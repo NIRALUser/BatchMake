@@ -11,6 +11,7 @@ SET(BatchMakeUtilities_SRCS
   Timer.cxx
   XMLReader.cxx
   XMLWriter.cxx
+  XMLIniIO.cxx
 )
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
