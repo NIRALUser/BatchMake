@@ -14,9 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptListFileInDirAction.h"
-#ifdef WIN32
-  #include <windows.h>
-#endif
+#include <stdio.h>
+#include "FL/filename.H"
 
 namespace bm {
 
@@ -54,7 +53,7 @@ void ScriptListFileInDirAction::Execute()
   if (m_initdir.startWith('\''))
     m_initdir = m_initdir.rbegin("'") + 1;
 
-  MString m_filter = "";
+  MString m_filter = "*";
   if (m_parameters.size() == 3)
   {
     m_filter = m_manager->Convert(m_parameters[2]);
@@ -64,72 +63,33 @@ void ScriptListFileInDirAction::Execute()
 
   MString m_value;
 
+  std::string dir = m_initdir.toChar();
 
-   #ifdef WIN32
-     WIN32_FIND_DATA File;
-     HANDLE hSearch;
-     int re;
-     hSearch=FindFirstFile((m_initdir + "/*.*").toChar(),&File);
-     if (hSearch != INVALID_HANDLE_VALUE)
-     {
-      re=true;
-      while(re)
+  if( (dir[dir.length()-1] != '/') && (dir[dir.length()-1] != '\\') )
+    {
+    dir += '/';
+    }
+
+  dirent** dirList;
+  
+  unsigned int size = fl_filename_list(dir.c_str(),&dirList);
+  
+  for(unsigned int i=0;i<size;i++)
+    {
+    if(fl_filename_match((*dirList)->d_name,m_filter.toChar())
+      && !fl_filename_match((*dirList)->d_name,"./")
+      && !fl_filename_match((*dirList)->d_name,"../")
+      && !fl_filename_match((*dirList)->d_name,"*/")
+      )
       {
-        re = FindNextFile(hSearch,&File);
-        if (re)
+      if (m_value != "")
         {
-          if (MString(File.cFileName) != "..")
-          {      
-            if (m_filter != "")
-            {
-              if(MString(File.cFileName).rend(".") == m_filter)
-              {
-                if (m_value != "")
-                  m_value += " ";
-                m_value += MString("'") + MString(File.cFileName) + MString("'");
-              } 
-            }
-            else
-            {
-              if (m_value != "")
-                 m_value += " ";
-
-               m_value += MString("'") + MString(File.cFileName) + MString("'");
-            }
-          }
+        m_value += " ";
         }
+      m_value += MString("'") + MString((*dirList)->d_name) + MString("'");
       }
-      FindClose(hSearch);
-     }
-    #else
-      DIR *d;
-      struct dirent * dir;
-      d = opendir((m_initdir).toChar());
-      if (d)
-      {
-        while((dir = readdir(d)) != NULL)
-        {
-
-          if (m_filter != "")
-          {
-            if(MString(dir->d_name).rend(".") == m_filter))
-            {
-              if (m_value != "")
-                m_value += " ";
-              m_value += MString("'") + MString(dir->d_name) + MString("'");
-            } 
-          }
-          else
-          {
-            if (m_value != "")
-               m_value += " ";
-
-             m_value += MString("'") + MString(dir->d_name) + MString("'");
-          }
-
-        }
-      }
-    #endif
+    dirList++;
+    }
 
   m_manager->SetVariable(m_parameters[0],m_value);
 }
