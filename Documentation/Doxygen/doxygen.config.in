@@ -244,7 +244,7 @@ WARN_FORMAT           = "$file:$line: $text"
 # or directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT    = "@BatchMake_SOURCE_DIR@/Code" "@BatchMake_SOURCE_DIR@/Documentation/Doxygen"
+INPUT    = "@BatchMake_SOURCE_DIR@" "@BatchMake_SOURCE_DIR@/Documentation/Doxygen"
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -263,7 +263,7 @@ RECURSIVE             = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag. 
 
-EXCLUDE               = "@BatchMake_SOURCE_DIR/Code/Common/BatchMakePixelTraits.h"
+#EXCLUDE               = "@BatchMake_SOURCE_DIR/Code/Common/BatchMakePixelTraits.h"
               
 # If the value of the INPUT tag contains directories, you can use the 
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude 
@@ -277,7 +277,7 @@ EXCLUDE_PATTERNS      = "*/vxl_copyright.h" "*/vcl/*" "*/dll.h" \
 # directories that contain example code fragments that are included (see 
 # the \include command). 
 
-EXAMPLE_PATH     = "@BatchMake_SOURCE_DIR@/Testing/Code" "@BatchMake_SOURCE_DIR@/Examples"
+EXAMPLE_PATH     = "@BatchMake_SOURCE_DIR@/Examples"
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the 
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -290,7 +290,7 @@ EXAMPLE_PATTERNS      = *.cxx
 # directories that contain image that are included in the documentation (see 
 # the \image command). 
 
-IMAGE_PATH            = "@BatchMake_SOURCE_DIR@/Documentation/Art"
+IMAGE_PATH            = "@BatchMake_SOURCE_DIR@/Images"
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should 
 # invoke to filter for each input file. Doxygen will invoke the filter program 
@@ -730,7 +730,7 @@ CGI_URL               = http://public.kitware.com/cgi-bin/
 # documentation is located. If left blank the absolute path to the 
 # documentation, with file:// prepended to it, will be used. 
 
-DOC_URL               = http://www.BatchMake.org/Doxygen/html/
+DOC_URL               = http://caddlab.rad.unc.edu/Public/Dashboard/Doxygen/html/
 
 # The DOC_ABSPATH tag should be the absolute path to the directory where the 
 # documentation is located. If left blank the directory on the local machine 
