@@ -23,6 +23,7 @@
 #include "bmScriptAction.h"
 #include "bmScriptError.h"
 #include "bmProgressManager.h"
+#include "ApplicationWrapper.h"
 #include <vector>
 #include <iostream>
 #include "MString.h"
@@ -58,13 +59,13 @@ public:
   void SetError(ScriptError* error);
   ScriptError* GetError();
   bool TestParam();
-  void Clear();
+  void Reset();
   bool TestConvert(MString param,int linenumber);
   void SetTestVariable(MString name);
   bool IsTestVariable(MString name);
   std::vector<MString> GetParamsFromVariable(MString name);
   void SetProgressManager(ProgressManager* progressmanager);
-
+  void SetApplicationWrapperList(std::vector<ApplicationWrapper*>* applicationlist);
 
 protected:
   std::vector<ScriptAction*> m_actionlist;
@@ -75,6 +76,8 @@ protected:
   ScriptError* m_error;
   ProgressManager* m_progressmanager;
   MString m_applicationpath;
+  std::vector<ApplicationWrapper*>* m_applicationlist;
+
 };
 
 } // end namespace bm

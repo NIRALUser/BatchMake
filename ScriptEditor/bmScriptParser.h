@@ -50,6 +50,9 @@ public:
   void SetProgressManager(ProgressManager* progressmanager);
   bool Execute(MString filename);
   bool Compile(MString filename);
+  void LoadWrappedApplication(MString applicationpath);
+  std::vector<ApplicationWrapper*>* GetApplicationList();
+  void Reset();
 
 protected:
   int m_linenumber;
@@ -57,6 +60,7 @@ protected:
   std::vector<MString> m_code;
   ScriptError* m_error;
   MString m_applicationpath;
+  std::vector<ApplicationWrapper*>* m_applicationlist;
 };
 
 } // end namespace bm

@@ -16,12 +16,17 @@
 #include "bmScriptParser.h"
 #include <fstream>
 
+#ifdef WIN32
+  #include <windows.h>
+#endif
+
 namespace bm {
 
 ScriptParser::ScriptParser()
 {
   m_scriptactionmanager = new ScriptActionManager();
   m_error = 0;
+  m_applicationlist = 0;
 }
 
 ScriptParser::~ScriptParser()
@@ -32,8 +37,63 @@ void ScriptParser::SetApplicationPath(MString applicationpath)
 {
  m_applicationpath = applicationpath;
  m_scriptactionmanager->SetApplicationPath(m_applicationpath);
+ LoadWrappedApplication(m_applicationpath);
 }
 
+
+void  ScriptParser::LoadWrappedApplication(MString applicationpath) 
+{
+  m_applicationlist = new std::vector<ApplicationWrapper*>;
+
+  #ifdef WIN32
+   WIN32_FIND_DATA File;
+   HANDLE hSearch;
+   int re;
+   hSearch=FindFirstFile((applicationpath+ "/Applications/*.*").toChar(),&File);
+   if (hSearch != INVALID_HANDLE_VALUE)
+   {
+    re=true;
+    while(re)
+    {
+      re = FindNextFile(hSearch,&File);
+      if (re)
+      {
+        if (MString(File.cFileName) != "..")
+        {
+          ApplicationWrapper* m_newapplication = new ApplicationWrapper();
+          m_newapplication->Load(applicationpath + "/Applications/" + MString(File.cFileName));
+          m_applicationlist->push_back(m_newapplication);
+        }
+      }
+    }
+    FindClose(hSearch);
+   }
+  #else
+    DIR *d;
+    struct dirent * dir;
+    d = opendir((applicationpath + "/Applications/").toChar());
+    if (d)
+    {
+      while((dir = readdir(d)) != NULL)
+      {
+       if (MString(dir->d_name).rend(".") == ".bmm")
+       {
+          ApplicationWrapper* m_newapplication = new ApplicationWrapper();  
+          m_newapplication->Load(applicationpath + "/Applications/" + MString(dir->d_name));
+          m_applicationlist->push_back(m_newapplication);
+       }
+      }
+    }
+  #endif
+
+ m_scriptactionmanager->SetApplicationWrapperList(m_applicationlist);
+
+}
+
+std::vector<ApplicationWrapper*>* ScriptParser::GetApplicationList()
+{
+  return m_applicationlist;
+}
 
 void ScriptParser::SetProgressManager(ProgressManager* progressmanager)
 {
@@ -42,8 +102,8 @@ void ScriptParser::SetProgressManager(ProgressManager* progressmanager)
 
 void ScriptParser::SetError(ScriptError* error)
 {
-  m_scriptactionmanager->SetError(error);
   m_error = error;
+  m_scriptactionmanager->SetError(error);
 }
 
 bool  ScriptParser::Compile(MString filename)
@@ -117,7 +177,7 @@ void ScriptParser::Load(MString filename)
     m_currentline = data;
     if (m_currentline.startWith('#'))
     {
-      //std::cout << "Comment: " <<  m_currentline.toChar() << std::endl;
+      //Comment
     }
     else
     {
@@ -133,15 +193,11 @@ void ScriptParser::Load(MString filename)
   m_file.close();
 
   m_scriptactionmanager->Execute();
-//  m_scriptactionmanager->DisplayVariableList();
 }
 
 
 bool ScriptParser::Parse(MString line)
 {
-  /*if ((line.find("(") == -1) || (line.find("(") == -1)) && (m_error))
-     m_error->SetError(MString("Undefined parameter"),m_linenumber);*/
-
   MString m_option = line.begin("(").removeChar(' ').removeChar('\t').toLower();
   if (m_option == "")
     return true;
@@ -243,6 +299,14 @@ ScriptAction::ParametersType ScriptParser::GetParams(MString param)
   return m_params;
 }
 
+
+void ScriptParser::Reset()
+{
+    m_scriptactionmanager->Reset();
+    m_code.clear();
+}
+
+
 void ScriptParser::AddCodeLine(MString line)
 {
   m_code.push_back(line);
@@ -251,7 +315,7 @@ void ScriptParser::AddCodeLine(MString line)
 
 bool ScriptParser::Parse()
 {
-  m_scriptactionmanager->Clear();
+  m_scriptactionmanager->Reset();
   m_linenumber = 0;
   MString m_currentline;
   MString m_line;
@@ -263,13 +327,10 @@ bool ScriptParser::Parse()
 
     if (m_currentline.startWith('#'))
     {
-      //std::cout << "Comment: " <<  m_currentline.toChar() << std::endl;
+       //Comments
     }
     else
     {
-      /*if (m_currentline.find("(") != -1) 
-        m_line = m_currentline;
-      else*/
         m_line += " ";
         m_line += m_currentline;
 
@@ -281,12 +342,10 @@ bool ScriptParser::Parse()
        }
     }
   }
-//   m_scriptactionmanager->DisplayVariableList();
+
   if (m_scriptactionmanager->GetError()->GetError() != 0)
     return false;
 
-  //std::cout << "End Parse" << std::endl;
-  //return m_scriptactionmanager->TestParam();
   return true;
 }
 

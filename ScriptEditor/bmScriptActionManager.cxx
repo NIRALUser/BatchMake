@@ -22,6 +22,7 @@
 #include "bmScriptRunAction.h"
 #include "bmScriptSetAction.h"
 #include "bmScriptGetParamAction.h"
+#include "bmScriptListFileInDirAction.h"
 
 #include "Timer.h"
 
@@ -32,6 +33,7 @@ ScriptActionManager::ScriptActionManager()
   m_parentaction = 0;
   m_error = new ScriptError();
   m_progressmanager = new ProgressManager();
+  m_applicationlist = 0;
 }
 
 ScriptActionManager::~ScriptActionManager()
@@ -50,7 +52,6 @@ void ScriptActionManager::AddAction(ScriptAction* action)
   m_actionlist.push_back(action);
 }
 
-
 void ScriptActionManager::SetProgressManager(ProgressManager* progressmanager)
 {
   if (m_progressmanager)
@@ -61,8 +62,8 @@ void ScriptActionManager::SetProgressManager(ProgressManager* progressmanager)
 
 void ScriptActionManager::SetError(ScriptError* error)
 {
- if (m_error)
-   delete m_error;
+  if (m_error != error)
+    delete m_error;
 
   m_error = error;
 }
@@ -89,30 +90,47 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    if (option == "set")            return new ScriptSetAction();
    if (option == "validationdashboard")  return new ScriptAction(); 
    if (option == "getparam")  return new ScriptGetParamAction(); 
+   if (option == "listfileindir")  return new ScriptListFileInDirAction(); 
    return 0;
 }
 
-void ScriptActionManager::Clear()
+void ScriptActionManager::SetApplicationWrapperList(std::vector<ApplicationWrapper*>* applicationlist)
+{
+  m_applicationlist = applicationlist;
+}
+
+void ScriptActionManager::Reset()
 {
    m_variabletestlist.clear();
    m_variablelist.clear();
-
    SetVariable(MString("applicationpath"),MString("'") + m_applicationpath + "'");
    SetTestVariable(MString("applicationpath"));
+
+   if (m_applicationlist)
+   {
+     for (unsigned int k=0;k<m_applicationlist->size();k++)
+     { 
+       SetVariable((*m_applicationlist)[k]->GetName(),MString("'") + (*m_applicationlist)[k]->GetApplicationPath() + "'");
+       SetTestVariable((*m_applicationlist)[k]->GetName()); 
+     }
+   }
 
    m_parentaction = 0;
    for (unsigned int i=0;i<m_actionlist.size();i++)
    {
      m_actionlist[i]->Delete();
-     delete m_actionlist[i];
    }
+  
+   m_actionlist.clear();
+
 }
 
 void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
 {
   if ((option == "endforeach") || (option == "endif"))
   {
-      m_parentaction = m_parentaction->GetParent();
+      if (m_parentaction != 0)
+        m_parentaction = m_parentaction->GetParent();
   }
   else if (option == "else")
   {
@@ -150,21 +168,17 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
 
 void ScriptActionManager::Execute()
 {
-  //m_variablelist.clear();
-  //std::cout << "ScriptActionManager::Execute() - " << m_actionlist.size() << std::endl;
   Timer m_timer;
   m_timer.start();
   for (unsigned int i=0;i<m_actionlist.size();i++)
   {
     m_actionlist[i]->Execute();
   }
-  //m_progressmanager->SetStatus(MString("Finish: Total Execution time %1ms").arg(m_timer.getMilliseconds()) + m_manager->Convert(m_parameters[1]));
   m_progressmanager->SetFinished(MString("Total Execution time: %1ms").arg(m_timer.getMilliseconds()));
 }
 
 void ScriptActionManager::SetTestVariable(MString name)
 {
-  //std::cout << "SetTestVariable " << name.toChar() << std::endl;
   bool m_detected = false;
   for (unsigned int i=0;i<m_variabletestlist.size();i++)
   {
@@ -174,11 +188,6 @@ void ScriptActionManager::SetTestVariable(MString name)
 
   if (m_detected == false)
     m_variabletestlist.push_back(name);
-
-  /*for (unsigned int j=0;j<m_variabletestlist.size();j++)
-  { 
-    std::cout << "var: " << m_variabletestlist[j].toChar() << std::endl;
-  }*/
 
 }
 

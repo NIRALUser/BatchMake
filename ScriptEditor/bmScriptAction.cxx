@@ -47,11 +47,6 @@ void ScriptAction::SetParameters(ParametersType parameters)
 
 void ScriptAction::Execute()
 {
- /* std::cout << "Execute() " << m_name.toChar() << std::endl;
-  for (unsigned int i=0;i<m_parameters.size();i++)
-  {
-    std::cout << "Param #" << i << ": " << m_parameters[i].toChar() << std::endl;
-  }*/
 }
 
 

@@ -74,19 +74,20 @@ void ScriptRunAction::Execute()
   m_progressmanager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
   
   int m_offset = 0;
+  int m_offset2 = 0;
   while (m_offset != -1)
   {
-    m_offset = m_output.find("\n",m_offset);
+    m_offset = m_output.find("\n");
     m_progressmanager->AddOutput(m_output.begin("\n"));
     if (m_offset != -1)
-     m_output = m_output.end("\n")+1;
+      m_output = m_output.end("\n")+1;
   }
 
 
   m_offset = 0;
   while (m_offset != -1)
   {
-    m_offset = m_error.find("\n",m_offset);
+    m_offset = m_error.find("\n");
     m_progressmanager->AddError(m_error.begin("\n"));
     if (m_offset != -1)
      m_error = m_error.end("\n")+1;

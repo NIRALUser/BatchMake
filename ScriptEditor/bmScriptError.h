@@ -38,6 +38,7 @@ public:
   virtual void DisplaySummary();
   virtual int GetError();
   virtual int GetWarning();
+  virtual void Reset();
 
 protected:
 

@@ -34,14 +34,18 @@ void ScriptForAction::AddAction(ScriptAction* action)
 
 bool ScriptForAction::TestParam(ScriptError* error,int linenumber)
 {
-  m_manager->SetTestVariable(m_parameters[0]);
-
-
   if (m_parameters.size() < 2)
   {
     error->SetError(MString("Not enough parameters - foreach function accepts only 2 parameters"),linenumber);
     return false;
   }
+
+  for (unsigned int k=0;k<m_parameters.size();k++)
+      m_manager->TestConvert(m_parameters[k],linenumber);
+
+  m_manager->SetTestVariable(m_parameters[0]);
+  
+
 
   for (unsigned int i=0;i<m_action.size();i++)
   {

@@ -28,6 +28,12 @@ ScriptError::~ScriptError()
 {
 }
 
+void ScriptError::Reset()
+{
+  nb_error = 0;
+  nb_warning = 0;
+}
+
 int ScriptError::GetError()
 {
   return nb_error;
