@@ -53,7 +53,7 @@ protected:
   ScriptErrorGUI* m_errorgui;
   MString m_applicationpath;
   std::vector<ApplicationWrapper*> m_applicationlist;
-
+  MString m_title;
 };
 
 } // end namespace bm

@@ -42,7 +42,6 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
   m_errorbuffer = new Fl_Text_Buffer();
   make_window();
   g_output->buffer(m_errorbuffer);
-
 }
 
 ScriptEditorGUIControls::~ScriptEditorGUIControls()
@@ -88,7 +87,9 @@ void ScriptEditorGUIControls::Show()
     Fl::add_timeout(0.1,Timer,ui);
   }*/
   g_Scripteditorgui->show();
-
+  m_title = MString(g_Scripteditorgui->label()) + " [script]" ;
+  g_Scripteditorgui->label(m_title.toChar());
+  g_editor->SetParentWindow(g_Scripteditorgui);
 }
 
 
@@ -102,32 +103,42 @@ void ScriptEditorGUIControls::OnOpenScript()
     m_filename = filename;
     g_editor->Load(m_filename.toChar());
     m_parser->SetScriptPath(m_filename);
+    m_title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_filename.rend("/")+1) + "]" ;
+    g_Scripteditorgui->label(m_title.toChar());
   }
 }
 
-/** Save the current script */
+
 void ScriptEditorGUIControls::OnSaveScript()
 {
   const char* filename = 0;
+  int result = 2;
   if (m_filename == "")
-    {
+    result = 2;
+  else
+  {
+    result = fl_choice("Script already exists !","Cancel","Overwrite","Save As ...");
+  }
+
+  if (result == 0)
+    return;
+
+  if (result == 2)
     filename = fl_file_chooser("Save script", "BatchMake Script(*.bms)", NULL);
-    if(filename)
-      {
-      m_filename = filename;
-      }
-    }
-  if(m_filename != "")
+
+
+  if(filename || (m_filename != ""))
+  {
+    if (filename != 0)
     {
-    if (MString(m_filename).rend(".") != ".bms")
-      {
-      m_filename = MString(m_filename) +  ".bms";
-      }
-    g_editor->Save(m_filename.toChar());
-    fl_alert("Saved");
-    m_parser->SetScriptPath(m_filename);
+      m_filename = filename;
+      if (MString(m_filename).rend(".") != ".bms")
+       m_filename = MString(m_filename) +  ".bms";
     }
 
+    g_editor->Save(m_filename.toChar());
+    m_parser->SetScriptPath(m_filename);
+  }
 }
 
 

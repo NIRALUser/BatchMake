@@ -21,6 +21,7 @@
 #include "FL/Fl_Browser.H"
 #include "Fl/Fl_Output.h"
 #include "FLU/Flu_Tree_Browser.h"
+#include <FL/Fl_Window.H>
 #include "MString.h"
 #include <list>
 
@@ -52,6 +53,8 @@ public:
   static bool Find(std::list<MString> array,MString key);
   void UpdateKeyword();
   void UpdateVariable();
+  void SetParentWindow(Fl_Window* parentwindow);
+  static void SetModified(bool flag);
 
 protected:
   Fl_Text_Buffer* stylebuf;

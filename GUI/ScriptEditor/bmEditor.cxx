@@ -57,7 +57,8 @@ static std::list<MString> m_keywords;
          "null",
        };
 
-
+static Fl_Window* m_parentwindow;
+char m_title[256];
 
 Editor::Editor(int X, int Y, int W, int H, const char* l)
 :Fl_Text_Editor(X, Y, W, H, l)
@@ -112,6 +113,7 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_buffer->call_modify_callbacks();
 
   m_currentword = "";
+  m_parentwindow = 0;
 }
 
 Editor::~Editor()
@@ -150,6 +152,23 @@ void Editor::UpdateVariable()
 { 
 }
 
+void Editor::SetParentWindow(Fl_Window* parentwindow)
+{
+  m_parentwindow = parentwindow;
+}
+
+void Editor::SetModified(bool flag)
+{
+  if (m_parentwindow)
+  {
+    strcpy(m_title,m_parentwindow->label());
+    if (MString(m_title).rfind("*") == -1)
+      {
+        strcpy(m_title,(MString(m_title).rbegin("]") + "*]").toChar());
+        m_parentwindow->label(m_title);
+      }
+  }
+}
 
 
 bool Editor::Find(std::list<MString> array,MString key)
@@ -187,6 +206,7 @@ void Editor::style_update(int        pos,          // I - Position of update
        *text;                         // Text data
 
 
+  if ((nInserted || nDeleted)) SetModified(true);
   Fl_Text_Buffer* stylebuf = ((Editor *)cbArg)->stylebuf;
   Fl_Text_Buffer* textbuf = ((Editor *)cbArg)->m_buffer;
 
