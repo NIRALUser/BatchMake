@@ -26,11 +26,14 @@ namespace bm {
          { FL_BLUE,       FL_COURIER,        12 }, // D - Strings
          { FL_DARK_RED,   FL_COURIER,        12 }, // E - Directives
          { FL_DARK_RED,   FL_COURIER_BOLD,   12 }, // F - Types
-         { FL_BLUE,       FL_COURIER_BOLD,   12 }  // G - Keywords
+         { FL_BLUE,       FL_COURIER_BOLD,   12 },  // G - Keywords
+         { FL_RED,         FL_COURIER,   12 }       // H - Keywords
 };
 
 
 /** The list of keywords recognized. SHOULD BE IN ALPHABETICAL ORDER */
+
+/*  
 const char         *code_keywords[] = {  // List of known C/C++ keywords...     
          "echo",  
          "getparam",
@@ -41,7 +44,9 @@ const char         *code_keywords[] = {  // List of known C/C++ keywords...
          "sequence",  
          "set",
          "validationdashboard"
-       };
+       };*/
+
+static std::list<MString> m_keywords;
 
   const char         *code_types[] = {  // List of known C/C++ types...
          "else",
@@ -64,13 +69,6 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_browser->branch_text(m_browser->branch_color(),m_browser->branch_font(),10);
   m_browser->leaf_text(m_browser->leaf_color(),m_browser->leaf_font(),10);
   m_browser->vertical_gap(-2);
-  m_browser->add("echo");
-  m_browser->add("getparam");
-  m_browser->add("randomize");
-  m_browser->add("run");
-  m_browser->add("sequence");
-  m_browser->add("set");
-  m_browser->add("validationdashboard");
   m_browser->selection_color(87);
   m_browser->show_leaves( true );
   m_browser->show_branches( true );
@@ -79,11 +77,9 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_browser->selection_follows_hilight(true);
   m_browser->selection_mode(FLU_SINGLE_SELECT);
   m_browser->callback((Fl_Callback*)SelectOption,this);
-  Flu_Tree_Browser::Node* m_node = m_browser->first();
-  m_node = m_node->next();
-  m_node = m_node->next();
-  m_node->select_only();
-  m_browser->set_hilighted(m_node);
+
+  UpdateKeyword();
+ 
   m_browser->resize(0,0,200,80);
   m_browser->end();
 
@@ -122,11 +118,58 @@ Editor::~Editor()
 {
 }
 
+void Editor::UpdateKeyword()
+{ 
+  m_keywords.clear();
+  m_browser->clear();
+  ScriptActionManager m_manager;
+  std::vector<MString> m_list = m_manager.GetKeywordList();
+
+  for (unsigned int i=0;i<m_list.size();i++)
+  { 
+    m_keywords.push_back(m_list[i]);
+  }
+   
+  m_keywords.sort();
+
+  std::list<MString>::iterator it = m_keywords.begin();
+  while (it != m_keywords.end())
+  { 
+    m_browser->add((*it).toChar());
+    it++;
+  }
+
+  Flu_Tree_Browser::Node* m_node = m_browser->first();
+  m_node = m_node->next();
+  m_node = m_node->next();
+  m_node->select_only();
+  m_browser->set_hilighted(m_node);
+}
+
+void Editor::UpdateVariable()
+{ 
+}
+
+
+
+bool Editor::Find(std::list<MString> array,MString key)
+{
+  std::list<MString>::iterator it = m_keywords.begin();
+  while (it != m_keywords.end())
+  {
+      if ((*it).toLower() == key)
+        return true;
+      it++;
+  }
+   return false;
+}
+
 
 int Editor::compare_keywords(const void *a,const void *b) 
 {
   return (strcmp(*((const char **)a), *((const char **)b)));
 }
+
 
 void Editor::style_unfinished_cb(int, void*) {
 }
@@ -273,7 +316,11 @@ for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
           for (; length > 0 && *text != '\n'; length --, text ++) *style++ = 'B';
         if (length == 0) break;
       } 
-      else if (strncmp(text, "${", 2) == 0) 
+      /*else if (strncmp(text, "${", 2) == 0) 
+      {
+        current = 'C';
+      } */
+      else if (strncmp(text, "$", 1) == 0) 
       {
         current = 'C';
       } 
@@ -334,9 +381,11 @@ for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
               last = 1;
               continue;
             } 
-            else if (bsearch(&bufptr, code_keywords,
+            /*else if (bsearch(&bufptr, code_keywords,
                      sizeof(code_keywords) / sizeof(code_keywords[0]),
-               sizeof(code_keywords[0]), compare_keywords)) 
+               sizeof(code_keywords[0]), compare_keywords)) */
+
+            else if (Find(m_keywords,bufptr))
             {
               while (text < temp) 
               {
@@ -353,7 +402,7 @@ for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
             }
         }
      }
-    } else if (current == 'C' && strncmp(text, "}", 1) == 0) 
+    } else if (current == 'C' && ((strncmp(text+1, ")", 1)== 0) || (strncmp(text, " ", 1)== 0) || (strncmp(text, "}", 1) == 0)) )
       {
         // Close a C comment...
         *style++ = current;
@@ -363,6 +412,8 @@ for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
       } else if (current == 'D') 
       {
         // Continuing in string...
+        if (strncmp(text, "$", 1) == 0) 
+           current = 'H';
         /*if (strncmp(text, "\\\"", 2) == 0) 
         {
           // Quoted end quote...
@@ -381,6 +432,14 @@ for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
           current = 'A';
           continue;
         }
+      }
+      else if (current == 'H' && ((strncmp(text+1, ")", 1)== 0) || (strncmp(text, " ", 1)== 0) || (strncmp(text, "}", 1) == 0)) )
+      {
+        // Close a C comment...
+        *style++ = current;
+        current = 'D';
+        col += 1;
+        continue;
       }
 
     // Copy style info...
@@ -423,7 +482,7 @@ void Editor::Save(const char* filename)
 void Editor::ShowOptionFinder(int x,int y)
 {
   m_browser->resize(x+13,y+15,200,80);
-  m_helper->resize(x+13,y+15,200,15);
+  m_helper->resize(x+13,y+15,m_helper->w(),m_helper->h());
 }
 
 
@@ -432,15 +491,15 @@ void Editor::draw()
   //((Fl_Text_Display*)this)->draw();
   Fl_Text_Display::draw();
 
-  if (m_drawbrowser)
-    m_browser->show();
-  else
-    m_browser->hide();
-
   if (m_drawhelper)
     m_helper->show();
   else
     m_helper->hide();
+
+  if (m_drawbrowser)
+    m_browser->show();
+  else
+    m_browser->hide();
 
   m_browser->redraw();
   m_helper->redraw();
@@ -472,7 +531,7 @@ void Editor::SelectOption(Flu_Tree_Browser* browser, void* widget)
      ((Editor*)widget)->m_currentword = "";
 
      ScriptActionManager m_manager;
-     ScriptAction* m_help = m_manager.CreateAction(MString(browser->get_selected(1)->label()));
+     ScriptAction* m_help = m_manager.CreateAction(MString(browser->get_selected(1)->label()).toLower());
      if (m_help)
      {
        ((Editor*)widget)->m_helper->value(m_help->Help().toChar());
@@ -499,6 +558,15 @@ void Editor::TabPressed(void* widget)
 
 int Editor :: handle( int event )
 {
+  if (event == FL_PUSH)
+  {
+    m_currentword = "";
+    m_drawbrowser = false;
+    draw();
+    return Fl_Text_Editor::handle( event );
+
+  }
+
   if ( event == FL_KEYDOWN )
   {
     if( Fl::event_key() == FL_Tab)
@@ -545,19 +613,41 @@ int Editor :: handle( int event )
        }
 
       
+     ScriptActionManager m_manager;
+     ScriptAction* m_help = m_manager.CreateAction(m_currentword.toLower());
+     if (m_help)
+     {
+       m_helper->value(m_help->Help().toChar());
+       if (MString(m_helper->value()) != "")
+       {
+         m_helper->resize(m_helper->x(),m_helper->y(),(int)(m_help->Help().length()*4.9),15);
+         m_drawbrowser = false;
+         m_drawhelper = true;
+       }
+       else
+         m_drawhelper = false;
+       delete m_help;
+     }
+     else
+       m_drawhelper = false;
+   
+
+
       int m_offset = -1;
       int currentrating = 0;
-      for (unsigned int i=0;i<sizeof(code_keywords)/sizeof(code_keywords[0]);i++)
-      {
 
+      std::list<MString>::iterator it = m_keywords.begin();
+      unsigned int i =0;
+      while (it != m_keywords.end())
+      { 
         int m_rating = 0;
         int m_correctword = true;
        
         for (unsigned int j=0;j<m_currentword.length();j++)
         {
-          if (strlen(code_keywords[i]) > j)
+          if ((*it).length() > j)
           {
-            if ((m_currentword.toLower()[j] != code_keywords[i][j]))
+            if ((m_currentword.toLower()[j] != (*it).toLower()[j]))
               m_correctword = false;
             else
              m_rating++;
@@ -575,11 +665,15 @@ int Editor :: handle( int event )
           currentrating = m_rating;
         }
 
+        i++;
+        it++;
       }
 
       if (m_offset != -1)
       {
-        m_drawbrowser = true;
+        if (!m_drawhelper)
+          m_drawbrowser = true;
+
         Flu_Tree_Browser::Node* m_node = m_browser->first();
         for (unsigned int k=0;k<=m_offset;k++)
           m_node = m_node->next();
@@ -589,18 +683,23 @@ int Editor :: handle( int event )
           m_node->select_only();
           m_browser->set_hilighted(m_node);
           }
+        Fl_Text_Editor::handle( event );
         draw();
+        return 1;
       }
       else
       {
         m_drawbrowser = false;
         m_drawhelper = false;
+        Fl_Text_Editor::handle( event );
+        draw();
+        return 1;
       }
     }
 
   }
 
-  return   Fl_Text_Editor::handle( event );
+  return Fl_Text_Editor::handle( event );
 }
 
 } // end namespace bm

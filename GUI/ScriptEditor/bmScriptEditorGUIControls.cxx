@@ -36,7 +36,7 @@ namespace bm {
 
 ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
 {
-  m_filename = 0;
+  m_filename = "";
   m_parser = new ScriptParser();
   m_errorgui = new ScriptErrorGUI();
   m_errorbuffer = new Fl_Text_Buffer();
@@ -94,22 +94,32 @@ void ScriptEditorGUIControls::Show()
 
 void ScriptEditorGUIControls::OnOpenScript()
 {
-  m_filename = fl_file_chooser("Load script", "BatchMake Script(*.bms)", NULL);
-  if(m_filename)
+  const char* filename = 0;
+  filename = fl_file_chooser("Load script", "BatchMake Script(*.bms)", NULL);
+ 
+  if(filename)
   {
-    g_editor->Load(m_filename);
+    m_filename = filename;
+    g_editor->Load(m_filename.toChar());
+    m_parser->SetScriptPath(m_filename);
   }
 }
 
 
 void ScriptEditorGUIControls::OnSaveScript()
 {
-  if (!m_filename)
-    m_filename = fl_file_chooser("Save script", "BatchMake Script(*.bms)", NULL);
+  const char* filename = 0;
+  if (m_filename == "")
+    filename = fl_file_chooser("Save script", "BatchMake Script(*.bms)", NULL);
   
-  if(m_filename)
+  if(filename)
   {
-    g_editor->Save(m_filename);
+    m_filename = filename;
+    if (MString(m_filename).rend(".") != ".bms")
+     m_filename = MString(m_filename) +  ".bms";
+
+    g_editor->Save(m_filename.toChar());
+    m_parser->SetScriptPath(m_filename);
   }
 }
 

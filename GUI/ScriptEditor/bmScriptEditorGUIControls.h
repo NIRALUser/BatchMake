@@ -48,7 +48,7 @@ public:
   Fl_Text_Buffer* m_errorbuffer;
 
 protected:
-  char* m_filename;
+  MString m_filename;
   ScriptParser* m_parser;
   ScriptErrorGUI* m_errorgui;
   MString m_applicationpath;

@@ -22,6 +22,7 @@
 #include "Fl/Fl_Output.h"
 #include "FLU/Flu_Tree_Browser.h"
 #include "MString.h"
+#include <list>
 
 namespace bm {
 
@@ -48,6 +49,9 @@ public:
   void draw();
   static void TabPressed(void*);
   int handle( int event );
+  static bool Find(std::list<MString> array,MString key);
+  void UpdateKeyword();
+  void UpdateVariable();
 
 protected:
   Fl_Text_Buffer* stylebuf;
@@ -57,7 +61,6 @@ protected:
   bool m_drawbrowser;
   bool m_drawhelper;
   MString m_currentword;
-
 };
 
 } // end namespace bm
