@@ -15,7 +15,6 @@ SET(BatchMakeScriptEditor_SRCS
   bmScriptActionManager.cxx
   bmScriptError.cxx
   bmScriptParser.cxx
-  bmOutput.cxx
 )
 
 #Add Commands
