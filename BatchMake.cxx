@@ -15,7 +15,7 @@
 
 #include "BatchMakeScriptEditorGUIControls.h"
 #include "CommandLineArgumentParser.h"
-#include "FL/fl.H"
+#include "FL/Fl.H"
 #include "MString.h"
 #include <iostream>
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 {
   if (argc < 2)
   {
-	  // Create a UI object
+    // Create a UI object
     BatchMakeScriptEditorGUIControls* ui = new BatchMakeScriptEditorGUIControls();
     MString m_windowtitle("BatchMake - ");
     m_windowtitle += BatchMakeVersion;
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     // Show BatchMake Editor Interface
     ui->Show();
   
-	  // Run the FL driver
+    // Run the FL driver
     Fl::run();
   
     delete ui;
