@@ -128,7 +128,7 @@ void HttpRequest::ParseURL(const char* url,char* protocol,int lprotocol,
 
     work = strdup(url);
     //strupr(work);
-    for (int i=0;i<strlen(work);i++)
+    for (unsigned int i=0;i<strlen(work);i++)
     {
       work[i] = toupper(work[i]);
     }

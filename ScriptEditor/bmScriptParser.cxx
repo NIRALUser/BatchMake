@@ -247,7 +247,7 @@ ScriptAction::ParametersType ScriptParser::GetParams(MString param)
   MString m_value = "";
   bool m_isquote = false;
 
-  for (unsigned int i=0;i<m_param.length();i++)
+  for (int i=0;i<m_param.length();i++)
   {
       if (m_param[i] == '\'')
       {

@@ -364,7 +364,7 @@ MString ScriptActionManager::Convert(MString param)
   MString m_var;
   bool m_isquote = false;
 
-  for (unsigned int i=0;i<param.length();i++)
+  for (int i=0;i<param.length();i++)
   {
     if (param[i] == '$')
     {
@@ -421,7 +421,7 @@ MString ScriptActionManager::ConvertExtra(MString param)
   MString m_var;
   bool m_isquote = false;
 
-  for (unsigned int i=0;i<param.length();i++)
+  for (int i=0;i<param.length();i++)
   {
     if (param[i] == '$')
     {
@@ -475,7 +475,7 @@ bool ScriptActionManager::TestConvert(MString param,int linenumber)
 {
   bool m_vardetected = false;
   MString m_var;
-  for (unsigned int i=0;i<param.length();i++)
+  for (int i=0;i<param.length();i++)
   {
     if (param[i] == '$')
     {

@@ -65,7 +65,7 @@ void ScriptGetParamAction::Execute()
 
   for (unsigned int i=2;i<m_parameters.size();i++)
   {
-    if (m_parameters[i].toInt() >= m_list.size())
+    if (m_parameters[i].toInt() >= (int)m_list.size())
     {
       m_manager->GetError()->SetStatus(MString("GetParam: Exeed value for param %1").arg(i));
       return;
