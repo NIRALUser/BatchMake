@@ -14,7 +14,14 @@
 =========================================================================*/
 
 #include "bmLaunch.h"
-#include <Windows.h>
+
+#ifdef WIN32
+  #include <Windows.h>
+#else
+  #include <unistd.h>
+  #include <sys/wait.h>
+#endif
+
 #include <fstream>
 
 namespace bm {
@@ -29,7 +36,7 @@ Launch::Launch()
 Launch::~Launch()
 {
 }
-
+  
 void Launch::SetProgressManager(ProgressManager* progressmanager)
 {
  m_progressmanager = progressmanager;
@@ -40,9 +47,8 @@ void Launch::Execute(MString m_command)
   m_output = "";
   m_error = "";
 
+#ifdef WIN32
   STARTUPINFO si;
-
-
   PROCESS_INFORMATION pi;
  
   SECURITY_ATTRIBUTES tmpSec;
@@ -131,6 +137,86 @@ void Launch::Execute(MString m_command)
 
   unlink("output.tmp");
   unlink("error.tmp");
+#else  
+  int stdin_pipe[2];
+  int stdout_pipe[2];
+  int stderr_pipe[2];
+  char buffer[BUFSIZ+1];
+  char buffer_err[BUFSIZ+1];
+  int fork_result;
+  int data_processed;
+  int data_processed_err;
+  int nchars = 0;
+
+  memset(buffer,'\0',sizeof(buffer));
+
+   memset(buffer_err,'\0',sizeof(buffer)); 
+   if ( (pipe(stdin_pipe)==0)   
+        && (pipe(stdout_pipe)==0)
+        && (pipe(stderr_pipe)==0))
+   {
+     fork_result = fork();
+     if (fork_result == -1)
+     {
+       std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
+       m_error = "Create Process failed (Pipe error) ! "; 
+
+      exit(EXIT_FAILURE);
+     }  
+     else if (fork_result == 0)
+     { 
+       // This is the child
+       close(0);
+      dup(stdin_pipe[0]);
+      close(stdin_pipe[0]);
+      close(stdin_pipe[1]);
+      close(1);      
+      dup(stdout_pipe[1]);     
+      close(stdout_pipe[0]); 
+      close(stdout_pipe[1]);      
+      close(2);
+      dup(stderr_pipe[1]);     
+      close(stderr_pipe[0]);      
+      close(stderr_pipe[1]);    
+
+      MString m_prog = m_command.begin(" ");
+      MString m_param = m_command.end(" ");   
+      if (m_param.length() != 0)
+        m_param = m_param + 1;
+      execlp(m_prog.toChar(),m_prog.toChar(),m_param.toChar(),NULL);   
+      exit(EXIT_FAILURE);
+    } 
+    else   
+    { 
+      // This is the parent
+      close(stdin_pipe[0]);
+      close(stdin_pipe[1]);
+      close(stderr_pipe[1]);
+      while(1)   
+      {       
+        data_processed_err = read(stderr_pipe[0],buffer_err,BUFSIZ);
+        for (unsigned int k=0;k<strlen(buffer_err);k++)
+          m_error += buffer_err[k];
+       
+         memset(buffer_err,'\0',sizeof(buffer))
+        if (data_processed_err == 0) break;
+      }
+      close(stderr_pipe[0]);
+      close(stdout_pipe[1]);  
+ 
+     while(1)
+     {
+       data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
+       for (unsigned int k=0;k<strlen(buffer);k++)
+          m_output += buffer[k];
+       
+       memset(buffer,'\0',sizeof(buffer));
+       if (data_processed == 0) break;
+     }
+     close(stdout_pipe[0]);
+    }
+  }
+#endif
 }
 
 
