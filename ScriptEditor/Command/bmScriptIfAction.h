@@ -36,6 +36,7 @@ public:
   void Execute();
   void SetMode(int mode);
   void Delete();
+  MString Help();
 
 protected:
   std::vector<ScriptAction*> m_thenaction;

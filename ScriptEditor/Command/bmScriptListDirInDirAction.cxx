@@ -43,7 +43,11 @@ bool ScriptListDirInDirAction::TestParam(ScriptError* error,int linenumber)
   return true;
 }
 
- 
+MString ScriptListDirInDirAction::Help()
+{
+  return "ListDirInDir(<dirlist> 'directory' *.*|*.img))";
+}
+
 
 
 void ScriptListDirInDirAction::Execute()

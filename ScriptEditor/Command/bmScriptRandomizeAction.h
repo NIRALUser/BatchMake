@@ -34,7 +34,7 @@ public:
   ~ScriptRandomizeAction();
   void Execute();
   bool TestParam(ScriptError* error,int linenumber);
-
+  MString Help();
 
 };
 

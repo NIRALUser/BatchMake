@@ -57,6 +57,10 @@ bool ScriptSequenceAction::TestParam(ScriptError* error,int linenumber)
    return true;
 }
 
+MString ScriptSequenceAction::Help()
+{
+  return "Sequence(<variable> <From> <To> <Step>) - Ex: Sequence(seq 1 10 0.2)";
+}
 
 
 void ScriptSequenceAction::Execute()

@@ -33,6 +33,7 @@ public:
   ScriptEchoAction();
   ~ScriptEchoAction();
   void Execute();
+  MString Help();
   bool TestParam(ScriptError* error,int linenumber);
 
 };

@@ -42,10 +42,15 @@ void ScriptIfAction::AddAction(ScriptAction* action)
     m_elseaction.push_back(action);
 }
 
+MString ScriptIfAction::Help()
+{
+  return "If(<$variable1> ==|<=|>= <$variable2>) ... EndIf(<variable>)";
+}
+
 
 void ScriptIfAction::Execute()
 {
-  if (m_parameters[1].toLower() == "equal")
+  if (m_parameters[1].toLower() == "==")
   {
     if (m_manager->GetVariable(m_parameters[0])[0] == m_parameters[2])
     {

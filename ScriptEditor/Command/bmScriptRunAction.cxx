@@ -48,6 +48,12 @@ bool ScriptRunAction::TestParam(ScriptError* error,int linenumber)
   return (m_manager->TestConvert(m_parameters[1],linenumber));
 }
 
+MString ScriptRunAction::Help()
+{
+  return "Run(<outputvariable> 'program.exe param1 param2 ...')";
+}
+
+
 void ScriptRunAction::Execute()
 {
   Launch m_launch;

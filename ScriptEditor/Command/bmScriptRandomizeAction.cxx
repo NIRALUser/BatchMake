@@ -63,6 +63,11 @@ bool ScriptRandomizeAction::TestParam(ScriptError* error,int linenumber)
   return true;
 } 
 
+MString ScriptRandomizeAction::Help()
+{
+  return "Randomize(<outputvariale> <uniform|gaussian|categorical> <min> <max>)";
+}
+
 
 void ScriptRandomizeAction::Execute()
 {

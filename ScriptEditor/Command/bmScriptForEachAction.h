@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptRunAction.h
+  Module:    bmScriptForEachAction.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,8 +13,8 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#ifndef __ScriptRunAction_h_
-#define __ScriptRunAction_h_
+#ifndef __ScriptForEachAction_h_
+#define __ScriptForEachAction_h_
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -27,14 +27,19 @@
 
 namespace bm {
 
-class ScriptRunAction : public ScriptAction
+class ScriptForEachAction : public ScriptAction
 {
 public:
-  ScriptRunAction();
-  ~ScriptRunAction();
-  bool TestParam(ScriptError* error,int linenumber);
+  ScriptForEachAction();
+  ~ScriptForEachAction();
+  void AddAction(ScriptAction* action);
   void Execute();
+  bool TestParam(ScriptError* error,int linenumber);
+  void Delete();
   MString Help();
+
+protected:
+  std::vector<ScriptAction*> m_action;
 
 };
 

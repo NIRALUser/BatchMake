@@ -34,7 +34,7 @@ public:
   ~ScriptListDirInDirAction();
   void Execute();
   bool TestParam(ScriptError* error,int linenumber);
-
+  MString Help();
 };
 
 } // end namespace bm

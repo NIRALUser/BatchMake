@@ -34,6 +34,11 @@ bool ScriptEchoAction::TestParam(ScriptError* error,int linenumber)
   return true;
 }
 
+MString ScriptEchoAction::Help()
+{
+  return "Echo(<value1> [value2] ...)";
+}
+
 
 void ScriptEchoAction::Execute()
 {
@@ -42,7 +47,7 @@ void ScriptEchoAction::Execute()
   {
     m_value += m_manager->Convert(m_parameters[i]).removeChar('\'');
   }
-  m_manager->GetError()->SetStatus(m_value);
+  m_manager->GetProgressManager()->DisplayOutput(m_value+"\n");
 }
 
 } // end namespace bm

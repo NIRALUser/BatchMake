@@ -43,7 +43,10 @@ bool ScriptSetAction::TestParam(ScriptError* error,int linenumber)
    return true;
 }
 
-
+MString ScriptSetAction::Help()
+{
+  return "Set(<variable> <name1> <name2> ...)";
+}
 
 
 void ScriptSetAction::Execute()
