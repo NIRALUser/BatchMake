@@ -8,8 +8,8 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
   } {
     Fl_Window g_Scripteditorgui {
       label BatchMake
-      callback {hide();} open selected
-      xywh {549 233 655 660} type Double resizable
+      callback {hide();} open
+      xywh {249 195 655 660} type Double resizable
       code0 {\#include "bmScriptEditorGUIBase.h"} visible
     } {
       Fl_Text_Editor g_editor {
@@ -36,12 +36,20 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
           image {../../Images/compilation.gif} xywh {75 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
-          callback {OnExecute()}
+          callback {OnExecute()} selected
           image {../../Images/run.gif} xywh {110 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
           callback {OnApplicationWrapper()}
           image {../../Images/applicationwrapper.gif} xywh {145 5 30 25} box PLASTIC_UP_BOX color 48
+        }
+        Fl_Button {} {
+          callback {OnApplicationWrapper()}
+          image {../../Images/script.gif} xywh {180 5 30 25} box PLASTIC_UP_BOX color 48
+        }
+        Fl_Button {} {
+          callback {OnApplicationWrapper()}
+          image {../../Images/condor.gif} xywh {215 5 30 25} box PLASTIC_UP_BOX color 48
         }
       }
     }
