@@ -18,6 +18,9 @@ SET(Uploader_LIBS
 )
 ENDIF(WIN32)
 
+LINK_LIBRARIES(
+${ITK_LIBRARIES}
+)
 
 ADD_LIBRARY(BatchMakeDashboard ${BatchMakeDashboard_SRCS})
 TARGET_LINK_LIBRARIES(BatchMakeDashboard ${BatchMakeDashboard_LIBS})

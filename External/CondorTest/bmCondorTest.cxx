@@ -17,6 +17,8 @@
 
 #ifdef WIN32
 #include <winsock2.h>
+#else
+#include <unistd.h>
 #endif
 
 int main(int argc, char **argv)
@@ -41,3 +43,4 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
