@@ -13,7 +13,7 @@ SET (PROJECT_URL "http://caddlab.rad.unc.edu/Public")
 #
 # Dart server configuration 
 #
-SET (CVS_WEB_URL "http://caddlab.rad.unc.edu/cgi-bin/cvsweb.cgi/BatchMake/")
+SET (CVS_WEB_URL "http://caddlab.rad.unc.edu/cgi-bin/cvsweb.cgi/?cvsroot=BatchMake")
 
 OPTION(BUILD_DOXYGEN "Build source documentation using doxygen" "On")
 SET (DOXYGEN_CONFIG "${PROJECT_BINARY_DIR}/doxygen.config" )
