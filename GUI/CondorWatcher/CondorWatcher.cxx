@@ -14,7 +14,7 @@
 =========================================================================*/
 
 #include "CondorWatcher.h"
-#include "Flu/flu_pixmaps.h"
+#include "FLU/flu_pixmaps.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -215,7 +215,8 @@ void CondorWatcher::ParseStatus(std::string & buffer)
         long p1 = mach.find("</a>",p+1);
         if(p1 != -1)
           {
-          m.StatusList[i].second = RemoveExtraChar(mach.substr(p+word.size(),p1-p-word.size()));
+          std::string tmps = mach.substr(p+word.size(),p1-p-word.size());
+          m.StatusList[i].second = RemoveExtraChar(tmps);
           p = p1;
           }
         }
@@ -339,7 +340,8 @@ void CondorWatcher::ParseQueue(std::string & buffer)
         long p1 = job.find("</a>",p+1);
         if(p1 != -1)
           {
-          m.StatusList[i].second = RemoveExtraChar(job.substr(p+word.size(),p1-p-word.size()));
+          std::string tmps = job.substr(p+word.size(),p1-p-word.size());
+          m.StatusList[i].second = RemoveExtraChar(tmps);
           p = p1;
           }
         }
@@ -668,27 +670,28 @@ std::string CondorWatcher::Run(const char* program)
 #else  
   int stdin_pipe[2];
   int stdout_pipe[2];
-  int stderr_pipe[2];
+//  int stderr_pipe[2];
   char buffer[BUFSIZ+1];
-  char buffer_err[BUFSIZ+1];
+//  char buffer_err[BUFSIZ+1];
   int fork_result;
   int data_processed;
-  int data_processed_err;
+//  int data_processed_err;
   int nchars = 0;
 int status = 0;
 
   memset(buffer,'\0',sizeof(buffer));
-memset(buffer_err,'\0',sizeof(buffer)); 
+ //memset(buffer_err,'\0',sizeof(buffer)); 
 
    if ( (pipe(stdin_pipe)==0)   
         && (pipe(stdout_pipe)==0)
-        && (pipe(stderr_pipe)==0))
+  //      && (pipe(stderr_pipe)==0)
+      )
    {
      fork_result = fork();
      if (fork_result == -1)
      {
        std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
-       m_error = "Create Process failed (Pipe error) ! "; 
+     //  m_error = "Create Process failed (Pipe error) ! "; 
       exit(EXIT_FAILURE);
      }  
      else if (fork_result == 0)
@@ -703,29 +706,30 @@ memset(buffer_err,'\0',sizeof(buffer));
       close(stdout_pipe[0]); 
       close(stdout_pipe[1]);      
       close(2);
-      dup(stderr_pipe[1]);     
-      close(stderr_pipe[0]);      
-      close(stderr_pipe[1]);   
-      MString m_prog = m_command.begin(" ");
-      MString m_param = m_command.end(" ");   
+      //dup(stderr_pipe[1]);     
+      //close(stderr_pipe[0]);      
+      //close(stderr_pipe[1]);   
+      //MString m_prog = m_command.begin(" ");
+      //MString m_param = m_command.end(" ");   
    
 
       fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
-      fcntl(stderr_pipe[1], F_SETFL, O_NONBLOCK);
+   //   fcntl(stderr_pipe[1], F_SETFL, O_NONBLOCK);
 
-     if (m_param == m_prog)
+    /* if (m_param == m_prog)
        m_param = "";
 
      if (m_param.length() != 0)
         m_param = m_param + 1;
+*/
 
-
-    if (execlp(m_prog.toChar(),(m_prog.rend("/")+1).toChar(),m_param.toChar(),NULL) == -1)
+    if (execlp(program,program,"",NULL) == -1)
     {         
   if (errno == 2)
   {
-      std::cerr << (MString("Program (") + m_prog + ") not found!").toChar() << std::endl;      
-  }
+      //std::cerr << (MString("Program (") + m_prog + ") not found!").toChar() << std::endl;      
+      std::cout << "Program not found : " << program  << std::endl;
+   }
     }
 
       exit(EXIT_FAILURE);
@@ -735,15 +739,15 @@ memset(buffer_err,'\0',sizeof(buffer));
       // This is the parent
       close(stdin_pipe[0]);
       close(stdin_pipe[1]);
-      close(stderr_pipe[1]);
+     // close(stderr_pipe[1]);
       close(stdout_pipe[1]);  
 
       fcntl(stdout_pipe[0], F_SETFL, O_NONBLOCK);
-      fcntl(stderr_pipe[0], F_SETFL, O_NONBLOCK);
+     // fcntl(stderr_pipe[0], F_SETFL, O_NONBLOCK);
 
       while(1)   
       {       
-        data_processed_err = read(stderr_pipe[0],buffer_err,BUFSIZ);
+       /* data_processed_err = read(stderr_pipe[0],buffer_err,BUFSIZ);
         if (data_processed_err != -1)
         {
           for (unsigned int k=0;k<strlen(buffer_err);k++)
@@ -754,7 +758,7 @@ memset(buffer_err,'\0',sizeof(buffer));
        
     memset(buffer_err,'\0',sizeof(buffer));
         }
-
+*/
  
        data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
        if (data_processed != -1)
@@ -762,23 +766,15 @@ memset(buffer_err,'\0',sizeof(buffer));
    for (unsigned int k=0;k<strlen(buffer);k++)
            m_output += buffer[k];
        
-         if (m_progressmanager)
-           m_progressmanager->DisplayOutput(MString(buffer));
 
          memset(buffer,'\0',sizeof(buffer));
        }
       
-  if (m_progressmanager)
-     {
-          m_progressmanager->IsRunning();
-          if (m_progressmanager->IsStop())
-          break;
-      }
 
-       if ((data_processed == 0) && (data_processed_err == 0)) break;
+       if ((data_processed == 0) ) break;
      }
 
-     close(stderr_pipe[0]);
+//     close(stderr_pipe[0]);
      close(stdout_pipe[0]);
     }
   }

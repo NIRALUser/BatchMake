@@ -14,8 +14,6 @@
 =========================================================================*/
 
 #include "CondorWatcher.h"
-#include "Flu/Flu_Tree_Browser.h"
-#include "Flu/flu_pixmaps.h"
 
 int main()
 {
