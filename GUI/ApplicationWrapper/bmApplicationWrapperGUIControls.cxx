@@ -20,6 +20,10 @@
 
 #include "MString.h"
 
+#ifndef WIN32
+  #include <unistd.h>
+#endif
+
 namespace bm {
 
 ApplicationWrapperGUIControls::ApplicationWrapperGUIControls():ApplicationWrapperGUI()
