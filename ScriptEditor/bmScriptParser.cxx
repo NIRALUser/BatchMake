@@ -19,6 +19,7 @@
 #ifdef WIN32
   #include <windows.h>
 #endif
+#include <dirent.h>
 
 namespace bm {
 

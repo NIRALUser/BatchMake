@@ -198,7 +198,7 @@ void Launch::Execute(MString m_command)
         for (unsigned int k=0;k<strlen(buffer_err);k++)
           m_error += buffer_err[k];
        
-         memset(buffer_err,'\0',sizeof(buffer))
+         memset(buffer_err,'\0',sizeof(buffer));
         if (data_processed_err == 0) break;
       }
       close(stderr_pipe[0]);
