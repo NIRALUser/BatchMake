@@ -66,11 +66,11 @@ MString ScriptSequenceAction::Help()
 void ScriptSequenceAction::Execute()
 {
   MString m_value;
-  for (int i=m_parameters[1].toInt();i<m_parameters[2].toInt();i+=m_parameters[3].toInt())
+  for (float i=m_parameters[1].toFloat();i<m_parameters[2].toFloat();i+=m_parameters[3].toFloat())
   {
-    m_value+= MString("%1 ").arg(i);
+    m_value+= MString("'%1' ").arg(i);
   }
-  m_value+= m_parameters[2];
+  m_value+= MString("'%1' ").arg(m_parameters[2].toFloat());
   m_manager->SetVariable(m_parameters[0],m_value);
 }
 
