@@ -73,7 +73,8 @@ void ScriptEditorGUIControls::Timer(void* ui)
 
 void ScriptEditorGUIControls::Show()
 {
-  if(!g_Scripteditorgui->shown())
+  // disable the splash screen for the moment
+  /*if(!g_Scripteditorgui->shown())
   {
     SplashScreenControls* ui = new SplashScreenControls();
     g_Scripteditorgui->show();
@@ -85,7 +86,9 @@ void ScriptEditorGUIControls::Show()
     ui->Show();
     ui->g_progress->maximum(10);
     Fl::add_timeout(0.1,Timer,ui);
-  }
+  }*/
+  g_Scripteditorgui->show();
+
 }
 
 
