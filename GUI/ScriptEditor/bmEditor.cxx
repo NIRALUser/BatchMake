@@ -368,7 +368,7 @@ for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
         temp = text;  
         bufptr = buf;
 
-        int offset =0;
+        unsigned int offset =0;
         while ((text[offset] != ' ') && (offset<strlen(text)) && (text[offset] != '\n') && (text[offset] != '('))
         {
            *bufptr++ = tolower(*temp++);
@@ -673,7 +673,7 @@ int Editor :: handle( int event )
         int m_rating = 0;
         int m_correctword = true;
        
-        for (unsigned int j=0;j<m_currentword.length();j++)
+        for (int j=0;j<m_currentword.length();j++)
         {
           if ((*it).length() > j)
           {
@@ -700,13 +700,15 @@ int Editor :: handle( int event )
       }
 
       if (m_offset != -1)
-      {
+        {
         if (!m_drawhelper)
           m_drawbrowser = true;
 
         Flu_Tree_Browser::Node* m_node = m_browser->first();
-        for (unsigned int k=0;k<=m_offset;k++)
+        for (int k=0;k<=m_offset;k++)
+          {
           m_node = m_node->next();
+          }
 
         if(m_node)
           {
@@ -716,15 +718,15 @@ int Editor :: handle( int event )
         Fl_Text_Editor::handle( event );
         draw();
         return 1;
-      }
+        }
       else
-      {
+        {
         m_drawbrowser = false;
         m_drawhelper = false;
         Fl_Text_Editor::handle( event );
         draw();
         return 1;
-      }
+        }
     }
 
   }
