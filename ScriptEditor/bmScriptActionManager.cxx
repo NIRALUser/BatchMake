@@ -27,6 +27,10 @@
 #include "bmScriptIncAction.h"
 #include "bmScriptWriteFileAction.h"
 #include "bmScriptAppendFileAction.h"
+#include "bmScriptDbSendValueAction.h"
+#include "bmScriptDbSendFileAction.h"
+#include "bmScriptDbClearAction.h"
+#include "bmScriptExtractSliceAction.h"
 
 #include "Timer.h"
 
@@ -112,6 +116,10 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(Inc);
   BM_NEWKEYWORD(AppendFile);
   BM_NEWKEYWORD(WriteFile);
+  BM_NEWKEYWORD(DbSendValue);
+  BM_NEWKEYWORD(DbSendFile);
+  BM_NEWKEYWORD(DbClear);
+  BM_NEWKEYWORD(ExtractSlice);
   return m_list;
 }
 
@@ -133,6 +141,10 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(Inc);
    BM_NEWACTION(AppendFile);
    BM_NEWACTION(WriteFile);
+   BM_NEWACTION(DbSendValue);
+   BM_NEWACTION(DbSendFile);
+   BM_NEWACTION(DbClear);
+   BM_NEWACTION(ExtractSlice);
    return 0;
 }
 

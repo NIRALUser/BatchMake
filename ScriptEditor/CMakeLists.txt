@@ -33,6 +33,14 @@ Command/bmScriptListDirInDirAction.cxx
 Command/bmScriptIncAction.cxx
 Command/bmScriptWriteFileAction.cxx
 Command/bmScriptAppendFileAction.cxx
+Command/bmScriptDbSendValueAction.cxx
+Command/bmScriptDbSendFileAction.cxx
+Command/bmScriptDbClearAction.cxx
+Command/bmScriptExtractSliceAction.cxx
+)
+
+LINK_LIBRARIES(
+ BatchMakeDashboard
 )
 
 ADD_LIBRARY(BatchMakeScriptEditor ${BatchMakeScriptEditor_SRCS})
