@@ -26,18 +26,6 @@ IF(FLTK_FOUND)
    INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
 ENDIF(FLTK_FOUND)
 
-#Compile Utilities
-SUBDIRS(Utilities)
-
-#Compile Application Wrapper
-SUBDIRS(ApplicationWrapper)
-
-#Compile Script Editor
-SUBDIRS(ScriptEditor)
-
-#Compile GUI
-SUBDIRS(GUI)
-
 # Add testing
 MARK_AS_ADVANCED( DART_ROOT )
 INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
@@ -54,53 +42,21 @@ SET(BatchMake_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
 SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 
-INCLUDE_DIRECTORIES(
-  ${BatchMake_SOURCE_DIR}
-  ${BatchMake_SOURCE_DIR}/Utilities
-  ${BatchMake_SOURCE_DIR}/ApplicationWrapper
-  ${BatchMake_SOURCE_DIR}/GUI
-  ${BatchMake_SOURCE_DIR}/GUI/ScriptEditor
-  ${BatchMake_SOURCE_DIR}/GUI/External/Flu
-  ${BatchMake_SOURCE_DIR}/GUI/ProgressGUI
-  ${BatchMake_SOURCE_DIR}/ScriptEditor
-  ${BatchMake_SOURCE_DIR}/ScriptEditor/Command
-  ${BatchMake_SOURCE_DIR}/GUI/SplashScreen
+#Compile Utilities
+SUBDIRS(Utilities)
 
-  ${BatchMake_BINARY_DIR}
-  ${BatchMake_BINARY_DIR}/GUI
+#Compile Application Wrapper
+SUBDIRS(ApplicationWrapper)
 
-)
+#Compile Script Editor
+SUBDIRS(ScriptEditor)
 
-SET(BatchMake_SRCS
-  BatchMake.cxx
-  CommandLineArgumentParser.cxx
-)
+#Compile GUI
+SUBDIRS(GUI)
 
-IF(WIN32)
-SET(BatchMake_SRCS
-  ${BatchMake_SRCS}
-  BatchMake.rc)
-ENDIF(WIN32)
+#Compile the BatchMake Application 
+SUBDIRS(Code)
 
-LINK_LIBRARIES(
- ${FLTK_LIBRARIES}
-)
-
-SET(BATCHMAKE_LIBS
- BatchMakeApplicationWrapper
- BatchMakeScriptEditor
- BatchMakeGUI
- BatchMakeUtilities
- FLU
-)
-# Add an option to hide the console
-OPTION("HIDE_CONSOLE",OFF)
-IF(HIDE_CONSOLE)
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows") 
-ENDIF(HIDE_CONSOLE)
-
-ADD_EXECUTABLE(BatchMake ${BatchMake_SRCS})
-TARGET_LINK_LIBRARIES(BatchMake ${BATCHMAKE_LIBS})
 
 #Copy example directories
 MAKE_DIRECTORY(${BatchMake_BINARY_DIR}/bin/RelWithDebInfo/Applications)
@@ -111,7 +67,7 @@ CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Examples/Applications/RViewAffineRegistra
 # Configure files with settings for use by the build.
 CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Documentation/Doxygen/doxygen.config.in
                ${BatchMake_BINARY_DIR}/doxygen.config)
-CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Utilities/Doxygen/itkdoxygen.pl.in
+CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Documentation/Doxygen/itkdoxygen.pl.in
                ${BatchMake_BINARY_DIR}/itkdoxygen.pl)
 
 
