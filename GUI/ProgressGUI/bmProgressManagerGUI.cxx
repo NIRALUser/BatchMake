@@ -95,11 +95,10 @@ void ProgressManagerGUI::AddAction(MString name)
      m_index = MString("%1 -").arg(m_offset++);
 
   m_currentnode  =  m_ProgressGUI->g_progress->add_branch(m_index.toChar() , m_group );
-  
-  
   m_currentnode->branch_icon( &image_waiting );
   m_ProgressGUI->g_Progressgui->redraw();
   Fl::check();
+  m_ProgressGUI->g_progress->set_hilighted(m_currentnode);
 }
 
 void ProgressManagerGUI::FinishAction(MString output)
@@ -130,6 +129,7 @@ void ProgressManagerGUI::AddOutput(MString output)
       m_outputnode->add_leaf(output.replaceChar('/','\\').toChar());
    m_ProgressGUI->g_Progressgui->redraw();
   Fl::check();
+  m_ProgressGUI->g_progress->set_hilighted(m_currentnode);
 }
 
 void ProgressManagerGUI::AddError(MString error)
@@ -145,8 +145,12 @@ void ProgressManagerGUI::AddError(MString error)
   }
 
   if (m_errornode)
+  {
       m_errornode->add_leaf(error.replaceChar('/','\\').toChar());
-   m_ProgressGUI->g_Progressgui->redraw();
+  }
+ 
+  m_ProgressGUI->g_Progressgui->redraw();
+
   Fl::check();
 }
 
@@ -163,9 +167,31 @@ void ProgressManagerGUI::SetFinished(MString message)
   m_currentnode  =  m_ProgressGUI->g_progress->add_branch("Processing finished !");
   m_currentnode->branch_icon( &image_output );
   m_currentnode->add_leaf(message.toChar());
-
   m_ProgressGUI->g_cancel->label("Ok");
   m_ProgressGUI->g_Progressgui->redraw();
+  Fl::check();
+  m_ProgressGUI->g_progress->set_hilighted(m_currentnode);
+}
+
+void ProgressManagerGUI::DisplayOutput(MString message)
+{
+  m_ProgressGUI->m_buffer->append(message.toChar());
+  m_ProgressGUI->g_output->scroll(m_ProgressGUI->m_buffer->line_start(m_ProgressGUI->m_buffer->length()),0); // m_ProgressGUI->m_buffer->line_start(m_ProgressGUI->m_buffer->length()),0);
+  Fl::check();
+
+}
+
+void ProgressManagerGUI::DisplayError(MString message)
+{
+  m_ProgressGUI->m_buffer->append(message.toChar());
+  m_ProgressGUI->g_output->scroll(m_ProgressGUI->m_buffer->line_start(m_ProgressGUI->m_buffer->length()),0); // m_ProgressGUI->m_buffer->line_start(m_ProgressGUI->m_buffer->length()),0);
+  Fl::check();
+}
+
+void ProgressManagerGUI::DisplayInfo(MString message)
+{
+  m_ProgressGUI->m_buffer->append(message.toChar());
+  m_ProgressGUI->g_output->scroll(m_ProgressGUI->m_buffer->line_start(m_ProgressGUI->m_buffer->length()),0); // m_ProgressGUI->m_buffer->line_start(m_ProgressGUI->m_buffer->length()),0);
   Fl::check();
 }
 

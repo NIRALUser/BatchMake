@@ -45,6 +45,9 @@ public:
   void AddError(MString output);
   void Stop();
   void SetFinished(MString message);
+  void DisplayOutput(MString message);
+  void DisplayError(MString message);
+  void DisplayInfo(MString message);
 
 protected:
   ProgressGUIControls* m_ProgressGUI;
@@ -53,6 +56,7 @@ protected:
   Flu_Tree_Browser::Node* m_errornode;
   Fl_Progress* m_progress;
   int m_offset;
+
 
 };
 

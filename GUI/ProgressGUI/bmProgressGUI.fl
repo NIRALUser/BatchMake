@@ -7,18 +7,18 @@ class ProgressGUI {open : {bm::ProgressGUIBase}
   Function {make_window()} {open
   } {
     Fl_Window g_Progressgui {
-      label {BatchMake - Progression} open selected
-      xywh {251 355 444 372} type Double selection_color 16
+      label {BatchMake - Progression} open
+      xywh {533 329 444 451} type Double selection_color 16
       code0 {\#include "bmProgressGUIBase.h"} modal visible
     } {
       Fl_Button g_cancel {
         label Cancel
         callback {OnCancel()}
-        xywh {160 345 100 20} box PLASTIC_THIN_UP_BOX color 180
+        xywh {155 425 100 20} box PLASTIC_THIN_UP_BOX color 180
       }
       Fl_Box g_progress {
         label label
-        xywh {5 85 430 250} labelsize 12
+        xywh {5 85 435 190} labelsize 12
         code0 {\#include "FLU/Flu_Tree_Browser.h"}
         class Flu_Tree_Browser
       }
@@ -29,6 +29,9 @@ class ProgressGUI {open : {bm::ProgressGUIBase}
         label {BatchMake running process ...} open
         xywh {90 30 320 25} labelfont 1 align 17
       } {}
+      Fl_Text_Display g_output {selected
+        xywh {5 280 435 140} labelsize 10 textsize 10
+      }
     }
   }
 } 

@@ -26,6 +26,20 @@ namespace bm {
 ProgressGUIControls::ProgressGUIControls():ProgressGUI()
 {
   make_window();
+  m_buffer = new Fl_Text_Buffer();
+  g_output->buffer(m_buffer);
+  g_progress->set_hilighted( g_progress->get_root());
+  g_progress->box( FL_DOWN_BOX );
+  g_progress->show_root(false);
+  g_progress->branch_text(g_progress->branch_color(),g_progress->branch_font(),10);
+  g_progress->leaf_text(g_progress->leaf_color(),g_progress->leaf_font(),10);
+  g_progress->selection_color(20);
+  g_progress->show_leaves( true );
+  g_progress->show_branches( true );
+  g_progress->get_root()->always_open( true );
+  g_progress->insertion_mode(FLU_INSERT_BACK);
+  g_progress->selection_follows_hilight(true);
+  g_progress->selection_mode(FLU_SINGLE_SELECT);
 }
 
 ProgressGUIControls::~ProgressGUIControls()
