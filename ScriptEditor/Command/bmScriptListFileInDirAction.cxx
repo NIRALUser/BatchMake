@@ -83,7 +83,6 @@ void ScriptListFileInDirAction::Execute()
     if(fl_filename_match((*dirList)->d_name,m_filter.toChar())
       && !fl_filename_match((*dirList)->d_name,"./")
       && !fl_filename_match((*dirList)->d_name,"../")
-      && !fl_filename_match((*dirList)->d_name,"*/")
       )
       {
       if (m_value != "")
