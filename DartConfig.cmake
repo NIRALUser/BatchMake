@@ -27,4 +27,4 @@ SET (DOXYGEN_URL "http://caddlab.rad.unc.edu/Public/Dashboard/Documentation/Doxy
 #
 # Copy over the testing logo
 #
-CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Images/logo.gif ${BatchMake_BINARY_DIR}/Testing/HTML/TestingResults/Icons/Logo.gif COPYONLY)
+CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Images/logosmall.gif ${BatchMake_BINARY_DIR}/Testing/HTML/TestingResults/Icons/Logo.gif COPYONLY)
