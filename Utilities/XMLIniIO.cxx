@@ -96,7 +96,7 @@ void XMLIniIO::Update(MString balise,bool value)
   {
     if (m_list[i]->balise == balise)
     {
-      m_list[i]->value = MString("%1").arg(value);
+      m_list[i]->value = MString("%1").arg((int)value);
       m_append = false;
     }
   }
@@ -105,7 +105,7 @@ void XMLIniIO::Update(MString balise,bool value)
   {
      balisestruct* m_value = new balisestruct;
      m_value->balise = balise;
-     m_value->value = MString("%1").arg(value);
+     m_value->value = MString("%1").arg((int)value);
      m_list.push_back(m_value);
   }
 }

@@ -18,6 +18,7 @@
 
 #include "MString.h"
 #include <iostream>
+#include <stdio.h>
 
 class MString
 {

@@ -244,7 +244,7 @@ void ApplicationWrapper::Save(MString filename)
           m_writer.Write(MString("Name"),m_params[i]->GetName());
           m_writer.Write(MString("Value"),m_params[i]->GetValue());
           m_writer.Write(MString("Parent"),m_params[i]->GetParent());
-          m_writer.Write(MString("Optional"),m_params[i]->GetOptional());
+          m_writer.Write(MString("Optional"),(int)m_params[i]->GetOptional());
           for (unsigned j=0;j<m_params[i]->GetEnum().size();j++)
           {
              m_writer.Write(MString("Enum"),m_params[i]->GetEnum()[j]);
