@@ -26,6 +26,7 @@
   #include <unistd.h>
   #include <sys/wait.h>
   #include <fcntl.h>
+  #include <errno.h>
 #endif
 
 #include <fstream>
