@@ -17,6 +17,13 @@ SUBDIRS(BatchMakeScriptEditor)
 #Compile GUI
 SUBDIRS(BatchMakeGUI)
 
+# Add testing
+MARK_AS_ADVANCED( DART_ROOT )
+INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
+IF(NOT DART_ROOT) 
+  SET(DROP_LOCATION /DartClient)
+ENDIF(NOT DART_ROOT)
+
 
 SET (LIBRARY_OUTPUT_PATH ${BatchMake_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
 SET (EXECUTABLE_OUTPUT_PATH ${BatchMake_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
