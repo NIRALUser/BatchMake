@@ -25,6 +25,8 @@
 #include "bmScriptListFileInDirAction.h"
 #include "bmScriptListDirInDirAction.h"
 #include "bmScriptIncAction.h"
+#include "bmScriptWriteFileAction.h"
+#include "bmScriptAppendFileAction.h"
 
 #include "Timer.h"
 
@@ -108,6 +110,8 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(GetParam);
   BM_NEWKEYWORD(Randomize);
   BM_NEWKEYWORD(Inc);
+  BM_NEWKEYWORD(AppendFile);
+  BM_NEWKEYWORD(WriteFile);
   return m_list;
 }
 
@@ -127,6 +131,8 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(GetParam);
    BM_NEWACTION(Randomize);
    BM_NEWACTION(Inc);
+   BM_NEWACTION(AppendFile);
+   BM_NEWACTION(WriteFile);
    return 0;
 }
 
