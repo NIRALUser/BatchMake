@@ -13,7 +13,7 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#include "BatchMakeScriptEditorGUIControls.h"
+#include "bmScriptEditorGUIControls.h"
 #include "CommandLineArgumentParser.h"
 #include "FL/Fl.H"
 #include "MString.h"
@@ -38,10 +38,10 @@ int main(int argc, char **argv)
   if (argc < 2)
   {
     // Create a UI object
-    BatchMakeScriptEditorGUIControls* ui = new BatchMakeScriptEditorGUIControls();
+    bm::ScriptEditorGUIControls* ui = new bm::ScriptEditorGUIControls();
     MString m_windowtitle("BatchMake - ");
     m_windowtitle += BatchMakeVersion;
-    ui->g_batchmakescripteditorgui->label(m_windowtitle.toChar());
+    ui->g_Scripteditorgui->label(m_windowtitle.toChar());
     ui->SetApplicationPath(MString(argv[0]).rbegin("\\"));
 
     // Initialize FLTK
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     {
       MString m_filename = parseResult.GetOptionParameter("-c");
       std::cout << "Compiling ..." << std::endl;
-      BatchMakeScriptParser m_parser;
+      bm::ScriptParser m_parser;
       m_parser.Compile(m_filename);
       return 0;
     }
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     if (parseResult.IsOptionPresent("-e"))
     {
       MString m_filename = parseResult.GetOptionParameter("-e");
-      BatchMakeScriptParser m_parser;
+      bm::ScriptParser m_parser;
       m_parser.Execute(m_filename);
       return 0;
     }

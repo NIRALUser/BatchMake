@@ -6,16 +6,16 @@ IF(FLTK_FOUND)
 ENDIF(FLTK_FOUND)
 
 #Compile Utilities
-SUBDIRS(BatchMakeUtilities)
+SUBDIRS(Utilities)
 
 #Compile Application Wrapper
-SUBDIRS(BatchMakeApplicationWrapper)
+SUBDIRS(ApplicationWrapper)
 
 #Compile Script Editor
-SUBDIRS(BatchMakeScriptEditor)
+SUBDIRS(ScriptEditor)
 
 #Compile GUI
-SUBDIRS(BatchMakeGUI)
+SUBDIRS(GUI)
 
 # Add testing
 MARK_AS_ADVANCED( DART_ROOT )
@@ -35,18 +35,18 @@ SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 INCLUDE_DIRECTORIES(
   ${BatchMake_SOURCE_DIR}
-  ${BatchMake_SOURCE_DIR}/BatchMakeUtilities
-  ${BatchMake_SOURCE_DIR}/BatchMakeApplicationWrapper
-  ${BatchMake_SOURCE_DIR}/BatchMakeGUI
-  ${BatchMake_SOURCE_DIR}/BatchMakeGUI/ScriptEditor
-  ${BatchMake_SOURCE_DIR}/BatchMakeGUI/External/Flu
-  ${BatchMake_SOURCE_DIR}/BatchMakeGUI/ProgressGUI
-  ${BatchMake_SOURCE_DIR}/BatchMakeScriptEditor
-  ${BatchMake_SOURCE_DIR}/BatchMakeScriptEditor/BatchMakeCommand
-  ${BatchMake_SOURCE_DIR}/BatchMakeGUI/SplashScreen
+  ${BatchMake_SOURCE_DIR}/Utilities
+  ${BatchMake_SOURCE_DIR}/ApplicationWrapper
+  ${BatchMake_SOURCE_DIR}/GUI
+  ${BatchMake_SOURCE_DIR}/GUI/ScriptEditor
+  ${BatchMake_SOURCE_DIR}/GUI/External/Flu
+  ${BatchMake_SOURCE_DIR}/GUI/ProgressGUI
+  ${BatchMake_SOURCE_DIR}/ScriptEditor
+  ${BatchMake_SOURCE_DIR}/ScriptEditor/Command
+  ${BatchMake_SOURCE_DIR}/GUI/SplashScreen
 
   ${BatchMake_BINARY_DIR}
-  ${BatchMake_BINARY_DIR}/BatchMakeGUI
+  ${BatchMake_BINARY_DIR}/GUI
 
 )
 

@@ -1,0 +1,43 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0105 
+header_name {.h} 
+code_name {.cxx}
+class ApplicationListGUI {open : {bm::ApplicationListGUIBase}
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window g_Applicationlistgui {
+      label {BatchMake - Application Wrapper} open
+      xywh {567 494 383 298} type Double
+      code0 {\#include "bmApplicationListGUIBase.h"} visible
+    } {
+      Fl_Button {} {
+        label {New ...}
+        callback {OnNew()}
+        xywh {290 5 85 20} box PLASTIC_UP_BOX down_box PLASTIC_DOWN_BOX color 180 labelsize 12
+      }
+      Fl_Button {} {
+        label {Edit ...}
+        callback {OnEdit()}
+        xywh {290 30 85 20} box PLASTIC_UP_BOX down_box PLASTIC_DOWN_BOX color 180 labelsize 12
+      }
+      Fl_Button {} {
+        label Remove
+        callback {OnRemove()}
+        xywh {290 55 85 20} box PLASTIC_UP_BOX down_box PLASTIC_DOWN_BOX color 180 labelsize 12
+      }
+      Fl_Button {} {
+        label Ok
+        callback {OnAccept()} selected
+        xywh {150 270 75 20} box PLASTIC_UP_BOX down_box PLASTIC_DOWN_BOX color 180 labelsize 12
+      }
+      Fl_Box g_list {
+        label label
+        callback {OnSelect();}
+        xywh {5 5 275 255} labelsize 12
+        code0 {\#include "FLU/Flu_Tree_Browser.h"}
+        class Flu_Tree_Browser
+      }
+    }
+  }
+} 
