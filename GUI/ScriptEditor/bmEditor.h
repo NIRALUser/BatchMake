@@ -25,6 +25,9 @@
 #include "MString.h"
 #include <list>
 
+#include <errno.h>
+
+
 namespace bm {
 
 class Editor : public Fl_Text_Editor
