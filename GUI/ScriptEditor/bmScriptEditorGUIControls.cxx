@@ -105,22 +105,29 @@ void ScriptEditorGUIControls::OnOpenScript()
   }
 }
 
-
+/** Save the current script */
 void ScriptEditorGUIControls::OnSaveScript()
 {
   const char* filename = 0;
   if (m_filename == "")
+    {
     filename = fl_file_chooser("Save script", "BatchMake Script(*.bms)", NULL);
-  
-  if(filename)
-  {
-    m_filename = filename;
+    if(filename)
+      {
+      m_filename = filename;
+      }
+    }
+  if(m_filename != "")
+    {
     if (MString(m_filename).rend(".") != ".bms")
-     m_filename = MString(m_filename) +  ".bms";
-
+      {
+      m_filename = MString(m_filename) +  ".bms";
+      }
     g_editor->Save(m_filename.toChar());
+    fl_alert("Saved");
     m_parser->SetScriptPath(m_filename);
-  }
+    }
+
 }
 
 
