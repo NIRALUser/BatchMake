@@ -1,0 +1,4 @@
+.git*            export-ignore
+
+*.gif           -crlf
+*.ico           -crlf
