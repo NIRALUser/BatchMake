@@ -24,6 +24,7 @@
 #include "bmScriptGetParamAction.h"
 #include "bmScriptListFileInDirAction.h"
 #include "bmScriptListDirInDirAction.h"
+#include "bmScriptIncAction.h"
 
 #include "Timer.h"
 
@@ -106,6 +107,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(ListFileInDir);
   BM_NEWKEYWORD(GetParam);
   BM_NEWKEYWORD(Randomize);
+  BM_NEWKEYWORD(Inc);
   return m_list;
 }
 
@@ -124,6 +126,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(ListFileInDir);
    BM_NEWACTION(GetParam);
    BM_NEWACTION(Randomize);
+   BM_NEWACTION(Inc);
    return 0;
 }
 
