@@ -19,7 +19,7 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_draw.H>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <FL/math.H>
 
 #include "FLU/Flu_Progress.h"
 

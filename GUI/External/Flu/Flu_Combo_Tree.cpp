@@ -18,7 +18,7 @@
 #include <FL/fl_draw.H>
 #include <string.h>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <FL/math.H>
 
 #include "FLU/Flu_Combo_Tree.h"
 

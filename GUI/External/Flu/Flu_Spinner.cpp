@@ -18,7 +18,7 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <FL/math.H>
 
 #include "FLU/Flu_Spinner.h"
 

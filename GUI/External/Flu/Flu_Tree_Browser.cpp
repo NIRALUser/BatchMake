@@ -17,7 +17,7 @@
 
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
-#include <FL/math.h>
+#include <FL/math.H>
 #include <stdlib.h>
 
 #include "FLU/Flu_Tree_Browser.h"

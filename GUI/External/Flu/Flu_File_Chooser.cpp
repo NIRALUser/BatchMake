@@ -39,7 +39,7 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/fl_ask.H>
-#include <FL/math.h>
+#include <FL/math.H>
 #include <FL/filename.H>
 #include <FL/Fl_Pixmap.H>
 #include <FL/Fl_Scroll.H>
