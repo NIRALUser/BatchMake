@@ -26,6 +26,12 @@ IF(FLTK_FOUND)
    INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
 ENDIF(FLTK_FOUND)
 
+FIND_PACKAGE(ITK)
+IF(ITK_FOUND)
+   INCLUDE( ${USE_ITK_FILE} ) 
+ENDIF(ITK_FOUND)
+
+
 # Add testing
 MARK_AS_ADVANCED( DART_ROOT )
 INCLUDE (${CMAKE_ROOT}/Modules/Dart.cmake)
@@ -52,6 +58,7 @@ INCLUDE_DIRECTORIES(
   ${BatchMake_SOURCE_DIR}/ScriptEditor
   ${BatchMake_SOURCE_DIR}/ScriptEditor/Command
   ${BatchMake_SOURCE_DIR}/GUI/SplashScreen
+  ${BatchMake_SOURCE_DIR}/Dashboard
 
   ${BatchMake_BINARY_DIR}
   ${BatchMake_BINARY_DIR}/GUI
@@ -74,6 +81,9 @@ SUBDIRS(Code)
 
 #Compile External applications
 SUBDIRS(External)
+
+#Compile Dashboard Library
+SUBDIRS(Dashboard)
 
 #Copy example directories
 MAKE_DIRECTORY(${BatchMake_BINARY_DIR}/bin/RelWithDebInfo/Applications)
