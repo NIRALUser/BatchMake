@@ -43,6 +43,8 @@ public:
   void OnCompile();
   void OnExecute();
   void OnApplicationWrapper();
+  void hide();
+
   static void Timer(void*);
 
   Fl_Text_Buffer* m_errorbuffer;

@@ -108,6 +108,12 @@ void ScriptEditorGUIControls::OnOpenScript()
   }
 }
 
+void ScriptEditorGUIControls::hide()
+{
+  if (MString(g_Scripteditorgui->label()).find("*") != -1)
+  OnSaveScript();     
+  g_Scripteditorgui->hide();
+}
 
 void ScriptEditorGUIControls::OnSaveScript()
 {
@@ -138,10 +144,10 @@ void ScriptEditorGUIControls::OnSaveScript()
 
     g_editor->Save(m_filename.toChar());
     m_parser->SetScriptPath(m_filename);
-  }
 
-  m_title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_filename.rend("/")+1) + "]" ;
-      g_Scripteditorgui->label(m_title.toChar());
+    m_title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_filename.rend("/")+1) + "]" ;
+    g_Scripteditorgui->label(m_title.toChar());
+  }
 }
 
 

@@ -33,6 +33,7 @@ public:
   virtual void OnCompile() = 0;
   virtual void OnExecute() = 0;
   virtual void OnApplicationWrapper() = 0;
+  virtual void hide() = 0;
 };
 
 } // end namespace bm
