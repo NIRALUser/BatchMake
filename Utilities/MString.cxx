@@ -141,9 +141,9 @@ bool MString::operator<(MString value)
 
 
 
-void MString::operator=(MString value)
+void MString::operator=(const MString & value)
 {
-  m_value=value.GetValue();
+  m_value= ((MString)value).GetValue();
 }
 
 

@@ -8,6 +8,7 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
+
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
@@ -31,27 +32,27 @@ public:
   MString(std::string string);
   MString(const char* s) {m_value = s;}
   ~MString();
-  
 
   std::string GetValue();
   MString arg(int value);
   MString arg(float value);
   MString arg(unsigned int value);
   MString arg(unsigned long value);
+
   const char* latin1();
   const char* toChar();
+
   int toInt();
   float toFloat();
   double toDouble();
   bool toBool();
   int length();
   MString mid(int begin,int nb=-1);
-
   bool operator==(MString);
   bool operator==(const char*);
   bool operator!=(MString);
   bool operator!=(const char*);
-  void operator=(MString);
+  void operator=(const MString &);
   void operator=(const char*);
   void operator+=(MString);
   void operator+=(const char*);
@@ -67,6 +68,7 @@ public:
   MString rbegin(const char* key,int offset=-1);
   MString rend(const char* key,int offset=-1);
   char operator[](int);
+
   bool isFloat();
   bool isInt();
 
@@ -80,6 +82,8 @@ public:
 
 private:
   std::string m_value;
+
 };
 
 #endif
+
