@@ -55,6 +55,7 @@ public:
   void operator+=(MString);
   void operator+=(const char*);
   void operator+=(const char);
+  bool operator<(MString);
   MString operator+(int);
   MString operator+(MString);
   MString operator+(const char*);

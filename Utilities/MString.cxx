@@ -131,6 +131,15 @@ bool MString::operator!=(const char* value)
     return true;
 }
 
+bool MString::operator<(MString value)
+{
+  if (m_value.compare(value.GetValue()) < 0)
+    return true;
+  else
+    return false;
+}
+
+
 
 void MString::operator=(MString value)
 {
