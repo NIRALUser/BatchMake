@@ -19,6 +19,7 @@
 #include "bmProgressManagerGUI.h"
 #include "bmProgressGUIControls.h"
 #include "bmApplicationListGUIControls.h"
+#include "XMLIniIO.h"
 
 #include <iostream>
 #include <FL/Fl_File_Chooser.H>
@@ -86,8 +87,24 @@ void ScriptEditorGUIControls::Show()
     ui->g_progress->maximum(10);
     Fl::add_timeout(0.1,Timer,ui);
   }*/
+
+
+  //Load .ini
+  XMLIniIO* m_inifile = new XMLIniIO();
+  m_inifile->SetFileName(m_applicationpath + "/BatchMake.ini");
+  if (m_inifile->Read() != -1)
+  {
+    MString m_inivalue = m_inifile->Find("Test .ini value");
+    std::cout << "Ini value: " << m_inivalue.toChar() << std::endl;
+  }
+  else
+  {
+    m_inifile->Update("Test .ini value","Seems to work!");
+    m_inifile->Write();
+  }
+
   g_Scripteditorgui->show();
-  m_title = MString(g_Scripteditorgui->label()) + " [script]" ;
+  m_title = MString(g_Scripteditorgui->label()) + " [script]";
   g_Scripteditorgui->label(m_title.toChar());
   g_editor->SetParentWindow(g_Scripteditorgui);
 }
