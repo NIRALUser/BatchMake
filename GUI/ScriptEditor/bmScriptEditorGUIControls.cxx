@@ -139,6 +139,9 @@ void ScriptEditorGUIControls::OnSaveScript()
     g_editor->Save(m_filename.toChar());
     m_parser->SetScriptPath(m_filename);
   }
+
+  m_title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_filename.rend("/")+1) + "]" ;
+      g_Scripteditorgui->label(m_title.toChar());
 }
 
 
