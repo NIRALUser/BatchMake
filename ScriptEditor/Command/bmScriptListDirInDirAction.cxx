@@ -45,7 +45,7 @@ bool ScriptListDirInDirAction::TestParam(ScriptError* error,int linenumber)
 
 MString ScriptListDirInDirAction::Help()
 {
-  return "ListDirInDir(<dirlist> 'directory' *.*|*.img))";
+  return "ListDirInDir(<dirlist> 'directory' *.*))";
 }
 
 
@@ -62,6 +62,11 @@ void ScriptListDirInDirAction::Execute()
     m_filter = m_manager->Convert(m_parameters[2]);
     if (m_filter.startWith('\''))
       m_filter = m_filter.rbegin("'") + 1;
+
+    if(m_filter[m_filter.length()-1] != '/')
+      {
+      m_filter += '/';
+      }
   }
 
   MString m_value;
