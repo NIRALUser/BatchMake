@@ -72,8 +72,7 @@ SUBDIRS(GUI)
 #Compile the BatchMake Application 
 SUBDIRS(Code)
 
-#Compile External 
-applications
+#Compile External applications
 SUBDIRS(External)
 
 #Copy example directories
