@@ -34,72 +34,32 @@
 
 namespace bm {
 
-void ScriptEditorGUIControls::SetApplicationPath(MString applicationpath)
-{
-  m_applicationpath = applicationpath;
-  LoadWrappedApplication();
-}
-
-
 ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
 {
   m_filename = 0;
-  m_parser = 0;
-  m_errorgui = 0;
+  m_parser = new ScriptParser();
+  m_errorgui = new ScriptErrorGUI();
   m_errorbuffer = new Fl_Text_Buffer();
   make_window();
+  g_output->buffer(m_errorbuffer);
+
 }
 
 ScriptEditorGUIControls::~ScriptEditorGUIControls()
 {
+  delete m_parser;
 }
 
-
-void ScriptEditorGUIControls::LoadWrappedApplication()
-{ 
-#ifdef WIN32
- WIN32_FIND_DATA File;
- HANDLE hSearch;
- int re;
- hSearch=FindFirstFile((m_applicationpath+ "/Applications/*.*").toChar(),&File);
- if (hSearch != INVALID_HANDLE_VALUE)
- {
-  re=true;
-  while(re)
-  {
-    re = FindNextFile(hSearch,&File);
-    if (re)
-    {
-      if (MString(File.cFileName) != "..")
-      {
-        ApplicationWrapper* m_newapplication = new ApplicationWrapper();
-        m_newapplication->Load(m_applicationpath+ "/Applications/" + MString(File.cFileName));
-        m_applicationlist.push_back(m_newapplication);
-      }
-    }
-  }
-  FindClose(hSearch);
- }
-
-#else
-  DIR *d;
-  struct dirent * dir;
-  d = opendir(m_applicationpath.toChar());
-  if (d)
-  {
-    while((dir = readdir(d)) != NULL)
-    {
-      std::cout << dir->d_name << std::endl;
-    }
-  }
-#endif
-  
-
+void ScriptEditorGUIControls::SetApplicationPath(MString applicationpath)
+{
+  m_applicationpath = applicationpath;
+  m_parser->SetApplicationPath(m_applicationpath);
 }
+
 
 void ScriptEditorGUIControls::Timer(void* ui)
 {
-  int newvalue = ((SplashScreenControls*)ui)->g_progress->value()+1;
+  int newvalue = (int)((SplashScreenControls*)ui)->g_progress->value()+1;
   ((SplashScreenControls*)ui)->g_progress->value(newvalue);
   if (((SplashScreenControls*)ui)->g_progress->value() == ((SplashScreenControls*)ui)->g_progress->maximum()+1)
   {
@@ -129,18 +89,53 @@ void ScriptEditorGUIControls::Show()
 }
 
 
+void ScriptEditorGUIControls::OnOpenScript()
+{
+  m_filename = fl_file_chooser("Load script", "BatchMake Script(*.bms)", NULL);
+  if(m_filename)
+  {
+    g_editor->Load(m_filename);
+  }
+}
+
+
+void ScriptEditorGUIControls::OnSaveScript()
+{
+  if (!m_filename)
+    m_filename = fl_file_chooser("Save script", "BatchMake Script(*.bms)", NULL);
+  
+  if(m_filename)
+  {
+    g_editor->Save(m_filename);
+  }
+}
+
+
+void ScriptEditorGUIControls::OnCompile()
+{
+    m_errorbuffer->text("");
+    m_parser->Reset();
+    m_errorgui->Reset();
+    m_errorgui->SetTextDisplay(g_output);
+    m_parser->SetError(m_errorgui);
+    int m_offset = 0;
+    for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+    {
+       const char* text = g_editor->buffer()->line_text(m_offset);
+       m_parser->AddCodeLine(MString(text));
+       m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    }
+    m_errorgui->SetStatus(MString("Compiling ..."));
+    m_parser->Parse();
+    m_errorgui->DisplaySummary();
+}
 
 void ScriptEditorGUIControls::OnExecute()
 {
-  if (!m_parser)
-  {
+    m_parser->Reset();
+    m_errorgui->Reset();
     m_errorbuffer->text("");
-    ScriptParser* m_parser = new ScriptParser();
-    ScriptErrorGUI* m_errorgui = new ScriptErrorGUI();
-    m_parser->SetApplicationPath(m_applicationpath);
-    g_output->buffer(m_errorbuffer);
     m_errorgui->SetTextDisplay(g_output);
-    
     m_parser->SetError(m_errorgui);
     int m_offset = 0;
     for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
@@ -177,67 +172,13 @@ void ScriptEditorGUIControls::OnExecute()
       m_errorgui->DisplaySummary();
     }
 
-    delete m_parser;
-    delete m_errorgui;
-  }
 }
-
-
-void ScriptEditorGUIControls::OnOpenScript()
-{
-  m_filename = fl_file_chooser("Load script", "BatchMake Script(*.bms)", NULL);
-  if(m_filename)
-  {
-    g_editor->Load(m_filename);
-  }
-}
-
-
-void ScriptEditorGUIControls::OnSaveScript()
-{
-  if (!m_filename)
-    m_filename = fl_file_chooser("Save script", "BatchMake Script(*.bms)", NULL);
-  
-  if(m_filename)
-  {
-    g_editor->Save(m_filename);
-  }
-}
-
-
-void ScriptEditorGUIControls::OnCompile()
-{
-  if (!m_parser)
-  {
-    m_errorbuffer->text("");
-    ScriptParser* m_parser = new ScriptParser();
-    m_parser->SetApplicationPath(m_applicationpath);
-    ScriptErrorGUI* m_errorgui = new ScriptErrorGUI();
-    g_output->buffer(m_errorbuffer);
-    m_errorgui->SetTextDisplay(g_output);
-    
-    m_parser->SetError(m_errorgui);
-    int m_offset = 0;
-    for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
-    {
-       const char* text = g_editor->buffer()->line_text(m_offset);
-       m_parser->AddCodeLine(MString(text));
-       m_offset = g_editor->buffer()->line_end(m_offset)+1;
-    }
-    m_errorgui->SetStatus(MString("Compiling ..."));
-    m_parser->Parse();
-    m_errorgui->DisplaySummary();
-    delete m_parser;
-    delete m_errorgui;
-  }
-}
-
 
 void ScriptEditorGUIControls::OnApplicationWrapper()
 {
   ApplicationListGUIControls* ui = new ApplicationListGUIControls();
   ui->SetApplicationPath(m_applicationpath);
-  ui->SetApplicationList(&m_applicationlist);
+  ui->SetApplicationList(m_parser->GetApplicationList());
   ui->Show();
 }
 

@@ -38,7 +38,6 @@ public:
 
   void Show();
  
-  void LoadWrappedApplication();
   void OnOpenScript();
   void OnSaveScript();
   void OnCompile();

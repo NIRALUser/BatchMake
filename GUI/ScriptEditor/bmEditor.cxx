@@ -33,6 +33,7 @@ namespace bm {
 const char         *code_keywords[] = {  // List of known C/C++ keywords...     
          "echo",  
          "getparam",
+         "listfileindir",
          "randomize",
          "run",
          "sequence",  
@@ -402,6 +403,10 @@ void Editor::Load(const char* filename)
   if (r)
      fl_alert("Error reading from file \'%s\':\n%s.", filename, strerror(errno));
 
+  int m_foundPos = 0;
+  while(m_buffer->findchars_forward(m_foundPos,"\r",&m_foundPos))
+    m_buffer->remove(m_foundPos,m_foundPos+1);
+  
   m_buffer->call_modify_callbacks();
 }
 
@@ -471,7 +476,7 @@ void Editor::SelectOption(Flu_Tree_Browser* browser, void* widget)
        ((Editor*)widget)->m_helper->value(m_help->Help().toChar());
        if (MString(((Editor*)widget)->m_helper->value()) != "")
        {
-         ((Editor*)widget)->m_helper->resize(((Editor*)widget)->m_helper->x(),((Editor*)widget)->m_helper->y(),m_help->Help().length()*4.9,15);
+         ((Editor*)widget)->m_helper->resize(((Editor*)widget)->m_helper->x(),((Editor*)widget)->m_helper->y(),(int)(m_help->Help().length()*4.9),15);
          ((Editor*)widget)->m_drawhelper = true;
        }
        else
