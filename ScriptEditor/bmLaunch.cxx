@@ -14,7 +14,6 @@
 =========================================================================*/
 
 #include "bmLaunch.h"
-#include "bmOutput.h"
   
 #ifdef WIN32
   #include <Windows.h>
