@@ -1,2 +1,3 @@
 SUBDIRS(Zip)
+SUBDIRS(Tester)
 
