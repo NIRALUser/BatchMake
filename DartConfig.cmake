@@ -18,11 +18,9 @@ SET (CVS_WEB_URL "http://caddlab.rad.unc.edu/cgi-bin/cvsweb.cgi/?cvsroot=BatchMa
 OPTION(BUILD_DOXYGEN "Build source documentation using doxygen" "On")
 SET (DOXYGEN_CONFIG "${PROJECT_BINARY_DIR}/doxygen.config" )
 SET (USE_DOXYGEN "On")
-SET (DOXYGEN_URL "http://caddlab.rad.unc.edu/Public/Dashboard/Documentation/Doxygen/html/" )
-
-
-#SET (DOXYGEN_URL "http://${DROP_SITE}/" )
-#SET (GNATS_WEB_URL "http://${DROP_SITE}/")
+SET (DOXYGEN_URL "http://caddlab.rad.unc.edu/Public/Dashboard/BatchMake-Dashboard/Documentation/Doxygen/html/" )
+SET (USE_GNATS "On")
+SET (GNATS_WEB_URL "http://caddlab.rad.unc.edu/software/itkUNC/Bug/index.php")
 
 #
 # Copy over the testing logo
