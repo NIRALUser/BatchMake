@@ -50,7 +50,23 @@ MString ScriptIfAction::Help()
 
 void ScriptIfAction::Execute()
 {
-  if (m_parameters[1].toLower() == "==")
+  // if we only have on parameter
+  // something like if(${myvar}) we just test if the var exist
+  if(m_parameters.size()==1)
+    {
+    if (m_manager->GetVariable(m_parameters[0])[0] != "")
+      {
+      for (unsigned int i=0;i<m_thenaction.size();i++)
+         m_thenaction[i]->Execute();
+      }
+    else
+      {
+      for (unsigned int i=0;i<m_elseaction.size();i++)
+        m_elseaction[i]->Execute();
+      }
+    }
+
+  else if (m_parameters[1].toLower() == "==")
   {
     if (m_manager->GetVariable(m_parameters[0])[0] == m_parameters[2])
     {
@@ -64,7 +80,7 @@ void ScriptIfAction::Execute()
     }
   }
 
- if (m_parameters[1].toLower() == ">")
+ else if (m_parameters[1].toLower() == ">")
  {
     if (m_manager->GetVariable(m_parameters[0])[0].toFloat() > m_parameters[2].toFloat())
     {
@@ -78,7 +94,7 @@ void ScriptIfAction::Execute()
     }
  }
   
- if (m_parameters[1].toLower() == "<")
+ else if (m_parameters[1].toLower() == "<")
  {
     if (m_manager->GetVariable(m_parameters[0])[0].toFloat() < m_parameters[2].toFloat())
     {
@@ -92,7 +108,7 @@ void ScriptIfAction::Execute()
     }
  }
 
- if (m_parameters[1].toLower() == ">=")
+ else if (m_parameters[1].toLower() == ">=")
  {
     if (m_manager->GetVariable(m_parameters[0])[0].toFloat() >= m_parameters[2].toFloat())
     {
@@ -107,7 +123,7 @@ void ScriptIfAction::Execute()
  }
 
 
- if (m_parameters[1].toLower() == "<=")
+ else if (m_parameters[1].toLower() == "<=")
  {
     if (m_manager->GetVariable(m_parameters[0])[0].toFloat() <= m_parameters[2].toFloat())
     {
