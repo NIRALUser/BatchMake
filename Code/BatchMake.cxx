@@ -25,9 +25,9 @@ void Help()
 {
   std::cout << "BatchMake - " << BatchMakeVersion << std::endl;
   std::cout << "---------------------------------" << std::endl;
-  std::cout << "BatchMake [-v] [-i] <filename>" << std::endl;
+  std::cout << "BatchMake [-h] [-i] <filename>" << std::endl;
   std::cout << "Options:" << std::endl;
-  std::cout << "-v : Verbose mode" << std::endl;
+  std::cout << "-h : Display help" << std::endl;
   std::cout << "-c <input filename> : Compile script" << std::endl;
   std::cout << "-e <input filename> : Execute script" << std::endl;
 }
@@ -35,6 +35,12 @@ void Help()
 
 int main(int argc, char **argv)
 {
+   #ifdef WIN32
+     MString m_applicationpath = MString(argv[0]).rbegin("\\");
+   #else
+     MString m_applicationpath = MString(argv[0]).rbegin("/");
+   #endif
+
   if (argc < 2)
   {
     // Create a UI object
@@ -42,8 +48,7 @@ int main(int argc, char **argv)
     MString m_windowtitle("BatchMake - ");
     m_windowtitle += BatchMakeVersion;
     ui->g_Scripteditorgui->label(m_windowtitle.toChar());
-    ui->SetApplicationPath(MString(argv[0]).rbegin("\\"));
-
+    ui->SetApplicationPath(m_applicationpath);
     // Initialize FLTK
     Fl::visual(FL_DOUBLE|FL_INDEX); 
     Fl::background(236,233,216);
@@ -61,7 +66,7 @@ int main(int argc, char **argv)
     // Parse command line parameters
     CommandLineArgumentParser parser;
     // input
-    parser.AddOption("-v",0);  // Verbose mode
+    parser.AddOption("-h",0);  // Verbose mode
     parser.AddOption("-c",1);  // Compile script
     parser.AddOption("-e",1);  // Execute script
     CommandLineArgumentParseResult parseResult;
@@ -77,7 +82,7 @@ int main(int argc, char **argv)
       return -1;
     }
 
-    if (parseResult.IsOptionPresent("-v"))
+    if (parseResult.IsOptionPresent("-h"))
     {
       Help();
       return 0;
@@ -88,6 +93,7 @@ int main(int argc, char **argv)
       MString m_filename = parseResult.GetOptionParameter("-c");
       std::cout << "Compiling ..." << std::endl;
       bm::ScriptParser m_parser;
+      m_parser.SetApplicationPath(m_applicationpath);
       m_parser.Compile(m_filename);
       return 0;
     }
@@ -96,6 +102,7 @@ int main(int argc, char **argv)
     {
       MString m_filename = parseResult.GetOptionParameter("-e");
       bm::ScriptParser m_parser;
+      m_parser.SetApplicationPath(m_applicationpath);
       m_parser.Execute(m_filename);
       return 0;
     }

@@ -14,9 +14,9 @@ LINK_LIBRARIES(
 )
 
 SET(BATCHMAKE_LIBS
+ BatchMakeGUI
  BatchMakeApplicationWrapper
  BatchMakeScriptEditor
- BatchMakeGUI
  BatchMakeUtilities
  FLU
 )

@@ -72,6 +72,9 @@ SUBDIRS(GUI)
 #Compile the BatchMake Application 
 SUBDIRS(Code)
 
+#Compile External 
+applications
+SUBDIRS(External)
 
 #Copy example directories
 MAKE_DIRECTORY(${BatchMake_BINARY_DIR}/bin/RelWithDebInfo/Applications)
