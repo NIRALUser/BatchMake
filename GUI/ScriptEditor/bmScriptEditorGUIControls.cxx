@@ -153,73 +153,131 @@ void ScriptEditorGUIControls::OnSaveScript()
 
 void ScriptEditorGUIControls::OnCompile()
 {
-    m_errorbuffer->text("");
-    m_parser->Reset();
-    m_errorgui->Reset();
-    m_errorgui->SetTextDisplay(g_output);
-    m_parser->SetError(m_errorgui);
-    int m_offset = 0;
-    for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+  m_errorbuffer->text("");
+  m_parser->Reset();
+  m_errorgui->Reset();
+  m_errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_errorgui);
+  int m_offset = 0;
+  for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
-       const char* text = g_editor->buffer()->line_text(m_offset);
-       m_parser->AddCodeLine(MString(text));
-       m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    const char* text = g_editor->buffer()->line_text(m_offset);
+    m_parser->AddCodeLine(MString(text));
+    m_offset = g_editor->buffer()->line_end(m_offset)+1;
     }
-    m_errorgui->SetStatus(MString("Compiling ..."));
-    m_parser->Parse();
-    m_errorgui->DisplaySummary();
+  m_errorgui->SetStatus(MString("Compiling ..."));
+  m_parser->Parse();
+  m_errorgui->DisplaySummary();
 }
 
 void ScriptEditorGUIControls::OnExecute()
 {
-    m_parser->Reset();
-    m_errorgui->Reset();
-    m_errorbuffer->text("");
-    m_errorgui->SetTextDisplay(g_output);
-    m_parser->SetError(m_errorgui);
-    int m_offset = 0;
-    for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+  m_parser->Reset();
+  m_errorgui->Reset();
+  m_errorbuffer->text("");
+  m_errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_errorgui);
+  int m_offset = 0;
+  for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
-       const char* text = g_editor->buffer()->line_text(m_offset);
-       m_parser->AddCodeLine(MString(text));
-       m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    const char* text = g_editor->buffer()->line_text(m_offset);
+    m_parser->AddCodeLine(MString(text));
+    m_offset = g_editor->buffer()->line_end(m_offset)+1;
     }
 
-    m_errorgui->SetStatus(MString("Compiling ..."));
+  m_errorgui->SetStatus(MString("Compiling ..."));
     
-    ProgressManagerGUI* m_progressmanagergui = new ProgressManagerGUI();
-    ProgressGUIControls* m_progressgui = new ProgressGUIControls();
-    m_progressgui->g_progress->box( FL_DOWN_BOX );
-   // m_progressgui->g_progress->auto_branches( true );  
-    m_progressgui->g_progress->show_leaves( true );
-    m_progressgui->g_progress->show_branches( true );
-    m_progressgui->g_progress->get_root()->always_open( true );
-    m_progressgui->g_progress->insertion_mode(FLU_INSERT_BACK);
+  ProgressManagerGUI* m_progressmanagergui = new ProgressManagerGUI();
+  ProgressGUIControls* m_progressgui = new ProgressGUIControls();
+  m_progressgui->g_progress->box( FL_DOWN_BOX );
+  // m_progressgui->g_progress->auto_branches( true );  
+  m_progressgui->g_progress->show_leaves( true );
+  m_progressgui->g_progress->show_branches( true );
+  m_progressgui->g_progress->get_root()->always_open( true );
+  m_progressgui->g_progress->insertion_mode(FLU_INSERT_BACK);
 
-    m_progressgui->g_progress->label( "BatchMake processing ..." );
-    m_progressmanagergui->SetProgressGUI(m_progressgui);
-    m_parser->SetProgressManager(m_progressmanagergui);
+  m_progressgui->g_progress->label( "BatchMake processing ..." );
+  m_progressmanagergui->SetProgressGUI(m_progressgui);
+  m_parser->SetProgressManager(m_progressmanagergui);
 
-    if (m_parser->Parse())
+  if (m_parser->Parse())
     {
-      m_errorgui->DisplaySummary();
-      m_errorgui->SetStatus(MString("Running ..."));
-      m_progressgui->Show();
-      m_parser->Execute();
+    m_errorgui->DisplaySummary();
+    m_errorgui->SetStatus(MString("Running ..."));
+    m_progressgui->Show();
+    m_parser->Execute();
     }
-    else
+  else
     {
-      m_errorgui->DisplaySummary();
+    m_errorgui->DisplaySummary();
     }
-
 }
 
+/** Launch the application wrapper */
 void ScriptEditorGUIControls::OnApplicationWrapper()
 {
   ApplicationListGUIControls* ui = new ApplicationListGUIControls();
   ui->SetApplicationPath(m_applicationpath);
   ui->SetApplicationList(m_parser->GetApplicationList());
   ui->Show();
+}
+
+/** Generate a Condor script */
+void ScriptEditorGUIControls::OnGenerateCondor()
+{
+  const char* filename = 0;
+  filename = fl_file_chooser("Save Condor script", "Condor Script(*.bmc)", NULL);
+
+  if(!filename)
+    {
+    return;
+    }
+
+  // Check first if the script is valid
+  m_parser->Reset();
+  m_errorgui->Reset();
+  m_errorbuffer->text("");
+  m_errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_errorgui);
+  int m_offset = 0;
+  for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+    {
+    const char* text = g_editor->buffer()->line_text(m_offset);
+    m_parser->AddCodeLine(MString(text));
+    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    }
+
+  m_errorgui->SetStatus(MString("Generating condor script ..."));
+    
+  Condor condor;
+  condor.SetFileName(filename);
+  m_parser->SetCondorModule(&condor);
+  if (m_parser->Parse())
+    {
+    m_errorgui->DisplaySummary();
+    m_errorgui->SetStatus(MString("Generating ..."));
+    m_parser->Execute();
+    }
+  else
+    {
+    m_errorgui->DisplaySummary();
+    }
+
+  condor.Write();
+  m_parser->SetCondorModule(NULL);
+}
+
+/** Generate a batch scripts */
+void ScriptEditorGUIControls::OnGenerateScripts()
+{
+  // Check first if the script is valid
+  this->OnCompile();
+
+
+
+
+
+
 }
 
 } // end namespace bm

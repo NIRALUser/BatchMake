@@ -53,9 +53,22 @@ MString ScriptRunAction::Help()
   return "Run(<outputvariable> 'program.exe param1 param2 ...')";
 }
 
+/** Generate the condor script */
+void ScriptRunAction::GenerateCondor()
+{
+  std::cout << "Generating Condor!" << std::endl;
+  m_CondorModule->AddCommand(m_manager->Convert(m_parameters[1]).removeChar('\'').toChar());
+}
 
+/** Execute the applications */
 void ScriptRunAction::Execute()
 {
+  if(m_CondorModule)
+    {
+    this->GenerateCondor();
+    return;
+    }
+
   Launch m_launch;
   Timer m_timer;
   m_timer.start();

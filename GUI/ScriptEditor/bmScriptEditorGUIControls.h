@@ -43,6 +43,8 @@ public:
   void OnCompile();
   void OnExecute();
   void OnApplicationWrapper();
+  void OnGenerateCondor();
+  void OnGenerateScripts();
   void hide();
 
   static void Timer(void*);

@@ -27,6 +27,7 @@
 #include <iostream>
 #include "MString.h"
 #include "bmScriptActionManager.h"
+#include "bmCondor.h"
 
 namespace bm {
 
@@ -53,6 +54,7 @@ public:
   void LoadWrappedApplication(MString applicationpath);
   std::vector<ApplicationWrapper*>* GetApplicationList();
   void Reset();
+  void SetCondorModule(Condor* condor) {m_scriptactionmanager->SetCondorModule(condor);}
 
 protected:
   int m_linenumber;

@@ -20,6 +20,7 @@ namespace bm {
 ScriptAction::ScriptAction()
 {
   m_parent = 0;
+  m_CondorModule = NULL;
 }
 
 ScriptAction::~ScriptAction()

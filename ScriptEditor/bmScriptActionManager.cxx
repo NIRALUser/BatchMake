@@ -44,6 +44,7 @@ ScriptActionManager::ScriptActionManager()
   m_progressmanager = new ProgressManager();
   m_applicationlist = 0;
   m_scriptpath = "";
+  m_CondorModule = NULL;
 }
 
 ScriptActionManager::~ScriptActionManager()
@@ -205,12 +206,14 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
         m_error->SetError(MString("Undefined parameter [") + option + "]" ,m_linenumber);
       else
       {
-
+  
         m_action->SetName(option);
         m_action->SetParameters(param);
         m_action->SetParent(m_parentaction);
         m_action->SetManager(this);
         m_action->SetProgressManager(m_progressmanager);
+        m_action->SetCondorModule(m_CondorModule);
+
         if (!m_action->TestParam(m_error,m_linenumber))
           if (m_action->Help() != "")
             m_error->SetStatus(MString("\tCommand: ") + m_action->Help());

@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptRunAction.h
+  Module:    bmCondor.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,30 +13,32 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#ifndef __ScriptRunAction_h_
-#define __ScriptRunAction_h_
+#ifndef __Condor_h_
+#define __Condor_h_
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <vector>
 #include <iostream>
-#include "MString.h"
-#include "bmScriptAction.h"
+#include <vector>
 
 namespace bm {
 
-class ScriptRunAction : public ScriptAction
+class Condor
 {
 public:
-  ScriptRunAction();
-  ~ScriptRunAction();
-  bool TestParam(ScriptError* error,int linenumber);
-  void Execute();
-  MString Help();
-  void GenerateCondor();
+  Condor();
+  ~Condor();
 
+  void SetFileName(const char* filename) {m_FileName = filename;}
+  void AddCommand(const char* command);
+  void Write();
+
+protected:
+
+  std::string m_FileName;
+  std::vector<std::string> m_CommandList;
 };
 
 } // end namespace bm

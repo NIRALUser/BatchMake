@@ -35,6 +35,7 @@
 #include <vector>
 #include <iostream>
 #include "MString.h"
+#include "bmCondor.h"
 
 namespace bm {
 
@@ -78,7 +79,8 @@ public:
   void SetApplicationWrapperList(std::vector<ApplicationWrapper*>* applicationlist);
   std::vector<MString> GetKeywordList();
 
-  
+  void SetCondorModule(Condor* condor) {m_CondorModule = condor;}
+
 protected:
   std::vector<ScriptAction*> m_actionlist;
   ScriptAction* m_parentaction;
@@ -90,6 +92,9 @@ protected:
   MString m_applicationpath;
   MString m_scriptpath;
   std::vector<ApplicationWrapper*>* m_applicationlist;
+
+  // Tells the output of the Run command to generate condor scripts
+  Condor* m_CondorModule;
 
 };
 
