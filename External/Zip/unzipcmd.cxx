@@ -24,7 +24,7 @@
 #endif
 
 #ifndef WIN32 /* unlink already in stdio.h for WIN32 */
-  extern int unlink OF((const char *));
+   #include <unistd.h>
 #endif
 
 #ifndef GZ_SUFFIX
