@@ -38,6 +38,8 @@ public:
   virtual void AddError(MString output);
   virtual bool IsStop();
   virtual void SetFinished(MString message);
+  virtual void DisplayOutput(MString message);
+  virtual void DisplayError(MString message);
 
 protected:
   bool m_stop;

@@ -15,13 +15,14 @@ SET(BatchMakeScriptEditor_SRCS
   bmScriptActionManager.cxx
   bmScriptError.cxx
   bmScriptParser.cxx
+  bmOutput.cxx
 )
 
 #Add Commands
 SET(BatchMakeScriptEditor_SRCS
 ${BatchMakeScriptEditor_SRCS}
 Command/bmScriptEchoAction.cxx
-Command/bmScriptForAction.cxx
+Command/bmScriptForEachAction.cxx
 Command/bmScriptGetParamAction.cxx
 Command/bmScriptIfAction.cxx
 Command/bmScriptRandomizeAction.cxx

@@ -14,7 +14,7 @@
 =========================================================================*/
 
 #include "bmScriptActionManager.h"
-#include "bmScriptForAction.h"
+#include "bmScriptForEachAction.h"
 #include "bmScriptSequenceAction.h"
 #include "bmScriptEchoAction.h"
 #include "bmScriptRandomizeAction.h"
@@ -27,6 +27,7 @@
 
 #include "Timer.h"
 
+
 namespace bm {
 
 ScriptActionManager::ScriptActionManager()
@@ -35,18 +36,22 @@ ScriptActionManager::ScriptActionManager()
   m_error = new ScriptError();
   m_progressmanager = new ProgressManager();
   m_applicationlist = 0;
+  m_scriptpath = "";
 }
 
 ScriptActionManager::~ScriptActionManager()
 {
 }
 
-
 void ScriptActionManager::SetApplicationPath(MString applicationpath)
 {
   m_applicationpath = applicationpath;
 }
 
+void ScriptActionManager::SetScriptPath(MString scriptpath)
+{
+  m_scriptpath = scriptpath;
+}
 
 void ScriptActionManager::AddAction(ScriptAction* action)
 {
@@ -60,6 +65,11 @@ void ScriptActionManager::SetProgressManager(ProgressManager* progressmanager)
 
   m_progressmanager = progressmanager;
 };
+
+ProgressManager* ScriptActionManager::GetProgressManager()
+{
+  return m_progressmanager;
+}
 
 void ScriptActionManager::SetError(ScriptError* error)
 {
@@ -80,19 +90,40 @@ void ScriptActionManager::SetLineNumber(int linenumber)
   m_linenumber = linenumber;
 }
 
+
+
+
+std::vector<MString> ScriptActionManager::GetKeywordList()
+{
+  std::vector<MString> m_list;
+  BM_NEWKEYWORD(ForEach);
+  BM_NEWKEYWORD(Sequence);
+  BM_NEWKEYWORD(Echo);
+  BM_NEWKEYWORD(If);
+  BM_NEWKEYWORD(Run);
+  BM_NEWKEYWORD(Set);
+  BM_NEWKEYWORD(ListDirInDir);
+  BM_NEWKEYWORD(ListFileInDir);
+  BM_NEWKEYWORD(GetParam);
+  BM_NEWKEYWORD(Randomize);
+  return m_list;
+}
+
+
+
+
 ScriptAction* ScriptActionManager::CreateAction(MString option)
 {
-   if (option == "foreach")        return new ScriptForAction();
-   if (option == "sequence")       return new ScriptSequenceAction();
-   if (option == "echo")           return new ScriptEchoAction();
-   if (option == "randomize")      return new ScriptRandomizeAction();
-   if (option == "if")             return new ScriptIfAction();
-   if (option == "run")            return new ScriptRunAction();
-   if (option == "set")            return new ScriptSetAction();
-   if (option == "validationdashboard")  return new ScriptAction(); 
-   if (option == "getparam")  return new ScriptGetParamAction(); 
-   if (option == "listdirindir")  return new ScriptListDirInDirAction(); 
-   if (option == "listfileindir")  return new ScriptListFileInDirAction();
+   BM_NEWACTION(ForEach);
+   BM_NEWACTION(Sequence);
+   BM_NEWACTION(Echo);
+   BM_NEWACTION(If);
+   BM_NEWACTION(Run);
+   BM_NEWACTION(Set);
+   BM_NEWACTION(ListDirInDir);
+   BM_NEWACTION(ListFileInDir);
+   BM_NEWACTION(GetParam);
+   BM_NEWACTION(Randomize);
    return 0;
 }
 
@@ -106,7 +137,14 @@ void ScriptActionManager::Reset()
    m_variabletestlist.clear();
    m_variablelist.clear();
    SetVariable(MString("applicationpath"),MString("'") + m_applicationpath + "'");
+  
+   if (m_scriptpath.length() == 0)
+      SetVariable(MString("scriptpath"),MString("'") + m_applicationpath + "'");
+   else
+      SetVariable(MString("scriptpath"),MString("'") + m_scriptpath + "'");
+   
    SetTestVariable(MString("applicationpath"));
+   SetTestVariable(MString("scriptpath"));
 
    if (m_applicationlist)
    {

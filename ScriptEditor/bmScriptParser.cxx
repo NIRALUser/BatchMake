@@ -22,7 +22,6 @@
   #include <dirent.h>
 #endif
 
-
 namespace bm {
 
 ScriptParser::ScriptParser()
@@ -42,6 +41,12 @@ void ScriptParser::SetApplicationPath(MString applicationpath)
  m_scriptactionmanager->SetApplicationPath(m_applicationpath);
  LoadWrappedApplication(m_applicationpath);
 }
+
+void ScriptParser::SetScriptPath(MString scriptpath)
+{
+   m_scriptactionmanager->SetScriptPath(scriptpath.rbegin("/"));
+}
+
 
 
 void  ScriptParser::LoadWrappedApplication(MString applicationpath) 
@@ -165,6 +170,7 @@ bool  ScriptParser::Execute(MString filename)
 
 void ScriptParser::Load(MString filename)
 {
+  SetScriptPath(filename);
   m_linenumber = 0;
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);

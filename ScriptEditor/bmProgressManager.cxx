@@ -64,4 +64,15 @@ void ProgressManager::SetFinished(MString message)
 
 }
 
+void ProgressManager::DisplayOutput(MString message)
+{
+  std::cout << message.toChar();
+}
+
+void ProgressManager::DisplayError(MString message)
+{
+  std::cout << message.toChar();
+}
+
+
 } // end namespace bm

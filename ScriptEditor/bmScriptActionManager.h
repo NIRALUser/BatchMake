@@ -20,6 +20,14 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#define BM_NEWACTION(iname)\
+ if (option == MString(#iname).toLower())           return new Script##iname##Action();
+
+
+#define BM_NEWKEYWORD(iname)\
+ m_list.push_back(MString(#iname));
+
+
 #include "bmScriptAction.h"
 #include "bmScriptError.h"
 #include "bmProgressManager.h"
@@ -46,6 +54,7 @@ public:
 
   ScriptAction* CreateAction(MString option);
   void SetApplicationPath(MString applicationpath);
+  void SetScriptPath(MString scriptpath);
   void AddAction(ScriptAction* action);
   void AddAction(MString option,std::vector<MString> param);
   void Execute();
@@ -58,6 +67,7 @@ public:
   void SetLineNumber(int linenumber);
   void SetError(ScriptError* error);
   ScriptError* GetError();
+  ProgressManager* GetProgressManager();
   bool TestParam();
   void Reset();
   bool TestConvert(MString param,int linenumber);
@@ -66,7 +76,9 @@ public:
   std::vector<MString> GetParamsFromVariable(MString name);
   void SetProgressManager(ProgressManager* progressmanager);
   void SetApplicationWrapperList(std::vector<ApplicationWrapper*>* applicationlist);
+  std::vector<MString> GetKeywordList();
 
+  
 protected:
   std::vector<ScriptAction*> m_actionlist;
   ScriptAction* m_parentaction;
@@ -76,6 +88,7 @@ protected:
   ScriptError* m_error;
   ProgressManager* m_progressmanager;
   MString m_applicationpath;
+  MString m_scriptpath;
   std::vector<ApplicationWrapper*>* m_applicationlist;
 
 };

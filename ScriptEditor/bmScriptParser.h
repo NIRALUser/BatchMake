@@ -16,7 +16,6 @@
 #ifndef __ScriptParser_h_
 #define __ScriptParser_h_
 #include "bmScriptAction.h"
-#include "bmScriptForAction.h"
 #include "bmScriptError.h"
 #include "bmProgressManager.h"
 
@@ -47,6 +46,7 @@ public:
   void SetError(ScriptError* error);
   bool Execute();
   void SetApplicationPath(MString applicationpath);
+  void SetScriptPath(MString scriptpath);
   void SetProgressManager(ProgressManager* progressmanager);
   bool Execute(MString filename);
   bool Compile(MString filename);
