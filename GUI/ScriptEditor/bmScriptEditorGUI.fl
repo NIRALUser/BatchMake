@@ -7,7 +7,8 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
   Function {make_window()} {open
   } {
     Fl_Window g_Scripteditorgui {
-      label BatchMake open selected
+      label BatchMake
+      callback {hide();} open selected
       xywh {549 233 655 660} type Double resizable
       code0 {\#include "bmScriptEditorGUIBase.h"} visible
     } {
