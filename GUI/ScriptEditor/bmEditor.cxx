@@ -589,6 +589,16 @@ int Editor :: handle( int event )
 
   if ( event == FL_KEYDOWN )
   {
+    if ( Fl::event_key() == FL_Escape)
+    {
+      m_drawbrowser = false;
+      m_drawhelper = false;
+      Fl_Text_Editor::handle( event );
+      draw();
+      return 1;
+    }
+
+
     if( Fl::event_key() == FL_Tab)
     {
       if (!m_drawbrowser)
