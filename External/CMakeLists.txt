@@ -1,3 +1,5 @@
-SUBDIRS(Zip)
-SUBDIRS(Tester)
-
+SUBDIRS(
+Zip
+Tester
+CondorTest
+)
