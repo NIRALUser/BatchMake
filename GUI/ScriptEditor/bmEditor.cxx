@@ -30,9 +30,11 @@ namespace bm {
 };
 
 
+/** The list of keywords recognized. SHOULD BE IN ALPHABETICAL ORDER */
 const char         *code_keywords[] = {  // List of known C/C++ keywords...     
          "echo",  
          "getparam",
+         "listdirindir",
          "listfileindir",
          "randomize",
          "run",
@@ -582,8 +584,11 @@ int Editor :: handle( int event )
         for (unsigned int k=0;k<=m_offset;k++)
           m_node = m_node->next();
 
-        m_node->select_only();
-        m_browser->set_hilighted(m_node);
+        if(m_node)
+          {
+          m_node->select_only();
+          m_browser->set_hilighted(m_node);
+          }
         draw();
       }
       else
