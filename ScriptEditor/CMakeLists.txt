@@ -29,6 +29,7 @@ Command/bmScriptRunAction.cxx
 Command/bmScriptSequenceAction.cxx
 Command/bmScriptSetAction.cxx
 Command/bmScriptListFileInDirAction.cxx
+Command/bmScriptListDirInDirAction.cxx
 )
 
 ADD_LIBRARY(BatchMakeScriptEditor ${BatchMakeScriptEditor_SRCS})

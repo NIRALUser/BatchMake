@@ -23,6 +23,7 @@
 #include "bmScriptSetAction.h"
 #include "bmScriptGetParamAction.h"
 #include "bmScriptListFileInDirAction.h"
+#include "bmScriptListDirInDirAction.h"
 
 #include "Timer.h"
 
@@ -90,7 +91,8 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    if (option == "set")            return new ScriptSetAction();
    if (option == "validationdashboard")  return new ScriptAction(); 
    if (option == "getparam")  return new ScriptGetParamAction(); 
-   if (option == "listfileindir")  return new ScriptListFileInDirAction(); 
+   if (option == "listdirindir")  return new ScriptListDirInDirAction(); 
+   if (option == "listfileindir")  return new ScriptListFileInDirAction();
    return 0;
 }
 
