@@ -14,6 +14,7 @@ LINK_LIBRARIES(
 )
 
 SET(BATCHMAKE_LIBS
+ ${ITK_LIBRARIES}
  BatchMakeGUI
  BatchMakeApplicationWrapper
  BatchMakeScriptEditor
