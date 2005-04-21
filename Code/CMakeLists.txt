@@ -4,9 +4,11 @@ SET(BatchMake_SRCS
 )
 
 IF(WIN32)
+IF(NOT CYGWIN)
 SET(BatchMake_SRCS
   ${BatchMake_SRCS}
   BatchMake.rc)
+ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
 LINK_LIBRARIES(
