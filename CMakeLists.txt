@@ -20,8 +20,7 @@ SET(BatchMake_VERSION_PATCH "0")
 # enough to distinguish available features of the toolkit.
 SET(BatchMake_VERSION_STRING "${BatchMake_VERSION_MAJOR}.${BatchMake_VERSION_MINOR}")
 
-
-FIND_PACKAGE(FLTK)
+INCLUDE(${BatchMake_SOURCE_DIR}/FindFLTK.cmake)
 IF(FLTK_FOUND)
    INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
    IF(CYGWIN)
