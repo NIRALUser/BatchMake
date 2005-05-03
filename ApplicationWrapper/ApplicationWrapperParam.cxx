@@ -18,6 +18,9 @@
 
 ApplicationWrapperParam::ApplicationWrapperParam()
 {
+  m_name = "NA";
+  m_parent = 0;
+  m_ValueDefined = false;
 }
 
 ApplicationWrapperParam::~ApplicationWrapperParam()

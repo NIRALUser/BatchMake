@@ -47,6 +47,9 @@ public:
   void SetOptional(bool flag);
   bool GetOptional();
 
+  bool IsValueDefined() {return m_ValueDefined;}
+  void SetValueDefined(bool val) {m_ValueDefined = val;}
+
 
 private:
   Type m_type;
@@ -55,6 +58,7 @@ private:
   bool m_optional;
   int m_parent;
   std::vector<MString> m_enum;
+  bool m_ValueDefined;
 
 };
 

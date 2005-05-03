@@ -1,15 +1,14 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0105 
+version 1.0107 
 header_name {.h} 
 code_name {.cxx}
 class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
 } {
-  Function {make_window()} {open
-  } {
+  Function {MakeWindow()} {} {
     Fl_Window g_Scripteditorgui {
       label BatchMake
       callback {hide();} open
-      xywh {249 195 655 660} type Double resizable
+      xywh {426 194 655 660} type Double resizable
       code0 {\#include "bmScriptEditorGUIBase.h"} visible
     } {
       Fl_Text_Editor g_editor {
@@ -24,32 +23,32 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
         xywh {0 0 640 35} align 225
       } {
         Fl_Button {} {
-          callback {OnOpenScript()}
-          tooltip {Open script} image {../../Images/open.gif} xywh {5 5 30 25} box PLASTIC_UP_BOX color 48 align 192 hotspot
+          callback {OnOpenScript()} selected
+          tooltip {Open script} image {../../Images/open.gif} xywh {5 5 30 25} box PLASTIC_UP_BOX color 48 labelsize 11 align 192 hotspot
         }
         Fl_Button {} {
           callback {OnSaveScript()}
-          image {../../Images/save.gif} xywh {40 5 30 25} box PLASTIC_UP_BOX color 48
+          tooltip {Save current script} image {../../Images/save.gif} xywh {40 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
           callback {OnCompile()}
-          image {../../Images/compilation.gif} xywh {75 5 30 25} box PLASTIC_UP_BOX color 48
+          tooltip {Compile current script} image {../../Images/compilation.gif} xywh {75 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
           callback {OnExecute()}
-          image {../../Images/run.gif} xywh {110 5 30 25} box PLASTIC_UP_BOX color 48
+          tooltip {Run processing} image {../../Images/run.gif} xywh {110 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
           callback {OnApplicationWrapper()}
-          image {../../Images/applicationwrapper.gif} xywh {145 5 30 25} box PLASTIC_UP_BOX color 48
+          tooltip {Application Wrapper} image {../../Images/applicationwrapper.gif} xywh {145 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
-          callback {OnGenerateScripts()} selected
-          image {../../Images/script.gif} xywh {180 5 30 25} box PLASTIC_UP_BOX color 48
+          callback {OnGenerateScripts()}
+          tooltip {Script Generation} image {../../Images/script.gif} xywh {180 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
           callback {OnGenerateCondor()}
-          image {../../Images/condor.gif} xywh {215 5 30 25} box PLASTIC_UP_BOX color 48
+          tooltip {Generate Condor Script} image {../../Images/condor.gif} xywh {215 5 30 25} box PLASTIC_UP_BOX color 48
         }
       }
     }

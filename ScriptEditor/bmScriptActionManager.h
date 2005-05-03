@@ -44,14 +44,17 @@ class ScriptAction;
 class ScriptActionManager
 {
 public:
+
+  typedef std::vector<ApplicationWrapper*> ApplicationWrapperListType;
+  
   ScriptActionManager();
   ~ScriptActionManager();
   
   struct variablestruct
-  {
+    {
      MString name;
      MString value;
-  };
+    };
 
   ScriptAction* CreateAction(MString option);
   void SetApplicationPath(MString applicationpath);
@@ -76,7 +79,11 @@ public:
   bool IsTestVariable(MString name);
   std::vector<MString> GetParamsFromVariable(MString name);
   void SetProgressManager(ProgressManager* progressmanager);
-  void SetApplicationWrapperList(std::vector<ApplicationWrapper*>* applicationlist);
+  
+  /** Set/Get the list of wrapped applications */
+  void SetApplicationWrapperList(ApplicationWrapperListType* applicationlist);
+  ApplicationWrapperListType* GetApplicationWrapperList() {return m_applicationlist;}
+
   std::vector<MString> GetKeywordList();
 
   void SetCondorModule(Condor* condor) {m_CondorModule = condor;}
@@ -91,7 +98,7 @@ protected:
   ProgressManager* m_progressmanager;
   MString m_applicationpath;
   MString m_scriptpath;
-  std::vector<ApplicationWrapper*>* m_applicationlist;
+  ApplicationWrapperListType* m_applicationlist;
 
   // Tells the output of the Run command to generate condor scripts
   Condor* m_CondorModule;

@@ -30,6 +30,7 @@ SET(BatchMakeGUI_SRCS
   ProgressGUI/bmProgressManagerGUI.cxx
   ProgressGUI/bmScriptErrorGUI.cxx
   ScriptEditor/bmEditor.cxx
+  ScriptEditor/bmEditor.h
   ScriptEditor/bmScriptEditorGUIControls.cxx
 )
 

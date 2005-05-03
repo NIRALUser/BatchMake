@@ -56,6 +56,9 @@ public:
   void Reset();
   void SetCondorModule(Condor* condor) {m_scriptactionmanager->SetCondorModule(condor);}
 
+  /** Return the ScriptActionManager */
+  ScriptActionManager* GetScriptActionManager() {return m_scriptactionmanager;}
+
 protected:
   int m_linenumber;
   ScriptActionManager* m_scriptactionmanager;

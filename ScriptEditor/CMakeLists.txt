@@ -30,6 +30,8 @@ Command/bmScriptRandomizeAction.cxx
 Command/bmScriptRunAction.cxx
 Command/bmScriptSequenceAction.cxx
 Command/bmScriptSetAction.cxx
+Command/bmScriptSetAppAction.cxx
+Command/bmScriptSetAppOptionAction.cxx
 Command/bmScriptListFileInDirAction.cxx
 Command/bmScriptListDirInDirAction.cxx
 Command/bmScriptIncAction.cxx

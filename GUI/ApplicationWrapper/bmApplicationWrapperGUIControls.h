@@ -52,7 +52,7 @@ public:
   void SetApplicationWrapper(ApplicationWrapper*);
   void SetApplicationPath(MString applicationpath);
   void SetApplicationListGUIControls(ApplicationListGUIControls* applicationlistguicontrols);
-
+  void AutomaticCommandLineParsing();
 
 private:
   ApplicationWrapper* m_applicationwrapper;

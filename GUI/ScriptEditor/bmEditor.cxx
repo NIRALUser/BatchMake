@@ -15,7 +15,7 @@
 
 #include "bmEditor.h"
 #include "MString.h"
-#include "bmScriptActionManager.h"
+
 
 namespace bm {
 
@@ -30,21 +30,6 @@ namespace bm {
          { FL_RED,         FL_COURIER,   12 }       // H - Keywords
 };
 
-
-/** The list of keywords recognized. SHOULD BE IN ALPHABETICAL ORDER */
-
-/*  
-const char         *code_keywords[] = {  // List of known C/C++ keywords...     
-         "echo",  
-         "getparam",
-         "listdirindir",
-         "listfileindir",
-         "randomize",
-         "run",
-         "sequence",  
-         "set",
-         "validationdashboard"
-       };*/
 
 static std::list<MString> m_keywords;
 
@@ -63,6 +48,9 @@ char m_title[256];
 Editor::Editor(int X, int Y, int W, int H, const char* l)
 :Fl_Text_Editor(X, Y, W, H, l)
 {
+  m_Parser = NULL;
+   
+  // Specification for the word completion browser (for actions)  
   m_drawbrowser = false;
   m_browser = new Flu_Tree_Browser(0, 0,200,80);
   m_browser->box( FL_DOWN_BOX );
@@ -78,11 +66,50 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_browser->selection_follows_hilight(true);
   m_browser->selection_mode(FLU_SINGLE_SELECT);
   m_browser->callback((Fl_Callback*)SelectOption,this);
-
-  UpdateKeyword();
- 
-  m_browser->resize(0,0,200,80);
+  m_browser->resize(13,15,200,80);
   m_browser->end();
+
+  // Specification for the applications completion browser (for wrapped applications)
+  m_DrawApplicationBrowser = false;
+  m_ApplicationBrowser = new Flu_Tree_Browser(0, 0,200,80);
+  m_ApplicationBrowser->box( FL_DOWN_BOX );
+  m_ApplicationBrowser->show_root(false);
+  m_ApplicationBrowser->branch_text(m_ApplicationBrowser->branch_color(),m_ApplicationBrowser->branch_font(),10);
+  m_ApplicationBrowser->leaf_text(m_ApplicationBrowser->leaf_color(),m_ApplicationBrowser->leaf_font(),10);
+  m_ApplicationBrowser->vertical_gap(-2);
+  m_ApplicationBrowser->selection_color(87);
+  m_ApplicationBrowser->show_leaves( true );
+  m_ApplicationBrowser->show_branches( true );
+  m_ApplicationBrowser->get_root()->always_open( true );
+  m_ApplicationBrowser->insertion_mode(FLU_INSERT_BACK);
+  m_ApplicationBrowser->selection_follows_hilight(true);
+  m_ApplicationBrowser->selection_mode(FLU_SINGLE_SELECT);
+  m_ApplicationBrowser->callback((Fl_Callback*)SelectApplication,this);
+  m_ApplicationBrowser->resize(13,15,200,80);
+  m_ApplicationBrowser->end();
+
+
+
+  // Specification for the applications completion browser (for wrapped applications)
+  m_DrawApplicationOptionBrowser = false;
+  m_ApplicationOptionBrowser = new Flu_Tree_Browser(0, 0,200,80);
+  m_ApplicationOptionBrowser->box( FL_DOWN_BOX );
+  m_ApplicationOptionBrowser->show_root(false);
+  m_ApplicationOptionBrowser->branch_text(m_ApplicationOptionBrowser->branch_color(),m_ApplicationOptionBrowser->branch_font(),10);
+  m_ApplicationOptionBrowser->leaf_text(m_ApplicationOptionBrowser->leaf_color(),m_ApplicationOptionBrowser->leaf_font(),10);
+  m_ApplicationOptionBrowser->vertical_gap(-2);
+  m_ApplicationOptionBrowser->selection_color(87);
+  m_ApplicationOptionBrowser->show_leaves( true );
+  m_ApplicationOptionBrowser->show_branches( true );
+  m_ApplicationOptionBrowser->get_root()->always_open( true );
+  m_ApplicationOptionBrowser->insertion_mode(FLU_INSERT_BACK);
+  m_ApplicationOptionBrowser->selection_follows_hilight(true);
+  m_ApplicationOptionBrowser->selection_mode(FLU_SINGLE_SELECT);
+  m_ApplicationOptionBrowser->callback((Fl_Callback*)SelectApplicationOption,this);
+  m_ApplicationOptionBrowser->resize(13,15,200,80);
+  //m_ApplicationOptionBrowser->end();
+
+
 
   m_drawhelper = false;
   m_helper = new Fl_Output(0, 0,200,15);
@@ -101,10 +128,7 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   delete[] style;
   free(text);
 
-
   buffer(m_buffer);
- // m_buffer->tab_distance(3);
-
   highlight_data(stylebuf, styletable,
                           sizeof(styletable) / sizeof(styletable[0]),
                           'A', style_unfinished_cb, 0);
@@ -116,36 +140,68 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_parentwindow = 0;
 }
 
+/** Desctructor */
 Editor::~Editor()
 {
 }
 
+/** Set the parser and initialize */
+void Editor::SetParser(ScriptParser* parser)
+{
+  m_Parser = parser;
+  m_Manager = m_Parser->GetScriptActionManager();
+  this->UpdateKeyword();
+}
+
+/** Update the list of wrapped applications */
+void Editor::UpdateApplicationsList()
+{ 
+  if(!m_Manager->GetApplicationWrapperList())
+    {
+    return;
+    }
+
+  m_ApplicationBrowser->clear();
+  
+  ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  if(m_Manager->GetApplicationWrapperList()->size == 0)
+    {
+    return;
+    }
+
+  while (it != m_Manager->GetApplicationWrapperList()->end())
+    { 
+    m_ApplicationBrowser->add((*it)->GetName().toChar());
+    it++;
+    }
+
+  Flu_Tree_Browser::Node* m_node = m_ApplicationBrowser->first();
+  m_node = m_node->next();
+  m_node->select_only();
+  m_ApplicationBrowser->set_hilighted(m_node);
+}
+
+/** Update the list of keywords */
 void Editor::UpdateKeyword()
 { 
   m_keywords.clear();
   m_browser->clear();
-  ScriptActionManager m_manager;
-  std::vector<MString> m_list = m_manager.GetKeywordList();
 
+  std::vector<MString> m_list = m_Manager->GetKeywordList();
   for (unsigned int i=0;i<m_list.size();i++)
-  { 
+    { 
     m_keywords.push_back(m_list[i]);
-  }
+    }
    
   m_keywords.sort();
-
   std::list<MString>::iterator it = m_keywords.begin();
   while (it != m_keywords.end())
-  { 
+    { 
     m_browser->add((*it).toChar());
     it++;
-  }
-
-  Flu_Tree_Browser::Node* m_node = m_browser->first();
-  m_node = m_node->next();
-  m_node = m_node->next();
-  m_node->select_only();
-  m_browser->set_hilighted(m_node);
+    }
+  m_browser->resize(13,15,200,80);
+  m_browser->end();
 }
 
 void Editor::UpdateVariable()
@@ -478,6 +534,49 @@ for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
   }
 }
 
+/** Add the application to browse */
+void Editor::AddApplicationsToBrowse()
+{
+  unsigned long lpos=0;
+  for(unsigned int l=0;l<buffer()->count_lines(0,buffer()->length());l++)
+    {
+    // get the current line
+    std::string line = buffer()->line_text(buffer()->line_start(lpos));
+    lpos =  buffer()->line_end(lpos)+1;
+    long pos = 0;
+    if(pos = line.find("SetApp")!=-1)
+      {
+      long pos1 = line.find("(",pos);
+      if(pos1 != -1)
+        {
+        long pos2 = line.find(")",pos1);
+        if(pos2 != -1)
+          {
+          long posspace = line.find(" ",pos1);
+          std::string name = line.substr(pos1+1,posspace-pos1-1);  
+          std::string app = line.substr(posspace+2,pos2-posspace-2); // there should be a @
+              
+          // Search the correct app corresponding to the name
+          ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_Manager->GetApplicationWrapperList()->begin();
+          while (it != m_Manager->GetApplicationWrapperList()->end())
+            { 
+            if(!strcmp((*it)->GetName().toChar(),app.c_str()))
+              {
+              ApplicationNameType newapp;
+              newapp.first = name;
+              newapp.second = (*it);
+              std::cout << "Added " << name.c_str() << std::endl;
+              m_ApplicationsList.push_back(newapp);
+              break;
+              }
+            it++;
+            }
+          }
+        }
+      }
+    }
+}
+
 void Editor::Load(const char* filename)
 {
   int r = m_buffer->loadfile(filename);
@@ -489,44 +588,81 @@ void Editor::Load(const char* filename)
     m_buffer->remove(m_foundPos,m_foundPos+1);
   
   m_buffer->call_modify_callbacks();
+
+  this->AddApplicationsToBrowse();
+
 }
 
 void Editor::Save(const char* filename)
 {
  if (m_buffer->savefile(filename))
-      fl_alert("Error writing to file \'%s\':\n%s.", filename, strerror(errno));
-
-    m_buffer->call_modify_callbacks();
+   {
+   fl_alert("Error writing to file \'%s\':\n%s.", filename, strerror(errno));
+   }
+ m_buffer->call_modify_callbacks();
 }
 
+
+/** Place the browser at the correct location */
 void Editor::ShowOptionFinder(int x,int y)
 {
   m_browser->resize(x+13,y+15,200,80);
+  m_ApplicationBrowser->resize(x+13,y+15,200,80);
+  m_ApplicationOptionBrowser->resize(x+13,y+15,200,80);
   m_helper->resize(x+13,y+15,m_helper->w(),m_helper->h());
 }
 
-
+/** Draw */
 void Editor::draw()
 {
-  //((Fl_Text_Display*)this)->draw();
   Fl_Text_Display::draw();
 
   if (m_drawhelper)
+    {
     m_helper->show();
+    }
   else
+    {
     m_helper->hide();
+    }
 
   if (m_drawbrowser)
+    {
     m_browser->show();
+    }
   else
+    {
     m_browser->hide();
+    }
 
+  if (m_DrawApplicationBrowser)
+    {
+    m_ApplicationBrowser->show();
+    }
+  else
+    {
+    m_ApplicationBrowser->hide();
+    }
+
+  if (m_DrawApplicationOptionBrowser)
+    {
+    m_ApplicationOptionBrowser->show();
+    }
+  else
+    {
+    m_ApplicationOptionBrowser->hide();
+    }
+    
+  m_ApplicationBrowser->redraw();
+  m_ApplicationOptionBrowser->redraw();
   m_browser->redraw();
   m_helper->redraw();
 
   redraw();
 }
 
+
+/** Callback when a tab completion is done for an action */
 void Editor::SelectOption(Flu_Tree_Browser* browser, void* widget)
 {
   if (browser->get_selected(1) != 0)
@@ -541,7 +677,7 @@ void Editor::SelectOption(Flu_Tree_Browser* browser, void* widget)
      ((Editor*)widget)->m_currentword = "";
     }
 
-   if (browser->callback_reason() == FLU_TAB_KEY)
+   if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
    {
       MString m_text(MString(browser->get_selected(1)->label()) + "()");
       m_text = m_text.mid(((Editor*)widget)->m_currentword.length());
@@ -571,96 +707,383 @@ void Editor::SelectOption(Flu_Tree_Browser* browser, void* widget)
   }
 } 
 
-
-void Editor::TabPressed(void* widget) 
+/** Callback when a tab completion is done for an action */
+void Editor::SelectApplication(Flu_Tree_Browser* browser, void* widget)
 {
+  if (browser->get_selected(1) != 0)
+    {
+    if (browser->callback_reason() == FLU_DOUBLE_CLICK)
+      {
+      MString m_text(MString(browser->get_selected(1)->label()));
+     ((Editor*)widget)->m_buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
+     ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
+     ((Editor*) widget)->m_DrawApplicationBrowser = false;
+     ((Editor*) widget)->m_drawbrowser = false;
+     ((Editor*)widget)->m_drawhelper = false;
+     ((Editor*)widget)->m_currentword = "";
+      }
+
+     if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
+      {
+       MString m_text(MString(browser->get_selected(1)->label()));
+      ((Editor*)widget)->m_buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
+      ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
+      ((Editor*) widget)->m_DrawApplicationBrowser = false;
+      ((Editor*) widget)->m_drawbrowser = false;
+      ((Editor*)widget)->m_drawhelper = false;
+      ((Editor*)widget)->m_currentword = "";
+      }
+    }
+} 
+
+/** Callback when a tab completion is done for an action */
+void Editor::SelectApplicationOption(Flu_Tree_Browser* browser, void* widget)
+{
+  if (browser->get_selected(1) != 0)
+    {
+    if (browser->callback_reason() == FLU_DOUBLE_CLICK)
+      {
+      MString m_text(MString(browser->get_selected(1)->label()));
+     ((Editor*)widget)->m_buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
+     ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
+     ((Editor*)widget)->m_DrawApplicationOptionBrowser = false;
+     ((Editor*)widget)->m_currentword = "";
+      }
+
+     if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
+      {
+       MString m_text(MString(browser->get_selected(1)->label()));
+      ((Editor*)widget)->m_buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
+      ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
+      ((Editor*)widget)->m_DrawApplicationOptionBrowser = false;
+      ((Editor*)widget)->m_currentword = "";
+      }
+    }
 }
 
-int Editor :: handle( int event )
+/** Show the option give the variable name of an app */
+bool Editor::ShowApplicationOptions(const char* appVarName)
+{
+  if(!m_Manager->GetApplicationWrapperList())
+    {
+    return false;
+    }
+
+  m_ApplicationOptionBrowser->clear();
+  
+  std::vector<ApplicationNameType>::const_iterator it = m_ApplicationsList.begin();
+  ApplicationWrapper* app = NULL;
+  while (it != m_ApplicationsList.end())
+    {
+    if(!strcmp((*it).first.c_str(),appVarName))
+      {
+      app = (*it).second;
+      break;
+      }
+    it++;
+    }
+
+  if(!app)
+    {
+    return false;
+    }
+
+  // Get the option from the application wrapper
+  std::vector<ApplicationWrapperParam> params = app->GetParams();
+  std::vector<ApplicationWrapperParam>::iterator itParams = params.begin();
+
+  if(params.size == 0)
+    {
+    return false;
+    }
+
+  while(itParams!= params.end())
+    {
+    std::string text = "";
+    int parent = (*itParams).GetParent();
+    if(parent > 0)
+      {
+      unsigned int pos = 0;
+      for(unsigned int j=0;j<params.size();j++)
+        {
+        if(params[j].GetParent() == 0)
+          {
+          pos++;
+          }
+        if(pos == parent)
+          {
+          text = params[j].GetName().toChar();
+          text += ".";
+          break;
+          }
+        }
+
+
+      }
+    text += (*itParams).GetName().toChar();
+    m_ApplicationOptionBrowser->add(text.c_str());
+    itParams++;
+    }
+/*
+  Flu_Tree_Browser::Node* m_node = m_ApplicationOptionBrowser->first();
+  if(params.size() > 1)
+    {
+    m_node = m_node->next();
+    }
+  m_node->select_only();
+  m_ApplicationOptionBrowser->set_hilighted(m_node);
+ */
+  return true;
+}
+
+/** Handle function for the text editor */
+int Editor::handle( int event )
 {
   if (event == FL_PUSH)
-  {
+    {
     m_currentword = "";
     m_drawbrowser = false;
+    m_DrawApplicationBrowser = false;
+    m_DrawApplicationOptionBrowser = false;
     draw();
     return Fl_Text_Editor::handle( event );
-
-  }
+    }
 
   if ( event == FL_KEYDOWN )
-  {
-    if ( Fl::event_key() == FL_Escape)
     {
+    // if @ is pressed then we show the list of wrapped applications
+    if(Fl::event_state() == 1114112 && Fl::event_key() == 50)
+      {
+      if (!m_DrawApplicationBrowser)
+        {
+        this->UpdateApplicationsList();
+        m_DrawApplicationBrowser = true;
+        }
+      else
+        {
+        m_ApplicationBrowser->handle(event);
+        }
+      take_focus();   
+      }
+    
+    if ( Fl::event_key() == FL_Escape)
+      {
       m_drawbrowser = false;
       m_drawhelper = false;
+      m_DrawApplicationBrowser = false;
+      m_DrawApplicationOptionBrowser = false;
       Fl_Text_Editor::handle( event );
       draw();
       return 1;
-    }
-
+      }
 
     if( Fl::event_key() == FL_Tab)
-    {
-      if (!m_drawbrowser)
+      {
+      if (!m_drawbrowser && !m_DrawApplicationBrowser && !m_DrawApplicationOptionBrowser)
+        {
         m_drawbrowser = true;
-      else
+        }
+      else if(m_drawbrowser)
+        {
         m_browser->handle(event);
-
+        }
+      else if(m_DrawApplicationBrowser)
+        {
+        m_ApplicationBrowser->handle(event);
+        } 
+      else if(m_DrawApplicationOptionBrowser)
+        {
+        m_ApplicationOptionBrowser->handle(event);
+        }
       take_focus();
       return 1;
-    }
-    else if( Fl::event_key() == FL_Down)
-    {
-      if (m_drawbrowser)
+      }
+    else if(Fl::event_key() == FL_Enter)
       {
+      if(m_drawbrowser)
+        {
+        m_browser->handle(event);
+        take_focus();
+        return 1;
+        }
+      else if(m_DrawApplicationBrowser)
+        {
+        m_ApplicationBrowser->handle(event);
+        take_focus();
+        return 1;
+        } 
+      else if(m_DrawApplicationOptionBrowser)
+        {
+        m_ApplicationOptionBrowser->handle(event);
+        take_focus();
+        return 1;
+        }
+      else // we check if the current line contains the word SetApp()
+        {
+        // get the current line   
+        std::string line = buffer()->line_text(insert_position());
+        long pos = 0;
+        if(pos = line.find("SetApp")!=-1)
+          {
+          long pos1 = line.find("(",pos);
+          if(pos1 != -1)
+            {
+            long pos2 = line.find(")",pos1);
+            if(pos2 != -1)
+              {
+              long posspace = line.find(" ",pos1);
+              std::string name = line.substr(pos1+1,posspace-pos1-1);  
+              std::string app = line.substr(posspace+2,pos2-posspace-2); // there should be a @
+              
+              // Search the correct app corresponding to the name
+              ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_Manager->GetApplicationWrapperList()->begin();
+              while (it != m_Manager->GetApplicationWrapperList()->end())
+                { 
+                if(!strcmp((*it)->GetName().toChar(),app.c_str()))
+                  {
+                  ApplicationNameType newapp;
+                  newapp.first = name;
+                  newapp.second = (*it);
+                  std::cout << "Added " << name.c_str() << std::endl;
+                  m_ApplicationsList.push_back(newapp);
+                  break;
+                  }
+                it++;
+                }
+              }
+            }
+          }
+        }
+      }
+    else if( Fl::event_key() == FL_Down)
+      {
+      if (m_drawbrowser)
+        {
         m_browser->handle(event);
         take_focus();
         return 1;  
-      }
-    }
-    else if( Fl::event_key() == FL_Up)
-     {
-        if (m_drawbrowser)
-        {
-          m_browser->handle(event);
-          take_focus();
-          return 1;  
         }
-     }
+      else if(m_DrawApplicationBrowser)
+        {
+        m_ApplicationBrowser->handle(event);
+        take_focus();
+        return 1;  
+        }
+      else if(m_DrawApplicationOptionBrowser)
+        {
+        m_ApplicationOptionBrowser->handle(event);
+        take_focus();
+        return 1;  
+        }
+      }
+    else if( Fl::event_key() == FL_Up)
+      {
+      if (m_drawbrowser)
+        {
+        m_browser->handle(event);
+        take_focus();
+        return 1;  
+        }
+      else if(m_DrawApplicationBrowser)
+        {
+        m_ApplicationBrowser->handle(event);
+        take_focus();
+        return 1;  
+        }
+      else if(m_DrawApplicationOptionBrowser)
+        {
+        m_ApplicationOptionBrowser->handle(event);
+        take_focus();
+        return 1;  
+        }
+      }
     else
-    {
-       if ((Fl::event_key() == ' ') || (Fl::event_key() == FL_Enter))
+      {
+      if ((Fl::event_key() == ' ') || (Fl::event_key() == FL_Enter))
+        {
         m_currentword = "";
-       else
-       if ((Fl::event_key() == FL_BackSpace) || (Fl::event_key() == FL_BackSpace))
-       {
-          m_currentword = m_currentword.mid(0,m_currentword.length()-1);
-       }
-       else
-       {
-         if ((Fl::event_key() != FL_Shift_L) &&  (Fl::event_key() != FL_Shift_R))
-            m_currentword +=  Fl::event_key();
-       }
+        }
+      else if(Fl::event_key() == '.') // if it's a dot and the previous word is in the list of known apps/name
+        {
+        if (!m_DrawApplicationOptionBrowser)
+          {
+          // look for the work before the .
+          std::string reword;
+          long i = insert_position();
+          i--;
+          while(i>-1
+            && buffer()->character(i) != '('
+            && buffer()->character(i) != ')'
+            && buffer()->character(i) != '"'
+            && buffer()->character(i) != '.'
+            && buffer()->character(i) != ' '
+            && buffer()->character(i) != 10
+            && buffer()->character(i) != '$'
+            )
+            {
+            reword += buffer()->character(i);
+            i--;
+            }
+         
+          // reverse the string
+          std::string word;
+          for(i=0;i<reword.size();i++)
+            {
+            word += reword[reword.size()-i-1];
+            }
 
+          if(this->ShowApplicationOptions(word.c_str()))
+            {
+            m_DrawApplicationOptionBrowser = true;
+            }
+          else
+            {
+            m_DrawApplicationOptionBrowser = false;
+            }
+          }
+        else
+          {
+          m_ApplicationOptionBrowser->handle(event);
+          }
+        }
+      else
+        {
+        if ((Fl::event_key() == FL_BackSpace) || (Fl::event_key() == FL_BackSpace))
+          {
+          m_currentword = m_currentword.mid(0,m_currentword.length()-1);
+          }
+        else
+          {
+          if ((Fl::event_key() != FL_Shift_L) &&  (Fl::event_key() != FL_Shift_R))
+            {
+            m_currentword +=  Fl::event_key();
+            }
+          }
+        }
       
      ScriptActionManager m_manager;
      ScriptAction* m_help = m_manager.CreateAction(m_currentword.toLower());
      if (m_help)
-     {
+      {
        m_helper->value(m_help->Help().toChar());
        if (MString(m_helper->value()) != "")
        {
          m_helper->resize(m_helper->x(),m_helper->y(),(int)(m_help->Help().length()*4.9),15);
          m_drawbrowser = false;
+         m_DrawApplicationBrowser = false;
+         m_DrawApplicationOptionBrowser = false;
          m_drawhelper = true;
        }
        else
+         {
          m_drawhelper = false;
+         }
        delete m_help;
-     }
+      }
      else
+       {
        m_drawhelper = false;
-   
+       }
 
 
       int m_offset = -1;
@@ -669,7 +1092,7 @@ int Editor :: handle( int event )
       std::list<MString>::iterator it = m_keywords.begin();
       unsigned int i =0;
       while (it != m_keywords.end())
-      { 
+        { 
         int m_rating = 0;
         int m_correctword = true;
        
@@ -702,8 +1125,11 @@ int Editor :: handle( int event )
       if (m_offset != -1)
         {
         if (!m_drawhelper)
+          {
           m_drawbrowser = true;
+          }
 
+        
         Flu_Tree_Browser::Node* m_node = m_browser->first();
         for (int k=0;k<=m_offset;k++)
           {
@@ -712,11 +1138,14 @@ int Editor :: handle( int event )
 
         if(m_node)
           {
+          m_node->select(true);
           m_node->select_only();
           m_browser->set_hilighted(m_node);
           }
+
         Fl_Text_Editor::handle( event );
         draw();
+        
         return 1;
         }
       else

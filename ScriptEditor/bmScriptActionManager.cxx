@@ -21,6 +21,8 @@
 #include "bmScriptIfAction.h"
 #include "bmScriptRunAction.h"
 #include "bmScriptSetAction.h"
+#include "bmScriptSetAppAction.h"
+#include "bmScriptSetAppOptionAction.h"
 #include "bmScriptGetParamAction.h"
 #include "bmScriptListFileInDirAction.h"
 #include "bmScriptListDirInDirAction.h"
@@ -99,8 +101,6 @@ void ScriptActionManager::SetLineNumber(int linenumber)
 }
 
 
-
-
 std::vector<MString> ScriptActionManager::GetKeywordList()
 {
   std::vector<MString> m_list;
@@ -110,6 +110,8 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(If);
   BM_NEWKEYWORD(Run);
   BM_NEWKEYWORD(Set);
+  BM_NEWKEYWORD(SetApp);
+  BM_NEWKEYWORD(SetAppOption);
   BM_NEWKEYWORD(ListDirInDir);
   BM_NEWKEYWORD(ListFileInDir);
   BM_NEWKEYWORD(GetParam);
@@ -125,8 +127,6 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
 }
 
 
-
-
 ScriptAction* ScriptActionManager::CreateAction(MString option)
 {
    BM_NEWACTION(ForEach);
@@ -135,6 +135,8 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(If);
    BM_NEWACTION(Run);
    BM_NEWACTION(Set);
+   BM_NEWACTION(SetApp);
+   BM_NEWACTION(SetAppOption);
    BM_NEWACTION(ListDirInDir);
    BM_NEWACTION(ListFileInDir);
    BM_NEWACTION(GetParam);

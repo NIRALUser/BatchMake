@@ -39,10 +39,20 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
 {
   m_filename = "";
   m_parser = new ScriptParser();
+
+  MakeWindow();
+
+  // Center the window on the screen
+  g_Scripteditorgui->position(Fl::w()/2-g_Scripteditorgui->w()/2,
+                              Fl::h()/2-g_Scripteditorgui->h()/2);
+
   m_errorgui = new ScriptErrorGUI();
   m_errorbuffer = new Fl_Text_Buffer();
-  make_window();
   g_output->buffer(m_errorbuffer);
+
+  // Give a pointer of the parser to the editor (to get the list of apps, etc...)
+  g_editor->SetParser(m_parser);
+
 }
 
 ScriptEditorGUIControls::~ScriptEditorGUIControls()
@@ -116,13 +126,13 @@ void ScriptEditorGUIControls::OnOpenScript()
   filename = fl_file_chooser("Load script", "BatchMake Script(*.bms)", NULL);
  
   if(filename)
-  {
+    {
     m_filename = filename;
     g_editor->Load(m_filename.toChar());
     m_parser->SetScriptPath(m_filename);
     m_title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_filename.rend("/")+1) + "]" ;
     g_Scripteditorgui->label(m_title.toChar());
-  }
+    }
 }
 
 void ScriptEditorGUIControls::hide()

@@ -39,24 +39,31 @@ public:
   MString GetName();
   void SetVersion(MString version);
   MString GetVersion();
-  void AddParam(ApplicationWrapperParam* param);
+  void AddParam(ApplicationWrapperParam param);
   ApplicationWrapperParam* GetParam(MString name);
   void Save(MString filename);
   void Load(MString filename);
   MString GetExampleLine();
   void ReadModule(XMLReader& m_reader);
   void ReadParam(XMLReader& m_reader);
-  std::vector<ApplicationWrapperParam*> GetParams();
+  std::vector<ApplicationWrapperParam> & GetParams();
   void DisplayParam(MString& m_line,int offset);
   void DeleteParam(MString name);
   void UpParam(MString name);
   void DownParam(MString name);
 
+  /** Return the current command line arguments */
+  std::string GetCurrentCommandLineArguments();
+
+  /** Set the parameter value */
+  void SetParameterValue(std::string first, std::string second, std::string value);
+
+
 private:
   MString m_name;
   MString m_applicationpath;
   MString m_version;
-  std::vector<ApplicationWrapperParam*> m_params;
+  std::vector<ApplicationWrapperParam> m_params;
   
 };
 
