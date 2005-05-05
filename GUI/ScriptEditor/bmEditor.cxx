@@ -164,7 +164,7 @@ void Editor::UpdateApplicationsList()
   m_ApplicationBrowser->clear();
   
   ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_Manager->GetApplicationWrapperList()->begin();
-  if(m_Manager->GetApplicationWrapperList()->size == 0)
+  if(m_Manager->GetApplicationWrapperList()->size() == 0)
     {
     return;
     }
@@ -792,7 +792,7 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
   std::vector<ApplicationWrapperParam> params = app->GetParams();
   std::vector<ApplicationWrapperParam>::iterator itParams = params.begin();
 
-  if(params.size == 0)
+  if(params.size() == 0)
     {
     return false;
     }

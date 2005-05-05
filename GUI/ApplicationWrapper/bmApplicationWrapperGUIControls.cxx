@@ -25,6 +25,20 @@
   #include <unistd.h>
 #endif
 
+#ifdef WIN32
+  #include <Windows.h>
+  #include <fcntl.h>
+  #include <errno.h>
+  #include <io.h>
+  #include <stdio.h>
+  #include <process.h>
+#else
+  #include <unistd.h>
+  #include <sys/wait.h>
+  #include <fcntl.h>
+  #include <errno.h>
+#endif
+
 namespace bm {
 
 ApplicationWrapperGUIControls::ApplicationWrapperGUIControls():ApplicationWrapperGUI()
@@ -636,6 +650,9 @@ int status = 0;
   // extract the name from the filename
   std::string revname;
   
+  unsigned int i = 0;
+
+  
   for(i=0;i<g_path->size();i++)
     {
     if(g_path->value()[g_path->size()-1-i] == '/'
@@ -694,20 +711,21 @@ int status = 0;
       {
       ApplicationWrapperParam param;
       param.SetName((*itField).name);
-      param.SetValue((*itField).value);    
-      if((*itField).type == MetaCommand::TypeEnumType::FLOAT)
+      param.SetValue((*itField).value);
+
+      if((*itField).type == MetaCommand::FLOAT)
         {
         param.SetType(ApplicationWrapperParam::Float);
         }
-      else if((*itField).type == MetaCommand::TypeEnumType::INT)
+      else if((*itField).type == MetaCommand::INT)
         {
         param.SetType(ApplicationWrapperParam::Int);
         }
-      else if((*itField).type == MetaCommand::TypeEnumType::STRING)
+      else if((*itField).type == MetaCommand::STRING)
         {
         param.SetType(ApplicationWrapperParam::String);
         }
-      else if((*itField).type == MetaCommand::TypeEnumType::FLAG)
+      else if((*itField).type == MetaCommand::FLAG)
         {
         itField++;
         continue;

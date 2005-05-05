@@ -54,8 +54,9 @@ void ScriptSetAppOptionAction::Execute()
 {
   MString m_value;
   m_value=m_manager->Convert(m_parameters[1]);
- 
-  for (unsigned int i=2;i<m_parameters.size();i++)
+
+  unsigned int i; 
+  for (i=2;i<m_parameters.size();i++)
     {
     if (m_value != "")
       {
