@@ -54,18 +54,43 @@ MString ScriptRunAction::Help()
 }
 
 /** Generate the condor script */
-void ScriptRunAction::GenerateCondor()
+void ScriptRunAction::GenerateCondor(const char* appname)
 {
-  std::cout << "Generating Condor!" << std::endl;
-  m_CondorModule->AddCommand(m_manager->Convert(m_parameters[1]).removeChar('\'').toChar());
+  // we look for the current application
+  // first we remove any ${}
+  MString appvar(appname);
+  appvar = appvar.removeChar('$');
+  appvar = appvar.removeChar('{');
+  appvar = appvar.removeChar('}');
+
+  // second we try to find the current variable in the list of applications
+  std::vector<ApplicationNameType>::const_iterator it = m_manager->GetApplicationsList()->begin();
+  ApplicationWrapper* application = NULL;
+  while (it != m_manager->GetApplicationsList()->end())
+    {
+    if(!strcmp((*it).first.c_str(),appvar.toChar()))
+      {
+      application = (*it).second;
+      break;
+      }
+    it++;
+    }
+
+  if(!application)
+    {
+    std::cout << "ScriptRunAction::GenerateCondor : Cannot find the application corresponding to " << appvar.toChar() << std::endl;
+    return;
+    }
+
+  m_CondorModule->AddApplication(application);
 }
 
-/** Execute the applications */
+/** Execute the action */
 void ScriptRunAction::Execute()
 {
   if(m_CondorModule)
     {
-    this->GenerateCondor();
+    this->GenerateCondor(m_parameters[1].toChar());
     return;
     }
 
@@ -95,37 +120,28 @@ void ScriptRunAction::Execute()
   int m_offset = 0;
   int m_offset2 = 0;
   while (m_offset != -1)
-  {
+    {
     m_offset = m_output.find("\n");
     m_progressmanager->AddOutput(m_output.begin("\n"));
     if (m_offset != -1)
+      {
       m_output = m_output.end("\n")+1;
-  }
+      }
+    }
 
 
   m_offset = 0;
   while (m_offset != -1)
-  {
+    {
     m_offset = m_error.find("\n");
     m_progressmanager->AddError(m_error.begin("\n"));
     if (m_offset != -1)
-     m_error = m_error.end("\n")+1;
-  }
-
-
+      {
+      m_error = m_error.end("\n")+1;
+      }
+    }
 
   m_timer.stop();
-
-  // m_manager->GetError()->SetStatus(m_launch.Execute(m_manager->Convert(m_parameters[1])));
-
-
-  /*MString m_value;
-  for (int i=m_parameters[1].toInt();i<m_parameters[2].toInt();i+=m_parameters[3].toInt())
-  {
-    m_value+= MString("%1 ").arg(i);
-  }
-  m_value+= m_parameters[2];
-  m_manager->SetVariable(m_parameters[0],m_value);*/
 }
 
 } // end namespace bm

@@ -46,7 +46,10 @@ class ScriptActionManager
 public:
 
   typedef std::vector<ApplicationWrapper*> ApplicationWrapperListType;
-  
+  typedef std::pair<std::string,ApplicationWrapper*> ApplicationNameType;
+  typedef std::vector<ApplicationNameType> ApplicationsListType;
+
+
   ScriptActionManager();
   ~ScriptActionManager();
   
@@ -82,7 +85,11 @@ public:
   
   /** Set/Get the list of wrapped applications */
   void SetApplicationWrapperList(ApplicationWrapperListType* applicationlist);
-  ApplicationWrapperListType* GetApplicationWrapperList() {return m_applicationlist;}
+  ApplicationWrapperListType* GetApplicationWrapperList() {return m_ApplicationWrapperList;}
+
+  /** Set/Get the list of application from the editor associating an app and a keyword */
+  void SetApplicationsList(ApplicationsListType* list) {m_ApplicationsList = list;}
+  ApplicationsListType* GetApplicationsList() {return m_ApplicationsList;}
 
   std::vector<MString> GetKeywordList();
 
@@ -98,7 +105,8 @@ protected:
   ProgressManager* m_progressmanager;
   MString m_applicationpath;
   MString m_scriptpath;
-  ApplicationWrapperListType* m_applicationlist;
+  ApplicationWrapperListType* m_ApplicationWrapperList;
+  ApplicationsListType* m_ApplicationsList;
 
   // Tells the output of the Run command to generate condor scripts
   Condor* m_CondorModule;

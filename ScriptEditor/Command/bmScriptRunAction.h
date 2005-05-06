@@ -30,12 +30,20 @@ namespace bm {
 class ScriptRunAction : public ScriptAction
 {
 public:
+  typedef std::pair<std::string,ApplicationWrapper*> ApplicationNameType;
+
+  /** Constructor */
   ScriptRunAction();
+  /** Descructor */
   ~ScriptRunAction();
+  /** Test if the script is valid */
   bool TestParam(ScriptError* error,int linenumber);
+  /** Execute the current action*/
   void Execute();
+  /** Return the help for the current action */
   MString Help();
-  void GenerateCondor();
+  /** Generate condor script. The function delegate to the bmCondor */
+  void GenerateCondor(const char* appname);
 
 };
 

@@ -44,7 +44,8 @@ ScriptActionManager::ScriptActionManager()
   m_parentaction = 0;
   m_error = new ScriptError();
   m_progressmanager = new ProgressManager();
-  m_applicationlist = 0;
+  m_ApplicationWrapperList = 0;
+  m_ApplicationsList = 0;
   m_scriptpath = "";
   m_CondorModule = NULL;
 }
@@ -153,7 +154,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
 
 void ScriptActionManager::SetApplicationWrapperList(std::vector<ApplicationWrapper*>* applicationlist)
 {
-  m_applicationlist = applicationlist;
+  m_ApplicationWrapperList = applicationlist;
 }
 
 void ScriptActionManager::Reset()
@@ -170,12 +171,12 @@ void ScriptActionManager::Reset()
    SetTestVariable(MString("applicationpath"));
    SetTestVariable(MString("scriptpath"));
 
-   if (m_applicationlist)
+   if (m_ApplicationWrapperList)
    {
-     for (unsigned int k=0;k<m_applicationlist->size();k++)
+     for (unsigned int k=0;k<m_ApplicationWrapperList->size();k++)
      { 
-       SetVariable((*m_applicationlist)[k]->GetName(),MString("'") + (*m_applicationlist)[k]->GetApplicationPath() + "'");
-       SetTestVariable((*m_applicationlist)[k]->GetName()); 
+       SetVariable((*m_ApplicationWrapperList)[k]->GetName(),MString("'") + (*m_ApplicationWrapperList)[k]->GetApplicationPath() + "'");
+       SetTestVariable((*m_ApplicationWrapperList)[k]->GetName()); 
      }
    }
 

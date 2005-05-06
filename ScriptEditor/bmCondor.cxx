@@ -18,20 +18,21 @@
   
 namespace bm {
 
+/** Constructor */
 Condor::Condor()
 {
   m_FileName = "";
 }
 
+/** Destructor */
 Condor::~Condor()
 {
 }
 
-/** Add a command to the condor script 
- *  The command is parsed to produce a valid line */
-void Condor::AddCommand(const char* command)
+/** Add an application to the list of applications to generate */
+void Condor::AddApplication(ApplicationWrapper* app)
 {
-  m_CommandList.push_back(command);
+  m_ApplicationsList.push_back(*app);
 }
 
 /** Write the condor script */
@@ -61,10 +62,41 @@ void Condor::Write()
   fprintf(fic,"log            = bmCondor.log.txt\n");
   
   // Add the executable
-  std::vector<std::string>::const_iterator it = m_CommandList.begin();
-  while(it != m_CommandList.end())
+  std::vector<ApplicationWrapper>::iterator it = m_ApplicationsList.begin();
+  while(it != m_ApplicationsList.end())
     {
-    fprintf(fic,"executable     = %s\n",(*it).c_str());
+    fprintf(fic,"executable    = %s\n",(*it).GetApplicationPath().toChar());
+    fprintf(fic,"arguments     = %s\n",(*it).GetCurrentCommandLineArguments(true).c_str());  
+    
+#ifdef WIN32 
+    fprintf(fic,"requirements  = OpSys == \"WINNT50\"\n");
+#endif
+
+    // Check if we have external data
+    const std::vector<ApplicationWrapperParam> & params = (*it).GetParams();
+    std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();
+
+    std::string externalData = "";
+    while(itParams != params.end())
+      {
+      if((*itParams).GetExternalData())
+        {
+        if(externalData.size()>0)
+          {
+          externalData += ",";
+          }
+        externalData += (*itParams).GetValue().toChar();
+        }
+      itParams++;
+      }
+
+    if(externalData.size() > 0)
+      {
+      fprintf(fic,"should_transfer_files = yes\n");
+      fprintf(fic,"transfer_input_files = %s\n",externalData.c_str());
+      fprintf(fic,"when_to_transfer_output = ON_EXIT_OR_EVICT\n");
+      }
+
     fprintf(fic,"queue 1\n");
     it++;
     }

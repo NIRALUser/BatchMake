@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <vector>
+#include <ApplicationWrapper.h>
 
 namespace bm {
 
@@ -32,13 +33,16 @@ public:
   ~Condor();
 
   void SetFileName(const char* filename) {m_FileName = filename;}
-  void AddCommand(const char* command);
+    
+  /** Add an application to the list of applications to generate */
+  void AddApplication(ApplicationWrapper* app);
+  
   void Write();
 
 protected:
 
   std::string m_FileName;
-  std::vector<std::string> m_CommandList;
+  std::vector<ApplicationWrapper> m_ApplicationsList; // we create a copy of the app
 };
 
 } // end namespace bm
