@@ -53,7 +53,7 @@ public:
   void DownParam(MString name);
 
   /** Return the current command line arguments */
-  std::string GetCurrentCommandLineArguments();
+  std::string GetCurrentCommandLineArguments(bool relativePath=true);
 
   /** Set the parameter value */
   void SetParameterValue(std::string first, std::string second, std::string value);

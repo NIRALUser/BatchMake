@@ -14,11 +14,13 @@ INCLUDE_DIRECTORIES(
   ${BatchMakeGUI_SOURCE_DIR}/External/Flu
   ${BatchMakeGUI_SOURCE_DIR}/ProgressGUI
   ${BatchMakeGUI_SOURCE_DIR}/ScriptEditor
+  ${BatchMakeGUI_SOURCE_DIR}/CondorWatcher
 
   ${BatchMakeGUI_BINARY_DIR}/SplashScreen
   ${BatchMakeGUI_BINARY_DIR}/ApplicationWrapper
   ${BatchMakeGUI_BINARY_DIR}/ProgressGUI
   ${BatchMakeGUI_BINARY_DIR}/ScriptEditor
+  ${BatchMakeGUI_BINARY_DIR}/CondorWatcher
 )
 
 

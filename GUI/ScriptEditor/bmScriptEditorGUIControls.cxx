@@ -26,6 +26,8 @@
 #include <FL/Fl_Check_Button.H>
 #include <bmSplashScreenControls.h>
 #include <FL/Fl_Timer.H>
+#include "CondorWatcher.h"
+#include "bmLaunch.h"
 
 
 #ifndef WIN32
@@ -291,6 +293,24 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     }
 
   condor.Write();
+  
+  if(fl_ask("Run condor watcher?"))
+    {
+    CondorWatcher gui;
+    gui.Window->show();
+    gui.Watch();
+    }
+
+  if(fl_ask("Run current script?"))
+    {
+    Launch starter;
+    std::string run = "condor_submit ";
+    run += filename;
+    starter.Execute(run.c_str());
+    }
+
+  
+  
   m_parser->SetCondorModule(NULL);
 }
 

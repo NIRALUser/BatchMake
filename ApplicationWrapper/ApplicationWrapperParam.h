@@ -41,7 +41,7 @@ public:
   void SetName(MString name);
   MString GetName();
   void SetValue(MString value);
-  MString GetValue();
+  MString GetValue() const;
   void SetEnum(std::vector<MString>);
   std::vector<MString> GetEnum();
   void SetOptional(bool flag);
@@ -50,6 +50,9 @@ public:
   bool IsValueDefined() {return m_ValueDefined;}
   void SetValueDefined(bool val) {m_ValueDefined = val;}
 
+  /** Set/Get if the parameters is an input data file */
+  void SetExternalData(bool external) {m_ExternalData = external;}
+  bool GetExternalData() const {return m_ExternalData;}
 
 private:
   Type m_type;
@@ -59,6 +62,7 @@ private:
   int m_parent;
   std::vector<MString> m_enum;
   bool m_ValueDefined;
+  bool m_ExternalData;
 
 };
 

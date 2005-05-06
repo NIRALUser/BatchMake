@@ -34,7 +34,7 @@ void ApplicationWrapper::SetApplicationPath(MString applicationpath)
 
 
 /** Return the current command line arguments */
-std::string ApplicationWrapper::GetCurrentCommandLineArguments()
+std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath)
 {
   std::string line = "";
 
@@ -48,7 +48,20 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments()
         {
         line += " ";
         }
-      line += (*it).GetValue().toChar();
+      
+      // remove the absolute path if the relativePath is on
+      if(relativePath && (*it).GetExternalData())
+        {
+        MString appname = (*it).GetValue().rend("/");
+        appname = appname.rend("\\");
+        appname = appname.removeChar('\\');
+        appname = appname.removeChar('/');
+        line += appname.toChar();
+        }
+      else
+        {
+        line += (*it).GetValue().toChar();
+        }     
       }
     it++;
     }
@@ -247,8 +260,6 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)
     else
       m_line += " <";
 
-    std::cout << m_params[offset].GetName().toChar() << std::endl;
-
     switch(m_params[offset].GetType())
     {
       case 0: m_line += m_params[offset].GetName();
@@ -337,6 +348,7 @@ void ApplicationWrapper::Save(MString filename)
           m_writer.Write(MString("Name"),m_params[i].GetName());
           m_writer.Write(MString("Value"),m_params[i].GetValue());
           m_writer.Write(MString("Parent"),m_params[i].GetParent());
+          m_writer.Write(MString("External"),(int)m_params[i].GetExternalData());
           m_writer.Write(MString("Optional"),(int)m_params[i].GetOptional());
           for (unsigned j=0;j<m_params[i].GetEnum().size();j++)
           {
@@ -391,7 +403,8 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader)
     if (m_balise == "Type")     m_param.SetType(m_reader.GetValue().toInt());
     if (m_balise == "Value")    m_param.SetValue(m_reader.GetValue());
     if (m_balise == "Parent")   m_param.SetParent(m_reader.GetValue().toInt());
-    if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());
+    if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toBool());
+    if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
     if (m_balise == "Enum")     m_list.push_back(m_reader.GetValue());
 
     m_balise = m_reader.GetBalise();

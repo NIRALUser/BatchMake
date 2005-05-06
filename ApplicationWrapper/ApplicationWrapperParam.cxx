@@ -21,6 +21,7 @@ ApplicationWrapperParam::ApplicationWrapperParam()
   m_name = "NA";
   m_parent = 0;
   m_ValueDefined = false;
+  m_ExternalData = false;
 }
 
 ApplicationWrapperParam::~ApplicationWrapperParam()
@@ -68,7 +69,7 @@ void ApplicationWrapperParam::SetValue(MString value)
   m_value = value;
 }
 
-MString ApplicationWrapperParam::GetValue()
+MString ApplicationWrapperParam::GetValue() const
 {
   return m_value;
 }

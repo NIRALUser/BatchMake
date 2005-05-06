@@ -20,6 +20,7 @@ SET(BATCHMAKE_LIBS
  BatchMakeApplicationWrapper
  BatchMakeScriptEditor
  BatchMakeUtilities
+ CondorWatcher
  FLU
 )
 # Add an option to hide the console

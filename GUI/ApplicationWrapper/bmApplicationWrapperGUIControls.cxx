@@ -67,6 +67,7 @@ ApplicationWrapperGUIControls::ApplicationWrapperGUIControls():ApplicationWrappe
     g_delete->hide();
 
     g_optional->value(0);
+    g_external->value(0);
     g_moduleversion->value("1.0");
     m_applicationwrapper = new ApplicationWrapper();
 
@@ -183,6 +184,7 @@ void ApplicationWrapperGUIControls::OnSelectParameters()
     g_value->value("");
     g_name->value("");
     g_optional->value(0);
+    g_external->value(0);
     g_enumlist->clear();
     g_enumlist->add("New...");
     g_enumlist->redraw();
@@ -203,6 +205,7 @@ void ApplicationWrapperGUIControls::OnSelectParameters()
       g_type->value(m_param->GetType());
       g_parent->value(m_param->GetParent());
       g_optional->value(m_param->GetOptional());
+      g_external->value(m_param->GetExternalData());
       g_enumlist->clear();
       g_enumlist->add("New...");
       for (unsigned int i=0;i<m_param->GetEnum().size();i++)
@@ -230,7 +233,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
     m_param.SetValue(MString(g_value->value()));
     m_param.SetParent(g_parent->value());
     m_param.SetOptional(MString(g_optional->value()).toBool());
-   
+    m_param.SetExternalData(MString(g_external->value()).toBool());
     std::vector<MString> m_list;
     if (g_type->value() == 5)
     {
@@ -271,6 +274,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
     m_param->SetValue(MString(g_value->value()));
     m_param->SetParent(g_parent->value());
     m_param->SetOptional(MString(g_optional->value()).toBool());
+    m_param->SetExternalData(MString(g_external->value()).toBool());
 
     std::vector<MString> m_list;
     if (g_type->value() == 5)
@@ -461,6 +465,7 @@ void ApplicationWrapperGUIControls::AutomaticCommandLineParsing()
   program += " -vxml";
   std::cout << "Running = " << program.c_str() << std::endl;
   std::string m_output = "";
+  unsigned int i=0;
 
 #ifdef WIN32
 
@@ -519,7 +524,7 @@ void ApplicationWrapperGUIControls::AutomaticCommandLineParsing()
   // Wait until child process exits.
   bool m_run = true;
 
-  unsigned int i=0;
+
   while(m_run)
   {
   unsigned long m_nbread = 0;
@@ -649,10 +654,7 @@ int status = 0;
 
   // extract the name from the filename
   std::string revname;
-  
-  unsigned int i = 0;
-
-  
+ 
   for(i=0;i<g_path->size();i++)
     {
     if(g_path->value()[g_path->size()-1-i] == '/'
@@ -688,6 +690,7 @@ int status = 0;
   unsigned int parentId=0;
   while(it != options.end())
     {
+    bool gotParent = false;
     ApplicationWrapperParam parentParam;
     parentParam.SetName((*it).name);
     parentParam.SetOptional(!(*it).required);
@@ -699,11 +702,13 @@ int status = 0;
       parentParam.SetValue(tag);
       parentParam.SetName((*it).name);
       m_applicationwrapper->AddParam(parentParam);
+      gotParent = true;
       parentId++;
       }
     else
       {
-      parentId = 0;
+      parentId++;
+      gotParent = false;
       }
     
     std::vector<MetaCommand::Field>::const_iterator itField = (*it).fields.begin();
@@ -712,6 +717,7 @@ int status = 0;
       ApplicationWrapperParam param;
       param.SetName((*itField).name);
       param.SetValue((*itField).value);
+      param.SetExternalData((*itField).externaldata);
 
       if((*itField).type == MetaCommand::FLOAT)
         {
@@ -732,7 +738,14 @@ int status = 0;
         }
       
       param.SetOptional(!(*itField).required);
-      param.SetParent(parentId);
+      if(gotParent)
+        {
+        param.SetParent(parentId);
+        }
+      else
+        {
+        param.SetParent(0);
+        }
       m_applicationwrapper->AddParam(param);
       itField++; 
       }

@@ -107,7 +107,7 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_ApplicationOptionBrowser->selection_mode(FLU_SINGLE_SELECT);
   m_ApplicationOptionBrowser->callback((Fl_Callback*)SelectApplicationOption,this);
   m_ApplicationOptionBrowser->resize(13,15,200,80);
-  //m_ApplicationOptionBrowser->end();
+  m_ApplicationOptionBrowser->end();
 
 
 
@@ -150,6 +150,7 @@ void Editor::SetParser(ScriptParser* parser)
 {
   m_Parser = parser;
   m_Manager = m_Parser->GetScriptActionManager();
+  m_Manager->SetApplicationsList(&m_ApplicationsList);
   this->UpdateKeyword();
 }
 
@@ -565,7 +566,6 @@ void Editor::AddApplicationsToBrowse()
               ApplicationNameType newapp;
               newapp.first = name;
               newapp.second = (*it);
-              std::cout << "Added " << name.c_str() << std::endl;
               m_ApplicationsList.push_back(newapp);
               break;
               }
@@ -801,6 +801,8 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
     {
     std::string text = "";
     int parent = (*itParams).GetParent();
+
+    std::cout << "parent = " << parent << std::endl;
     if(parent > 0)
       {
       unsigned int pos = 0;

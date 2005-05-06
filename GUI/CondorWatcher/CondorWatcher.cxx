@@ -41,7 +41,7 @@ CondorWatcher* watcher;
 void timer_callback(void*)
 {
   watcher->Update();
-  Fl::repeat_timeout(60, timer_callback);
+  Fl::repeat_timeout(30, timer_callback);
 }
 
 /** Constructor */
@@ -526,7 +526,7 @@ void CondorWatcher::Watch()
   n->label_size(11);
 
   Fl::add_timeout(1.0, timer_callback);
-  Fl::run();
+  //Fl::run();
 }
 
 
