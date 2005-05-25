@@ -707,7 +707,7 @@ int status = 0;
       }
     else
       {
-      parentId++;
+      //parentId++;
       gotParent = false;
       }
     
