@@ -69,7 +69,7 @@ void Condor::Write()
     fprintf(fic,"arguments     = %s\n",(*it).GetCurrentCommandLineArguments(true).c_str());  
     
 #ifdef WIN32 
-    fprintf(fic,"requirements  = OpSys == \"WINNT50\"\n");
+    fprintf(fic,"requirements  = (OpSys == \"WINNT50\") || (OpSys == \"WINNT51\") \n");
 #endif
 
     // Check if we have external data

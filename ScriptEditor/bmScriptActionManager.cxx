@@ -292,30 +292,40 @@ void ScriptActionManager::SetVariable(MString name,MString value)
   }
 }
 
+
+/** Return the value of a given variable. The variable (name) can
+ *  be ${i} $i or i */
 std::vector<MString> ScriptActionManager::GetVariable(MString name)
 {
+  // We strip any ${} or $ as a variable name
+  MString varname = name.removeChar('$');
+  varname = varname.removeChar('{');
+  varname = varname.removeChar('}');
 
   std::vector<MString> m_list;
- for (unsigned int i=0;i<m_variablelist.size();i++)
- {
-   if (m_variablelist[i]->name == name)
-   {
-     MString m_param = m_variablelist[i]->value;
-     while (m_param != "")
-     {
+  for (unsigned int i=0;i<m_variablelist.size();i++)
+    {
+    if (m_variablelist[i]->name == varname)
+      {
+      MString m_param = m_variablelist[i]->value;
+      while (m_param != "")
+        {
         m_param = m_param.removeChar(' ',true);
         m_param = m_param.removeChar('\'',true);
         MString m_value = m_param.begin("\'");
         if (m_value != "")
+          {
           m_list.push_back(m_value);
-
-         m_param = m_param.end("\'");
-         if (m_param.length() != 0)
-           m_param = m_param+1;
-     }
-     return m_list;
-   }
- }
+          }
+        m_param = m_param.end("\'");
+        if (m_param.length() != 0)
+          {
+          m_param = m_param+1;
+          }
+        }
+      return m_list;
+      }
+    }
 
   return m_list;
 }
