@@ -7,7 +7,6 @@ INCLUDE_DIRECTORIES(
 
 
 SET(CondorWatcher_SRCS
-#  main.cxx
   CondorWatcher.cxx
   CondorWatcher.h
 )
@@ -22,7 +21,7 @@ LINK_LIBRARIES(
 )
 
 ADD_LIBRARY( CondorWatcher ${CondorWatcher_SRCS})
-ADD_EXECUTABLE( CondorWatcher ${CondorWatcher_SRCS})
+ADD_EXECUTABLE( CondorWatcherTool ${CondorWatcher_SRCS} main.cxx)
 SET(FLTK_WRAP_UI 1)
 FLTK_WRAP_UI( CondorWatcher  ${CondorWatcherGUI_SRCS} )
-
+FLTK_WRAP_UI( CondorWatcherTool  ${CondorWatcherGUI_SRCS} )

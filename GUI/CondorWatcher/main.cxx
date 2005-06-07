@@ -21,5 +21,6 @@ int main()
   gui.Window->show();
   gui.Watch();
 
+  Fl::run();
   return 0;
 }
