@@ -76,6 +76,7 @@ public:
   MString removeChar(const char key,bool onlyfirst=false);
   MString duplicateChar(const char key);
   MString replaceChar(const char key,const char key2);
+  MString replace(const char* key,const char* key2);
   MString toLower();
   MString toUpper();
   int count(const char key);

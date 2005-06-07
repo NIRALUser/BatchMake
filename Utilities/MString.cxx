@@ -342,6 +342,19 @@ MString MString::replaceChar(const char key,const char key2)
   return m_newvalue;
 }
 
+MString MString::replace(const char* key,const char* key2)
+{
+  std::string m_newvalue = m_value;
+  long pos = -1;
+  pos = m_newvalue.find(key);
+  while(pos != -1)
+    {
+    m_newvalue= m_newvalue.replace(pos,strlen(key),key2);
+    pos = m_newvalue.find(key);
+    }
+
+  return m_newvalue;
+}
 
 
 MString MString::toLower()
