@@ -54,7 +54,7 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
 
   // Give a pointer of the parser to the editor (to get the list of apps, etc...)
   g_editor->SetParser(m_parser);
-
+  g_editor->SetScriptEditorGUI(this);
 }
 
 ScriptEditorGUIControls::~ScriptEditorGUIControls()
@@ -306,7 +306,16 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     Launch starter;
     std::string run = "condor_submit ";
     run += filename;
+    std::cout << "Running Condor script " << run.c_str() << std::endl;
     starter.Execute(run.c_str());
+    MString output = starter.GetOutput();
+    output = output.replaceChar(13,' ');
+    output = output.replaceChar(10,' ');
+    m_errorgui->SetStatus(output);
+    MString error = starter.GetError();
+    error = error.replaceChar(13,' ');
+    error = error.replaceChar(10,' ');
+    m_errorgui->SetStatus(error);
     }
 
   

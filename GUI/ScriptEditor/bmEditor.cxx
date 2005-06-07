@@ -15,6 +15,7 @@
 
 #include "bmEditor.h"
 #include "MString.h"
+#include "bmScriptEditorGUIControls.h"
 
 
 namespace bm {
@@ -138,6 +139,7 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
 
   m_currentword = "";
   m_parentwindow = 0;
+  m_ScriptEditorGUI = NULL;
 }
 
 /** Desctructor */
@@ -802,7 +804,6 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
     std::string text = "";
     int parent = (*itParams).GetParent();
 
-    std::cout << "parent = " << parent << std::endl;
     if(parent > 0)
       {
       unsigned int pos = 0;
@@ -866,6 +867,13 @@ int Editor::handle( int event )
         m_ApplicationBrowser->handle(event);
         }
       take_focus();   
+      }
+
+    // if CTRL+S is pressed we save the script
+    if(Fl::event_state() == 1310720 && Fl::event_key() == 115)
+      {
+      static_cast<ScriptEditorGUIControls*>(m_ScriptEditorGUI)->OnSaveScript();
+      return 1;
       }
     
     if ( Fl::event_key() == FL_Escape)

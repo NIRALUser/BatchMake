@@ -23,12 +23,12 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
         xywh {0 0 640 35} align 225
       } {
         Fl_Button {} {
-          callback {OnOpenScript()} selected
+          callback {OnOpenScript()}
           tooltip {Open script} image {../../Images/open.gif} xywh {5 5 30 25} box PLASTIC_UP_BOX color 48 labelsize 11 align 192 hotspot
         }
-        Fl_Button {} {
-          callback {OnSaveScript()}
-          tooltip {Save current script} image {../../Images/save.gif} xywh {40 5 30 25} box PLASTIC_UP_BOX color 48
+        Fl_Button saveBt {
+          callback {OnSaveScript()} selected
+          tooltip {Save current script} image {../../Images/save.gif} xywh {40 5 30 25} box PLASTIC_UP_BOX shortcut 0x40073 color 48
         }
         Fl_Button {} {
           callback {OnCompile()}

@@ -67,7 +67,6 @@ public:
   /** Add the applications to browse (by SetApp()) */
   void AddApplicationsToBrowse();
 
-
   void Load(const char* filename);
   void Save(const char* filename);
   void ShowOptionFinder(int x,int y);
@@ -87,6 +86,9 @@ public:
   /** Show the options for an applications */
   bool ShowApplicationOptions(const char* appVarName);
 
+  /** Set the script editor GUI */
+  void SetScriptEditorGUI(void* editorGUI) {m_ScriptEditorGUI=editorGUI;}
+
 protected:
 
   Fl_Text_Buffer* stylebuf;
@@ -101,6 +103,7 @@ protected:
   bool m_drawhelper;
   MString m_currentword;
 
+  void* m_ScriptEditorGUI;
   ScriptParser* m_Parser;
   ScriptActionManager* m_Manager;
 
