@@ -59,6 +59,7 @@ INCLUDE_DIRECTORIES(
   ${BatchMake_SOURCE_DIR}/GUI/ScriptEditor
   ${BatchMake_SOURCE_DIR}/GUI/External/Flu
   ${BatchMake_SOURCE_DIR}/GUI/ProgressGUI
+  ${BatchMake_SOURCE_DIR}/GUI/CondorWatcher
   ${BatchMake_SOURCE_DIR}/ScriptEditor
   ${BatchMake_SOURCE_DIR}/ScriptEditor/Command
   ${BatchMake_SOURCE_DIR}/GUI/SplashScreen
@@ -66,6 +67,7 @@ INCLUDE_DIRECTORIES(
 
   ${BatchMake_BINARY_DIR}
   ${BatchMake_BINARY_DIR}/GUI
+  ${BatchMake_BINARY_DIR}/GUI/CondorWatcher
 )
 
 #Compile Utilities
