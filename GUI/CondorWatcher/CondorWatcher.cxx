@@ -36,18 +36,17 @@
 #endif
 
 
-CondorWatcher* watcher;
+//CondorWatcher* watcher;
 
-void timer_callback(void*)
+void timer_callback(void* watcher)
 {
-  watcher->Update();
-  Fl::repeat_timeout(30, timer_callback);
+  static_cast<CondorWatcher*>(watcher)->Update();
+  Fl::repeat_timeout(30,timer_callback, watcher);
 }
 
 /** Constructor */
 CondorWatcher::CondorWatcher()
 {
-  watcher = this;
 }
 
 /** Destructor */
@@ -372,8 +371,16 @@ void CondorWatcher::UpdateClients()
 /** Update the current display */
 void CondorWatcher::Update()
 {
-  m_MachineVector.clear();
-  m_JobVector.clear();
+  if(m_MachineVector.size()>0)
+    {
+    m_MachineVector.clear();
+    }
+
+  if(m_JobVector.size()>0)
+    {
+    m_JobVector.clear();
+    }
+
   this->UpdateClients();
   this->Clients->clear();
   this->Clients->always_open(true);
@@ -525,7 +532,7 @@ void CondorWatcher::Watch()
   n->branch_icon(new Fl_Pixmap( (char*const*)home_xpm ));
   n->label_size(11);
 
-  Fl::add_timeout(1.0, timer_callback);
+  Fl::add_timeout(1.0, timer_callback, this);
   //Fl::run();
 }
 
