@@ -26,7 +26,7 @@
 #include <FL/Fl_Check_Button.H>
 #include <bmSplashScreenControls.h>
 #include <FL/Fl_Timer.H>
-#include "CondorWatcher.h"
+
 #include "bmLaunch.h"
 
 
@@ -55,11 +55,15 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
   // Give a pointer of the parser to the editor (to get the list of apps, etc...)
   g_editor->SetParser(m_parser);
   g_editor->SetScriptEditorGUI(this);
+
+  m_CondorWatcher = new CondorWatcher;
+
 }
 
 ScriptEditorGUIControls::~ScriptEditorGUIControls()
 {
   delete m_parser;
+  delete m_CondorWatcher;
 }
 
 void ScriptEditorGUIControls::SetApplicationPath(MString applicationpath)
@@ -296,9 +300,8 @@ void ScriptEditorGUIControls::OnGenerateCondor()
   
   if(fl_ask("Run condor watcher?"))
     {
-    CondorWatcher gui;
-    gui.Window->show();
-    gui.Watch();
+    m_CondorWatcher->Window->show();
+    m_CondorWatcher->Watch();
     }
 
   if(fl_ask("Run current script?"))
@@ -318,8 +321,6 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     m_errorgui->SetStatus(error);
     }
 
-  
-  
   m_parser->SetCondorModule(NULL);
 }
 

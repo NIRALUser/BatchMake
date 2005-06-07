@@ -25,6 +25,7 @@
 #include "bmScriptParser.h"
 #include "ApplicationWrapper.h"
 #include <vector>
+#include "CondorWatcher.h"
 
 namespace bm {
 
@@ -58,6 +59,8 @@ protected:
   MString m_applicationpath;
   std::vector<ApplicationWrapper*> m_applicationlist;
   MString m_title;
+
+  CondorWatcher* m_CondorWatcher;
 };
 
 } // end namespace bm
