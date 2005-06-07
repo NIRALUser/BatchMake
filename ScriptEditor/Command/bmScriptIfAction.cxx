@@ -33,6 +33,23 @@ void ScriptIfAction::SetMode(int mode)
   m_mode = mode;
 }
 
+bool ScriptIfAction::TestParam(ScriptError* error,int linenumber)
+{
+   if (m_parameters.size() <3)
+   {
+     error->SetError(MString("if() takes 3 arguments"),linenumber);
+     return false;
+   }
+
+   m_manager->SetTestVariable(m_parameters[0]);
+
+  for (unsigned int i=1;i<m_parameters.size();i++)
+      m_manager->TestConvert(m_parameters[i],linenumber);
+
+
+   return true;
+}
+
 
 void ScriptIfAction::AddAction(ScriptAction* action)
 {
@@ -44,7 +61,7 @@ void ScriptIfAction::AddAction(ScriptAction* action)
 
 MString ScriptIfAction::Help()
 {
-  return "If(<$variable1> ==|<=|>= <$variable2>) ... EndIf(<variable>)";
+  return "If(<$variable1> ==|<=|>=|!= <$variable2>) ... EndIf(<variable>)";
 }
 
 
@@ -69,6 +86,20 @@ void ScriptIfAction::Execute()
   else if (m_parameters[1].toLower() == "==")
   {
     if (m_manager->GetVariable(m_parameters[0])[0] == m_parameters[2])
+    {
+      for (unsigned int i=0;i<m_thenaction.size();i++)
+        m_thenaction[i]->Execute();
+    }
+    else
+    {
+      for (unsigned int i=0;i<m_elseaction.size();i++)
+        m_elseaction[i]->Execute();
+    }
+  }
+
+  else if (m_parameters[1].toLower() == "!=")
+  {
+    if (m_manager->GetVariable(m_parameters[0])[0] != m_parameters[2])
     {
       for (unsigned int i=0;i<m_thenaction.size();i++)
         m_thenaction[i]->Execute();

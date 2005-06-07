@@ -88,15 +88,18 @@ void ScriptSetAppOptionAction::Execute()
     third = m_parameters[0].mid(pos1+1,m_parameters.size()-pos1-1).toChar();
     }
 
-  //std::cout << "First = " << first.c_str() << std::endl;
-  //std::cout << "Second = " << second.c_str() << std::endl;
-  //std::cout << "Third = " << third.c_str() << std::endl;
-
   // Copy the values
   std::string value = "";
   for(i=1;i<m_parameters.size();i++)
     {
-    value += m_parameters[i].toChar();
+    if(m_parameters[i].find("$") != -1) // if the second parametershas been defined as a variable
+      {
+      value += m_manager->GetVariable(m_parameters[i])[0].toChar();
+      }
+    else
+      {
+      value += m_parameters[i].toChar();
+      }
     value += " ";
     }
 

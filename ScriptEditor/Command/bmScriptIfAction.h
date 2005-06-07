@@ -37,6 +37,7 @@ public:
   void SetMode(int mode);
   void Delete();
   MString Help();
+  bool TestParam(ScriptError* error,int linenumber);
 
 protected:
   std::vector<ScriptAction*> m_thenaction;
