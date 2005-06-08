@@ -1,6 +1,8 @@
 #
 # Dart server to submit results (used by client)
 #
+SET (NIGHTLY_START_TIME "21:00:00 EDT")
+
 SET (DROP_SITE "degas.rad.unc.edu")
 SET (DROP_LOCATION "DartClient")
 SET (DROP_SITE_USER "dart")
