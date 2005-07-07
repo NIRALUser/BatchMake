@@ -33,6 +33,7 @@
 #include "bmScriptDbSendFileAction.h"
 #include "bmScriptDbClearAction.h"
 #include "bmScriptExtractSliceAction.h"
+#include "bmScriptExtractStringAction.h"
 
 #include "Timer.h"
 
@@ -124,6 +125,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(DbSendFile);
   BM_NEWKEYWORD(DbClear);
   BM_NEWKEYWORD(ExtractSlice);
+  BM_NEWKEYWORD(ExtractString);
   return m_list;
 }
 
@@ -149,6 +151,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(DbSendFile);
    BM_NEWACTION(DbClear);
    BM_NEWACTION(ExtractSlice);
+   BM_NEWACTION(ExtractString);
    return 0;
 }
 
