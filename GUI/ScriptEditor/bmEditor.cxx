@@ -260,9 +260,9 @@ void Editor::style_update(int        pos,          // I - Position of update
              void       *cbArg) {     // I - Callback data
   int  start,                         // Start of text
        end;                           // End of text
-  char last,                          // Last style on line
-       *style,                        // Style data
-       *text;                         // Text data
+  char last;                          // Last style on line
+  char *style = NULL;                 // Style data
+  char *text  = NULL;                 // Text data
 
 
   if ((nInserted || nDeleted)) SetModified(true);
@@ -317,12 +317,7 @@ void Editor::style_update(int        pos,          // I - Position of update
   {
     style[0] = stylebuf->text_range(start-1,start)[0];
     style[1] = '\0';
-    //std::cout << "Style start:" << style << std::endl;
-   //int value = style[0];
-    //style = new char[2];
-    //memset(style,value, 1);
-    //
-  }
+   }
 
 
  /* printf("start = %d, end = %d, text = \"%s\", style = \"%s\"...\n",
@@ -341,8 +336,10 @@ void Editor::style_update(int        pos,          // I - Position of update
   if (last != style[end - start - 1]) {
     // The last character on the line changed styles, so reparse the
     // remainder of the buffer...
-    free(text);
-    free(style);
+    delete text;
+  text = NULL;
+    delete style;
+  style = NULL;
 
     end   = textbuf->length();
     text  = textbuf->text_range(start, end);
@@ -354,9 +351,13 @@ void Editor::style_update(int        pos,          // I - Position of update
     ((Editor *)cbArg)->redisplay_range(start, end);
   }
 
-  free(text);
-  free(style);
+  delete text;
+  text = NULL;
 
+  // MAKE THINGS CRASH
+  //delete style;
+  //style = NULL;
+   
   int m_x;
   int m_y;
  ((Editor *)cbArg)->position_to_xy(pos,&m_x,&m_y);
