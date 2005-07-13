@@ -58,12 +58,17 @@ public:
   /** Set the parameter value */
   void SetParameterValue(std::string first, std::string second, std::string value);
 
+  /** Set/Get if the application uses sequential arguments */
+  void SetSequentialParsing(bool val) {m_Sequential = val; m_SequentialParams.clear();}
+  bool GetSequentialParsing() {return m_Sequential;}
 
 private:
   MString m_name;
   MString m_applicationpath;
   MString m_version;
+  bool    m_Sequential; // Set if we should use the sequential application
   std::vector<ApplicationWrapperParam> m_params;
+  std::vector<ApplicationWrapperParam> m_SequentialParams;
   
 };
 

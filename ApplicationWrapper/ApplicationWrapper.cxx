@@ -21,6 +21,8 @@
 ApplicationWrapper::ApplicationWrapper()
 {
   m_name = "";
+  m_Sequential = false;
+  m_SequentialParams.clear();
 }
 
 ApplicationWrapper::~ApplicationWrapper()
@@ -39,8 +41,15 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
   std::string line = "";
 
   std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
+  std::vector<ApplicationWrapperParam>::iterator end = m_params.end();
+  
+  if(m_Sequential)
+    {
+    it  = m_SequentialParams.begin();
+    end = m_SequentialParams.end();
+    }
 
-  while(it != m_params.end())
+  while(it != end)
     {
     if((*it).IsValueDefined())
       {
@@ -81,24 +90,9 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
       {
       parent++;
       }
+
     if(!strcmp((*it).GetName().toChar(),first.c_str()))
       {
-      // Look for the child
-      if(second.size() > 0)
-        {
-        std::vector<ApplicationWrapperParam>::iterator itChild = m_params.begin();
-        while(itChild != m_params.end())
-          {
-          if(!strcmp((*itChild).GetName().toChar(),second.c_str())
-            && ((*itChild).GetParent() == parent)
-            )
-            {
-            (*itChild).SetValueDefined(true);
-            (*itChild).SetValue(value.c_str());
-            }
-          itChild++;
-          }
-        }
       if((*it).GetType() != ApplicationWrapperParam::Flag)
         {
         (*it).SetValueDefined(true);
@@ -118,6 +112,73 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
           )
           {
           (*it).SetValueDefined(false);
+          }
+        }
+
+      
+      // We manage the sequential params here
+      if(m_Sequential)
+        {
+        if((m_SequentialParams.size() == 0)
+          || (m_SequentialParams[m_SequentialParams.size()-1].GetParent()!=parent)
+          )
+          {
+          m_SequentialParams.push_back(*it);
+          // We add all the things
+          std::vector<ApplicationWrapperParam>::iterator itChild = m_params.begin();
+          while(itChild != m_params.end())
+            {
+            if((*itChild).GetParent() == parent)
+              {
+              if(!strcmp((*itChild).GetName().toChar(),second.c_str()))
+                {
+                (*itChild).SetValueDefined(true);
+                (*itChild).SetValue(value.c_str());
+                }
+              (*itChild).SetParent(parent);
+              m_SequentialParams.push_back(*itChild);
+                //std::cout << (*itChild).GetParent() << std::endl;
+              //  std::cout << "Addding " << (*itChild).GetName().toChar() << std::endl;
+              }
+            itChild++;
+            }
+          }
+        else // we look in the list where is the parameter
+          {
+          std::vector<ApplicationWrapperParam>::iterator it = m_SequentialParams.end();
+
+          do
+            {
+            it--;
+            if(!strcmp((*it).GetName().toChar(),second.c_str()))
+              {
+              (*it).SetValueDefined(true);
+              (*it).SetValue(value.c_str());
+              break;
+              }
+            }
+            while(it != m_SequentialParams.begin());
+          }
+        }
+      else
+        { 
+        // Look for the child
+        if(second.size() > 0)
+          {
+          //m_SequentialParams.push_back(*it);
+          std::vector<ApplicationWrapperParam>::iterator itChild = m_params.begin();
+          while(itChild != m_params.end())
+            {
+            if(!strcmp((*itChild).GetName().toChar(),second.c_str())
+              && ((*itChild).GetParent() == parent)
+              )
+              {
+              (*itChild).SetValueDefined(true);
+              (*itChild).SetValue(value.c_str());
+              }
+         
+            itChild++;
+            }
           }
         }
       }

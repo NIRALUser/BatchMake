@@ -45,7 +45,7 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
   appName = appName.removeChar('@');
 
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_manager->GetApplicationWrapperList()->begin();
+  ScriptActionManager::ApplicationWrapperListType::iterator it = m_manager->GetApplicationWrapperList()->begin();
   while (it != m_manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
@@ -65,6 +65,17 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
         itParams++;
         }
 
+      (*it)->SetSequentialParsing(false);
+      if(m_parameters.size()==3)
+        {
+        if(m_parameters[2].toInt())
+          {
+          (*it)->SetSequentialParsing(true);
+          }
+        }
+     
+
+
       break;
       }
     it++;
@@ -74,6 +85,7 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
     {
     error->SetError(MString("SetApp() cannot find the corresponding application"),linenumber);
     }
+
 
 
   return true;
