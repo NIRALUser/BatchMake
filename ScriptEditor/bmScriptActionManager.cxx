@@ -27,6 +27,7 @@
 #include "bmScriptListFileInDirAction.h"
 #include "bmScriptListDirInDirAction.h"
 #include "bmScriptIncAction.h"
+#include "bmScriptIntAction.h"
 #include "bmScriptWriteFileAction.h"
 #include "bmScriptAppendFileAction.h"
 #include "bmScriptDbSendValueAction.h"
@@ -119,6 +120,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(GetParam);
   BM_NEWKEYWORD(Randomize);
   BM_NEWKEYWORD(Inc);
+  BM_NEWKEYWORD(Int);
   BM_NEWKEYWORD(AppendFile);
   BM_NEWKEYWORD(WriteFile);
   BM_NEWKEYWORD(DbSendValue);
@@ -145,6 +147,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(GetParam);
    BM_NEWACTION(Randomize);
    BM_NEWACTION(Inc);
+   BM_NEWACTION(Int);
    BM_NEWACTION(AppendFile);
    BM_NEWACTION(WriteFile);
    BM_NEWACTION(DbSendValue);

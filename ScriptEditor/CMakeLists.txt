@@ -35,6 +35,7 @@ Command/bmScriptSetAppOptionAction.cxx
 Command/bmScriptListFileInDirAction.cxx
 Command/bmScriptListDirInDirAction.cxx
 Command/bmScriptIncAction.cxx
+Command/bmScriptIntAction.cxx
 Command/bmScriptWriteFileAction.cxx
 Command/bmScriptAppendFileAction.cxx
 Command/bmScriptDbSendValueAction.cxx
