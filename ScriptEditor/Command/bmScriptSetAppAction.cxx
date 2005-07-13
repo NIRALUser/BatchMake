@@ -55,7 +55,7 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
       m_value +="'";
       appFound = true;
       
-      // Set all the variable of the application to off
+      // Set all the variables of the application to off
       std::vector<ApplicationWrapperParam> & params = (*it)->GetParams();
       std::vector<ApplicationWrapperParam>::iterator itParams = params.begin();
         
@@ -73,19 +73,15 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
           (*it)->SetSequentialParsing(true);
           }
         }
-     
-
-
       break;
       }
     it++;
-  }
+    }
 
   if(!appFound)
     {
     error->SetError(MString("SetApp() cannot find the corresponding application"),linenumber);
     }
-
 
 
   return true;
@@ -99,6 +95,41 @@ MString ScriptSetAppAction::Help()
 
 void ScriptSetAppAction::Execute()
 {
+  MString appName = m_parameters[1];
+  appName = appName.removeChar('@');
+  bool appFound = false;
+  ScriptActionManager::ApplicationWrapperListType::iterator it = m_manager->GetApplicationWrapperList()->begin();
+  while (it != m_manager->GetApplicationWrapperList()->end())
+    {
+    if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
+      {
+      m_value = "'";
+      m_value +=(*it)->GetApplicationPath();
+      m_value +="'";
+      appFound = true;
+      
+      // Set all the variables of the application to off
+      std::vector<ApplicationWrapperParam> & params = (*it)->GetParams();
+      std::vector<ApplicationWrapperParam>::iterator itParams = params.begin();
+        
+      while(itParams != params.end())
+        {
+        (*itParams).SetValueDefined(false);
+        itParams++;
+        }
+
+      (*it)->SetSequentialParsing(false);
+      if(m_parameters.size()==3)
+        {
+        if(m_parameters[2].toInt())
+          {
+          (*it)->SetSequentialParsing(true);
+          }
+        }
+      break;
+      }
+    it++;
+    }
   m_manager->SetVariable(m_parameters[0],m_value);
 }
 
