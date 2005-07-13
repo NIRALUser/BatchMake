@@ -56,7 +56,7 @@ void ScriptWriteFileAction::Execute()
   {
     MString m_text = m_manager->Convert(m_parameters[i]).removeChar('\'').latin1();
     bool m_insert;
-    for (unsigned int l=0;l<m_text.length();l++)
+    for (int l=0;l<m_text.length();l++)
     {
       m_insert = true;
       if ((m_text[l] == '\\') && (l!=m_text.length()-1))

@@ -128,7 +128,7 @@ void ScriptSetAppOptionAction::Execute()
   m_value = "'";
   m_value += app->GetApplicationPath();
   m_value += "' '";
-  m_value += app->GetCurrentCommandLineArguments();
+  m_value += app->GetCurrentCommandLineArguments(false);
   m_value += "'";
 
   m_manager->SetVariable(first.c_str(),m_value);

@@ -36,10 +36,10 @@ public:
   void SetType(int type);
   Type GetType();
   void SetParent(int parent);
-  int GetParent();
+  int GetParent() const;
 
   void SetName(MString name);
-  MString GetName();
+  MString GetName() const;
   void SetValue(MString value);
   MString GetValue() const;
   void SetEnum(std::vector<MString>);

@@ -792,14 +792,15 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
     }
 
   // Get the option from the application wrapper
-  std::vector<ApplicationWrapperParam> params = app->GetParams();
-  std::vector<ApplicationWrapperParam>::iterator itParams = params.begin();
-
+  std::vector<ApplicationWrapperParam> & params = app->GetParams();
+ // std::cout << "App Name = " << app->GetName().toChar() << std::endl;
+  std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();
   if(params.size() == 0)
     {
     return false;
     }
-
+  //std::cout << "params.size() = " << params.size() << std::endl;
+  //std::cout << "Has params" << std::endl;
   while(itParams!= params.end())
     {
     std::string text = "";
@@ -955,8 +956,30 @@ int Editor::handle( int event )
                   ApplicationNameType newapp;
                   newapp.first = name;
                   newapp.second = (*it);
-                  std::cout << "Added " << name.c_str() << std::endl;
-                  m_ApplicationsList.push_back(newapp);
+                  std::cout << "Added " << name.c_str() << " = " << (*it)->GetName().toChar() << std::endl;
+                  // Check if the variable is already assigned to a specific application
+                  int apppos = -1;
+                  bool appexists = false;
+                  std::vector<ApplicationNameType>::const_iterator it2 = m_ApplicationsList.begin();
+                  while (it2 != m_ApplicationsList.end())
+                    {  
+                    apppos++;
+                    if(!strcmp((*it2).first.c_str(),name.c_str()))
+                      {
+                      appexists = true;
+                      break;
+                      }
+                    it2++;
+                    }
+
+                  if(appexists)
+                    {
+                    m_ApplicationsList[apppos] = newapp;
+                    }
+                  else
+                    {
+                    m_ApplicationsList.push_back(newapp);
+                    }
                   break;
                   }
                 it++;
@@ -1037,12 +1060,11 @@ int Editor::handle( int event )
             }
          
           // reverse the string
-          std::string word;
+          std::string word = "";
           for(i=0;i<reword.size();i++)
             {
             word += reword[reword.size()-i-1];
             }
-
           if(this->ShowApplicationOptions(word.c_str()))
             {
             m_DrawApplicationOptionBrowser = true;

@@ -48,7 +48,7 @@ void ApplicationWrapperParam::SetParent(int parent)
   m_parent = parent;
 }
 
-int ApplicationWrapperParam::GetParent()
+int ApplicationWrapperParam::GetParent() const
 {
   return m_parent;
 }
@@ -59,7 +59,7 @@ void ApplicationWrapperParam::SetName(MString name)
   m_name = name;
 }
 
-MString ApplicationWrapperParam::GetName()
+MString ApplicationWrapperParam::GetName() const
 {
   return m_name;
 }
