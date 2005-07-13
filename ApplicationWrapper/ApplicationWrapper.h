@@ -59,7 +59,11 @@ public:
   void SetParameterValue(std::string first, std::string second, std::string value);
 
   /** Set/Get if the application uses sequential arguments */
-  void SetSequentialParsing(bool val) {m_Sequential = val; m_SequentialParams.clear();}
+  void SetSequentialParsing(bool val)
+    {
+    m_Sequential = val; 
+    m_SequentialParams.clear();
+    }
   bool GetSequentialParsing() {return m_Sequential;}
 
 private:
