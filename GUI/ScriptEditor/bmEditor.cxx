@@ -935,7 +935,11 @@ int Editor::handle( int event )
         // get the current line   
         std::string line = buffer()->line_text(insert_position());
         long pos = 0;
-        if(pos = line.find("SetApp")!=-1)
+        MString lowercaseLine = line;
+        lowercaseLine = lowercaseLine.toLower();
+        std::string lowercaseLine2 = lowercaseLine.toChar();
+
+        if(pos = lowercaseLine2.find("setapp")!=-1)
           {
           long pos1 = line.find("(",pos);
           if(pos1 != -1)
@@ -946,7 +950,12 @@ int Editor::handle( int event )
               long posspace = line.find(" ",pos1);
               std::string name = line.substr(pos1+1,posspace-pos1-1);  
               std::string app = line.substr(posspace+2,pos2-posspace-2); // there should be a @
-              
+              long pos3 = app.find(" ");
+              if(pos3 != -1)
+                {
+                app = app.substr(0,pos3); // there should be a @
+                }
+
               // Search the correct app corresponding to the name
               ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_Manager->GetApplicationWrapperList()->begin();
               while (it != m_Manager->GetApplicationWrapperList()->end())
