@@ -650,6 +650,8 @@ void Editor::draw()
 
   if (m_DrawApplicationBrowser)
     {
+    m_ApplicationBrowser->show_leaves( true );
+    m_ApplicationBrowser->show_branches( false );
     m_ApplicationBrowser->show();
     }
   else
