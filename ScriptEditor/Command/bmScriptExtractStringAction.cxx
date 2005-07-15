@@ -45,7 +45,7 @@ bool ScriptExtractStringAction::TestParam(ScriptError* error,int linenumber)
 
 MString ScriptExtractStringAction::Help()
 {
-  return "Set(<output> <input> <lenght>)";
+  return "ExtractString(<output> <input> <lenght> [FROMEND])";
 }
 
 
