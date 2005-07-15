@@ -37,15 +37,17 @@ bool ScriptGetParamAction::TestParam(ScriptError* error,int linenumber)
    m_manager->SetTestVariable(m_parameters[0]);
 
   for (unsigned int i=1;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
+    {
+    m_manager->TestConvert(m_parameters[i],linenumber);
+    }
     
-  for (unsigned int j=2;j<m_parameters.size();j++)
+  /*for (unsigned int j=2;j<m_parameters.size();j++)
     if (!m_parameters[j].isInt())
     {
       error->SetError(MString("Parameter %1 should be an int for GetParam ").arg(j) + m_parameters[j],linenumber);
       return false;
     }
-
+*/
 
    return true;
 }
@@ -65,7 +67,16 @@ void ScriptGetParamAction::Execute()
 
   for (unsigned int i=2;i<m_parameters.size();i++)
   {
-    if (m_parameters[i].toInt() >= (int)m_list.size())
+  // if we have the variable we want the value
+  MString m_param = m_parameters[i];
+  if(m_parameters[i][0] == '$')
+    {
+    m_param = m_manager->Convert(m_parameters[i]);
+    }
+
+   m_param = m_param.removeChar('\'');
+
+    if (m_param.toInt() >= (int)m_list.size())
     {
       m_manager->GetError()->SetStatus(MString("GetParam: Exeed value for param %1").arg(i));
       return;
@@ -74,7 +85,7 @@ void ScriptGetParamAction::Execute()
       if (m_value != "")
         m_value+=" ";
 
-      m_value+= m_list[m_parameters[i].toInt()]; 
+      m_value+= m_list[m_param.toInt()]; 
   }
 
   m_manager->SetVariable(m_parameters[0],m_value);
