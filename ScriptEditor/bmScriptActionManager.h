@@ -72,6 +72,7 @@ public:
   std::vector<MString> GetVariable(MString name);
   void DisplayVariableList();
   void SetLineNumber(int linenumber);
+  int GetLineNumber() {return m_linenumber;}
   void SetError(ScriptError* error);
   ScriptError* GetError();
   ProgressManager* GetProgressManager();
@@ -82,7 +83,9 @@ public:
   bool IsTestVariable(MString name);
   std::vector<MString> GetParamsFromVariable(MString name);
   void SetProgressManager(ProgressManager* progressmanager);
-  
+  void SetParser(void* parser) {m_Parser = parser;}
+  void* GetParser() {return m_Parser;}
+
   /** Set/Get the list of wrapped applications */
   void SetApplicationWrapperList(ApplicationWrapperListType* applicationlist);
   ApplicationWrapperListType* GetApplicationWrapperList() {return m_ApplicationWrapperList;}
@@ -107,6 +110,7 @@ protected:
   MString m_scriptpath;
   ApplicationWrapperListType* m_ApplicationWrapperList;
   ApplicationsListType* m_ApplicationsList;
+  void* m_Parser;
 
   // Tells the output of the Run command to generate condor scripts
   Condor* m_CondorModule;

@@ -35,6 +35,7 @@
 #include "bmScriptDbClearAction.h"
 #include "bmScriptExtractSliceAction.h"
 #include "bmScriptExtractStringAction.h"
+#include "bmScriptIncludeAction.h"
 
 #include "Timer.h"
 
@@ -50,6 +51,7 @@ ScriptActionManager::ScriptActionManager()
   m_ApplicationsList = 0;
   m_scriptpath = "";
   m_CondorModule = NULL;
+  m_Parser = NULL;
 }
 
 ScriptActionManager::~ScriptActionManager()
@@ -128,6 +130,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(DbClear);
   BM_NEWKEYWORD(ExtractSlice);
   BM_NEWKEYWORD(ExtractString);
+  BM_NEWKEYWORD(Include);
   return m_list;
 }
 
@@ -155,6 +158,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(DbClear);
    BM_NEWACTION(ExtractSlice);
    BM_NEWACTION(ExtractString);
+   BM_NEWACTION(Include);
    return 0;
 }
 

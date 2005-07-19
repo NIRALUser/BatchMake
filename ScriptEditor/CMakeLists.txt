@@ -43,6 +43,7 @@ Command/bmScriptDbSendFileAction.cxx
 Command/bmScriptDbClearAction.cxx
 Command/bmScriptExtractSliceAction.cxx
 Command/bmScriptExtractStringAction.cxx
+Command/bmScriptIncludeAction.cxx
 )
 
 LINK_LIBRARIES(

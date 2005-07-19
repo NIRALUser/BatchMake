@@ -59,6 +59,8 @@ public:
   /** Return the ScriptActionManager */
   ScriptActionManager* GetScriptActionManager() {return m_scriptactionmanager;}
 
+  std::vector<MString> & GetCode() {return m_code;}
+
 protected:
   int m_linenumber;
   ScriptActionManager* m_scriptactionmanager;
