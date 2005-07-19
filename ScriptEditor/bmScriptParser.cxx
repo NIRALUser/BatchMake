@@ -27,6 +27,7 @@ namespace bm {
 ScriptParser::ScriptParser()
 {
   m_scriptactionmanager = new ScriptActionManager();
+  m_scriptactionmanager->SetParser(this);
   m_error = 0;
   m_applicationlist = 0;
 }
@@ -118,21 +119,26 @@ bool  ScriptParser::Compile(MString filename)
 {
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);
+  if(!m_file.good())
+    {
+    std::cout << "Cannot open file: " << filename.toChar() << std::endl;
+    return false;
+    }
   char* data = (char*)malloc(1000);
   strcpy(data,"");
   MString m_currentline;
   while(!m_file.eof())
-  {
+    {
     m_file.getline(data,1000);
     if (data[strlen(data)-1] == '\r')
-    {
+      {
       data[strlen(data)-1] = '\0';
-    }
-      m_currentline = data;
+      }
+    m_currentline = data;
     AddCodeLine(m_currentline);
-  }
-  m_file.close();
+    }
 
+  m_file.close();
   Parse();
   m_scriptactionmanager->GetError()->DisplaySummary();
   
@@ -178,6 +184,7 @@ void ScriptParser::Load(MString filename)
   strcpy(data,"");
   MString m_currentline;
   MString m_line;
+  bool inComment = false;
   while(!m_file.eof())
   {
     m_file.getline(data,1000);
@@ -185,18 +192,29 @@ void ScriptParser::Load(MString filename)
 
     m_currentline = data;
     if (m_currentline.startWith('#'))
-    {
+      {
       //Comment
-    }
+      }
+    else if (m_currentline.find("/*") != -1)
+      {
+      inComment = true;
+      }
+    else if (m_currentline.find("*/") != -1)
+      {
+      inComment = false;
+      }
     else
     {
-      if (m_currentline.find("(") != -1) 
-        m_line = m_currentline;
-      else
-        m_line += m_currentline;
+      if(!inComment)
+        {
+        if (m_currentline.find("(") != -1) 
+          m_line = m_currentline;
+        else
+          m_line += m_currentline;
       
-       if (m_currentline.find(")") != -1)
-         Parse(m_line);
+         if (m_currentline.find(")") != -1)
+           Parse(m_line);
+        }
     }
   }
   m_file.close();
@@ -328,6 +346,7 @@ bool ScriptParser::Parse()
   m_linenumber = 0;
   MString m_currentline;
   MString m_line;
+  bool inComment = false;
 
   for (unsigned int i=0;i<m_code.size();i++)
   {
@@ -335,20 +354,33 @@ bool ScriptParser::Parse()
     m_currentline = m_code[i];
 
     if (m_currentline.startWith('#'))
-    {
-       //Comments
-    }
+      {
+      //Comments
+      }
+    else if (m_currentline.find("/*") != -1 )
+      {
+      inComment = true;
+      }
+    else if (m_currentline.find("*/")!= -1 )
+      {
+      inComment = false;
+      }
     else
     {
-        m_line += " ";
-        m_line += m_currentline;
+    if(!inComment)
+      {
+      m_line += " ";
+      m_line += m_currentline;
 
-       if ((m_currentline.find(")") != -1) || (i==m_code.size()-1))
-       {
-         if (Parse(m_line) == false)
-           return false;
-         m_line = "";
-       }
+      if ((m_currentline.find(")") != -1) || (i==m_code.size()-1))
+        {
+        if (Parse(m_line) == false)
+          {
+          return false;
+          }
+        m_line = "";
+        }
+      }
     }
   }
 
