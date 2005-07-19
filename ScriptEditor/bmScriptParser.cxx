@@ -115,7 +115,18 @@ void ScriptParser::SetError(ScriptError* error)
   m_scriptactionmanager->SetError(error);
 }
 
-bool  ScriptParser::Compile(MString filename)
+void  ScriptParser::RemoveCodeLine(unsigned int line)
+{
+  std::vector<MString>::iterator it = m_code.begin();
+  for(unsigned int i=0;i<line;i++)
+    {
+    it++;
+    }   
+  m_code.erase(it);
+}
+
+
+bool  ScriptParser::Compile(MString filename,unsigned long pos)
 {
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);
@@ -124,6 +135,7 @@ bool  ScriptParser::Compile(MString filename)
     std::cout << "Cannot open file: " << filename.toChar() << std::endl;
     return false;
     }
+  unsigned long position = pos;
   char* data = (char*)malloc(1000);
   strcpy(data,"");
   MString m_currentline;
@@ -135,23 +147,31 @@ bool  ScriptParser::Compile(MString filename)
       data[strlen(data)-1] = '\0';
       }
     m_currentline = data;
-    AddCodeLine(m_currentline);
+    this->AddCodeLine(m_currentline,position);
+    position++;
     }
 
+  delete data;
   m_file.close();
-  Parse();
+  this->Parse();
   m_scriptactionmanager->GetError()->DisplaySummary();
   
   return true;
 }
 
-bool  ScriptParser::Execute(MString filename)
+bool  ScriptParser::Execute(MString filename,unsigned long pos)
 { 
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);
+  if(!m_file.good())
+    {
+    std::cout << "Cannot open file: " << filename.toChar() << std::endl;
+    return false;
+    }
   char* data = (char*)malloc(1000);
   strcpy(data,"");
   MString m_currentline;
+  unsigned long position = pos;
   while(!m_file.eof())
   {
     m_file.getline(data,1000);
@@ -159,13 +179,14 @@ bool  ScriptParser::Execute(MString filename)
     {
       data[strlen(data)-1] = '\0';
     }
-      m_currentline = data;
-    AddCodeLine(m_currentline);
+    m_currentline = data;
+   this->AddCodeLine(m_currentline,position);
+   position++;
   }
   m_file.close();
 
-  
-  if (Parse())
+ 
+  if (this->Parse())
   {
     m_scriptactionmanager->Execute();
     return true;
@@ -227,7 +248,9 @@ bool ScriptParser::Parse(MString line)
 {
   MString m_option = line.begin("(").removeChar(' ').removeChar('\t').toLower();
   if (m_option == "")
+    {
     return true;
+    }
 
   return AddOption(m_option,line.end("("));
 }
@@ -285,44 +308,6 @@ ScriptAction::ParametersType ScriptParser::GetParams(MString param)
         m_value = "";
       }
    }
-
-
-
-
-
-
-
-
-
-
-
-/*
-  while ((m_param != "") && (m_param != m_value))
-  {
-    m_param = m_param.removeChar(' ',true);
-    if (m_param.startWith('\''))
-    {
-      m_param = m_param.removeChar('\'',true);
-      m_value = MString("'") + m_param.begin("'");
-      if (m_value.length() != 0)
-      {
-        m_value += MString("'");
-        m_params.push_back(m_value);
-      }
-
-      m_param = m_param.end("'")+1;
-      //m_param = m_param.end(" ");
-    }
-    else
-    {
-      m_value = m_param.begin(" ");
-
-      if (m_value.length() != 0)
-        m_params.push_back(m_value);
-      m_param = m_param.end(" ");
-    }
-  }
-*/
   return m_params;
 }
 
@@ -334,9 +319,19 @@ void ScriptParser::Reset()
 }
 
 
-void ScriptParser::AddCodeLine(MString line)
+void ScriptParser::AddCodeLine(MString line,unsigned long pos)
 {
-  m_code.push_back(line);
+  if(pos==0)
+    {
+    m_code.push_back(line);
+    return;
+    }
+  std::vector<MString>::iterator it = m_code.begin();
+  for(unsigned long i=0;i<pos;i++)
+    {
+    it++;
+    }
+  m_code.insert(it,line);
 }
 
 
@@ -352,6 +347,8 @@ bool ScriptParser::Parse()
   {
     m_linenumber++;
     m_currentline = m_code[i];
+      
+    MString optionName = m_currentline.begin("(").removeChar(' ').removeChar('\t').toLower();
 
     if (m_currentline.startWith('#'))
       {
@@ -365,6 +362,12 @@ bool ScriptParser::Parse()
       {
       inComment = false;
       }
+    else if (optionName == "include")
+      {
+      this->Parse(m_currentline);
+      this->Parse();
+      return true;
+      }
     else
     {
     if(!inComment)
@@ -374,7 +377,7 @@ bool ScriptParser::Parse()
 
       if ((m_currentline.find(")") != -1) || (i==m_code.size()-1))
         {
-        if (Parse(m_line) == false)
+        if (this->Parse(m_line) == false)
           {
           return false;
           }

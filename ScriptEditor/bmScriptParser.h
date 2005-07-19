@@ -42,15 +42,15 @@ public:
   bool CheckOption(MString param);
   bool AddOption(MString option, MString param);
   ScriptAction::ParametersType GetParams(MString param);
-  void AddCodeLine(MString line);
+  void AddCodeLine(MString line,unsigned long pos=0);
   bool Parse();
   void SetError(ScriptError* error);
   bool Execute();
   void SetApplicationPath(MString applicationpath);
   void SetScriptPath(MString scriptpath);
   void SetProgressManager(ProgressManager* progressmanager);
-  bool Execute(MString filename);
-  bool Compile(MString filename);
+  bool Execute(MString filename,unsigned long pos=0);
+  bool Compile(MString filename,unsigned long pos=0);
   void LoadWrappedApplication(MString applicationpath);
   std::vector<ApplicationWrapper*>* GetApplicationList();
   void Reset();
@@ -60,6 +60,7 @@ public:
   ScriptActionManager* GetScriptActionManager() {return m_scriptactionmanager;}
 
   std::vector<MString> & GetCode() {return m_code;}
+  void RemoveCodeLine(unsigned int line);
 
 protected:
   int m_linenumber;

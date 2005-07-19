@@ -202,45 +202,73 @@ void ScriptActionManager::Reset()
 
 void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
 {
+
   if ((option == "endforeach") || (option == "endif"))
-  {
-      if (m_parentaction != 0)
-        m_parentaction = m_parentaction->GetParent();
-  }
-  else if (option == "else")
-  {
-    ((ScriptIfAction*)m_parentaction)->SetMode(1);
-  }
-  else
-  {
-      ScriptAction* m_action = CreateAction(option);
-
-      if (m_action == 0)
-        m_error->SetError(MString("Undefined parameter [") + option + "]" ,m_linenumber);
-      else
+    {
+    if (m_parentaction != 0)
       {
-  
-        m_action->SetName(option);
-        m_action->SetParameters(param);
-        m_action->SetParent(m_parentaction);
-        m_action->SetManager(this);
-        m_action->SetProgressManager(m_progressmanager);
-        m_action->SetCondorModule(m_CondorModule);
-
-        if (!m_action->TestParam(m_error,m_linenumber))
-          if (m_action->Help() != "")
-            m_error->SetStatus(MString("\tCommand: ") + m_action->Help());
-
-        if (m_parentaction == 0)
-          AddAction(m_action);
-        else
-          m_parentaction->AddAction(m_action);
-
-        if ((option == "foreach")  || (option == "if"))
-          m_parentaction = m_action;
+      m_parentaction = m_parentaction->GetParent();
       }
+    }
+  else if (option == "else")
+    {
+    ((ScriptIfAction*)m_parentaction)->SetMode(1);
+    }
+  else
+    {
+    ScriptAction* m_action = CreateAction(option);
 
-  }
+    if (m_action == 0)
+      {
+      m_error->SetError(MString("Undefined parameter [") + option + "]" ,m_linenumber);
+      }
+    else if(option == "include")
+      {
+      m_action->SetName(option);
+      m_action->SetParameters(param);
+      m_action->SetParent(m_parentaction);
+      m_action->SetManager(this);
+      m_action->SetProgressManager(m_progressmanager);
+      m_action->SetCondorModule(m_CondorModule);
+      if (!m_action->TestParam(m_error,m_linenumber))
+        {
+        if (m_action->Help() != "")
+          {
+          m_error->SetStatus(MString("\tCommand: ") + m_action->Help());
+          }
+        }
+      }
+    else
+      {
+      m_action->SetName(option);
+      m_action->SetParameters(param);
+      m_action->SetParent(m_parentaction);
+      m_action->SetManager(this);
+      m_action->SetProgressManager(m_progressmanager);
+      m_action->SetCondorModule(m_CondorModule);
+
+      if (!m_action->TestParam(m_error,m_linenumber))
+        {
+        if (m_action->Help() != "")
+          {
+          m_error->SetStatus(MString("\tCommand: ") + m_action->Help());
+          }
+        }
+        
+        if (m_parentaction == 0)
+          {
+          AddAction(m_action);
+          }
+        else
+          {
+          m_parentaction->AddAction(m_action);
+          }
+        if ((option == "foreach")  || (option == "if"))
+          {
+          m_parentaction = m_action;
+          }
+        }
+    }
 }
 
 void ScriptActionManager::Execute()
