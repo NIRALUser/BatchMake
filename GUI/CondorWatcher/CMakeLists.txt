@@ -22,7 +22,8 @@ LINK_LIBRARIES(
 
 SET(FLTK_WRAP_UI 1)
 FLTK_WRAP_UI( CondorWatcher  ${CondorWatcherGUI_SRCS} )
-
 ADD_LIBRARY( CondorWatcher ${CondorWatcher_SRCS} ${CondorWatcher_FLTK_UI_SRCS})
-ADD_EXECUTABLE( CondorWatcherTool ${CondorWatcher_FLTK_UI_SRCS} ${CondorWatcher_SRCS} main.cxx)
+
+ADD_EXECUTABLE( CondorWatcherTool main.cxx)
+TARGET_LINK_LIBRARIES(CondorWatcherTool CondorWatcher)
 
