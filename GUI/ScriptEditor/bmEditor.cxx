@@ -1072,7 +1072,7 @@ int Editor::handle( int event )
             && buffer()->character(i) != '"'
             && buffer()->character(i) != '.'
             && buffer()->character(i) != 65454
-            && buffer()->character(i) != ' '
+            && buffer()->character(i) != 32
             && buffer()->character(i) != 10
             && buffer()->character(i) != '$'
             )
