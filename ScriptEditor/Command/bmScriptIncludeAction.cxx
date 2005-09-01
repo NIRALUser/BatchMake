@@ -45,7 +45,7 @@ bool ScriptIncludeAction::TestParam(ScriptError* error,int linenumber)
   MString filename = m_manager->Convert(m_parameters[0]);
   filename = filename.removeChar('\'');
   static_cast<ScriptParser*>(m_manager->GetParser())->RemoveCodeLine(m_manager->GetLineNumber()-1);
-  static_cast<ScriptParser*>(m_manager->GetParser())->Compile(filename,m_manager->GetLineNumber()-1);
+  static_cast<ScriptParser*>(m_manager->GetParser())->Compile(filename,m_manager->GetLineNumber());
 
   return true;
 }
