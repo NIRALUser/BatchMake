@@ -44,7 +44,7 @@ bool ScriptIntAction::TestParam(ScriptError* error,int linenumber)
 
 MString ScriptIntAction::Help()
 {
-  return "Inc(<myvar>)";
+  return "Int(<myvar>)";
 }
 
 
