@@ -29,7 +29,14 @@ ScriptRandomizeAction::~ScriptRandomizeAction()
 
 bool ScriptRandomizeAction::TestParam(ScriptError* error,int linenumber)
 {
-   m_manager->SetTestVariable(m_parameters[0]);
+  m_manager->SetTestVariable(m_parameters[0]);
+
+  if (m_parameters.size() <4)
+    {
+    error->SetError(MString("No enough parameter for Randomize"),linenumber);
+    return false;
+    }
+
   if ((m_parameters[1].toLower() != "gaussian")\
       && (m_parameters[1].toLower() != "uniform")\
       && (m_parameters[1].toLower() != "categorical"))
