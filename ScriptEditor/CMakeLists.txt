@@ -44,6 +44,9 @@ Command/bmScriptDbClearAction.cxx
 Command/bmScriptExtractSliceAction.cxx
 Command/bmScriptExtractStringAction.cxx
 Command/bmScriptIncludeAction.cxx
+Command/bmScriptDashboardHostAction.cxx
+Command/bmScriptDashboardExperimentAction.cxx
+Command/bmScriptDashboardSendAction.cxx
 )
 
 LINK_LIBRARIES(

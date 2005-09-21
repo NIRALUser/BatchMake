@@ -97,6 +97,14 @@ public:
   std::vector<MString> GetKeywordList();
 
   void SetCondorModule(Condor* condor) {m_CondorModule = condor;}
+  
+  /** Set/Get variables relative to the dashboard */
+  void SetDashboardURL(const char* url) {m_DashboardURL = url;}
+  const char* GetDashboardURL() {return m_DashboardURL.c_str();}
+  
+  void SetDashboardExperiment(const char* exp) {m_DashboardExperiment = exp;}
+  const char* GetDashboardExperiment() {return m_DashboardExperiment.c_str();}
+
 
 protected:
   std::vector<ScriptAction*> m_actionlist;
@@ -114,6 +122,10 @@ protected:
 
   // Tells the output of the Run command to generate condor scripts
   Condor* m_CondorModule;
+
+  // The Script Action manager keeps global variables regarding the dashboard
+  std::string m_DashboardURL;
+  std::string m_DashboardExperiment;
 
 };
 

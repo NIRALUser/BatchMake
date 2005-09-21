@@ -36,6 +36,10 @@
 #include "bmScriptExtractSliceAction.h"
 #include "bmScriptExtractStringAction.h"
 #include "bmScriptIncludeAction.h"
+#include "bmScriptDashboardHostAction.h"
+#include "bmScriptDashboardExperimentAction.h"
+#include "bmScriptDashboardSendAction.h"
+
 
 #include "Timer.h"
 
@@ -52,6 +56,8 @@ ScriptActionManager::ScriptActionManager()
   m_scriptpath = "";
   m_CondorModule = NULL;
   m_Parser = NULL;
+  m_DashboardURL = "";
+  m_DashboardExperiment = "";
 }
 
 ScriptActionManager::~ScriptActionManager()
@@ -131,6 +137,9 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(ExtractSlice);
   BM_NEWKEYWORD(ExtractString);
   BM_NEWKEYWORD(Include);
+  BM_NEWKEYWORD(DashboardHost);
+  BM_NEWKEYWORD(DashboardExperiment);
+  BM_NEWKEYWORD(DashboardSend);
   return m_list;
 }
 
@@ -159,6 +168,9 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(ExtractSlice);
    BM_NEWACTION(ExtractString);
    BM_NEWACTION(Include);
+   BM_NEWACTION(DashboardHost);
+   BM_NEWACTION(DashboardExperiment);
+   BM_NEWACTION(DashboardSend);
    return 0;
 }
 
