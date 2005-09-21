@@ -391,10 +391,12 @@ int MString::count(const char key)
 bool MString::isFloat()
 {
   for (unsigned int i=0;i<m_value.length();i++)
-  {
-    if ((!isdigit(m_value[i])) && m_value[i] != '.')
+    {
+    if ((!isdigit(m_value[i])) && (m_value[i] != '.') && (m_value[i] != '-'))
+      {
       return false;
-  }
+      }
+    }
 
   return true;
 }
@@ -402,10 +404,12 @@ bool MString::isFloat()
 bool MString::isInt()
 {
   for (unsigned int i=0;i<m_value.length();i++)
-  {
-    if (!isdigit(m_value[i]))
+    {
+    if (!isdigit(m_value[i]) && (m_value[i] != '-'))
+      {
       return false;
-  }
+      }
+    }
 
   return true;
 }
