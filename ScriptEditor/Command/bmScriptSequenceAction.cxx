@@ -44,15 +44,18 @@ bool ScriptSequenceAction::TestParam(ScriptError* error,int linenumber)
    m_manager->SetTestVariable(m_parameters[0]);
 
   for (unsigned int j=1;j<m_parameters.size();j++)
-    if (!m_parameters[j].isFloat())
     {
-      error->SetError(MString("Parameter %1 should be an int for Sequence ").arg(j) + m_parameters[j],linenumber);
+    if (!m_parameters[j].isFloat())
+      {
+      error->SetError(MString("Parameter %1 should be a float for Sequence ").arg(j) + m_parameters[j],linenumber);
       return false;
+      }
     }
 
   for (unsigned int i=1;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
-
+    {
+    m_manager->TestConvert(m_parameters[i],linenumber);
+    }
 
    return true;
 }
