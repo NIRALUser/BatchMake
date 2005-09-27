@@ -47,6 +47,7 @@ Command/bmScriptIncludeAction.cxx
 Command/bmScriptDashboardHostAction.cxx
 Command/bmScriptDashboardExperimentAction.cxx
 Command/bmScriptDashboardSendAction.cxx
+Command/bmScriptSinAction.cxx
 )
 
 LINK_LIBRARIES(

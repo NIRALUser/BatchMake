@@ -39,7 +39,7 @@
 #include "bmScriptDashboardHostAction.h"
 #include "bmScriptDashboardExperimentAction.h"
 #include "bmScriptDashboardSendAction.h"
-
+#include "bmScriptSinAction.h"
 
 #include "Timer.h"
 
@@ -140,6 +140,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(DashboardHost);
   BM_NEWKEYWORD(DashboardExperiment);
   BM_NEWKEYWORD(DashboardSend);
+  BM_NEWKEYWORD(Sin);
   return m_list;
 }
 
@@ -171,6 +172,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(DashboardHost);
    BM_NEWACTION(DashboardExperiment);
    BM_NEWACTION(DashboardSend);
+   BM_NEWACTION(Sin);
    return 0;
 }
 
