@@ -4,7 +4,7 @@
 SET (NIGHTLY_START_TIME "21:00:00 EDT")
 
 SET (DROP_SITE "degas.rad.unc.edu")
-SET (DROP_LOCATION "/DartClient")
+SET (DROP_LOCATION "/DartClient/BatchMake")
 SET (DROP_SITE_USER "dart")
 SET (DROP_SITE_PASSWORD "DartClient")
 SET (TRIGGER_SITE "http://caddlab.rad.unc.edu/cgi-bin/Dart-BatchMake.pl")
