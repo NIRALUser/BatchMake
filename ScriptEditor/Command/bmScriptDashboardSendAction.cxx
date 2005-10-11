@@ -32,9 +32,9 @@ ScriptDashboardSendAction::~ScriptDashboardSendAction()
 /** */
 bool ScriptDashboardSendAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <1)
+  if (m_parameters.size() <2)
     {
-    error->SetError(MString("No enough parameter for Int"),linenumber);
+    error->SetError(MString("No enough parameter for DashboardSend"),linenumber);
     return false;
     }
 
@@ -50,7 +50,7 @@ bool ScriptDashboardSendAction::TestParam(ScriptError* error,int linenumber)
 /** */
 MString ScriptDashboardSendAction::Help()
 {
-  return "DashboardSend()";
+  return "DashboardSend(methodid value1 value2 ...)";
 }
 
 /** */
