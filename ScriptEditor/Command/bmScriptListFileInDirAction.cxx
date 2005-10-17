@@ -65,6 +65,7 @@ void ScriptListFileInDirAction::Execute()
       m_filter = m_filter.rbegin("'") + 1;
   }
 
+
   MString m_value;
 
   std::string dir = m_initdir.toChar();
@@ -72,6 +73,16 @@ void ScriptListFileInDirAction::Execute()
   if( (dir[dir.length()-1] != '/') && (dir[dir.length()-1] != '\\') )
     {
     dir += '/';
+    }
+
+  // Check if the given filename is a directory
+  if(!fl_filename_isdir(dir.c_str()))
+    {
+    m_progressmanager->AddAction("Action: ListFileInDir()");
+    std::string error = dir;
+    error += " is not a valid directory";
+    m_progressmanager->AddError(error.c_str());
+    return;
     }
 
   dirent** dirList;

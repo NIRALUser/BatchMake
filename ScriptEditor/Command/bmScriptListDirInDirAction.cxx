@@ -77,6 +77,15 @@ void ScriptListDirInDirAction::Execute()
     {
     dir += '/';
     }
+ 
+  if(!fl_filename_isdir(dir.c_str()))
+    {
+    m_progressmanager->AddAction("Action: ListDirInDir()");
+    std::string error = dir;
+    error += " is not a valid directory";
+    m_progressmanager->AddError(error.c_str());
+    return;
+    }
 
   dirent** dirList;
   
