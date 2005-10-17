@@ -126,7 +126,7 @@ void  ScriptParser::RemoveCodeLine(unsigned int line)
 }
 
 
-bool  ScriptParser::Compile(MString filename,unsigned long pos)
+bool  ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
 {
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);
@@ -147,15 +147,27 @@ bool  ScriptParser::Compile(MString filename,unsigned long pos)
       data[strlen(data)-1] = '\0';
       }
     m_currentline = data;
-    this->AddCodeLine(m_currentline,position);
+    if(isInclude && position == 0)
+      {
+      std::vector<MString>::iterator it = m_code.begin();
+      m_code.insert(it,m_currentline);
+      }
+    else
+      {
+      this->AddCodeLine(m_currentline,position);
+      }
     position++;
     }
 
   delete data;
   m_file.close();
-  this->Parse();
-  m_scriptactionmanager->GetError()->DisplaySummary();
-  
+
+  if(!isInclude)
+    {
+    this->Parse();
+    m_scriptactionmanager->GetError()->DisplaySummary();
+    }
+
   return true;
 }
 
@@ -314,8 +326,8 @@ ScriptAction::ParametersType ScriptParser::GetParams(MString param)
 
 void ScriptParser::Reset()
 {
-    m_scriptactionmanager->Reset();
-    m_code.clear();
+  m_scriptactionmanager->Reset();
+  m_code.clear();
 }
 
 

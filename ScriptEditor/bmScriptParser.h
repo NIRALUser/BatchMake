@@ -50,7 +50,7 @@ public:
   void SetScriptPath(MString scriptpath);
   void SetProgressManager(ProgressManager* progressmanager);
   bool Execute(MString filename,unsigned long pos=0);
-  bool Compile(MString filename,unsigned long pos=0);
+  bool Compile(MString filename,unsigned long pos=0,bool isInclude = false);
   void LoadWrappedApplication(MString applicationpath);
   std::vector<ApplicationWrapper*>* GetApplicationList();
   void Reset();
@@ -61,6 +61,8 @@ public:
 
   std::vector<MString> & GetCode() {return m_code;}
   void RemoveCodeLine(unsigned int line);
+
+  unsigned long GetLineNumber() {return m_linenumber;}
 
 protected:
   int m_linenumber;
