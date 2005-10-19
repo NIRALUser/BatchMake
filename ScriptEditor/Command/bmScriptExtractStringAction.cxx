@@ -55,13 +55,16 @@ void ScriptExtractStringAction::Execute()
   m_value = "'";
   unsigned int size = m_parameters[2].toInt();
 
-  if(!strcmp(m_parameters[3].toChar(),"FROMEND"))
+  if(m_parameters.size() > 3)
     {
-    unsigned int lenght = strlen(m_manager->Convert(m_parameters[1]).toChar());
-    for(unsigned int i=1;i<lenght-size-1;i++)
+    if(!strcmp(m_parameters[3].toChar(),"FROMEND"))
       {
-      char v = m_manager->Convert(m_parameters[1])[i];
-      m_value+=v;
+      unsigned int lenght = strlen(m_manager->Convert(m_parameters[1]).toChar());
+      for(unsigned int i=1;i<lenght-size-1;i++)
+        {
+        char v = m_manager->Convert(m_parameters[1])[i];
+        m_value+=v;
+        }
       }
     }
   else
