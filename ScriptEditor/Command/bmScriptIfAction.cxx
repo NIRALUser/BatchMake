@@ -66,12 +66,24 @@ MString ScriptIfAction::Help()
 
 
 void ScriptIfAction::Execute()
-{
+{  
+  MString left = m_parameters[0];
+  if(left[0] == '$')
+    {
+    left = m_manager->GetVariable(m_parameters[0])[0];
+    }
+  
+  MString right = m_parameters[2];
+  if(right[0] == '$')
+    {
+    right = m_manager->GetVariable(m_parameters[2])[0];
+    }
+
   // if we only have on parameter
   // something like if(${myvar}) we just test if the var exist
   if(m_parameters.size()==1)
     {
-    if (m_manager->GetVariable(m_parameters[0])[0] != "")
+    if (left != "")
       {
       for (unsigned int i=0;i<m_thenaction.size();i++)
          m_thenaction[i]->Execute();
@@ -85,7 +97,7 @@ void ScriptIfAction::Execute()
 
   else if (m_parameters[1].toLower() == "==")
   {
-    if (m_manager->GetVariable(m_parameters[0])[0] == m_parameters[2])
+    if (left == right)
     {
       for (unsigned int i=0;i<m_thenaction.size();i++)
         m_thenaction[i]->Execute();
@@ -99,7 +111,7 @@ void ScriptIfAction::Execute()
 
   else if (m_parameters[1].toLower() == "!=")
   {
-    if (m_manager->GetVariable(m_parameters[0])[0] != m_parameters[2])
+    if (left != right)
     {
       for (unsigned int i=0;i<m_thenaction.size();i++)
         m_thenaction[i]->Execute();
@@ -113,7 +125,7 @@ void ScriptIfAction::Execute()
 
  else if (m_parameters[1].toLower() == ">")
  {
-    if (m_manager->GetVariable(m_parameters[0])[0].toFloat() > m_parameters[2].toFloat())
+    if (left.toFloat() > right.toFloat())
     {
       for (unsigned int i=0;i<m_thenaction.size();i++)
         m_thenaction[i]->Execute();
@@ -127,7 +139,7 @@ void ScriptIfAction::Execute()
   
  else if (m_parameters[1].toLower() == "<")
  {
-    if (m_manager->GetVariable(m_parameters[0])[0].toFloat() < m_parameters[2].toFloat())
+    if (left.toFloat() < right.toFloat())
     {
       for (unsigned int i=0;i<m_thenaction.size();i++)
         m_thenaction[i]->Execute();
@@ -141,7 +153,7 @@ void ScriptIfAction::Execute()
 
  else if (m_parameters[1].toLower() == ">=")
  {
-    if (m_manager->GetVariable(m_parameters[0])[0].toFloat() >= m_parameters[2].toFloat())
+    if (left.toFloat() >= right.toFloat())
     {
       for (unsigned int i=0;i<m_thenaction.size();i++)
         m_thenaction[i]->Execute();
@@ -156,7 +168,7 @@ void ScriptIfAction::Execute()
 
  else if (m_parameters[1].toLower() == "<=")
  {
-    if (m_manager->GetVariable(m_parameters[0])[0].toFloat() <= m_parameters[2].toFloat())
+    if (left.toFloat() <= right.toFloat())
     {
       for (unsigned int i=0;i<m_thenaction.size();i++)
         m_thenaction[i]->Execute();
