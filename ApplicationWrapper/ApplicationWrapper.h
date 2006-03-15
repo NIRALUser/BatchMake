@@ -51,6 +51,7 @@ public:
   void DeleteParam(MString name);
   void UpParam(MString name);
   void DownParam(MString name);
+  void AutomaticCommandLineParsing(const char * _path);
 
   /** Return the current command line arguments */
   std::string GetCurrentCommandLineArguments(bool relativePath=true);

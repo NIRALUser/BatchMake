@@ -17,6 +17,7 @@
 #include "CommandLineArgumentParser.h"
 #include "FL/Fl.H"
 #include "MString.h"
+#include "ApplicationWrapper.h"
 #include <iostream>
 
 #define BatchMakeVersion "0.1 Beta"
@@ -30,6 +31,7 @@ void Help()
   std::cout << "-h : Display help" << std::endl;
   std::cout << "-c <input filename> : Compile script" << std::endl;
   std::cout << "-e <input filename> : Execute script" << std::endl;
+  std::cout << "-a <application path> <application name> : Add the application into the application wrapper" << std::endl;
 }
 
 
@@ -69,6 +71,7 @@ int main(int argc, char **argv)
     parser.AddOption("-h",0);  // Verbose mode
     parser.AddOption("-c",1);  // Compile script
     parser.AddOption("-e",1);  // Execute script
+    parser.AddOption("-a",2);  // Add application
     CommandLineArgumentParseResult parseResult;
     if(!parser.TryParseCommandLine(argc,argv,parseResult))
     {
@@ -105,6 +108,29 @@ int main(int argc, char **argv)
       m_parser.SetApplicationPath(m_applicationpath);
       m_parser.Execute(m_filename);
       return 0;
+    }
+    if (parseResult.IsOptionPresent("-a"))
+    {
+      m_applicationpath = MString(argv[0]).rbegin("/");
+      
+      MString m_path = parseResult.GetOptionParameter("-a",0);
+      MString m_modulename = parseResult.GetOptionParameter("-a",1);
+      ApplicationWrapper m_ApplicationWrapper;
+
+      m_ApplicationWrapper.AutomaticCommandLineParsing(m_path.toChar());
+      
+      m_ApplicationWrapper.SetApplicationPath(m_path);
+      m_ApplicationWrapper.SetName(m_modulename);
+      
+      FILE* m_file = fopen((m_applicationpath + "/Applications/" + m_modulename + ".bmm").toChar(),"rb");
+      if (m_file == 0)
+      {
+        m_ApplicationWrapper.Save(m_applicationpath + "/Applications/" + m_modulename + ".bmm");
+      }
+      else
+      {
+        fclose(m_file);
+      }
     }
   }
 

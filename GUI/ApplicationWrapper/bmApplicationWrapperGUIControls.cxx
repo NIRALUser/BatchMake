@@ -20,7 +20,7 @@
 #include "metaCommand.h"
 
 #include "MString.h"
-
+/*
 #ifndef WIN32
   #include <unistd.h>
 #endif
@@ -38,7 +38,7 @@
   #include <fcntl.h>
   #include <errno.h>
 #endif
-
+*/
 namespace bm {
 
 ApplicationWrapperGUIControls::ApplicationWrapperGUIControls():ApplicationWrapperGUI()
@@ -104,7 +104,7 @@ void ApplicationWrapperGUIControls::OnSelectPath()
 {
   char* fName = fl_file_chooser(
     "Select program", "Program (*.*)", NULL,Fl_File_Chooser::MULTI);
- 
+    
   if(fName)
     {
     g_path->value(fName);
@@ -462,297 +462,11 @@ void ApplicationWrapperGUIControls::AutomaticCommandLineParsing()
 
   // Run the application
   std::string program = g_path->value();
-  program += " -vxml";
-  std::cout << "Running = " << program.c_str() << std::endl;
-  std::string m_output = "";
-  unsigned int i=0;
-
-#ifdef WIN32
-
-  char buffer[BUFSIZ+1];
-
-  STARTUPINFO si;
-  PROCESS_INFORMATION pi;
- 
-  SECURITY_ATTRIBUTES tmpSec;
-  ZeroMemory( &tmpSec, sizeof(tmpSec) );
-  tmpSec.nLength = sizeof(tmpSec);
-  tmpSec.bInheritHandle = true;
-  HANDLE hReadPipe;
-  HANDLE hWritePipe;
-
-  SECURITY_ATTRIBUTES  sa;
-  ZeroMemory( &sa, sizeof(sa) );
-  sa.nLength = sizeof(sa);
-  sa.bInheritHandle = true;
-
-
-  SECURITY_ATTRIBUTES  sa2;
-  ZeroMemory( &sa2, sizeof(sa2) );
-  sa2.nLength = sizeof(sa);
-  sa2.bInheritHandle = true;
-
-  CreatePipe(&hReadPipe,&hWritePipe,&sa,0);
-
-  ZeroMemory( &si, sizeof(si) );
-  si.cb = sizeof(si);
-  si.dwFlags = STARTF_USESTDHANDLES;
-  si.hStdOutput = hWritePipe; //output;
-  ZeroMemory( &pi, sizeof(pi) );
-
-  memset(buffer,'\0',sizeof(buffer)); 
+  m_applicationwrapper->AutomaticCommandLineParsing( program.c_str() );
   
-  // Start the child process. 
-  if( !CreateProcess( NULL,       // No module name (use command line). 
-      (char*)program.c_str(),  // Command line. 
-      NULL,                       // Process handle not inheritable. 
-      NULL,                       // Thread handle not inheritable. 
-      TRUE,                       // Set handle inheritance to FALSE. 
-      0,                          //CREATE_NEW_PROCESS_GROUP,  // No creation flags. 
-      NULL,                       // Use parent's environment block. 
-      NULL,                       // Use parent's starting directory. 
-      &si,                        // Pointer to STARTUPINFO structure.
-      &pi )                       // Pointer to PROCESS_INFORMATION structure.
-  ) 
-    {
-    std::cout << "AutomaticCommandLineParsing - CreateProcess failed!" << std::endl;
-    return;
-    }
-
-  CloseHandle(hWritePipe);
-
-  // Wait until child process exits.
-  bool m_run = true;
-
-
-  while(m_run)
-  {
-  unsigned long m_nbread = 0;
-  unsigned long m_nberrorread = 0;
-  unsigned long m_nbtoread = 512;
-  unsigned long m_nbtoreaderror = 512;
-  int m_read = 0;
-  int m_readerror = 0;
-  unsigned long m_nbreaded = 0;
-  unsigned long m_nberrorreaded = 0;
-
-  if (WaitForSingleObject( pi.hProcess, 500 )  == 0)
-    {
-    m_run = false;
-    }
-
-  PeekNamedPipe(hReadPipe,buffer,sizeof(buffer),&m_nbtoread,&m_nbread,NULL); 
-
-  int val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL); 
-  while (m_nbread > 0 && val)
-    {
-    for (unsigned int k=0;k<m_nbreaded;k++)
-      {
-      if (buffer[k] != '\r')
-        {
-        m_output += buffer[k];
-        }
-      }
-    memset(buffer,'\0',sizeof(buffer));
-    val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL);
-    }
-
-  } 
-
-  //Terminate Process
-  TerminateProcess(pi.hProcess,0);
-
-  CloseHandle(hReadPipe);
-
-  CloseHandle( pi.hProcess );
-  CloseHandle( pi.hThread );
-
-#else  
-  int stdin_pipe[2];
-  int stdout_pipe[2];
-  char buffer[BUFSIZ+1];
-  int fork_result;
-  int data_processed;
-  int nchars = 0;
-int status = 0;
-
-  memset(buffer,'\0',sizeof(buffer));
-
-   if ( (pipe(stdin_pipe)==0)   
-        && (pipe(stdout_pipe)==0)      )
-   {
-     fork_result = fork();
-     if (fork_result == -1)
-     {
-       std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
-      exit(EXIT_FAILURE);
-     }  
-     else if (fork_result == 0)
-     { 
-       // This is the child
-       close(0);
-      dup(stdin_pipe[0]);
-      close(stdin_pipe[0]);
-      close(stdin_pipe[1]);
-      close(1);      
-      dup(stdout_pipe[1]);     
-      close(stdout_pipe[0]); 
-      close(stdout_pipe[1]);      
-      close(2);   
-
-      fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
-
-    if (execlp(program.c_str(),program.c_str(),"",NULL) == -1)
-    {         
-  if (errno == 2)
-  {
-      std::cout << "Program not found : " << program  << std::endl;
-   }
-    }
-
-      exit(EXIT_FAILURE);
-    } 
-    else   
-    { 
-      // This is the parent
-      close(stdin_pipe[0]);
-      close(stdin_pipe[1]);
-      close(stdout_pipe[1]);  
-
-      fcntl(stdout_pipe[0], F_SETFL, O_NONBLOCK);
-
-      while(1)   
-        {      
-    
-       data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
-       if (data_processed != -1)
-       {
-   for (unsigned int k=0;k<strlen(buffer);k++)
-           m_output += buffer[k];
-       
-
-         memset(buffer,'\0',sizeof(buffer));
-       }
-      
-
-       if ((data_processed == 0) ) break;
-        }
-
-     close(stdout_pipe[0]);
-    }
-  } 
-#endif
+  g_moduleversion->value(m_applicationwrapper->GetVersion().toChar());
+  g_modulename->value(m_applicationwrapper->GetName().toChar());
   
-  // Analayze the output of the program
-  MetaCommand parser;
-  parser.ParseXML(m_output.c_str());
-
-  // Convert the metaCommand to ApplicationWrapper
-  g_moduleversion->value(parser.GetVersion().c_str());
-  m_applicationwrapper->SetVersion(parser.GetVersion().c_str());
-
-
-  // extract the name from the filename
-  std::string revname;
- 
-  for(i=0;i<g_path->size();i++)
-    {
-    if(g_path->value()[g_path->size()-1-i] == '/'
-      || g_path->value()[g_path->size()-1-i] == '\\')
-      {
-      break;
-      }
-    revname += g_path->value()[g_path->size()-1-i];
-    }
-
-  std::string name;
-  
-  int end=0;
-  if(revname.find("exe.") != -1)
-    {
-    end=4;
-    }
-
-  for(i=0;i<revname.size()-end;i++)
-    {
-    name += revname[revname.size()-i-1];
-    }
-
-  g_modulename->value(name.c_str());
-  m_applicationwrapper->SetName(name.c_str());
-
-  m_applicationwrapper->SetApplicationPath(g_path->value());
-
-  // Now adding the parameters
-  const MetaCommand::OptionVector & options = parser.GetOptions();
-  MetaCommand::OptionVector::const_iterator it = options.begin();
-
-  unsigned int parentId=0;
-  while(it != options.end())
-    {
-    bool gotParent = false;
-    ApplicationWrapperParam parentParam;
-    parentParam.SetName((*it).name);
-    parentParam.SetOptional(!(*it).required);
-    if((*it).tag != "") // we have one value
-      {
-      parentParam.SetType(ApplicationWrapperParam::Flag);
-      std::string tag = "-";
-      tag += (*it).tag;
-      parentParam.SetValue(tag);
-      parentParam.SetName((*it).name);
-      m_applicationwrapper->AddParam(parentParam);
-      gotParent = true;
-      parentId++;
-      }
-    else
-      {
-      //parentId++;
-      gotParent = false;
-      }
-    
-    std::vector<MetaCommand::Field>::const_iterator itField = (*it).fields.begin();
-    while(itField != (*it).fields.end())
-      {
-      ApplicationWrapperParam param;
-      param.SetName((*itField).name);
-      param.SetValue((*itField).value);
-      param.SetExternalData((*itField).externaldata);
-
-      if((*itField).type == MetaCommand::FLOAT)
-        {
-        param.SetType(ApplicationWrapperParam::Float);
-        }
-      else if((*itField).type == MetaCommand::INT)
-        {
-        param.SetType(ApplicationWrapperParam::Int);
-        }
-      else if((*itField).type == MetaCommand::STRING)
-        {
-        param.SetType(ApplicationWrapperParam::String);
-        }
-      else if((*itField).type == MetaCommand::FLAG)
-        {
-        itField++;
-        continue;
-        }
-      
-      param.SetOptional(!(*itField).required);
-      if(gotParent)
-        {
-        param.SetParent(parentId);
-        }
-      else
-        {
-        param.SetParent(0);
-        }
-      m_applicationwrapper->AddParam(param);
-      itField++; 
-      }
-    
-    it++;
-    }
-
   this->DisplayExample();
 }
 
