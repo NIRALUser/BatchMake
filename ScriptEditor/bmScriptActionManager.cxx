@@ -41,6 +41,7 @@
 #include "bmScriptDashboardSendAction.h"
 #include "bmScriptDashboardNotifyAction.h"
 #include "bmScriptSinAction.h"
+#include "bmScriptDeleteFileAction.h"
 
 #include "Timer.h"
 
@@ -143,6 +144,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(DashboardSend);
   BM_NEWKEYWORD(DashboardNotify);
   BM_NEWKEYWORD(Sin);
+  BM_NEWKEYWORD(DeleteFile);
   return m_list;
 }
 
@@ -176,6 +178,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(DashboardSend);
    BM_NEWACTION(DashboardNotify);
    BM_NEWACTION(Sin);
+   BM_NEWACTION(DeleteFile);
    return 0;
 }
 

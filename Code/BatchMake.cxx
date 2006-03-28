@@ -32,6 +32,7 @@ void Help()
   std::cout << "-c <input filename> : Compile script" << std::endl;
   std::cout << "-e <input filename> : Execute script" << std::endl;
   std::cout << "-a <application path> <application name> : Add the application into the application wrapper" << std::endl;
+  std::cout << "-p <Batchmake Path> : Specify BatchMake path" << std::endl;
 }
 
 
@@ -72,6 +73,7 @@ int main(int argc, char **argv)
     parser.AddOption("-c",1);  // Compile script
     parser.AddOption("-e",1);  // Execute script
     parser.AddOption("-a",2);  // Add application
+    parser.AddOption("-p",1);  // Specify batchmake path
     CommandLineArgumentParseResult parseResult;
     if(!parser.TryParseCommandLine(argc,argv,parseResult))
     {
@@ -83,6 +85,11 @@ int main(int argc, char **argv)
     {
       Help();
       return -1;
+    }
+    
+    if (parseResult.IsOptionPresent("-p"))
+    {
+      m_applicationpath = parseResult.GetOptionParameter("-p",0);
     }
 
     if (parseResult.IsOptionPresent("-h"))
@@ -111,8 +118,6 @@ int main(int argc, char **argv)
     }
     if (parseResult.IsOptionPresent("-a"))
     {
-      m_applicationpath = MString(argv[0]).rbegin("/");
-      
       MString m_path = parseResult.GetOptionParameter("-a",0);
       MString m_modulename = parseResult.GetOptionParameter("-a",1);
       ApplicationWrapper m_ApplicationWrapper;
@@ -122,15 +127,9 @@ int main(int argc, char **argv)
       m_ApplicationWrapper.SetApplicationPath(m_path);
       m_ApplicationWrapper.SetName(m_modulename);
       
-      FILE* m_file = fopen((m_applicationpath + "/Applications/" + m_modulename + ".bmm").toChar(),"rb");
-      if (m_file == 0)
-      {
-        m_ApplicationWrapper.Save(m_applicationpath + "/Applications/" + m_modulename + ".bmm");
-      }
-      else
-      {
-        fclose(m_file);
-      }
+      m_ApplicationWrapper.Save(m_applicationpath + "/Applications/" + m_modulename + ".bmm");
+ 
+      return 0;
     }
   }
 

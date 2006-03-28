@@ -49,6 +49,7 @@ Command/bmScriptDashboardExperimentAction.cxx
 Command/bmScriptDashboardSendAction.cxx
 Command/bmScriptDashboardNotifyAction.cxx
 Command/bmScriptSinAction.cxx
+Command/bmScriptDeleteFileAction.cxx
 )
 
 LINK_LIBRARIES(
