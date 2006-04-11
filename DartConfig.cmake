@@ -16,7 +16,7 @@ SET (TRIGGER_SITE
   "http://${DROP_SITE}/cgi-bin/Submit-BatchMake-TestingResults.cgi")
 
 # Project Home Page
-SET (PROJECT_URL "http://caddlab.rad.unc.edu/Public")
+SET (PROJECT_URL "http://public.kitware.com/BatchMake")
 
 #
 # Dart server configuration 
@@ -25,10 +25,10 @@ SET (CVS_WEB_URL "http://caddlab.rad.unc.edu/cgi-bin/cvsweb.cgi/?cvsroot=BatchMa
 
 OPTION(BUILD_DOXYGEN "Build source documentation using doxygen" "On")
 SET (DOXYGEN_CONFIG "${PROJECT_BINARY_DIR}/doxygen.config" )
-SET (USE_DOXYGEN "On")
+SET (USE_DOXYGEN "Off")
 SET (DOXYGEN_URL "http://caddlab.rad.unc.edu/Public/Dashboard/BatchMake-Dashboard/Documentation/Doxygen/html/" )
 SET (USE_GNATS "On")
-SET (GNATS_WEB_URL "http://caddlab.rad.unc.edu/software/itkUNC/Bug/index.php")
+SET (GNATS_WEB_URL "http://www.itk.org/Bug")
 
 #
 # Copy over the testing logo
