@@ -36,6 +36,7 @@
 #include <iostream>
 #include "MString.h"
 #include "bmCondor.h"
+#include "TCPSocket.h"
 
 namespace bm {
 
@@ -58,18 +59,25 @@ public:
      MString name;
      MString value;
     };
+    
+  struct variablestructsocket
+    {
+    MString   name;
+    TCPSocket socket;
+    };
 
   ScriptAction* CreateAction(MString option);
   void SetApplicationPath(MString applicationpath);
   void SetScriptPath(MString scriptpath);
   void AddAction(ScriptAction* action);
   void AddAction(MString option,std::vector<MString> param);
-  void Execute();
-
+  void Execute(); 
   MString Convert(MString param);
   MString ConvertExtra(MString param);
   void SetVariable(MString name,MString value);
+  void SetSocketVariable(MString name);
   std::vector<MString> GetVariable(MString name);
+  
   void DisplayVariableList();
   void SetLineNumber(int linenumber);
   int GetLineNumber() {return m_linenumber;}
@@ -104,6 +112,9 @@ public:
   
   void SetDashboardExperiment(const char* exp) {m_DashboardExperiment = exp;}
   const char* GetDashboardExperiment() {return m_DashboardExperiment.c_str();}
+  
+  TCPSocket* GetVariableSocket(MString name);
+  bool RemoveSocket(MString name);
 
 
 protected:
@@ -111,6 +122,7 @@ protected:
   ScriptAction* m_parentaction;
   std::vector<variablestruct*> m_variablelist;
   std::vector<MString> m_variabletestlist;
+  std::vector<variablestructsocket*> m_variablesocketlist;
   int m_linenumber;
   ScriptError* m_error;
   ProgressManager* m_progressmanager;

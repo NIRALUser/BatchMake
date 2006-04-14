@@ -42,6 +42,9 @@
 #include "bmScriptDashboardNotifyAction.h"
 #include "bmScriptSinAction.h"
 #include "bmScriptDeleteFileAction.h"
+#include "bmScriptOpenTCPSocketAction.h"
+#include "bmScriptSendTCPAction.h"
+#include "bmScriptCloseTCPSocketAction.h"
 
 #include "Timer.h"
 
@@ -145,6 +148,9 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(DashboardNotify);
   BM_NEWKEYWORD(Sin);
   BM_NEWKEYWORD(DeleteFile);
+  BM_NEWKEYWORD(OpenTCPSocket);
+  BM_NEWKEYWORD(SendTCP);
+  BM_NEWKEYWORD(CloseTCPSocket);
   return m_list;
 }
 
@@ -179,6 +185,9 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
    BM_NEWACTION(DashboardNotify);
    BM_NEWACTION(Sin);
    BM_NEWACTION(DeleteFile);
+   BM_NEWACTION(OpenTCPSocket);
+   BM_NEWACTION(SendTCP);
+   BM_NEWACTION(CloseTCPSocket);
    return 0;
 }
 
@@ -388,6 +397,38 @@ std::vector<MString> ScriptActionManager::GetVariable(MString name)
   return m_list;
 }
 
+void ScriptActionManager::SetSocketVariable(MString name)
+{
+  bool m_detected = false;
+  for (unsigned int i=0;i<m_variablesocketlist.size();i++)
+  {
+     if (m_variablesocketlist[i]->name == name)
+     {
+        m_detected = true;
+        return;
+     }
+  }
+
+  if (m_detected == false)
+  {
+    variablestructsocket* m_newvar = new variablestructsocket;
+    m_newvar->name = name;
+    m_variablesocketlist.push_back(m_newvar);
+  }
+}
+
+TCPSocket* ScriptActionManager::GetVariableSocket(MString name)
+{
+  for (unsigned int i=0;i<m_variablesocketlist.size();i++)
+  {
+     if (m_variablesocketlist[i]->name == name)
+     {
+        return &(m_variablesocketlist[i]->socket);
+     }
+  }
+  return NULL;
+}
+
 std::vector<MString> ScriptActionManager::GetParamsFromVariable(MString name)
 {
 
@@ -592,6 +633,25 @@ bool ScriptActionManager::TestParam()
   }
 
   return flag;
+}
+
+bool ScriptActionManager::RemoveSocket(MString name)
+{
+  bool found = false;
+  std::vector<variablestructsocket*>::iterator it;
+  it = m_variablesocketlist.begin();
+  
+  while( it != m_variablesocketlist.end() )
+  {
+     if( (*it)->name == name)
+     {
+        m_variablesocketlist.erase(it);
+        found = true;
+        return found;
+     }
+     ++it;
+  }
+  return found;
 }
 
 } // end namespace bm

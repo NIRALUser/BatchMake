@@ -50,6 +50,9 @@ Command/bmScriptDashboardSendAction.cxx
 Command/bmScriptDashboardNotifyAction.cxx
 Command/bmScriptSinAction.cxx
 Command/bmScriptDeleteFileAction.cxx
+Command/bmScriptOpenTCPSocketAction.cxx
+Command/bmScriptSendTCPAction.cxx
+Command/bmScriptCloseTCPSocketAction.cxx
 )
 
 LINK_LIBRARIES(
