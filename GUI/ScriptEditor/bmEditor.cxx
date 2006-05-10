@@ -542,7 +542,7 @@ for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
 void Editor::AddApplicationsToBrowse()
 {
   unsigned long lpos=0;
-  for(unsigned int l=0;l<buffer()->count_lines(0,buffer()->length());l++)
+  for(int l=0;l<buffer()->count_lines(0,buffer()->length());l++)
     {
     // get the current line
     std::string line = buffer()->line_text(buffer()->line_start(lpos));
@@ -1064,7 +1064,7 @@ int Editor::handle( int event )
           {
           // look for the work before the .
           std::string reword;
-          long i = insert_position();
+          long int i = insert_position();
           i--;
           while(i>-1
             && buffer()->character(i) != '('
@@ -1083,7 +1083,7 @@ int Editor::handle( int event )
          
           // reverse the string
           std::string word = "";
-          for(i=0;i<reword.size();i++)
+          for(i=0;i<(int)reword.size();i++)
             {
             word += reword[reword.size()-i-1];
             }
@@ -1146,7 +1146,7 @@ int Editor::handle( int event )
       int currentrating = 0;
 
       std::list<MString>::iterator it = m_keywords.begin();
-      unsigned int i =0;
+      int i =0;
       while (it != m_keywords.end())
         { 
         int m_rating = 0;

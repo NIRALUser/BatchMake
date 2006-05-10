@@ -237,8 +237,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
     std::vector<MString> m_list;
     if (g_type->value() == 5)
     {
-
-      for (unsigned int i=1;i<g_enumlist->size()-1;i++)
+      for (int i=1;i<g_enumlist->size()-1;i++)
       {
         m_list.push_back(MString(g_enumlist->text(i)));
       }
@@ -253,7 +252,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
     g_parameters->replace(g_parameters->value(),g_name->value());
     
     unsigned int m_offset = 0;
-    for (unsigned int i=1;i<g_parent->size()-1;i++)
+    for (int i=1;i<g_parent->size()-1;i++)
       if (m_currentname == g_parent->text(i))
         m_offset = i;
     
@@ -279,7 +278,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
     std::vector<MString> m_list;
     if (g_type->value() == 5)
     {
-      for (unsigned int i=1;i<g_enumlist->size()-1;i++)
+      for (int i=1;i<g_enumlist->size()-1;i++)
       {
         m_list.push_back(MString(g_enumlist->text(i)));
       }
@@ -306,7 +305,7 @@ void ApplicationWrapperGUIControls::OnDeleteParameters()
   m_applicationwrapper->DeleteParam(m_currentname);
   g_parameters->remove(g_parameters->value());
   unsigned int m_offset = 0;
-  for (unsigned int i=1;i<g_parent->size()-1;i++)
+  for (int i=1;i<g_parent->size()-1;i++)
     if (m_currentname == g_parent->text(i))
       m_offset = i;
   

@@ -76,7 +76,7 @@ void ScriptEditorGUIControls::SetApplicationPath(MString applicationpath)
 void ScriptEditorGUIControls::Timer(void* ui)
 {
   int newvalue = (int)((SplashScreenControls*)ui)->g_progress->value()+1;
-  ((SplashScreenControls*)ui)->g_progress->value(newvalue);
+  ((SplashScreenControls*)ui)->g_progress->value((float)newvalue);
   if (((SplashScreenControls*)ui)->g_progress->value() == ((SplashScreenControls*)ui)->g_progress->maximum()+1)
   {
     ((SplashScreenControls*)ui)->g_Splashscreen->hide();
@@ -192,7 +192,7 @@ void ScriptEditorGUIControls::OnCompile()
   m_errorgui->SetTextDisplay(g_output);
   m_parser->SetError(m_errorgui);
   int m_offset = 0;
-  for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+  for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
     const char* text = g_editor->buffer()->line_text(m_offset);
     m_parser->AddCodeLine(MString(text));
@@ -211,7 +211,7 @@ void ScriptEditorGUIControls::OnExecute()
   m_errorgui->SetTextDisplay(g_output);
   m_parser->SetError(m_errorgui);
   int m_offset = 0;
-  for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+  for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
     const char* text = g_editor->buffer()->line_text(m_offset);
     m_parser->AddCodeLine(MString(text));
@@ -273,7 +273,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
   m_errorgui->SetTextDisplay(g_output);
   m_parser->SetError(m_errorgui);
   int m_offset = 0;
-  for (unsigned int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+  for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
     const char* text = g_editor->buffer()->line_text(m_offset);
     m_parser->AddCodeLine(MString(text));
