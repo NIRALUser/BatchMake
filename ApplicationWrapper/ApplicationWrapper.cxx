@@ -248,7 +248,7 @@ void ApplicationWrapper::DeleteParam(MString name)
   };
 
   int m_currentflag = 0;
-  for (unsigned int k=0;k<m_offset+1;k++)
+  for (int k=0;k<m_offset+1;k++)
   {
     if (m_params[k].GetType() == 1)
       m_currentflag++;
@@ -369,7 +369,7 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)
     }
 
     int m_currentflag = 0;
-      for (unsigned int k=0;k<offset+1;k++)
+      for (int k=0;k<offset+1;k++)
       {
         if (m_params[k].GetType() == 1)
             m_currentflag++;

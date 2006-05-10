@@ -207,7 +207,7 @@ int MString::toInt()
 
 float MString::toFloat()
 {
-  return atof(m_value.c_str());
+  return (float)atof(m_value.c_str());
 }
 
 double MString::toDouble()

@@ -117,7 +117,7 @@ int main(int argc, char **argv)
    char outmode[20];
    sprintf(outmode,"wb%i ",6);
    int m_result = 0; 
-   for (unsigned int i=1;i<argc;i++)
+   for (int i=1;i<argc;i++)
      if (gz_compressfile(argv[i],outmode) != 0)
   m_result = -1;
 
