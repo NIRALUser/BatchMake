@@ -54,5 +54,6 @@ SET(FLTK_WRAP_UI 1)
 FLTK_WRAP_UI( BatchMakeGUI ${BatchMakeGUI_GUI_SRCS} )
 
 ADD_LIBRARY(BatchMakeGUI ${BatchMakeGUI_SRCS} ${BatchMakeGUI_FLTK_UI_SRCS})
+ADD_DEPENDENCIES(BatchMakeGUI FLU CondorWatcher)
 TARGET_LINK_LIBRARIES(BatchMakeGUI CondorWatcher)
 
