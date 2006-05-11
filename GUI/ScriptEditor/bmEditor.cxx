@@ -147,6 +147,18 @@ Editor::~Editor()
 {
 }
 
+
+/** Return true if the current script is empty */
+bool Editor::IsBufferEmpty()
+{
+  if(m_buffer->length() == 0)
+    {
+    return true;
+    }
+  return false;
+}
+
+
 /** Set the parser and initialize */
 void Editor::SetParser(ScriptParser* parser)
 {

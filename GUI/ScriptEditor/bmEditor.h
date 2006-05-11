@@ -79,6 +79,10 @@ public:
   void UpdateVariable();
   void SetParentWindow(Fl_Window* parentwindow);
   static void SetModified(bool flag);
+  
+  /** Return true if the current buffer is empty. 
+   *  i.e the script is empty*/
+  bool IsBufferEmpty();
 
   /** Set the action manager and initialize everything */
   void SetParser(ScriptParser* parser);

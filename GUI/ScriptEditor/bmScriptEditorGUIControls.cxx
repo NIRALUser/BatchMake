@@ -150,37 +150,55 @@ void ScriptEditorGUIControls::hide()
 
 void ScriptEditorGUIControls::OnSaveScript()
 {
+  int resultempty = 1;
+  if(g_editor->IsBufferEmpty())
+    {
+    resultempty = fl_choice("Your script is empty! Are you sure you want to write it?!","Cancel","Ok",0L);
+    }
+  if (resultempty == 0)
+    {
+    return;
+    }
+
+
   const char* filename = 0;
   int result = 2;
   if (m_filename == "")
+    {
     result = 2;
+    }
   else
-  {
+    {
     result = fl_choice("Script already exists !","Cancel","Overwrite","Save As ...");
-  }
+    }
 
   if (result == 0)
+    {
     return;
+    }
 
   if (result == 2)
+    {
     filename = fl_file_chooser("Save script", "BatchMake Script(*.bms)", NULL);
-
+    }
 
   if(filename || (m_filename != ""))
-  {
-    if (filename != 0)
     {
+    if (filename != 0)
+      {
       m_filename = filename;
       if (MString(m_filename).rend(".") != ".bms")
-       m_filename = MString(m_filename) +  ".bms";
-    }
+        {
+        m_filename = MString(m_filename) +  ".bms";
+        }
+      }
 
     g_editor->Save(m_filename.toChar());
     m_parser->SetScriptPath(m_filename);
 
     m_title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_filename.rend("/")+1) + "]" ;
     g_Scripteditorgui->label(m_title.toChar());
-  }
+    }
 }
 
 
