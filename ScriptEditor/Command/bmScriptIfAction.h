@@ -30,6 +30,7 @@ namespace bm {
 class ScriptIfAction : public ScriptAction
 {
 public:
+
   ScriptIfAction();
   ~ScriptIfAction();
   void AddAction(ScriptAction* action);
@@ -40,10 +41,11 @@ public:
   bool TestParam(ScriptError* error,int linenumber);
 
 protected:
+
   std::vector<ScriptAction*> m_thenaction;
   std::vector<ScriptAction*> m_elseaction;
   int m_mode;
-
+  bool TestCurrentCondition(unsigned int startingParameter,unsigned int conditionSize);
 };
 
 } // end namespace bm
