@@ -566,12 +566,10 @@ std::string CondorWatcher::Run(const char* program)
   sa.nLength = sizeof(sa);
   sa.bInheritHandle = true;
 
-
   SECURITY_ATTRIBUTES  sa2;
   ZeroMemory( &sa2, sizeof(sa2) );
   sa2.nLength = sizeof(sa);
   sa2.bInheritHandle = true;
-
 
   CreatePipe(&hReadPipe,&hWritePipe,&sa,0);
 //  CreatePipe(&hReadErrorPipe,&hWriteErrorPipe,&sa2,0);
