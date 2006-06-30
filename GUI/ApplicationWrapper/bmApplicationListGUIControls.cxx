@@ -96,6 +96,35 @@ void ApplicationListGUIControls::OnEdit()
 
 void ApplicationListGUIControls::OnRemove()
 {
+  if (g_list->num_selected() == 0)
+    {
+    fl_alert("Select an application to remove!");
+    return;
+    }
+  int index = g_list->get_selected(1)->index();
+  if(index < 0)
+    {
+    return;
+    }
+  g_list->remove(index+1);
+  g_list->sort();
+
+  // Remove the actual file application file
+  std::vector<ApplicationWrapper*>::iterator it = m_applicationlist->begin();
+  for(int i=0;i<index;i++)
+    {
+    it++;
+    }
+  
+  ApplicationWrapper* wrapper = *it;
+  std::string app = m_applicationpath.toChar();
+  app += "/Applications/";
+  app += wrapper->GetName().toChar();
+  app += ".bmm";
+  std::remove(app.c_str());
+
+  // Remove from the applications list
+  m_applicationlist->erase(it);
 }
 
 
