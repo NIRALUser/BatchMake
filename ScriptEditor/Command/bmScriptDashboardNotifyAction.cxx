@@ -57,12 +57,12 @@ MString ScriptDashboardNotifyAction::Help()
 void ScriptDashboardNotifyAction::Execute()
 {
   std::string url = m_manager->GetDashboardURL();
-  const char* experiment = m_manager->GetDashboardExperiment();
+  //const char* experiment = m_manager->GetDashboardExperiment();
   m_progressmanager->AddAction("Send notify to user");
   m_progressmanager->IsRunning();
   HttpRequest m_request;
 
-  m_request.AddParam("experiment",experiment);
+  //m_request.AddParam("experiment",experiment);
   m_request.AddParam("message",m_parameters[0].toChar());
   m_request.AddParam("hostname",m_request.GetHostName());
   m_request.AddParam("hostip",m_request.GetHostIp());

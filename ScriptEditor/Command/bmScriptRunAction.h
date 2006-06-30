@@ -44,6 +44,8 @@ public:
   MString Help();
   /** Generate condor script. The function delegate to the bmCondor */
   void GenerateCondor(const char* appname);
+  /** Parse the XML output */
+  void ParseXMLOutput(const char* output);
 
 };
 

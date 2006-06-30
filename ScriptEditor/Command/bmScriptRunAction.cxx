@@ -16,6 +16,7 @@
 #include "bmScriptRunAction.h"
 #include "bmLaunch.h"
 #include "Timer.h"
+#include "XMLBufferReader.h"
 
 namespace bm {
 
@@ -85,6 +86,59 @@ void ScriptRunAction::GenerateCondor(const char* appname)
   m_CondorModule->AddApplication(application);
 }
 
+/** Parse the XML output and set some variables */
+void ScriptRunAction::ParseXMLOutput(const char* output)
+{
+  typedef itk::XMLBufferReader XMLParserType;
+  XMLParserType::Pointer xmlReader = XMLParserType::New();
+  std::string Buffer = output;
+  try
+    {
+    xmlReader->Parse(Buffer.c_str(),Buffer.size());
+    }
+  catch(...)
+    {
+    std::cout << "Cannot parse output" << std::endl;
+    return;
+    }
+  XMLParserType::TagVectorType tags = xmlReader->GetTags();
+
+  XMLParserType::TagVectorType::const_iterator it = tags.begin();
+  while(it != tags.end())
+    {
+    if(((*it).name == "Input") || ((*it).name == "Output"))
+      {
+      std::string name = "";
+      std::string value = "";
+      std::vector<XMLParserType::PairType> values = (*it).values;
+      std::vector<XMLParserType::PairType>::const_iterator itValues = values.begin();
+      while(itValues != values.end())
+        {
+        if((*itValues).first == "name")
+          {
+          name = (*itValues).second;
+          }
+        else if((*itValues).first == "value")
+          {
+          value = "'"+(*itValues).second+"'";
+          }
+        itValues++;
+        }
+      // We only add the output values
+      if((*it).name == "Output")
+        {
+        MString app = m_parameters[1];
+        app = app.removeChar('$');
+        app = app.removeChar('{');
+        app = app.removeChar('}');
+        std::string fullname = app.toChar();
+        fullname += "."+name;
+        m_manager->SetVariable(fullname,value);
+        }
+      }
+    it++;
+    }
+}
 /** Execute the action */
 void ScriptRunAction::Execute()
 {
@@ -113,6 +167,10 @@ void ScriptRunAction::Execute()
   m_launch.Execute(m_manager->Convert(m_parameters[1]).removeChar('\''));
   MString m_output = m_launch.GetOutput();
   MString m_error = m_launch.GetError();
+  
+  // Parse the output of the application and set the variables
+  this->ParseXMLOutput(m_output.toChar());
+
   m_manager->SetVariable(m_parameters[0],MString("'") + m_output + "'");
   m_progressmanager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()) + m_manager->Convert(m_parameters[1]));
   m_progressmanager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
@@ -128,7 +186,6 @@ void ScriptRunAction::Execute()
       m_output = m_output.end("\n")+1;
       }
     }
-
 
   m_offset = 0;
   while (m_offset != -1)
