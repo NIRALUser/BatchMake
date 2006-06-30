@@ -756,7 +756,10 @@ int status = 0;
       ApplicationWrapperParam param;
       param.SetName((*itField).name);
       param.SetValue((*itField).value);
-      param.SetExternalData((*itField).externaldata);
+      if((*itField).externaldata)
+        {
+        param.SetExternalData(true);
+        }
 
       if((*itField).type == MetaCommand::FLOAT)
         {
