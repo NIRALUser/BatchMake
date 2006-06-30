@@ -13,6 +13,7 @@ SET(BatchMakeUtilities_SRCS
   XMLWriter.cxx
   XMLIniIO.cxx
   TCPSocket.cxx
+  XMLBufferReader.cxx
 )
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
