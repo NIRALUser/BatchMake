@@ -37,7 +37,9 @@
 #include "bmScriptExtractStringAction.h"
 #include "bmScriptIncludeAction.h"
 #include "bmScriptDashboardHostAction.h"
-#include "bmScriptDashboardExperimentAction.h"
+#include "bmScriptDashboardUserAction.h"
+#include "bmScriptCreateExperimentAction.h"
+#include "bmScriptCreateMethodAction.h"
 #include "bmScriptDashboardSendAction.h"
 #include "bmScriptDashboardNotifyAction.h"
 #include "bmScriptSinAction.h"
@@ -45,7 +47,8 @@
 #include "bmScriptOpenTCPSocketAction.h"
 #include "bmScriptSendTCPAction.h"
 #include "bmScriptCloseTCPSocketAction.h"
-
+#include "bmScriptAddMethodInputAction.h"
+#include "bmScriptAddMethodOutputAction.h"
 #include "Timer.h"
 
 
@@ -61,8 +64,6 @@ ScriptActionManager::ScriptActionManager()
   m_scriptpath = "";
   m_CondorModule = NULL;
   m_Parser = NULL;
-  m_DashboardURL = "";
-  m_DashboardExperiment = "";
 }
 
 ScriptActionManager::~ScriptActionManager()
@@ -143,52 +144,60 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(ExtractString);
   BM_NEWKEYWORD(Include);
   BM_NEWKEYWORD(DashboardHost);
-  BM_NEWKEYWORD(DashboardExperiment);
+  BM_NEWKEYWORD(DashboardUser);
   BM_NEWKEYWORD(DashboardSend);
   BM_NEWKEYWORD(DashboardNotify);
+  BM_NEWKEYWORD(CreateExperiment);
+  BM_NEWKEYWORD(CreateMethod);
   BM_NEWKEYWORD(Sin);
   BM_NEWKEYWORD(DeleteFile);
   BM_NEWKEYWORD(OpenTCPSocket);
   BM_NEWKEYWORD(SendTCP);
   BM_NEWKEYWORD(CloseTCPSocket);
+  BM_NEWKEYWORD(AddMethodInput);
+  BM_NEWKEYWORD(AddMethodOutput);
   return m_list;
 }
 
 
 ScriptAction* ScriptActionManager::CreateAction(MString option)
 {
-   BM_NEWACTION(ForEach);
-   BM_NEWACTION(Sequence);
-   BM_NEWACTION(Echo);
-   BM_NEWACTION(If);
-   BM_NEWACTION(Run);
-   BM_NEWACTION(Set);
-   BM_NEWACTION(SetApp);
-   BM_NEWACTION(SetAppOption);
-   BM_NEWACTION(ListDirInDir);
-   BM_NEWACTION(ListFileInDir);
-   BM_NEWACTION(GetParam);
-   BM_NEWACTION(Randomize);
-   BM_NEWACTION(Inc);
-   BM_NEWACTION(Int);
-   BM_NEWACTION(AppendFile);
-   BM_NEWACTION(WriteFile);
-   BM_NEWACTION(DbSendValue);
-   BM_NEWACTION(DbSendFile);
-   BM_NEWACTION(DbClear);
-   BM_NEWACTION(ExtractSlice);
-   BM_NEWACTION(ExtractString);
-   BM_NEWACTION(Include);
-   BM_NEWACTION(DashboardHost);
-   BM_NEWACTION(DashboardExperiment);
-   BM_NEWACTION(DashboardSend);
-   BM_NEWACTION(DashboardNotify);
-   BM_NEWACTION(Sin);
-   BM_NEWACTION(DeleteFile);
-   BM_NEWACTION(OpenTCPSocket);
-   BM_NEWACTION(SendTCP);
-   BM_NEWACTION(CloseTCPSocket);
-   return 0;
+  BM_NEWACTION(ForEach);
+  BM_NEWACTION(Sequence);
+  BM_NEWACTION(Echo);
+  BM_NEWACTION(If);
+  BM_NEWACTION(Run);
+  BM_NEWACTION(Set);
+  BM_NEWACTION(SetApp);
+  BM_NEWACTION(SetAppOption);
+  BM_NEWACTION(ListDirInDir);
+  BM_NEWACTION(ListFileInDir);
+  BM_NEWACTION(GetParam);
+  BM_NEWACTION(Randomize);
+  BM_NEWACTION(Inc);
+  BM_NEWACTION(Int);
+  BM_NEWACTION(AppendFile);
+  BM_NEWACTION(WriteFile);
+  BM_NEWACTION(DbSendValue);
+  BM_NEWACTION(DbSendFile);
+  BM_NEWACTION(DbClear);
+  BM_NEWACTION(ExtractSlice);
+  BM_NEWACTION(ExtractString);
+  BM_NEWACTION(Include);
+  BM_NEWACTION(DashboardHost);
+  BM_NEWACTION(DashboardUser);
+  BM_NEWACTION(DashboardSend);
+  BM_NEWACTION(DashboardNotify);
+  BM_NEWACTION(CreateExperiment);
+  BM_NEWACTION(CreateMethod);
+  BM_NEWACTION(Sin);
+  BM_NEWACTION(DeleteFile);
+  BM_NEWACTION(OpenTCPSocket);
+  BM_NEWACTION(SendTCP);
+  BM_NEWACTION(CloseTCPSocket);
+  BM_NEWACTION(AddMethodInput);
+  BM_NEWACTION(AddMethodOutput);
+  return 0;
 }
 
 void ScriptActionManager::SetApplicationWrapperList(std::vector<ApplicationWrapper*>* applicationlist)
@@ -221,12 +230,16 @@ void ScriptActionManager::Reset()
 
    m_parentaction = 0;
    for (unsigned int i=0;i<m_actionlist.size();i++)
-   {
+     {
      m_actionlist[i]->Delete();
-   }
+     }
   
    m_actionlist.clear();
 
+   m_Dashboard.url = "";
+   m_Dashboard.user = "";
+   m_Dashboard.password = "";
+   m_Dashboard.experiments.clear();
 }
 
 void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
@@ -462,9 +475,10 @@ void ScriptActionManager::DisplayVariableList()
 {
   std::cout << "Variable List" << std::endl;
   for (unsigned int i=0;i<m_variablelist.size();i++)
-  {
-    std::cout << m_variablelist[i]->name.toChar() <<"\t"<< m_variablelist[i]->value.toChar() << std::endl;
-  }
+    {
+    std::cout << m_variablelist[i]->name.toChar() 
+              << "\t" << m_variablelist[i]->value.toChar() << std::endl;
+    }
 }
 
 
@@ -654,5 +668,104 @@ bool ScriptActionManager::RemoveSocket(MString name)
   return found;
 }
 
-} // end namespace bm
+/** Add an experiement to the dashboard */
+bool ScriptActionManager::AddDashboardExperiment(const char* var, const char* projectName, const char* experimentName)
+{
+  // Check that the experiment does not exist
+  std::vector<DashboardExperiment>::const_iterator it = m_Dashboard.experiments.begin();
+  while(it != m_Dashboard.experiments.end())
+    {
+    if((!strcmp((*it).project.c_str(),projectName)) 
+      && (!strcmp((*it).name.c_str(),experimentName)))
+      {
+      return false;
+      }
+    it++;
+    }
 
+  DashboardExperiment exp;
+  exp.variable = var;
+  exp.project = projectName;
+  exp.name = experimentName;
+  m_Dashboard.experiments.push_back(exp);
+  return true;
+}
+
+/** Add a method to an experiment */
+bool ScriptActionManager::AddDashboardMethod(const char* var, const char* expvar, const char* methodName)
+{
+  // Check that the experiment exist
+  std::vector<DashboardExperiment>::iterator it = m_Dashboard.experiments.begin();
+  while(it != m_Dashboard.experiments.end())
+    {
+    if((!strcmp((*it).variable.c_str(),expvar)))
+      {
+      // Check that the method doesn't exit
+      std::vector<DashboardMethod>::const_iterator itMeth = (*it).methods.begin();
+      while(itMeth != (*it).methods.end())
+        {
+        if((!strcmp((*itMeth).expVariable.c_str(),expvar))
+          && (!strcmp((*itMeth).name.c_str(),methodName))
+          )
+          {
+          return false;
+          }
+        itMeth++;
+        }
+      DashboardMethod meth;
+      meth.variable = var;
+      meth.expVariable = expvar;
+      meth.name = methodName;  
+      (*it).methods.push_back(meth);
+      return true;
+      }
+    it++;
+    }
+  return false;
+}
+
+/** Add a parameter to a specific method */
+bool ScriptActionManager::AddDashboardMethodParameter(const char* var, 
+                                                      const char* methVar, 
+                                                      const char* name,
+                                                      bool output)
+{
+  // Check that the experiment exist
+  std::vector<DashboardExperiment>::iterator it = m_Dashboard.experiments.begin();
+  while(it != m_Dashboard.experiments.end())
+    {
+    std::vector<DashboardMethod>::iterator itMeth = (*it).methods.begin();
+    while(itMeth != (*it).methods.end())
+      {
+      if((!strcmp((*itMeth).variable.c_str(),methVar)))
+        {
+        std::vector<DashboardMethodParameter>::const_iterator itParam 
+                                                    = (*itMeth).parameters.begin();
+        bool found = false;
+        while(itParam != (*itMeth).parameters.end())
+          {
+          if(!strcmp((*itParam).variable.c_str(),var))
+            {
+            found = true;
+            break;
+            }
+          itParam++;
+          }
+        if(!found)
+          {
+          DashboardMethodParameter param;
+          param.variable = var;
+          param.method = methVar;
+          param.name = name;
+          param.output = output;
+          (*itMeth).parameters.push_back(param);
+          }
+        }
+      itMeth++;
+      }
+    it++;
+    }
+  return false;
+}
+
+} // end namespace bm

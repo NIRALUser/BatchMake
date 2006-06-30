@@ -45,14 +45,18 @@ Command/bmScriptExtractSliceAction.cxx
 Command/bmScriptExtractStringAction.cxx
 Command/bmScriptIncludeAction.cxx
 Command/bmScriptDashboardHostAction.cxx
-Command/bmScriptDashboardExperimentAction.cxx
+Command/bmScriptDashboardUserAction.cxx
 Command/bmScriptDashboardSendAction.cxx
 Command/bmScriptDashboardNotifyAction.cxx
+Command/bmScriptCreateExperimentAction.cxx
+Command/bmScriptCreateMethodAction.cxx
 Command/bmScriptSinAction.cxx
 Command/bmScriptDeleteFileAction.cxx
 Command/bmScriptOpenTCPSocketAction.cxx
 Command/bmScriptSendTCPAction.cxx
 Command/bmScriptCloseTCPSocketAction.cxx
+Command/bmScriptAddMethodInputAction.cxx
+Command/bmScriptAddMethodOutputAction.cxx
 )
 
 LINK_LIBRARIES(

@@ -66,6 +66,38 @@ public:
     TCPSocket socket;
     };
 
+  struct DashboardMethodParameter
+    {
+    std::string variable;
+    std::string method;
+    std::string name;
+    bool        output;
+    };
+
+  struct DashboardMethod
+    {
+    std::string variable;
+    std::string expVariable;
+    std::string name;
+    std::vector<DashboardMethodParameter> parameters;
+    };
+
+  struct DashboardExperiment
+    {
+    std::string variable;
+    std::string project;
+    std::string name;
+    std::vector<DashboardMethod> methods;
+    };
+
+  struct Dashboard
+    {
+    std::string url;
+    std::string user;
+    std::string password;
+    std::vector<DashboardExperiment> experiments;
+    };
+   
   ScriptAction* CreateAction(MString option);
   void SetApplicationPath(MString applicationpath);
   void SetScriptPath(MString scriptpath);
@@ -107,15 +139,21 @@ public:
   void SetCondorModule(Condor* condor) {m_CondorModule = condor;}
   
   /** Set/Get variables relative to the dashboard */
-  void SetDashboardURL(const char* url) {m_DashboardURL = url;}
-  const char* GetDashboardURL() {return m_DashboardURL.c_str();}
+  void SetDashboardURL(const char* url) {m_Dashboard.url = url;}
+  const char* GetDashboardURL() {return m_Dashboard.url.c_str();}
   
-  void SetDashboardExperiment(const char* exp) {m_DashboardExperiment = exp;}
-  const char* GetDashboardExperiment() {return m_DashboardExperiment.c_str();}
-  
+  void SetDashboardUser(const char* user) {m_Dashboard.user = user;}
+  const char* GetDashboardUser() {return m_Dashboard.user.c_str();}
+
+  bool AddDashboardExperiment(const char* var, const char* projectName, const char* experimentName);
+  bool AddDashboardMethod(const char* var, const char* expvar, const char* methodName);
+  bool AddDashboardMethodParameter(const char* var, const char* methVar, const char* name,bool output=false);
+
+  /** Get the dashboard as a const method, onlt to retrieve data from it */
+  const Dashboard * GetDashboard() const {return &m_Dashboard;}
+
   TCPSocket* GetVariableSocket(MString name);
   bool RemoveSocket(MString name);
-
 
 protected:
   std::vector<ScriptAction*> m_actionlist;
@@ -136,9 +174,10 @@ protected:
   Condor* m_CondorModule;
 
   // The Script Action manager keeps global variables regarding the dashboard
-  std::string m_DashboardURL;
-  std::string m_DashboardExperiment;
+  Dashboard m_Dashboard;
 
+  //std::string m_DashboardURL;
+  //std::string m_DashboardExperiment;
 };
 
 } // end namespace bm
