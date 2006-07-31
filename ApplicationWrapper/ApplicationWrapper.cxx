@@ -196,7 +196,6 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
               (*itChild).SetValueDefined(true);
               (*itChild).SetValue(value.c_str());
               }
-         
             itChild++;
             }
           }
@@ -754,7 +753,14 @@ int status = 0;
     while(itField != (*it).fields.end())
       {
       ApplicationWrapperParam param;
-      param.SetName((*itField).name);
+      std::string fullname = "";
+      if(strcmp((*it).name.c_str(),(*itField).name.c_str()))
+        {
+        fullname += (*it).name;
+        fullname += ".";
+        }
+      fullname += (*itField).name;
+      param.SetName(fullname);
       param.SetValue((*itField).value);
       if((*itField).externaldata)
         {
