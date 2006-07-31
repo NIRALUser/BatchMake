@@ -26,7 +26,7 @@
 #include "bmScriptActionManager.h"
 #include "bmProgressManager.h"
 #include "bmScriptError.h"
-#include "bmCondor.h"
+#include "bmGrid.h"
 
 namespace bm {
 
@@ -54,7 +54,7 @@ public:
   virtual void Delete();
   virtual MString Help();
 
-  void SetCondorModule(Condor* condor) {m_CondorModule = condor;}
+  void SetGridModule(Grid* grid) {m_GridModule = grid;}
 
 protected:
   ParametersType m_parameters;
@@ -62,7 +62,7 @@ protected:
   ScriptAction* m_parent;
   ScriptActionManager* m_manager;
   ProgressManager* m_progressmanager;
-  Condor* m_CondorModule;
+  Grid* m_GridModule;
 };
 
 } // end namespace bm

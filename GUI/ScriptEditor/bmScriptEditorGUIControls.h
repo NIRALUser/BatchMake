@@ -45,6 +45,7 @@ public:
   void OnExecute();
   void OnApplicationWrapper();
   void OnGenerateCondor();
+  void OnGenerateGAD();
   void OnGenerateScripts();
   void hide();
 

@@ -62,7 +62,7 @@ ScriptActionManager::ScriptActionManager()
   m_ApplicationWrapperList = 0;
   m_ApplicationsList = 0;
   m_scriptpath = "";
-  m_CondorModule = NULL;
+  m_GridModule = NULL;
   m_Parser = NULL;
 }
 
@@ -271,7 +271,7 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
       m_action->SetParent(m_parentaction);
       m_action->SetManager(this);
       m_action->SetProgressManager(m_progressmanager);
-      m_action->SetCondorModule(m_CondorModule);
+      m_action->SetGridModule(m_GridModule);
       if (!m_action->TestParam(m_error,m_linenumber))
         {
         if (m_action->Help() != "")
@@ -287,7 +287,7 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
       m_action->SetParent(m_parentaction);
       m_action->SetManager(this);
       m_action->SetProgressManager(m_progressmanager);
-      m_action->SetCondorModule(m_CondorModule);
+      m_action->SetGridModule(m_GridModule);
 
       if (!m_action->TestParam(m_error,m_linenumber))
         {

@@ -34,6 +34,7 @@ public:
   virtual void OnExecute() = 0;
   virtual void OnApplicationWrapper() = 0;
   virtual void OnGenerateCondor() = 0;
+  virtual void OnGenerateGAD() = 0;
   virtual void OnGenerateScripts() = 0;
   virtual void hide() = 0;
 };

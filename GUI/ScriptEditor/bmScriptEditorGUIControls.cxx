@@ -273,6 +273,52 @@ void ScriptEditorGUIControls::OnApplicationWrapper()
   ui->Show();
 }
 
+/** Generate a KWGrid script */
+void ScriptEditorGUIControls::OnGenerateGAD()
+{
+  const char* filename = 0;
+  filename = fl_file_chooser("Save KWGrid script", "Grid Script(*.gad)", NULL);
+
+  if(!filename)
+    {
+    return;
+    }
+
+  // Check first if the script is valid
+  m_parser->Reset();
+  m_errorgui->Reset();
+  m_errorbuffer->text("");
+  m_errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_errorgui);
+  int m_offset = 0;
+  for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+    {
+    const char* text = g_editor->buffer()->line_text(m_offset);
+    m_parser->AddCodeLine(MString(text));
+    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    }
+
+  m_errorgui->SetStatus(MString("Generating kwgrid script ..."));
+    
+  Grid grid;
+  grid.SetFileName(filename);
+  m_parser->SetGridModule(&grid);
+  if (m_parser->Parse())
+    {
+    m_errorgui->DisplaySummary();
+    m_errorgui->SetStatus(MString("Generating ..."));
+    m_parser->Execute();
+    }
+  else
+    {
+    m_errorgui->DisplaySummary();
+    }
+
+  grid.WriteGAD();
+
+  m_parser->SetGridModule(NULL);
+}
+
 /** Generate a Condor script */
 void ScriptEditorGUIControls::OnGenerateCondor()
 {
@@ -300,9 +346,9 @@ void ScriptEditorGUIControls::OnGenerateCondor()
 
   m_errorgui->SetStatus(MString("Generating condor script ..."));
     
-  Condor condor;
-  condor.SetFileName(filename);
-  m_parser->SetCondorModule(&condor);
+  Grid grid;
+  grid.SetFileName(filename);
+  m_parser->SetGridModule(&grid);
   if (m_parser->Parse())
     {
     m_errorgui->DisplaySummary();
@@ -314,7 +360,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     m_errorgui->DisplaySummary();
     }
 
-  condor.Write();
+  grid.WriteCondor();
   
   if(fl_ask("Run condor watcher?"))
     {
@@ -339,7 +385,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     m_errorgui->SetStatus(error);
     }
 
-  m_parser->SetCondorModule(NULL);
+  m_parser->SetGridModule(NULL);
 }
 
 /** Generate a batch scripts */

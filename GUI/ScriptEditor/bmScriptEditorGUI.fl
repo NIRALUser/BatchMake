@@ -7,7 +7,7 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
   Function {MakeWindow()} {} {
     Fl_Window g_Scripteditorgui {
       label BatchMake
-      callback {hide();} open
+      callback {hide();}
       xywh {426 194 655 660} type Double resizable
       code0 {\#include "bmScriptEditorGUIBase.h"} visible
     } {
@@ -27,7 +27,7 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
           tooltip {Open script} image {../../Images/open.gif} xywh {5 5 30 25} box PLASTIC_UP_BOX color 48 labelsize 11 align 192 hotspot
         }
         Fl_Button saveBt {
-          callback {OnSaveScript()} selected
+          callback {OnSaveScript()}
           tooltip {Save current script} image {../../Images/save.gif} xywh {40 5 30 25} box PLASTIC_UP_BOX shortcut 0x40073 color 48
         }
         Fl_Button {} {
@@ -49,6 +49,10 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
         Fl_Button {} {
           callback {OnGenerateCondor()}
           tooltip {Generate Condor Script} image {../../Images/condor.gif} xywh {215 5 30 25} box PLASTIC_UP_BOX color 48
+        }
+        Fl_Button {} {
+          callback {OnGenerateGAD()} selected
+          tooltip {Generate KWGrid script} image {../../Images/kwgrid.gif} xywh {250 5 30 25} box PLASTIC_UP_BOX color 48
         }
       }
     }

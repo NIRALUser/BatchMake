@@ -27,7 +27,7 @@
 #include <iostream>
 #include "MString.h"
 #include "bmScriptActionManager.h"
-#include "bmCondor.h"
+#include "bmGrid.h"
 
 namespace bm {
 
@@ -54,7 +54,7 @@ public:
   void LoadWrappedApplication(MString applicationpath);
   std::vector<ApplicationWrapper*>* GetApplicationList();
   void Reset();
-  void SetCondorModule(Condor* condor) {m_scriptactionmanager->SetCondorModule(condor);}
+  void SetGridModule(Grid* grid) {m_scriptactionmanager->SetGridModule(grid);}
 
   /** Return the ScriptActionManager */
   ScriptActionManager* GetScriptActionManager() {return m_scriptactionmanager;}

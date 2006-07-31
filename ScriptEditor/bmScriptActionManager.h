@@ -35,7 +35,7 @@
 #include <vector>
 #include <iostream>
 #include "MString.h"
-#include "bmCondor.h"
+#include "bmGrid.h"
 #include "TCPSocket.h"
 
 namespace bm {
@@ -136,7 +136,7 @@ public:
 
   std::vector<MString> GetKeywordList();
 
-  void SetCondorModule(Condor* condor) {m_CondorModule = condor;}
+  void SetGridModule(Grid* grid) {m_GridModule = grid;}
   
   /** Set/Get variables relative to the dashboard */
   void SetDashboardURL(const char* url) {m_Dashboard.url = url;}
@@ -171,7 +171,7 @@ protected:
   void* m_Parser;
 
   // Tells the output of the Run command to generate condor scripts
-  Condor* m_CondorModule;
+  Grid* m_GridModule;
 
   // The Script Action manager keeps global variables regarding the dashboard
   Dashboard m_Dashboard;

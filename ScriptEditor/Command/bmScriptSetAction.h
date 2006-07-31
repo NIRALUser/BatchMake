@@ -36,6 +36,8 @@ public:
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();
 
+  void GenerateCondor(std::string name,std::string value);
+
 };
 
 } // end namespace bm

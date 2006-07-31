@@ -36,6 +36,7 @@ public:
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();
 
+  void GenerateCondor();
 };
 
 } // end namespace bm
