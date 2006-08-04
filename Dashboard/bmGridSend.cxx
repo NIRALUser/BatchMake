@@ -160,18 +160,18 @@ int main(int argc, char* argv[])
       std::string value = *it;
       it++;
      
+
       std::string val = value+":";
-      if(int pos = buffer.find(val) != -1)
+      int pos = buffer.find(val);
+      if(pos != -1)
         {
         unsigned int size = buffer.find("\n",pos);
-        value = buffer.substr(pos+val.size()-1,size-pos-val.size()+1);
+        value = buffer.substr(pos+val.size(),size-pos-val.size());
         }
       m_request.AddParam(name,value);
       std::cout << name.c_str() << " : " << value.c_str() << std::endl;
       }
     }
-
- return 0;
 
   // Send the data to the dashboard
   url += "/dashboard.php";
@@ -201,7 +201,6 @@ int main(int argc, char* argv[])
         }  
       }
     }
-
 
   return 0;
 }
