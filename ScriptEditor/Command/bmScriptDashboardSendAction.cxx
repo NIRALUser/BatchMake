@@ -162,7 +162,9 @@ void ScriptDashboardSendAction::GenerateCondor()
           data += "\"";
           data += " ";
           data += "\"";
-          data += m_manager->Convert(param).toChar();
+          MString value = m_manager->Convert(param).toChar();
+          value = value.removeChar('\'');
+          data += value.toChar();
           data += "\" ";
           num++;
           itParam++;
