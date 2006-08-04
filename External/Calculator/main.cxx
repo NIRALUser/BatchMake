@@ -112,7 +112,8 @@ public:
         case '3' :  std::cout << "Bad project name" << std::endl; break;
         case '4' :  std::cout << "Over quota: please use DbClear function first" << std::endl; break;
         case '5' :  std::cout << "Host Database error" << std::endl; break;
-        case '-1' : std::cout << "Connexion problem" << std::endl; break;
+        default:
+          std::cout << "Connexion problem" << std::endl; break;
         }  
       }
     return true;

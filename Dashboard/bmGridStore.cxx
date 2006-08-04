@@ -114,11 +114,11 @@ void ParseXMLOutput(const char* filename,
       // We only add the output values
       if((*it).name == "Output")
         {
-         MString app = appname;
-        app = app->removeChar('$');
-        app = app->removeChar('{');
-        app = app->removeChar('}');
-        std::string fullname = app->toChar();
+        MString app = appname;
+        app = app.removeChar('$');
+        app = app.removeChar('{');
+        app = app.removeChar('}');
+        std::string fullname = app.toChar();
         fullname += "."+name;
         AddField(filename,fullname,value);
         }

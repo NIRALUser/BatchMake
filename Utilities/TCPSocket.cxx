@@ -47,7 +47,7 @@ void TCPSocket::CloseSocket()
 
 int TCPSocket::SendMessage(std::string message)
 {
-  if( send(m_Sock,message.c_str(),message.length(),0) == SOCKET_ERROR )
+  if( send(m_Sock,message.c_str(),message.length(),0) == -1 )
     {
     return -1;
     }
