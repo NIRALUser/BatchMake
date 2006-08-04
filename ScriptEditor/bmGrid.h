@@ -44,6 +44,7 @@ public:
 
   void WriteCondor();
   void WriteGAD();
+  void WriteShell();
   const char* GetCurrentScopeFile();
 
 protected:
