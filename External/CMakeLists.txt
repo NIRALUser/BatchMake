@@ -3,4 +3,5 @@ Zip
 Tester
 CondorTest
 Calculator
+PixelCounter
 )
