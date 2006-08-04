@@ -103,8 +103,8 @@ void ApplicationWrapperGUIControls::Show()
 void ApplicationWrapperGUIControls::OnSelectPath()
 {
   char* fName = fl_file_chooser(
-    "Select program", "Program (*.*)", NULL,Fl_File_Chooser::MULTI);
-    
+    "Select program", "Program (*.*)", NULL); //Fl_File_Chooser::MULTI);
+
   if(fName)
     {
     g_path->value(fName);
