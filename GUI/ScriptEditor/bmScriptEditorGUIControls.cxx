@@ -319,6 +319,52 @@ void ScriptEditorGUIControls::OnGenerateGAD()
   m_parser->SetGridModule(NULL);
 }
 
+/** Generate a Shell script */
+void ScriptEditorGUIControls::OnGenerateShell()
+{
+  const char* filename = 0;
+  filename = fl_file_chooser("Save Shell script", "Shell script (*.sh)", NULL);
+
+  if(!filename)
+    {
+    return;
+    }
+
+  // Check first if the script is valid
+  m_parser->Reset();
+  m_errorgui->Reset();
+  m_errorbuffer->text("");
+  m_errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_errorgui);
+  int m_offset = 0;
+  for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+    {
+    const char* text = g_editor->buffer()->line_text(m_offset);
+    m_parser->AddCodeLine(MString(text));
+    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    }
+
+  m_errorgui->SetStatus(MString("Generating shell script ..."));
+    
+  Grid grid;
+  grid.SetFileName(filename);
+  m_parser->SetGridModule(&grid);
+  if (m_parser->Parse())
+    {
+    m_errorgui->DisplaySummary();
+    m_errorgui->SetStatus(MString("Generating ..."));
+    m_parser->Execute();
+    }
+  else
+    {
+    m_errorgui->DisplaySummary();
+    }
+
+  grid.WriteShell();
+
+  m_parser->SetGridModule(NULL);
+}
+
 /** Generate a Condor script */
 void ScriptEditorGUIControls::OnGenerateCondor()
 {

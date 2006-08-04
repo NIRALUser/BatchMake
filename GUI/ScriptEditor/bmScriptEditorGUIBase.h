@@ -36,6 +36,7 @@ public:
   virtual void OnGenerateCondor() = 0;
   virtual void OnGenerateGAD() = 0;
   virtual void OnGenerateScripts() = 0;
+  virtual void OnGenerateShell() = 0;
   virtual void hide() = 0;
 };
 
