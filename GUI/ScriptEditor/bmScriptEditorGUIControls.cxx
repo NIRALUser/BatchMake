@@ -306,7 +306,6 @@ void ScriptEditorGUIControls::OnGenerateGAD()
   if (m_parser->Parse())
     {
     m_errorgui->DisplaySummary();
-    m_errorgui->SetStatus(MString("Generating ..."));
     m_parser->Execute();
     }
   else
@@ -352,7 +351,6 @@ void ScriptEditorGUIControls::OnGenerateShell()
   if (m_parser->Parse())
     {
     m_errorgui->DisplaySummary();
-    m_errorgui->SetStatus(MString("Generating ..."));
     m_parser->Execute();
     }
   else
@@ -398,7 +396,6 @@ void ScriptEditorGUIControls::OnGenerateCondor()
   if (m_parser->Parse())
     {
     m_errorgui->DisplaySummary();
-    m_errorgui->SetStatus(MString("Generating ..."));
     m_parser->Execute();
     }
   else
