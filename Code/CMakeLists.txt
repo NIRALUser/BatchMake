@@ -1,6 +1,5 @@
 SET(BatchMake_SRCS
   BatchMake.cxx
-  CommandLineArgumentParser.cxx
 )
 
 IF(WIN32)

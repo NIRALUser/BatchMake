@@ -14,27 +14,14 @@
 =========================================================================*/
 
 #include "bmScriptEditorGUIControls.h"
-#include "CommandLineArgumentParser.h"
 #include "FL/Fl.H"
 #include "MString.h"
 #include "ApplicationWrapper.h"
 #include <iostream>
+#include "metaCommand.h"
+#include "bmGrid.h"
 
-#define BatchMakeVersion "0.1 Beta"
-
-void Help()
-{
-  std::cout << "BatchMake - " << BatchMakeVersion << std::endl;
-  std::cout << "---------------------------------" << std::endl;
-  std::cout << "BatchMake [-h] [-i] <filename>" << std::endl;
-  std::cout << "Options:" << std::endl;
-  std::cout << "-h : Display help" << std::endl;
-  std::cout << "-c <input filename> : Compile script" << std::endl;
-  std::cout << "-e <input filename> : Execute script" << std::endl;
-  std::cout << "-a <application path> <application name> : Add the application into the application wrapper" << std::endl;
-  std::cout << "-p <Batchmake Path> : Specify BatchMake path" << std::endl;
-}
-
+#define BatchMakeVersion "0.2 Beta"
 
 int main(int argc, char **argv)
 {
@@ -45,7 +32,7 @@ int main(int argc, char **argv)
    #endif
 
   if (argc < 2)
-  {
+    {
     // Create a UI object
     bm::ScriptEditorGUIControls* ui = new bm::ScriptEditorGUIControls();
     MString m_windowtitle("BatchMake - ");
@@ -63,74 +50,143 @@ int main(int argc, char **argv)
     Fl::run();
   
     delete ui;
-  }
+    }
   else
-  {
-    // Parse command line parameters
-    CommandLineArgumentParser parser;
-    // input
-    parser.AddOption("-h",0);  // Verbose mode
-    parser.AddOption("-c",1);  // Compile script
-    parser.AddOption("-e",1);  // Execute script
-    parser.AddOption("-a",2);  // Add application
-    parser.AddOption("-p",1);  // Specify batchmake path
-    CommandLineArgumentParseResult parseResult;
-    if(!parser.TryParseCommandLine(argc,argv,parseResult))
-    {
-      Help();
-      return -1;
-    }
+    { 
+    MetaCommand command;
+  
+    command.SetName("BatchMake");
+    command.SetVersion(BatchMakeVersion);
+    command.SetAuthor("CADDLab @ UNC & Kitware Inc");
+    command.SetDescription("BatchMake");
 
-    if (argc < 3)
-    {
-      Help();
-      return -1;
-    }
+    // Compile a script
+    command.SetOption("compileScript","c",false,"Compile a script");
+    command.AddOptionField("compileScript","filename",MetaCommand::STRING,true);
     
-    if (parseResult.IsOptionPresent("-p"))
-    {
-      m_applicationpath = parseResult.GetOptionParameter("-p",0);
-    }
+    // Execute a script
+    command.SetOption("executeScript","e",false,"Execute a script");
+    command.AddOptionField("executeScript","filename",MetaCommand::STRING,true);
 
-    if (parseResult.IsOptionPresent("-h"))
-    {
-      Help();
-      return 0;
-    }
+    // Specify batchmake path
+    command.SetOption("path","p",false,"Specify a the batchmake path");
+    command.AddOptionField("path","path",MetaCommand::STRING,true);
 
-    if (parseResult.IsOptionPresent("-c"))
-    {
-      MString m_filename = parseResult.GetOptionParameter("-c");
+    // Add application
+    command.SetOption("addApplication","a",false,"Add an application");
+    command.AddOptionField("addApplication","appname",MetaCommand::STRING,true);
+
+    // Generate Shell
+    command.SetOption("generateShell","sh",false,"Generate shell script");
+    command.AddOptionField("generateShell","scriptname",MetaCommand::STRING,true);
+    command.AddOptionField("generateShell","outputname",MetaCommand::STRING,true);
+
+    // Generate Condor
+    command.SetOption("generateCondor","condor",false,"Generate shell script");
+    command.AddOptionField("generateCondor","scriptname",MetaCommand::STRING,true);
+    command.AddOptionField("generateCondor","outputname",MetaCommand::STRING,true);
+
+    // Generate GAD
+    command.SetOption("generateGAD","kwgrid",false,"Generate shell script");
+    command.AddOptionField("generateGAD","scriptname",MetaCommand::STRING,true);
+    command.AddOptionField("generateGAD","outputname",MetaCommand::STRING,true);
+
+
+
+    // Parsing
+    if(!command.Parse(argc,argv))
+      {
+      return 1;
+      }
+      
+    if(command.GetOptionWasSet("path"))
+      {
+      m_applicationpath = command.GetValueAsString("path","path");
+      }
+
+    if(command.GetOptionWasSet("compileScript"))
+      {
+      std::string filename = command.GetValueAsString("compileScript","filename");
       std::cout << "Compiling ..." << std::endl;
       bm::ScriptParser m_parser;
       m_parser.SetApplicationPath(m_applicationpath);
-      m_parser.Compile(m_filename);
+      m_parser.Compile(filename);
       return 0;
-    }
-
-    if (parseResult.IsOptionPresent("-e"))
-    {
-      MString m_filename = parseResult.GetOptionParameter("-e");
+      }
+    if(command.GetOptionWasSet("executeScript"))
+      {
+      std::string filename = command.GetValueAsString("executeScript","filename");
+      std::cout << "Executing ..." << std::endl;
       bm::ScriptParser m_parser;
       m_parser.SetApplicationPath(m_applicationpath);
-      m_parser.Execute(m_filename);
+      m_parser.Execute(filename);
       return 0;
-    }
-    if (parseResult.IsOptionPresent("-a"))
-    {
-      MString m_path = parseResult.GetOptionParameter("-a",0);
-      MString m_modulename = parseResult.GetOptionParameter("-a",1);
+      }
+    if(command.GetOptionWasSet("addApplication"))
+      {
+      std::string appname = command.GetValueAsString("addApplication","appname");
       ApplicationWrapper m_ApplicationWrapper;
-
-      m_ApplicationWrapper.AutomaticCommandLineParsing(m_path.toChar());
-      
-      m_ApplicationWrapper.SetApplicationPath(m_path);
-      m_ApplicationWrapper.SetName(m_modulename);
-      
-      m_ApplicationWrapper.Save(m_applicationpath + "/Applications/" + m_modulename + ".bmm");
+      m_ApplicationWrapper.AutomaticCommandLineParsing(appname.c_str());
+      std::string moduleName = m_ApplicationWrapper.GetName().toChar();
+       
+      std::string output = m_applicationpath.toChar();
+      output += "/Applications/";
+      output += moduleName; 
+      output += ".bmm";
+      std::cout << "Saving application description as: " 
+                << output.c_str() << std::endl;
+      m_ApplicationWrapper.Save(output.c_str());
  
       return 0;
-    }
+      }
+    if(command.GetOptionWasSet("generateShell"))
+      {
+      std::string scriptname = command.GetValueAsString("generateShell","scriptname");
+      std::string outputname = command.GetValueAsString("generateShell","outputname");
+      bm::ScriptParser m_parser;
+      m_parser.SetApplicationPath(m_applicationpath);
+     
+      std::cout << "Generating shell script ...";
+        
+      bm::Grid grid;
+      grid.SetFileName(outputname.c_str());
+      m_parser.SetGridModule(&grid);
+      m_parser.Execute(scriptname);
+      grid.WriteShell();
+      std::cout << "Done." << std::endl;
+      }
+    if(command.GetOptionWasSet("generateCondor"))
+      {
+      std::string scriptname = command.GetValueAsString("generateCondor","scriptname");
+      std::string outputname = command.GetValueAsString("generateCondor","outputname");
+      bm::ScriptParser m_parser;
+      m_parser.SetApplicationPath(m_applicationpath);
+     
+      std::cout << "Generating condor script ...";
+        
+      bm::Grid grid;
+      grid.SetFileName(outputname.c_str());
+      m_parser.SetGridModule(&grid);
+      m_parser.Execute(scriptname);
+      grid.WriteCondor();
+      std::cout << "Done." << std::endl;
+      }
+    if(command.GetOptionWasSet("generateGAD"))
+      {
+      std::string scriptname = command.GetValueAsString("generateGAD","scriptname");
+      std::string outputname = command.GetValueAsString("generateGAD","outputname");
+      bm::ScriptParser m_parser;
+      m_parser.SetApplicationPath(m_applicationpath);
+     
+      std::cout << "Generating kwgrid script ...";
+        
+      bm::Grid grid;
+      grid.SetFileName(outputname.c_str());
+      m_parser.SetGridModule(&grid);
+      m_parser.Execute(scriptname);
+      grid.WriteGAD();
+      std::cout << "Done." << std::endl;
+      }
   }
 
   return 0;
