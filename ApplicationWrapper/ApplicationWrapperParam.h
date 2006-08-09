@@ -34,7 +34,8 @@ public:
   
   void SetType(Type type);
   void SetType(int type);
-  Type GetType();
+  Type GetType() const;
+  const char* GetTypeAsChar() const;
   void SetParent(int parent);
   int GetParent() const;
 
@@ -45,14 +46,14 @@ public:
   void SetEnum(std::vector<MString>);
   std::vector<MString> GetEnum();
   void SetOptional(bool flag);
-  bool GetOptional();
+  bool GetOptional() const;
 
-  bool IsValueDefined() {return m_ValueDefined;}
+  bool IsValueDefined() const {return m_ValueDefined;}
   void SetValueDefined(bool val) {m_ValueDefined = val;}
 
   /** Set/Get if the parameters is an input data file */
-  void SetExternalData(bool external) {m_ExternalData = external;}
-  bool GetExternalData() const {return m_ExternalData;}
+  void SetExternalData(unsigned int external) {m_ExternalData = external;}
+  unsigned int GetExternalData() const {return m_ExternalData;}
 
 private:
   Type m_type;
@@ -62,7 +63,7 @@ private:
   int m_parent;
   std::vector<MString> m_enum;
   bool m_ValueDefined;
-  bool m_ExternalData;
+  unsigned int m_ExternalData;
 
 };
 

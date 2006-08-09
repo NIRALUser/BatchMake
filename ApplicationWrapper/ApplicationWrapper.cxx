@@ -43,6 +43,8 @@ ApplicationWrapper::ApplicationWrapper()
   m_name = "";
   m_Sequential = false;
   m_SequentialParams.clear();
+  m_DependsOn = -1; // previous one, i.e sequential
+  m_SingleNode = 0;
 }
 
 ApplicationWrapper::~ApplicationWrapper()
@@ -79,7 +81,7 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
         }
       
       // remove the absolute path if the relativePath is on
-      if(relativePath && (*it).GetExternalData())
+      if(relativePath && (*it).GetExternalData()>0)
         {
         MString appname = (*it).GetValue().rend("/");
         appname = appname.rend("\\");
@@ -483,7 +485,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader)
     if (m_balise == "Type")     m_param.SetType(m_reader.GetValue().toInt());
     if (m_balise == "Value")    m_param.SetValue(m_reader.GetValue());
     if (m_balise == "Parent")   m_param.SetParent(m_reader.GetValue().toInt());
-    if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toBool());
+    if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toInt());
     if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
     if (m_balise == "Enum")     m_list.push_back(m_reader.GetValue());
 
@@ -739,6 +741,18 @@ int status = 0;
       tag += (*it).tag;
       parentParam.SetValue(tag);
       parentParam.SetName((*it).name);
+
+      // Check the field and see if the data is external
+/*      std::vector<MetaCommand::Field>::const_iterator itField = (*it).fields.begin();
+      if((*itField).externaldata == MetaCommand::DATA_IN)
+        {
+        parentParam.SetExternalData(1);
+        }      
+      else if((*itField).externaldata == MetaCommand::DATA_OUT)
+        {
+        parentParam.SetExternalData(2);
+        }
+*/
       this->AddParam(parentParam);
       gotParent = true;
       parentId++;
@@ -754,7 +768,8 @@ int status = 0;
       {
       ApplicationWrapperParam param;
       std::string fullname = "";
-      if(strcmp((*it).name.c_str(),(*itField).name.c_str()))
+      //if(strcmp((*it).name.c_str(),(*itField).name.c_str()))
+      if(gotParent)      
         {
         fullname += (*it).name;
         fullname += ".";
@@ -762,9 +777,14 @@ int status = 0;
       fullname += (*itField).name;
       param.SetName(fullname);
       param.SetValue((*itField).value);
-      if((*itField).externaldata)
+
+      if((*itField).externaldata == MetaCommand::DATA_IN)
         {
-        param.SetExternalData(true);
+        param.SetExternalData(1);
+        }      
+      else if((*itField).externaldata == MetaCommand::DATA_OUT)
+        {
+        param.SetExternalData(2);
         }
 
       if((*itField).type == MetaCommand::FLOAT)

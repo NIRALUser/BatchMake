@@ -182,9 +182,10 @@ void ScriptDashboardSendAction::GenerateCondor()
   numParam += data;
   delete [] numParams;
   app.SetParameterValue("data.NumberOfValues","",numParam);
-  app.SetParameterValue("inputFile","",m_GridModule->GetCurrentScopeFile());
+  app.SetParameterValue("inputFile","","1");
+  app.SetParameterValue("inputFile.inputFile","",m_GridModule->GetCurrentScopeFile());
 
-  m_GridModule->AddApplication(&app);
+  m_GridModule->AddApplication(&app,m_GridModule->GetOutputDirectory());
  
 }
 

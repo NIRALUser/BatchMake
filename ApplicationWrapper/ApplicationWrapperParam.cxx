@@ -21,7 +21,7 @@ ApplicationWrapperParam::ApplicationWrapperParam()
   m_name = "NA";
   m_parent = 0;
   m_ValueDefined = false;
-  m_ExternalData = false;
+  m_ExternalData = 0;
 }
 
 ApplicationWrapperParam::~ApplicationWrapperParam()
@@ -38,7 +38,7 @@ void ApplicationWrapperParam::SetType(int type)
   m_type = (Type)type;
 }
 
-ApplicationWrapperParam::Type ApplicationWrapperParam::GetType()
+ApplicationWrapperParam::Type ApplicationWrapperParam::GetType() const
 {
   return m_type;
 }
@@ -92,9 +92,22 @@ void ApplicationWrapperParam::SetOptional(bool flag)
   m_optional = flag;
 }
 
-bool ApplicationWrapperParam::GetOptional()
+bool ApplicationWrapperParam::GetOptional() const
 {
   return m_optional;
 }
-
-
+  
+const char* ApplicationWrapperParam::GetTypeAsChar() const
+{
+  switch(m_type)
+    {
+    case Filepath: return "string"; break;
+    case Flag: return "string"; break;
+    case Int: return "int"; break;
+    case Float: return "float"; break;
+    case String: return "string"; break;
+    case Enum: return "enum"; break;
+    default:
+      return "NA";
+    }
+}

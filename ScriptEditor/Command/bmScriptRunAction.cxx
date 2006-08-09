@@ -93,7 +93,8 @@ void ScriptRunAction::GenerateCondor(const char* appname)
   sprintf(num,"%d",m_GridModule->GetNumberOfApplications());
   xmloutputname += num;
   xmloutputname += ".out.xml";
-  application->SetParameterValue("GenerateXMLFile","",xmloutputname);
+  application->SetParameterValue("GenerateXMLFile","","1");
+  application->SetParameterValue("GenerateXMLFile.GenerateXMLFile","",xmloutputname);
   delete [] num;
 
   m_GridModule->AddApplication(application);
@@ -121,35 +122,21 @@ void ScriptRunAction::GenerateCondor(const char* appname)
     return;
     }
 
-/*  ApplicationWrapper app;
-  app.SetApplicationPath("bmGridStore");
-  app.SetName("bmGridStore");
-  
-  ApplicationWrapperParam p;
-  p.SetName("filename");
-  app.AddParam(p);
-  p.SetName("name");
-  app.AddParam(p);
-  p.SetName("value");
-  app.AddParam(p);
-  p.SetName("parse");
-  app.AddParam(p);
-  p.SetName("appname");
-  app.AddParam(p);
-*/
   app.SetParameterValue("filename","",m_GridModule->GetCurrentScopeFile());
   app.SetParameterValue("name","","\" \"");
   app.SetParameterValue("value","","\" \"");
   //std::string parse = "-p ";
   //parse += xmloutputname;
-  app.SetParameterValue("parse","",xmloutputname.c_str());
+  app.SetParameterValue("parse","","1");
+  app.SetParameterValue("parse.parse","",xmloutputname.c_str());
   //std::string appvarname = "-a ";
   MString appn = m_parameters[1];
   appn = appn.removeChar('$');
   appn = appn.removeChar('{');
   appn = appn.removeChar('}');
   //appvarname += appn.toChar();
-  app.SetParameterValue("appname","",appn.toChar());
+  app.SetParameterValue("appname","","1");
+  app.SetParameterValue("appname.appname","",appn.toChar());
 
   m_GridModule->AddApplication(&app);
   

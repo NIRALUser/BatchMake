@@ -73,15 +73,7 @@ void ScriptSetAction::GenerateCondor(std::string name,std::string value)
               << appName.toChar() << std::endl;
     return;
     }   
-/*
-  ApplicationWrapperParam p;
-  p.SetName("filename");
-  app.AddParam(p);
-  p.SetName("name");
-  app.AddParam(p);
-  p.SetName("value");
-  app.AddParam(p);
-*/   
+
   app.SetParameterValue("filename","",m_GridModule->GetCurrentScopeFile());
   app.SetParameterValue("name","",name);
   app.SetParameterValue("value","",value);

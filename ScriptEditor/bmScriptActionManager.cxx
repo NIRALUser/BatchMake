@@ -49,6 +49,12 @@
 #include "bmScriptCloseTCPSocketAction.h"
 #include "bmScriptAddMethodInputAction.h"
 #include "bmScriptAddMethodOutputAction.h"
+#include "bmScriptGridDataHostAction.h"
+#include "bmScriptGridOutputHostAction.h"
+#include "bmScriptDataDirectoryAction.h"
+#include "bmScriptOutputDirectoryAction.h"
+#include "bmScriptGridSingleNodeAction.h"
+
 #include "Timer.h"
 
 
@@ -156,6 +162,11 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(CloseTCPSocket);
   BM_NEWKEYWORD(AddMethodInput);
   BM_NEWKEYWORD(AddMethodOutput);
+  BM_NEWKEYWORD(GridDataHost);
+  BM_NEWKEYWORD(GridOutputHost);
+  BM_NEWKEYWORD(DataDirectory);
+  BM_NEWKEYWORD(OutputDirectory);
+  BM_NEWKEYWORD(GridSingleNode);
   return m_list;
 }
 
@@ -197,6 +208,11 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(CloseTCPSocket);
   BM_NEWACTION(AddMethodInput);
   BM_NEWACTION(AddMethodOutput);
+  BM_NEWACTION(GridDataHost);
+  BM_NEWACTION(GridOutputHost);
+  BM_NEWACTION(DataDirectory);
+  BM_NEWACTION(OutputDirectory);
+  BM_NEWACTION(GridSingleNode);
   return 0;
 }
 

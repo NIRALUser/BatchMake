@@ -205,7 +205,14 @@ void ApplicationWrapperGUIControls::OnSelectParameters()
       g_type->value(m_param->GetType());
       g_parent->value(m_param->GetParent());
       g_optional->value(m_param->GetOptional());
-      g_external->value(m_param->GetExternalData());
+      if(m_param->GetExternalData()>0)
+        {
+        g_external->value(true);
+        }
+      else
+        {
+        g_external->value(false);
+        }
       g_enumlist->clear();
       g_enumlist->add("New...");
       for (unsigned int i=0;i<m_param->GetEnum().size();i++)

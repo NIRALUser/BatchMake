@@ -57,6 +57,11 @@ Command/bmScriptSendTCPAction.cxx
 Command/bmScriptCloseTCPSocketAction.cxx
 Command/bmScriptAddMethodInputAction.cxx
 Command/bmScriptAddMethodOutputAction.cxx
+Command/bmScriptGridDataHostAction.cxx
+Command/bmScriptGridOutputHostAction.cxx
+Command/bmScriptOutputDirectoryAction.cxx
+Command/bmScriptDataDirectoryAction.cxx
+Command/bmScriptGridSingleNodeAction.cxx
 )
 
 LINK_LIBRARIES(

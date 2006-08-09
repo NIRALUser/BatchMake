@@ -175,9 +175,6 @@ protected:
 
   // The Script Action manager keeps global variables regarding the dashboard
   Dashboard m_Dashboard;
-
-  //std::string m_DashboardURL;
-  //std::string m_DashboardExperiment;
 };
 
 } // end namespace bm

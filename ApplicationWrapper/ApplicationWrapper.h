@@ -67,6 +67,26 @@ public:
     }
   bool GetSequentialParsing() {return m_Sequential;}
 
+  void SetDataHost(const char* hostname) {m_DataHost = hostname;}
+  const char* GetDataHost() {return m_DataHost.c_str();}
+  
+  void SetOutputHost(const char* hostname) {m_OutputHost = hostname;}
+  const char* GetOutputHost() {return m_OutputHost.c_str();}
+ 
+  void SetOutputDirectory(const char* directory) {m_OutputDirectory = directory;}
+  const char* GetOutputDirectory() {return m_OutputDirectory.c_str();}
+  void SetDataDirectory(const char* directory) {m_DataDirectory = directory;}
+  const char* GetDataDirectory() {return m_DataDirectory.c_str();}
+
+  void SetDependsOn(int val) {m_DependsOn = val;}
+  int  GetDependsOn() {return m_DependsOn;}
+
+  void SetDependencyTag(const char* tag) {m_DependencyTag = tag;}
+  const char* GetDependencyTag() {return m_DependencyTag.c_str();}
+
+  void SetSingleNode(int single) {m_SingleNode = single;}
+  int GetSingleNode() {return m_SingleNode;}
+
 private:
   MString m_name;
   MString m_applicationpath;
@@ -74,7 +94,13 @@ private:
   bool    m_Sequential; // Set if we should use the sequential application
   std::vector<ApplicationWrapperParam> m_params;
   std::vector<ApplicationWrapperParam> m_SequentialParams;
-  
+  std::string m_DataHost;
+  std::string m_OutputHost;
+  std::string m_OutputDirectory;
+  std::string m_DataDirectory;
+  int         m_DependsOn;
+  std::string m_DependencyTag;
+  int        m_SingleNode;
 };
 
 #endif
