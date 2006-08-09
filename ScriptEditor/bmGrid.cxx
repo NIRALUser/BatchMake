@@ -223,8 +223,24 @@ void Grid::WriteGAD()
   delete [] temp;
 
   fprintf(fic," <componentAction type=\"JobSubmission\" name=\"app%d\">\n",appnum);
+
+  // We assume that the current application is in the path of the node
+  std::string applicationName = (*it).GetApplicationPath().toChar();
+  int pos = applicationName.find_last_of("/");
+  int pos2 = applicationName.find_last_of("\\");
+
+  if(pos2 > pos)
+    {
+    pos = pos2;
+    }
+
+  if(pos != -1)
+    {
+    applicationName = applicationName.substr(pos+1,applicationName.size()-pos-1);
+    }
+
   fprintf(fic,"  <parameter name=\"Executable\" value=\"%s\"/>\n"
-                                       ,(*it).GetApplicationPath().toChar());
+                                       ,applicationName.c_str());
 
   std::string commandline = "";
   itParams = params.begin();
