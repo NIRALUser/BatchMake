@@ -137,14 +137,14 @@ int main(int argc, char* argv[])
   command.SetDescription("Store variable in a file");
 
   // Required field
-  command.AddField("filename","Name of the file to store the variables",MetaCommand::STRING);
+  command.AddField("filename","Name of the file to store the variables",MetaCommand::STRING,MetaCommand::DATA_OUT);
   command.AddField("name","Name of the variable",MetaCommand::STRING);
   command.AddField("value","Value to store",MetaCommand::STRING);
 
   // Add option to parse the output of an executable
   command.SetOption("parse","p",false,
                     "Parse a file and add the output to the current filename",
-                    MetaCommand::STRING);
+                    MetaCommand::STRING,"",MetaCommand::DATA_IN);
 
   // Add option to set the app variable name
   command.SetOption("appname","a",false,

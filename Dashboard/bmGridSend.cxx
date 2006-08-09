@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
   
   // Parse an input file to find the values
   command.SetOption("inputFile","i",false,
-                    "Parse input file to find the missing values",MetaCommand::STRING);
+    "Parse input file to find the missing values",MetaCommand::STRING,"",MetaCommand::DATA_IN);
 
   // Parsing
   if(!command.Parse(argc,argv))
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
   // Send the data to the dashboard
   url += "/dashboard.php";
   MString m_output = m_request.Send(url.c_str());
- 
+
   if (m_output.length()>3)
     {
     std::cout << "Bad Host or connexion problem" << std::endl;
