@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
   command.SetAuthor("Kitware Inc");
   command.SetDescription("Count the number of pixel above a certain threshold");
 
-  command.AddField("filename","Image filename",MetaCommand::STRING);
+  command.AddField("filename","Image filename",MetaCommand::STRING,MetaCommand::DATA_IN);
   command.AddField("threshold","threshold",MetaCommand::FLOAT);
 
   // This should be put before the parsing
