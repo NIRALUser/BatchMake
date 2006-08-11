@@ -682,8 +682,6 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
       }
     } 
 #endif
-  
-  std::cout << "OUTPUT = " << m_output.c_str() << std::endl;
 
   // Analayze the output of the program
   MetaCommand parser;
