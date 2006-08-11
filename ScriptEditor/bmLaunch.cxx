@@ -257,14 +257,22 @@ void Launch::Execute(MString m_command)
         {
         m_param = "";
         }
-     
-      if (m_param.length() != 0)
+
+      std::string parameters = m_param.toChar();
+      if(parameters.size()>0)
         {
-        m_param = m_param + 1;
+        if(parameters[parameters.size()-1] == ' ')
+          {
+          parameters = parameters.substr(0,parameters.size()-1);
+          }
+        if(parameters[0] == ' ')
+          {
+          parameters = parameters.substr(1,parameters.size()-1);
+          }
         }
 
-      if (execlp(m_prog.toChar(),(m_prog.rend("/")+1).toChar(),m_param.toChar(),NULL) == -1)
-        {         
+      if (execlp(m_prog.toChar(),m_prog.toChar(),parameters.c_str(),NULL) == -1)
+        {
         if (errno == 2)
           {
           std::cerr << (MString("Program (") + m_prog + ") not found!").toChar() << std::endl;      
