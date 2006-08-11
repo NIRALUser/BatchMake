@@ -229,7 +229,7 @@ void ScriptRunAction::Execute()
   this->ParseXMLOutput(m_output.toChar());
 
   m_manager->SetVariable(m_parameters[0],MString("'") + m_output + "'");
-  m_progressmanager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()) + m_manager->Convert(m_parameters[1]));
+  m_progressmanager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
   m_progressmanager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
   
   int m_offset = 0;
