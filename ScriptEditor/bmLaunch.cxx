@@ -55,6 +55,9 @@ void Launch::Execute(MString m_command)
   m_output = "";
   m_error = "";
 
+
+  std::cout << m_command.toChar() << std::endl;
+
 #ifdef WIN32
 
   char buffer[BUFSIZ+1];
@@ -253,28 +256,6 @@ void Launch::Execute(MString m_command)
    
       fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
       fcntl(stderr_pipe[1], F_SETFL, O_NONBLOCK);
-
-      /*if (m_param == m_prog)
-        {
-        m_param = "";
-        }
-
-      std::string parameters = m_param.toChar();
-      if(parameters.size()>0)
-        {
-        if(parameters[parameters.size()-1] == ' ')
-          {
-          parameters = parameters.substr(0,parameters.size()-1);
-          }
-        if(parameters[0] == ' ')
-          {
-          parameters = parameters.substr(1,parameters.size()-1);
-          }
-        }*/
-
-      //parameters = "-vxml";
-
-      //if (execlp(m_prog.toChar(),m_prog.toChar(),parameters.c_str(),NULL) == -1)
 
       std::string com = m_command.toChar();
       std::vector<std::string> args;
