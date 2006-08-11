@@ -29,7 +29,7 @@ ProgressManager::~ProgressManager()
 
 void ProgressManager::SetStatus(MString status)
 {
-  std::cout << " Status: " << status.toChar() << std::endl;
+  std::cout << "Status: " << status.toChar() << std::endl;
 }
 
 

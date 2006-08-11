@@ -27,6 +27,7 @@
   #include <sys/wait.h>
   #include <fcntl.h>
   #include <errno.h>
+  #include <vector>
 #endif
 
 #include <fstream>
@@ -253,7 +254,7 @@ void Launch::Execute(MString m_command)
       fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
       fcntl(stderr_pipe[1], F_SETFL, O_NONBLOCK);
 
-      if (m_param == m_prog)
+      /*if (m_param == m_prog)
         {
         m_param = "";
         }
@@ -269,15 +270,65 @@ void Launch::Execute(MString m_command)
           {
           parameters = parameters.substr(1,parameters.size()-1);
           }
+        }*/
+
+      //parameters = "-vxml";
+
+      //if (execlp(m_prog.toChar(),m_prog.toChar(),parameters.c_str(),NULL) == -1)
+
+      std::string com = m_command.toChar();
+      std::vector<std::string> args;
+      
+      bool inword = false;
+      unsigned long start = 0;
+      for(unsigned int i=0;i<com.size();i++)
+        {
+        if(com[i] == ' ' && inword)
+          {
+          std::string arg = com.substr(start,i-start);
+          args.push_back(arg);
+          inword = false;
+          }
+        if(com[i]!=' ' && !inword)
+          {
+          start = i;
+          inword = true;
+          }
         }
 
-      if (execlp(m_prog.toChar(),m_prog.toChar(),parameters.c_str(),NULL) == -1)
+      if(args.size()==0)
         {
+        args.push_back(com);
+        }
+
+      char* arguments[args.size()+1];
+      
+      std::vector<std::string>::const_iterator it = args.begin();
+      unsigned int j=0;
+     
+      while(it != args.end())
+        {
+        arguments[j] = new char[255];
+        strcpy(arguments[j],(*it).c_str());
+        it++;
+        j++;
+        }
+
+      arguments[j] = (char *)0;
+
+      if (execvp(arguments[0],arguments) == -1)
+         {
         if (errno == 2)
           {
           std::cerr << (MString("Program (") + m_prog + ") not found!").toChar() << std::endl;      
           }
         }
+      
+      for(int i=0;i<args.size()+1;i++)
+        {
+        delete [] arguments[i];
+        }
+
       exit(EXIT_FAILURE);
       } 
     else   
