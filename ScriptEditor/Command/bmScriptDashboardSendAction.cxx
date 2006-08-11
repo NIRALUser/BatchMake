@@ -273,7 +273,13 @@ void ScriptDashboardSendAction::Execute()
           {
           MString param = "${";
           param += (*itParam).variable.c_str();
+          
+          if((*itParam).ideal == true)
+            {
+            param += "_ideal_output";
+            }
           param += "}";
+          std::cout << param.toChar() << " : " << (*itParam).name.c_str() << " :  " << m_manager->Convert(param).toChar() << std::endl;
           m_request.AddParam((*itParam).name.c_str(),m_manager->Convert(param).toChar());
           itParam++;
           }

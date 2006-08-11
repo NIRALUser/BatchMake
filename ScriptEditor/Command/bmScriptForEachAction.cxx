@@ -100,11 +100,17 @@ void ScriptForEachAction::Execute()
   }
 
   // We put a grid barrier
-  m_GridModule->SetGridBarrier();
+  if(m_GridModule)
+    {
+    m_GridModule->SetGridBarrier();
+    }
 
   for (unsigned int loop=0;loop<m_loopvalue.size();loop++)
     {
-    m_GridModule->SetDistributed(true);
+    if(m_GridModule)
+      {
+      m_GridModule->SetDistributed(true);
+      }
     m_manager->SetVariable(m_parameters[0],m_loopvalue[loop]); 
     for (unsigned int i=0;i<m_action.size();i++)
       {
@@ -114,11 +120,12 @@ void ScriptForEachAction::Execute()
         }
       }
     }
-  
-  m_GridModule->SetDistributed(false);
-
-  // Remove Grid barrier
-  m_GridModule->RemoveGridBarrier();
+  if(m_GridModule)
+    {
+    m_GridModule->SetDistributed(false);
+    // Remove Grid barrier
+    m_GridModule->RemoveGridBarrier();
+    }
 }
 
 

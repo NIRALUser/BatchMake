@@ -55,13 +55,16 @@ MString ScriptGridSingleNodeAction::Help()
 /** */
 void ScriptGridSingleNodeAction::Execute()
 {
-  if(!strcmp(m_parameters[0].toChar(),"on"))
+  if(m_GridModule)
     {
-    m_GridModule->SetSingleNode(true);
-    }
-  else
-    {
-    m_GridModule->SetSingleNode(false);
+    if(!strcmp(m_parameters[0].toChar(),"on"))
+      {
+      m_GridModule->SetSingleNode(true);
+      }
+    else
+      {
+      m_GridModule->SetSingleNode(false);
+      }
     }
 }
 

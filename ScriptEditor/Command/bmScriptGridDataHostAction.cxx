@@ -55,7 +55,10 @@ MString ScriptGridDataHostAction::Help()
 /** */
 void ScriptGridDataHostAction::Execute()
 {
-  m_GridModule->SetDataHost(m_parameters[0].toChar());
+  if(m_GridModule)
+    {
+    m_GridModule->SetDataHost(m_parameters[0].toChar());
+    }
 }
 
 } // end namespace bm

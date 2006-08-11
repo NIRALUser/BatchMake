@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptSetAction.cxx
+  Module:    bmScriptSetIdealOutputAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,24 +13,24 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#include "bmScriptSetAction.h"
+#include "bmScriptSetIdealOutputAction.h"
 
 namespace bm {
 
-ScriptSetAction::ScriptSetAction()
+ScriptSetIdealOutputAction::ScriptSetIdealOutputAction()
 : ScriptAction()
 {
 }
 
-ScriptSetAction::~ScriptSetAction()
+ScriptSetIdealOutputAction::~ScriptSetIdealOutputAction()
 {
 }
 
-bool ScriptSetAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptSetIdealOutputAction::TestParam(ScriptError* error,int linenumber)
 {
   if (m_parameters.size() <2)
     {
-    error->SetError(MString("No enough parameter for Set"),linenumber);
+    error->SetError(MString("No enough parameter for SetIdealOutput"),linenumber);
     return false;
     }
 
@@ -43,13 +43,13 @@ bool ScriptSetAction::TestParam(ScriptError* error,int linenumber)
   return true;
 }
 
-MString ScriptSetAction::Help()
+MString ScriptSetIdealOutputAction::Help()
 {
-  return "Set(<variable> <name1> <name2> ...)";
+  return "SetIdealOutput(<variable> <name1> <name2> ...)";
 }
 
 /** Generate the condor script */
-void ScriptSetAction::GenerateGrid(std::string name,std::string value)
+void ScriptSetIdealOutputAction::GenerateCondor(std::string name,std::string value)
 {
   // We create the bmGridStore application and send it to condor
   ApplicationWrapper app;
@@ -81,7 +81,7 @@ void ScriptSetAction::GenerateGrid(std::string name,std::string value)
   m_GridModule->AddApplication(&app);
 }
 
-void ScriptSetAction::Execute()
+void ScriptSetIdealOutputAction::Execute()
 {
   MString m_value;
   MString param;
@@ -110,12 +110,15 @@ void ScriptSetAction::Execute()
     m_value+=m_manager->Convert(m_parameters[i]);
     }
 
-  m_manager->SetVariable(m_parameters[0],m_value);
+  std::string varname = m_parameters[0].toChar();
+  varname += "_ideal_output";
+
+  m_manager->SetVariable(varname.c_str(),m_value);
 
   // If we are on the grid we use the bmGridStore to store the variable
   if(m_GridModule)
     {
-    this->GenerateGrid(m_parameters[0].toChar(),m_value.toChar());
+    this->GenerateCondor(varname.c_str(),m_value.toChar());
     return;
     }
 }

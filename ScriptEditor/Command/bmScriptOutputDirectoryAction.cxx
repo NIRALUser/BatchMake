@@ -55,8 +55,10 @@ MString ScriptOutputDirectoryAction::Help()
 /** */
 void ScriptOutputDirectoryAction::Execute()
 {
-  m_GridModule->SetOutputDirectory(m_parameters[0].toChar());
-  //m_manager->SetOutputDirectory(m_parameters[0].toChar());
+  if(m_GridModule)
+    {
+    m_GridModule->SetOutputDirectory(m_parameters[0].toChar());
+    }
 }
 
 } // end namespace bm

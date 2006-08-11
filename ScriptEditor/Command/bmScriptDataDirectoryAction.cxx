@@ -55,8 +55,10 @@ MString ScriptDataDirectoryAction::Help()
 /** */
 void ScriptDataDirectoryAction::Execute()
 {
-  m_GridModule->SetDataDirectory(m_parameters[0].toChar());
-  //m_manager->SetDataDirectory(m_parameters[0].toChar());
+  if(m_GridModule)
+    {
+    m_GridModule->SetDataDirectory(m_parameters[0].toChar());
+    }
 }
 
 } // end namespace bm
