@@ -191,10 +191,13 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
           std::vector<ApplicationWrapperParam>::iterator itChild = m_params.begin();
           while(itChild != m_params.end())
             {
-            if(!strcmp((*itChild).GetName().toChar(),second.c_str())
+            std::string childname = first;
+            childname += ".";
+            childname += second;
+             if(!strcmp((*itChild).GetName().toChar(),childname.c_str())
               && ((*itChild).GetParent() == parent)
               )
-              {
+              {           
               (*itChild).SetValueDefined(true);
               (*itChild).SetValue(value.c_str());
               }
@@ -205,8 +208,6 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
       }
     it++;
     }
-
-
 }
 
 MString ApplicationWrapper::GetApplicationPath()
