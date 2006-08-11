@@ -504,13 +504,12 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
   // Run the application
   std::string path = _path;
   std::string program = path;
-  program += " -vxml";
-  std::cout << "Running = " << program.c_str() << std::endl;
+  std::string arguments = "-vxml";
+  std::cout << "Running = " << program.c_str() << " " << arguments.c_str() << std::endl;
   std::string m_output = "";
   unsigned int i=0;
 
 #ifdef WIN32
-
   char buffer[BUFSIZ+1];
 
   STARTUPINFO si;
@@ -544,9 +543,13 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
 
   memset(buffer,'\0',sizeof(buffer)); 
   
+  std::string commandline = program;
+  commandline += " ";
+  commandline += arguments;
+
   // Start the child process. 
   if( !CreateProcess( NULL,       // No module name (use command line). 
-      (char*)program.c_str(),  // Command line. 
+      (char*)commandline.c_str(),  // Command line. 
       NULL,                       // Process handle not inheritable. 
       NULL,                       // Thread handle not inheritable. 
       TRUE,                       // Set handle inheritance to FALSE. 
@@ -598,7 +601,6 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
     memset(buffer,'\0',sizeof(buffer));
     val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL);
     }
-
   } 
 
   //Terminate Process
@@ -616,23 +618,23 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
   int fork_result;
   int data_processed;
   int nchars = 0;
-int status = 0;
+  int status = 0;
 
   memset(buffer,'\0',sizeof(buffer));
 
-   if ( (pipe(stdin_pipe)==0)   
+  if ( (pipe(stdin_pipe)==0)   
         && (pipe(stdout_pipe)==0)      )
-   {
-     fork_result = fork();
-     if (fork_result == -1)
-     {
-       std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
+    {
+    fork_result = fork();
+    if (fork_result == -1)
+      {
+      std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
       exit(EXIT_FAILURE);
-     }  
-     else if (fork_result == 0)
-     { 
-       // This is the child
-       close(0);
+      }  
+    else if (fork_result == 0)
+      { 
+      // This is the child
+      close(0);
       dup(stdin_pipe[0]);
       close(stdin_pipe[0]);
       close(stdin_pipe[1]);
@@ -644,18 +646,18 @@ int status = 0;
 
       fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
 
-    if (execlp(program.c_str(),program.c_str(),"",NULL) == -1)
-    {         
-  if (errno == 2)
-  {
-      std::cout << "Program not found : " << program  << std::endl;
-   }
-    }
-
+      //if (execlp(program.c_str(),program.c_str(),"",NULL) == -1)
+      if (execlp(program.c_str(),program.c_str(),arguments.c_str(),NULL) == -1)
+        {         
+        if (errno == 2)
+          {
+          std::cout << "Program not found : " << program  << std::endl;
+          }
+        }
       exit(EXIT_FAILURE);
-    } 
+      } 
     else   
-    { 
+      {
       // This is the parent
       close(stdin_pipe[0]);
       close(stdin_pipe[1]);
@@ -665,26 +667,24 @@ int status = 0;
 
       while(1)   
         {      
-    
-       data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
-       if (data_processed != -1)
-       {
-   for (unsigned int k=0;k<strlen(buffer);k++)
-           m_output += buffer[k];
-       
-
-         memset(buffer,'\0',sizeof(buffer));
-       }
-      
-
-       if ((data_processed == 0) ) break;
+        data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
+        if (data_processed != -1)
+          {
+          for (unsigned int k=0;k<strlen(buffer);k++)
+            {
+            m_output += buffer[k];
+            }
+          memset(buffer,'\0',sizeof(buffer));
+          }
+        if ((data_processed == 0) ) break;
         }
-
-     close(stdout_pipe[0]);
-    }
-  } 
+      close(stdout_pipe[0]);
+      }
+    } 
 #endif
   
+  std::cout << "OUTPUT = " << m_output.c_str() << std::endl;
+
   // Analayze the output of the program
   MetaCommand parser;
   parser.ParseXML(m_output.c_str());
