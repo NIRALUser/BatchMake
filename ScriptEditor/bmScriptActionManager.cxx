@@ -54,6 +54,8 @@
 #include "bmScriptDataDirectoryAction.h"
 #include "bmScriptOutputDirectoryAction.h"
 #include "bmScriptGridSingleNodeAction.h"
+#include "bmScriptAddMethodIdealOutputAction.h"
+#include "bmScriptSetIdealOutputAction.h"
 
 #include "Timer.h"
 
@@ -167,6 +169,8 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(DataDirectory);
   BM_NEWKEYWORD(OutputDirectory);
   BM_NEWKEYWORD(GridSingleNode);
+  BM_NEWKEYWORD(AddMethodIdealOutput);
+  BM_NEWKEYWORD(SetIdealOutput);
   return m_list;
 }
 
@@ -213,6 +217,8 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(DataDirectory);
   BM_NEWACTION(OutputDirectory);
   BM_NEWACTION(GridSingleNode);
+  BM_NEWACTION(AddMethodIdealOutput);
+  BM_NEWACTION(SetIdealOutput);
   return 0;
 }
 
@@ -744,7 +750,8 @@ bool ScriptActionManager::AddDashboardMethod(const char* var, const char* expvar
 bool ScriptActionManager::AddDashboardMethodParameter(const char* var, 
                                                       const char* methVar, 
                                                       const char* name,
-                                                      bool output)
+                                                      bool output,
+                                                      bool ideal)
 {
   // Check that the experiment exist
   std::vector<DashboardExperiment>::iterator it = m_Dashboard.experiments.begin();
@@ -760,7 +767,7 @@ bool ScriptActionManager::AddDashboardMethodParameter(const char* var,
         bool found = false;
         while(itParam != (*itMeth).parameters.end())
           {
-          if(!strcmp((*itParam).variable.c_str(),var))
+          if(!strcmp((*itParam).variable.c_str(),var) && (*itParam).ideal == ideal)
             {
             found = true;
             break;
@@ -774,6 +781,7 @@ bool ScriptActionManager::AddDashboardMethodParameter(const char* var,
           param.method = methVar;
           param.name = name;
           param.output = output;
+          param.ideal = ideal;
           (*itMeth).parameters.push_back(param);
           }
         }
