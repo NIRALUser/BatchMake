@@ -44,9 +44,9 @@ void ScriptEchoAction::Execute()
 {
   MString m_value;
   for (unsigned int i=0;i<m_parameters.size();i++)
-  {
+    {
     m_value += m_manager->Convert(m_parameters[i]).removeChar('\'');
-  }
+    }
   m_manager->GetProgressManager()->DisplayOutput(m_value+"\n");
 }
 
