@@ -6,6 +6,7 @@
 #include <string.h>
 #include <iostream>
 #include <vector>
+#include <string>
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -39,7 +40,8 @@ typedef struct
 typedef struct
 {
   std::string name;
-  std::string value;
+  char* value;
+  unsigned long size;
 } Paramstruct;
 
 class HttpRequest  
@@ -48,8 +50,8 @@ public:
   HttpRequest();
   virtual ~HttpRequest();
 
-  void AddParam(std::string name,std::string value);
-  void SetFile(std::string filename);
+  void AddParam(std::string name,const char* value,unsigned long size=0);
+  void SetFile(std::string name,std::string filename);
   char* Send(std::string url);
   std::string GetHostName();
   std::string GetHostIp();
@@ -64,9 +66,11 @@ private:
         bool          ValidHostChar(char ch);
   void    ParseURL(const char* url,char* protocol,int lprotocol, char* host,int lhost,char* request,int lrequest,int *port);
   int      SendHTTP(const char*  url,char* headers,unsigned char *post, unsigned int postLength,MessageStruct *req);
-  std::string CreateFile(std::string filename);
+  std::string CreateFile(std::string name,std::string filename);
 
-  std::string m_filename;
+  typedef std::string StringType;
+  typedef std::pair<StringType,StringType> FilePairType;
+  std::vector<FilePairType> m_Filenames;
   std::vector<Paramstruct> m_paramlist;
 };
 

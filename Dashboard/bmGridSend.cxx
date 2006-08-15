@@ -46,7 +46,8 @@ int main(int argc, char* argv[])
   command.AddOptionField("createMethodParameter","experiment",MetaCommand::STRING,true);
   command.AddOptionField("createMethodParameter","method",MetaCommand::STRING,true);
   command.AddOptionField("createMethodParameter","name",MetaCommand::STRING,true);
-  command.AddOptionField("createMethodParameter","type",MetaCommand::STRING,false);
+  command.AddOptionField("createMethodParameter","type",MetaCommand::STRING,true);
+  command.AddOptionField("createMethodParameter","paramtype",MetaCommand::STRING,false);
 
   // Send the data
   command.SetOption("send","send",false,"Send data to the dashboard");
@@ -81,6 +82,7 @@ int main(int argc, char* argv[])
   std::string createParameterExperiment = command.GetValueAsString("createMethodParameter","experiment");
   std::string createParameterMethod = command.GetValueAsString("createMethodParameter","method");
   std::string createParameterType = command.GetValueAsString("createMethodParameter","type");
+  std::string createParameterParamType = command.GetValueAsString("createMethodParameter","paramtype");
 
   std::string sendDataExperiment = command.GetValueAsString("send","experiment");
   std::string sendDataMethod = command.GetValueAsString("send","method");
@@ -112,7 +114,12 @@ int main(int argc, char* argv[])
     m_request.AddParam("name",createParameterName);
     m_request.AddParam("experiment",createParameterExperiment);
     m_request.AddParam("methodname",createParameterMethod);
-    m_request.AddParam("type",createParameterType); // 0 = input | 1 = output
+    m_request.AddParam("type",createParameterType); // 0 = input | 1 = output | 2 = idealoutput
+
+    if(createParameterParamType.size()>0)
+      {
+      m_request.AddParam("paramtype",createParameterParamType);
+      }
     }
  else if(command.GetOptionWasSet("send"))
     {
@@ -169,7 +176,7 @@ int main(int argc, char* argv[])
         value = buffer.substr(pos+val.size(),size-pos-val.size());
         }
       m_request.AddParam(name,value);
-      std::cout << name.c_str() << " : " << value.c_str() << std::endl;
+      //std::cout << name.c_str() << " : " << value.c_str() << std::endl;
       }
     }
 

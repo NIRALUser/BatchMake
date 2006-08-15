@@ -1,10 +1,8 @@
-//#include "stdafx.h"
 #include "HttpRequest.h"
 
 HttpRequest::HttpRequest()
 {
   m_paramlist.clear();
-  m_filename = "";
 }
 
 HttpRequest::~HttpRequest()
@@ -217,10 +215,10 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
     strcpy(headerSend, "GET ");
   }
     else 
-  {
+    {
     SendString(sock,"POST ");
     strcpy(headerSend, "POST ");
-  }
+    }
     SendString(sock,request);
     strcat(headerSend, request);
 
@@ -245,13 +243,6 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
     SendString(sock,"User-Agent: Mozilla/4.0\r\n");
     strcat(headerSend, "User-Agent: Mozilla/4.0\r\n");
 
-    if(postLength)
-    {
-      sprintf(buffer,"Content-Length: %ld\r\n",postLength);
-      SendString(sock,buffer);
-      strcat(headerSend, buffer);
-    }
-
     SendString(sock,"Host: ");
     strcat(headerSend, "Host: ");
 
@@ -260,21 +251,80 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
 
     SendString(sock,"\r\n");
     strcat(headerSend, "\r\n");
+    if(postLength)
+      {
+      sprintf(buffer,"Content-Length: %ld\r\n",postLength-4);
+      SendString(sock,buffer);
+      strcat(headerSend, buffer);
+      }
 
     if( (headerReceive!=NULL) && *headerReceive )
-    {
+      {
       SendString(sock,headerReceive);
       strcat(headerSend, headerReceive);
-    }
+      }
     
     SendString(sock,"\r\n");                // Send a blank line to signal end of HTTP headerReceive
     strcat(headerSend, "\r\n");
 
     if( (post!=NULL) && postLength )
-    {
+      {
       send(sock,(const char*)post,postLength,0);
-    }
-    
+      }
+
+ /*
+  std::string test = "";
+
+  std::string line = "Content-Type: multipart/form-data; boundary=\"123456789123456789\"\r\n";
+  long prev = test.size();
+  test += line;
+  std::cout << test.size()-prev << std::endl;
+  prev = test.size();
+  test += "\r\n";
+  std::cout << test.size()-prev << std::endl; 
+  prev = test.size();
+  std::string test2 = "--123456789123456789\r\n";
+  test2 += "Content-Disposition: form-data; name=\"gender\"\r\n";
+  test2 += "\r\n";
+  test2 += "M\r\n";
+  test2 += "--123456789123456789\r\n";
+  test2 += "Content-Disposition: form-data; name=\"born\"\r\n";
+  test2 += "\r\n";
+  test2 += "1964\r\n";
+  test += test2;
+  test += "--123456789123456789\r\n";
+  std::cout << test.size()-prev << std::endl; 
+  prev = test.size();
+  test += "Content-Disposition: form-data; name=\"init\"; filename=\".profile\"\r\n";
+  std::cout << test.size()-prev << std::endl; 
+  prev = test.size();
+  test += "Content-Type: text/plain\r\n";
+  std::cout << test.size()-prev << std::endl; 
+  prev = test.size();
+  test += "\r\n";
+  std::cout << test.size()-prev << std::endl; 
+  prev = test.size();
+  test += "PATH=/local/perl/bin:$PATH\r\n";
+  std::cout << test.size()-prev << std::endl; 
+  prev = test.size();
+  test += "\r\n";
+  std::cout << test.size()-prev << std::endl; 
+  prev = test.size();
+  test += "--123456789123456789--\r\n";
+  std::cout << test.size()-prev << std::endl; 
+  prev = test.size();
+
+  char* testl = new char[100];
+  std::cout << test.size() << std::endl;
+  std::cout << "Total = " << test.size()-line.size() << std::endl;
+  //std::cout << "Test 2 = " << test2.size() << std::endl;
+  sprintf(testl,"Content-Length: %d\r\n",test.size()-line.size()-6); //138
+  std::cout << testl <<  std::endl;
+  std::string sending = testl;
+  sending += test;
+
+  SendString(sock,sending.c_str());
+*/
 
     // Read the result
     MemBufferCreate(&headersBuffer );
@@ -333,22 +383,24 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
     return 0;
 }
 
-std::string HttpRequest::CreateFile(std::string filename)
+std::string HttpRequest::CreateFile(std::string name,std::string filename)
 {
   FILE* m_file;
   m_file = fopen(filename.c_str(),"rb");
 
   if (m_file == 0)
-  {
+    {
     return "";
-  }
+    }
 
-  std::string m_text = "-----------------------------29772313742745\n";
+  std::string m_text = "--29772313742745\n";
   m_text += "Content-Disposition: form-data; name=\"MAX_FILE_SIZE\"\n";
   m_text += "\n";
   m_text += "100000\n";
-  m_text += "-----------------------------29772313742745\n";
-  m_text += "Content-Disposition: form-data; name=\"userfile\"; filename=\"";
+  m_text += "--29772313742745\n";
+  m_text += "Content-Disposition: form-data; name=\"";
+  m_text += name;
+  m_text += "\"; filename=\"";
  
   if (filename.rfind("/") != -1)
    m_text += filename.substr(filename.rfind("/")+1);
@@ -358,73 +410,96 @@ std::string HttpRequest::CreateFile(std::string filename)
     else
       m_text += filename;
 
-  m_text += "\"\n";
-  m_text += "Content-Type: text/plain\n";
-  m_text += "\n";
+  m_text += "\"\r\n";
+  m_text += "Content-Type: text/plain\r\n";
+  m_text += "\r\n";
   unsigned char m_val;
   while (!feof(m_file))
-  {
+    {
     fread(&m_val,1,1,m_file);
     m_text += m_val;
-  }
-  
-  m_text += "\n";
+    }  
+  m_text += "\r\n";
+
+  fclose(m_file);
+
   return m_text;
 }
 
-void HttpRequest::AddParam(std::string name,std::string value)
+void HttpRequest::AddParam(std::string name,const char* value,unsigned long size)
 {
   Paramstruct m_param;
   m_param.name = name;
-  m_param.value = value;
+  if(size==0)
+    {
+    size = strlen(value);
+    }
+  m_param.value = new char[size+1];
+  strncpy(m_param.value,value,size);
+  m_param.value[size] = '\0';
+  m_param.size = size;
+  std::string temp = m_param.value;
+
   m_paramlist.push_back(m_param);
 }
 
-void HttpRequest::SetFile(std::string filename)
+void HttpRequest::SetFile(std::string name,std::string filename)
 {
-   m_filename = filename;
+  FilePairType file;
+  file.first = name;
+  file.second = filename;
+  m_Filenames.push_back(file);
 }
 
 char* HttpRequest::Send(std::string url)
 {
   MessageStruct  req;
 
-  if ((m_paramlist.size() == 0) && (m_filename.length() == 0))
+  if ((m_paramlist.size() == 0) && (m_Filenames.size() == 0))
   {
     std::cerr << "No Param or File defined !" << std::endl;
     return "-2";
   }
 
+  unsigned long textLenght = 0;
+
   std::string m_text;
   for (unsigned int i=0;i<m_paramlist.size();i++)
-  {
-    m_text +=  "-----------------------------29772313742745\n";
+    {
+    m_text += "--29772313742745\n";
     m_text += "Content-Disposition: form-data; name=\"";
     m_text += m_paramlist[i].name;
-    m_text += "\n\n";
+    m_text += "\"\r\n";
+    m_text += "\r\n";
     m_text += m_paramlist[i].value;
-    m_text += "\n";
-  }
+    m_text += "\r\n";
+    }
+  for(unsigned int i=0;i<m_Filenames.size();i++)
+    {
 
-  if (m_filename.length() != 0)
-  {
-    std::string m_file = CreateFile(m_filename);
+    FilePairType p = m_Filenames[i];
+    std::string m_file = CreateFile(p.first,p.second);
     if (m_file.length() == 0)
+      {
       return "-3";
+      }
     else
+      {
       m_text += m_file;
-  }
+      }
+    }
+
+  m_text += "--29772313742745--\r\n";
 
   if (SendHTTP(  url.c_str(),
-    "Content-Type: multipart/form-data; boundary=---------------------------29772313742745\r\n",
+    "Content-Type: multipart/form-data; boundary=\"29772313742745\"\r\n",
     (unsigned char*)m_text.c_str(),
     m_text.length(),
     &req) == 1)
   return "-1";
 
-
   m_paramlist.clear();
-  m_filename = "";
+  m_Filenames.clear();
 
   return req.message ;
 }
