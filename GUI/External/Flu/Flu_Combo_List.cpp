@@ -18,7 +18,7 @@
 #include <FL/fl_draw.H>
 #include <string.h>
 #include <stdlib.h>
-#include <FL/math.H>
+#include <FL/math.h>
 
 #include "FLU/Flu_Combo_List.h"
 
@@ -47,16 +47,16 @@ void Flu_Combo_List :: _hilight( int x, int y )
   if( list.scrollbar.visible() )
     {
       if( x > list.x() && y > list.y() &&
-	  x < (list.x()+list.w()-list.scrollbar.w()) &&
-	  y < (list.y()+list.h()) )
-	list.handle( FL_DRAG );
+    x < (list.x()+list.w()-list.scrollbar.w()) &&
+    y < (list.y()+list.h()) )
+  list.handle( FL_DRAG );
     }
   else
     {
       if( x > list.x() && y > list.y() &&
-	  x < (list.x()+list.w()) &&
-	  y < (list.y()+list.h()) )
-	list.handle( FL_DRAG );
+    x < (list.x()+list.w()) &&
+    y < (list.y()+list.h()) )
+  list.handle( FL_DRAG );
     }
 }
 
@@ -66,10 +66,10 @@ bool Flu_Combo_List :: _value( const char *v )
   for( int i = 1; i <= list.size(); i++ )
     {
       if( strcmp( list.text(i), v ) == 0 )
-	{
-	  list.value( i );
-	  return true;
-	}
+  {
+    list.value( i );
+    return true;
+  }
     }
   return false;
 }

@@ -18,7 +18,7 @@
 #include <FL/fl_draw.H>
 #include <string.h>
 #include <stdlib.h>
-#include <FL/math.H>
+#include <FL/math.h>
 
 #include "FLU/Flu_Combo_Tree.h"
 
@@ -68,13 +68,13 @@ const char* Flu_Combo_Tree :: _next()
     {
       Flu_Tree_Browser::Node *n2 = n->next();
       if( n2 )
-	{
-	  n->select( false );
-	  n2->select( true );
-	  tree.set_hilighted( n2 );
-	  const char *path = n2->find_path();
-	  return( strlen(path) ? path : NULL );
-	}
+  {
+    n->select( false );
+    n2->select( true );
+    tree.set_hilighted( n2 );
+    const char *path = n2->find_path();
+    return( strlen(path) ? path : NULL );
+  }
     }
   return NULL;
 }
@@ -86,15 +86,15 @@ const char* Flu_Combo_Tree :: _previous()
     {
       Flu_Tree_Browser::Node *n2 = n->previous();
       if( n2 )
-	{
-	  if( n2->is_root() && !tree.show_root() )
-	    return NULL;
-	  n->select( false );
-	  n2->select( true );
-	  tree.set_hilighted( n2 );
-	  const char *path = n2->find_path();
-	  return( strlen(path) ? path : NULL );
-	}
+  {
+    if( n2->is_root() && !tree.show_root() )
+      return NULL;
+    n->select( false );
+    n2->select( true );
+    tree.set_hilighted( n2 );
+    const char *path = n2->find_path();
+    return( strlen(path) ? path : NULL );
+  }
     }
   return NULL;
 }

@@ -18,7 +18,7 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <stdlib.h>
-#include <FL/math.H>
+#include <FL/math.h>
 
 #include "FLU/Flu_Spinner.h"
 
@@ -36,24 +36,24 @@ int Flu_Spinner :: NoTabInput :: handle( int event )
     {
     case FL_KEYDOWN:
       {
-	switch( Fl::event_key() )
-	  {
-	  case FL_Tab:
-	    redraw();
-	    return 0;
+  switch( Fl::event_key() )
+    {
+    case FL_Tab:
+      redraw();
+      return 0;
 
-	  case FL_Enter:
-	  case FL_KP_Enter:
-	    Fl_Input::handle( event );
-	    spinner->value( spinner->clamp( atof( value() ) ) );
-	    spinner->do_callback();
-	    return 1;
+    case FL_Enter:
+    case FL_KP_Enter:
+      Fl_Input::handle( event );
+      spinner->value( spinner->clamp( atof( value() ) ) );
+      spinner->do_callback();
+      return 1;
 
-	  case FL_Down:
-	  case FL_Up:
-	    spinner->handle( event );
-	    return 1;
-	  }
+    case FL_Down:
+    case FL_Up:
+      spinner->handle( event );
+      return 1;
+    }
       }
       break;
 
@@ -76,9 +76,9 @@ void Flu_Spinner :: NoTabInput :: draw()
   if( spinner->_dragging )
     {
       if( (spinner->align() & FL_ALIGN_INSIDE) || !spinner->editable() )
-	position( size() );
+  position( size() );
       else
-	position( 0, size() );
+  position( 0, size() );
     }
 
   Fl_Input::draw();
@@ -145,27 +145,27 @@ void Flu_Spinner :: input_cb( Fl_Widget*, void* v )
   if( nv != t.value() || t._input.when() & FL_WHEN_NOT_CHANGED)
     {
       if( nv < t.minimum() )
-	{
-	  t.set_value(t.minimum());
-	  t.value_damage();
-	}
+  {
+    t.set_value(t.minimum());
+    t.value_damage();
+  }
       else if( nv > t.maximum() )
-	{
-	  t.set_value(t.maximum());
-	  t.value_damage();
-	}
+  {
+    t.set_value(t.maximum());
+    t.value_damage();
+  }
       else
-	t.set_value(nv);
+  t.set_value(nv);
 
       if( t.when() )
-	{
-	  t.clear_changed();
-	  t.do_callback();
-	}
+  {
+    t.clear_changed();
+    t.do_callback();
+  }
       else
-	{
-	  t.set_changed();
-	}
+  {
+    t.set_changed();
+  }
     }
 
   t.value_damage();
@@ -289,62 +289,62 @@ int Flu_Spinner::handle(int event)
       _lastY = Fl::event_y();
       Fl::remove_timeout( repeat_callback, this );
       if( Fl::event_inside( X, Y, W, h()/2 ) ) // up button
-	{
-	  _pushed = true;
-	  _valbox[0] = FL_DOWN_BOX;
-	  _up = true;
-	}
+  {
+    _pushed = true;
+    _valbox[0] = FL_DOWN_BOX;
+    _up = true;
+  }
       if( Fl::event_inside( X, Y+h()/2, W, h()/2 ) ) // down button
-	{
-	  _pushed = true;
-	  _valbox[1] = FL_DOWN_BOX;
-	  _up = false;
-	}
+  {
+    _pushed = true;
+    _valbox[1] = FL_DOWN_BOX;
+    _up = false;
+  }
       if( _pushed )
-	{
-	  increment_cb();
-	  _totalTime = _initialDelay;
-	  if( _doRepeat )
-	    Fl::add_timeout( _initialDelay, repeat_callback, this);
-	  handle_push();
-	  take_focus();
-	  redraw();
-	  return 1;
-	}
+  {
+    increment_cb();
+    _totalTime = _initialDelay;
+    if( _doRepeat )
+      Fl::add_timeout( _initialDelay, repeat_callback, this);
+    handle_push();
+    take_focus();
+    redraw();
+    return 1;
+  }
       break;
 
     case FL_DRAG:
       {
-	// only do the dragging if the last Y differs from the current Y by more than 3 pixels
-	if( ABS(_lastY-Fl::event_y()) < 3 )
-	  break;
-	_dragging = true;
-	_pushed = false;
-	Fl::remove_timeout( repeat_callback, this );
-	int oldWhen = when();
-	_setvalue(increment(_lastValue,(_lastY-Fl::event_y())*(Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT)?10:1)));
-	_valbox[0] = _valbox[1] = FL_DOWN_BOX;
-	when( oldWhen );
-	fl_cursor((Fl_Cursor)22);
-	_input.redraw();
-	redraw();
+  // only do the dragging if the last Y differs from the current Y by more than 3 pixels
+  if( ABS(_lastY-Fl::event_y()) < 3 )
+    break;
+  _dragging = true;
+  _pushed = false;
+  Fl::remove_timeout( repeat_callback, this );
+  int oldWhen = when();
+  _setvalue(increment(_lastValue,(_lastY-Fl::event_y())*(Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT)?10:1)));
+  _valbox[0] = _valbox[1] = FL_DOWN_BOX;
+  when( oldWhen );
+  fl_cursor((Fl_Cursor)22);
+  _input.redraw();
+  redraw();
       }
       break;
 
     case FL_RELEASE:
       {
-	bool doCB = ( ( when() & FL_WHEN_RELEASE ) || ( when() & FL_WHEN_RELEASE_ALWAYS ) ) &&
-	  ( _pushed || ( (_valbox[0] == FL_DOWN_BOX) ^ (_valbox[1] == FL_DOWN_BOX) ) );
-	_pushed = false;
-	_dragging = false;
-	Fl::remove_timeout( repeat_callback, this );
-	_valbox[0] = _valbox[1] = FL_UP_BOX;
-	fl_cursor(FL_CURSOR_DEFAULT);
-	redraw();
-	handle_release();
-	if( doCB )
-	  do_callback();
-	_input.take_focus();
+  bool doCB = ( ( when() & FL_WHEN_RELEASE ) || ( when() & FL_WHEN_RELEASE_ALWAYS ) ) &&
+    ( _pushed || ( (_valbox[0] == FL_DOWN_BOX) ^ (_valbox[1] == FL_DOWN_BOX) ) );
+  _pushed = false;
+  _dragging = false;
+  Fl::remove_timeout( repeat_callback, this );
+  _valbox[0] = _valbox[1] = FL_UP_BOX;
+  fl_cursor(FL_CURSOR_DEFAULT);
+  redraw();
+  handle_release();
+  if( doCB )
+    do_callback();
+  _input.take_focus();
       }
       break;
 
@@ -356,44 +356,44 @@ int Flu_Spinner::handle(int event)
 
     case FL_ENTER:
       if( Fl::event_inside( &_input ) )
-	return _input.handle(event);
+  return _input.handle(event);
       else if( active_r() )
-	{
-	  fl_cursor(FL_CURSOR_DEFAULT);
-	  return 1;
-	}
+  {
+    fl_cursor(FL_CURSOR_DEFAULT);
+    return 1;
+  }
       break;
 
     case FL_LEAVE:
       if( Fl::event_inside( &_input ) )
-	return _input.handle(event);
+  return _input.handle(event);
       else if( active_r() )
-	{
-	  fl_cursor(FL_CURSOR_DEFAULT);
-	  return 1;
-	}
+  {
+    fl_cursor(FL_CURSOR_DEFAULT);
+    return 1;
+  }
       break;
 
     case FL_KEYBOARD:
       switch( Fl::event_key() )
-	{
-	case FL_Down:
-	  {
-	    int oldWhen = when(); when( FL_WHEN_CHANGED );
-	    _setvalue(increment(value(),-1*(Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT)?10:1)));
-	    when( oldWhen );
-	    redraw();
-	    return 1;
-	  }
-	case FL_Up:
-	  {
-	    int oldWhen = when(); when( FL_WHEN_CHANGED );
-	    _setvalue(increment(value(),1*(Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT)?10:1)));
-	    when( oldWhen );
-	    redraw();
-	    return 1;
-	  }
-	}
+  {
+  case FL_Down:
+    {
+      int oldWhen = when(); when( FL_WHEN_CHANGED );
+      _setvalue(increment(value(),-1*(Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT)?10:1)));
+      when( oldWhen );
+      redraw();
+      return 1;
+    }
+  case FL_Up:
+    {
+      int oldWhen = when(); when( FL_WHEN_CHANGED );
+      _setvalue(increment(value(),1*(Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT)?10:1)));
+      when( oldWhen );
+      redraw();
+      return 1;
+    }
+  }
       break;
     }
 
@@ -405,9 +405,9 @@ void Flu_Spinner :: _setvalue( double v )
   if( _wrapRange )
     {
       while( v > maximum() )
-	v = minimum() + (v - maximum());
+  v = minimum() + (v - maximum());
       while( v < minimum() )
-	v = maximum() - (minimum() - v);
+  v = maximum() - (minimum() - v);
     }
   else
     {
