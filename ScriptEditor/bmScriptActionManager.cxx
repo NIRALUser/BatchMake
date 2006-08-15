@@ -56,6 +56,7 @@
 #include "bmScriptGridSingleNodeAction.h"
 #include "bmScriptAddMethodIdealOutputAction.h"
 #include "bmScriptSetIdealOutputAction.h"
+#include "bmScriptRegExAction.h"
 
 #include "Timer.h"
 
@@ -171,6 +172,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(GridSingleNode);
   BM_NEWKEYWORD(AddMethodIdealOutput);
   BM_NEWKEYWORD(SetIdealOutput);
+  BM_NEWKEYWORD(RegEx);
   return m_list;
 }
 
@@ -219,6 +221,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(GridSingleNode);
   BM_NEWACTION(AddMethodIdealOutput);
   BM_NEWACTION(SetIdealOutput);
+  BM_NEWACTION(RegEx);
   return 0;
 }
 
