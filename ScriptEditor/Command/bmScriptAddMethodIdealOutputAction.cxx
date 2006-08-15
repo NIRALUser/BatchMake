@@ -136,6 +136,15 @@ void ScriptAddMethodIdealOutputAction::GenerateGrid()
   withslash += "\"";
   app.SetParameterValue("createMethodParameter.name","",withslash);
   app.SetParameterValue("createMethodParameter.type","","2");
+ 
+  if(m_parameters.size() > 3)
+    {
+    app.SetParameterValue("createMethodParameter.paramtype","",m_parameters[3].toChar());
+    }
+  else
+    {
+    app.SetParameterValue("createMethodParameter.paramtype","","string");
+    }
 
   m_GridModule->AddApplication(&app);
 }
@@ -143,10 +152,18 @@ void ScriptAddMethodIdealOutputAction::GenerateGrid()
 /** */
 void ScriptAddMethodIdealOutputAction::Execute()
 {
+  std::string parameterType = "";
+  if(m_parameters.size() > 3)
+    {
+    parameterType = m_parameters[3].toChar();
+    }
+  
   m_manager->AddDashboardMethodParameter(m_parameters[0].toChar(),
                                m_parameters[1].toChar(),
                                m_parameters[2].toChar(),
-                               true,true);
+                               true,
+                               true,
+                               parameterType.c_str());
   
   if(m_GridModule)
     {
@@ -195,16 +212,17 @@ void ScriptAddMethodIdealOutputAction::Execute()
     return;
     }
 
-  m_request.AddParam("project",exp->project);
+  m_request.AddParam("project",exp->project.c_str());
   m_request.AddParam("method","CreateParameter");
   m_request.AddParam("name",m_parameters[2].toChar());
-  m_request.AddParam("experiment",exp->name);
+  m_request.AddParam("experiment",exp->name.c_str());
 
-  m_request.AddParam("methodname",meth->name);
+  m_request.AddParam("methodname",meth->name.c_str());
   m_request.AddParam("type","2"); //ideal output
+  m_request.AddParam("paramtype",parameterType.c_str()); // type of the parameter
 
-  m_request.AddParam("hostname",m_request.GetHostName());
-  m_request.AddParam("hostip",m_request.GetHostIp());
+  m_request.AddParam("hostname",m_request.GetHostName().c_str());
+  m_request.AddParam("hostip",m_request.GetHostIp().c_str());
 
   url += "/dashboard.php";
   MString m_output = m_request.Send(url.c_str());

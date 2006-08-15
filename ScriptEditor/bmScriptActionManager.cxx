@@ -751,7 +751,8 @@ bool ScriptActionManager::AddDashboardMethodParameter(const char* var,
                                                       const char* methVar, 
                                                       const char* name,
                                                       bool output,
-                                                      bool ideal)
+                                                      bool ideal,
+                                                      const char* type)
 {
   // Check that the experiment exist
   std::vector<DashboardExperiment>::iterator it = m_Dashboard.experiments.begin();
@@ -782,6 +783,10 @@ bool ScriptActionManager::AddDashboardMethodParameter(const char* var,
           param.name = name;
           param.output = output;
           param.ideal = ideal;
+          if(type)
+            {
+            param.type = type;
+            }
           (*itMeth).parameters.push_back(param);
           }
         }

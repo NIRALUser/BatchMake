@@ -73,6 +73,7 @@ public:
     std::string name;
     bool output;
     bool ideal;
+    std::string type;
     };
 
   struct DashboardMethod
@@ -149,7 +150,8 @@ public:
   bool AddDashboardExperiment(const char* var, const char* projectName, const char* experimentName);
   bool AddDashboardMethod(const char* var, const char* expvar, const char* methodName);
   bool AddDashboardMethodParameter(const char* var, const char* methVar, 
-                                   const char* name,bool output=false, bool ideal=false);
+                                   const char* name,bool output=false, bool ideal=false,
+                                   const char* type=NULL);
 
   /** Get the dashboard as a const method, onlt to retrieve data from it */
   const Dashboard * GetDashboard() const {return &m_Dashboard;}

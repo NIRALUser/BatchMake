@@ -64,8 +64,8 @@ void ScriptDashboardNotifyAction::Execute()
 
   //m_request.AddParam("experiment",experiment);
   m_request.AddParam("message",m_parameters[0].toChar());
-  m_request.AddParam("hostname",m_request.GetHostName());
-  m_request.AddParam("hostip",m_request.GetHostIp());
+  m_request.AddParam("hostname",m_request.GetHostName().c_str());
+  m_request.AddParam("hostip",m_request.GetHostIp().c_str());
 
   url += "/notify.php";
   MString m_output = m_request.Send(url.c_str());

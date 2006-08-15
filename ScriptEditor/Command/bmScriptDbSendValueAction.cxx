@@ -60,8 +60,8 @@ void ScriptDbSendValueAction::Execute()
   MString m_caption = m_manager->Convert(m_parameters[4]).removeChar('\'').latin1();
   MString m_value = m_manager->Convert(m_parameters[5]).removeChar('\'').latin1();
 
-  m_request.AddParam("hostname",m_request.GetHostName());
-  m_request.AddParam("hostip",m_request.GetHostIp());
+  m_request.AddParam("hostname",m_request.GetHostName().c_str());
+  m_request.AddParam("hostip",m_request.GetHostIp().c_str());
   m_request.AddParam("project",m_project.toChar());
   m_request.AddParam("account",m_account.toChar());
   m_request.AddParam("password",m_password.toChar());

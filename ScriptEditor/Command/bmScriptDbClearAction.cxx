@@ -58,8 +58,8 @@ void ScriptDbClearAction::Execute()
   MString m_password = m_manager->Convert(m_parameters[2]).removeChar('\'').latin1(); 
   MString m_project = m_manager->Convert(m_parameters[3]).removeChar('\'').latin1();
 
-  m_request.AddParam("hostname",m_request.GetHostName());
-  m_request.AddParam("hostip",m_request.GetHostIp());
+  m_request.AddParam("hostname",m_request.GetHostName().c_str());
+  m_request.AddParam("hostip",m_request.GetHostIp().c_str());
   m_request.AddParam("project",m_project.toChar());
   m_request.AddParam("account",m_account.toChar());
   m_request.AddParam("password",m_password.toChar());  

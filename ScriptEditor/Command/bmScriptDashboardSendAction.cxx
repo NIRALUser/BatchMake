@@ -246,13 +246,13 @@ void ScriptDashboardSendAction::Execute()
     return;
     }
 
-  m_request.AddParam("project",exp->project);
+  m_request.AddParam("project",exp->project.c_str());
   m_request.AddParam("method","AddData");
-  m_request.AddParam("methodname",meth->name);
-  m_request.AddParam("experiment",exp->name);
+  m_request.AddParam("methodname",meth->name.c_str());
+  m_request.AddParam("experiment",exp->name.c_str());
 
-  m_request.AddParam("hostname",m_request.GetHostName());
-  m_request.AddParam("hostip",m_request.GetHostIp());
+  m_request.AddParam("hostname",m_request.GetHostName().c_str());
+  m_request.AddParam("hostip",m_request.GetHostIp().c_str());
 
   url += "/dashboard.php";
 
@@ -272,15 +272,35 @@ void ScriptDashboardSendAction::Execute()
         while(itParam != (*itMeth).parameters.end())
           {
           MString param = "${";
-          param += (*itParam).variable.c_str();
-          
+          param += (*itParam).variable.c_str(); 
+          // if this is an ideal output
           if((*itParam).ideal == true)
             {
             param += "_ideal_output";
             }
           param += "}";
-          std::cout << param.toChar() << " : " << (*itParam).name.c_str() << " :  " << m_manager->Convert(param).toChar() << std::endl;
-          m_request.AddParam((*itParam).name.c_str(),m_manager->Convert(param).toChar());
+
+          std::string value = m_manager->Convert(param).toChar();
+
+          // if this is an image we load it and send the data
+          if( !strcmp((*itParam).type.c_str(),"png")
+            || !strcmp((*itParam).type.c_str(),"jpg")
+            )
+            {
+            std::string imageFilename = m_manager->Convert(param).toChar();
+            long pos = imageFilename.find("'");
+            while(pos != -1)
+              {
+              imageFilename = imageFilename.replace(pos,1,"");
+              pos = imageFilename.find("'");
+              }
+            m_request.SetFile((*itParam).name.c_str(),imageFilename.c_str());
+            }
+          else
+            {
+            m_request.AddParam((*itParam).name.c_str(),value.c_str());
+            }
+           
           itParam++;
           }
         }
