@@ -90,42 +90,42 @@ int main(int argc, char* argv[])
   std::string url = hostname;
 
   HttpRequest m_request;
-  m_request.AddParam("user",user);
-  m_request.AddParam("project",project);
-  m_request.AddParam("hostname",m_request.GetHostName());
-  m_request.AddParam("hostip",m_request.GetHostIp());
+  m_request.AddParam("user",user.c_str());
+  m_request.AddParam("project",project.c_str());
+  m_request.AddParam("hostname",m_request.GetHostName().c_str());
+  m_request.AddParam("hostip",m_request.GetHostIp().c_str());
 
   if(command.GetOptionWasSet("createExperiment"))
     {
     m_request.AddParam("method","CreateExperiment");
-    m_request.AddParam("name",createExperimentName);
-    m_request.AddParam("description",createExperimentDescription);
+    m_request.AddParam("name",createExperimentName.c_str());
+    m_request.AddParam("description",createExperimentDescription.c_str());
     }
   else if(command.GetOptionWasSet("createMethod"))
     {
     m_request.AddParam("method","CreateMethod");
-    m_request.AddParam("name",createMethodName);
-    m_request.AddParam("experiment",createMethodExperiment);
-    m_request.AddParam("description",createMethodDescription);
+    m_request.AddParam("name",createMethodName.c_str());
+    m_request.AddParam("experiment",createMethodExperiment.c_str());
+    m_request.AddParam("description",createMethodDescription.c_str());
     }
  else if(command.GetOptionWasSet("createMethodParameter"))
     {
     m_request.AddParam("method","CreateParameter");
-    m_request.AddParam("name",createParameterName);
-    m_request.AddParam("experiment",createParameterExperiment);
-    m_request.AddParam("methodname",createParameterMethod);
-    m_request.AddParam("type",createParameterType); // 0 = input | 1 = output | 2 = idealoutput
+    m_request.AddParam("name",createParameterName.c_str());
+    m_request.AddParam("experiment",createParameterExperiment.c_str());
+    m_request.AddParam("methodname",createParameterMethod.c_str());
+    m_request.AddParam("type",createParameterType.c_str()); // 0 = input | 1 = output | 2 = idealoutput
 
     if(createParameterParamType.size()>0)
       {
-      m_request.AddParam("paramtype",createParameterParamType);
+      m_request.AddParam("paramtype",createParameterParamType.c_str());
       }
     }
  else if(command.GetOptionWasSet("send"))
     {
     m_request.AddParam("method","AddData");
-    m_request.AddParam("methodname",sendDataMethod);
-    m_request.AddParam("experiment",sendDataExperiment);
+    m_request.AddParam("methodname",sendDataMethod.c_str());
+    m_request.AddParam("experiment",sendDataExperiment.c_str());
 
     if(!command.GetOptionWasSet("data"))
       {
@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
         unsigned int size = buffer.find("\n",pos);
         value = buffer.substr(pos+val.size(),size-pos-val.size());
         }
-      m_request.AddParam(name,value);
+      m_request.AddParam(name,value.c_str());
       //std::cout << name.c_str() << " : " << value.c_str() << std::endl;
       }
     }

@@ -39,12 +39,12 @@ public:
     m_ExperimentID = m_MetaCommand->GetValueAsString("SendDashboard","experimentid");
     m_RemoteHostname = m_MetaCommand->GetValueAsString("SendDashboard","hostname");
     m_MethodID = m_MetaCommand->GetValueAsString("SendDashboard","methodid");
-    m_Request.AddParam("experiment",m_ExperimentID);
-    m_Request.AddParam("methodid",m_MethodID);
+    m_Request.AddParam("experiment",m_ExperimentID.c_str());
+    m_Request.AddParam("methodid",m_MethodID.c_str());
     if(m_MetaOutput)
       {
-      m_Request.AddParam("hostname",static_cast<MetaOutput*>(m_MetaOutput)->GetHostname());
-      m_Request.AddParam("hostip",static_cast<MetaOutput*>(m_MetaOutput)->GetHostip());
+      m_Request.AddParam("hostname",static_cast<MetaOutput*>(m_MetaOutput)->GetHostname().c_str());
+      m_Request.AddParam("hostip",static_cast<MetaOutput*>(m_MetaOutput)->GetHostip().c_str());
       }
     return true;
     }
@@ -79,7 +79,7 @@ public:
             }
           itValues++;
           }
-        m_Request.AddParam(name,value);
+        m_Request.AddParam(name,value.c_str());
         }
       
       it++;
