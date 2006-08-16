@@ -74,7 +74,14 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
   MString left = m_parameters[startingParameter];
   if(left[0] == '$')
     {
-    left = m_manager->GetVariable(m_parameters[startingParameter])[0];
+    if ((m_manager->GetVariable(m_parameters[startingParameter])).size())
+      {
+      left = m_manager->GetVariable(m_parameters[startingParameter])[0];
+      }
+    else
+      {
+      left = "";
+      }
     }
   
   MString right = "";
