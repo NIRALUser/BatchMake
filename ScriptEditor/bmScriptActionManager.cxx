@@ -57,6 +57,7 @@
 #include "bmScriptAddMethodIdealOutputAction.h"
 #include "bmScriptSetIdealOutputAction.h"
 #include "bmScriptRegExAction.h"
+#include "bmScriptMakeDirectoryAction.h"
 
 #include "Timer.h"
 
@@ -173,6 +174,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(AddMethodIdealOutput);
   BM_NEWKEYWORD(SetIdealOutput);
   BM_NEWKEYWORD(RegEx);
+  BM_NEWKEYWORD(MakeDirectory);
   return m_list;
 }
 
@@ -222,6 +224,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(AddMethodIdealOutput);
   BM_NEWACTION(SetIdealOutput);
   BM_NEWACTION(RegEx);
+  BM_NEWACTION(MakeDirectory);
   return 0;
 }
 

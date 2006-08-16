@@ -65,6 +65,7 @@ Command/bmScriptGridSingleNodeAction.cxx
 Command/bmScriptAddMethodIdealOutputAction.cxx
 Command/bmScriptSetIdealOutputAction.cxx
 Command/bmScriptRegExAction.cxx
+Command/bmScriptMakeDirectoryAction.cxx
 )
 
 LINK_LIBRARIES(
