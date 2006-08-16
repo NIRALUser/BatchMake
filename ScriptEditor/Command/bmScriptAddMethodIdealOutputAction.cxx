@@ -56,7 +56,7 @@ MString ScriptAddMethodIdealOutputAction::Help()
 /** */
 void ScriptAddMethodIdealOutputAction::GenerateGrid()
 {
- // We create the bmGridSend application and send it to condor
+  // We create the bmGridSend application and send it to condor
   ApplicationWrapper app;
   MString appName = "bmGridSend";
   bool appFound = false;
