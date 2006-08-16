@@ -35,7 +35,7 @@ public:
   void Execute();
   MString Help();
   bool TestParam(ScriptError* error,int linenumber);
-
+  void GenerateGrid();
 };
 
 } // end namespace bm

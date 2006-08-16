@@ -140,6 +140,9 @@ void ScriptDashboardSendAction::GenerateCondor()
   // Check that the experiment exist
   std::string data = "";
   unsigned int num = 0;
+  std::string imagedata = "";
+  unsigned int imagenum = 0;
+
   std::vector<DashboardExperimentType>::const_iterator itE 
                                               = dashboard->experiments.begin();
   while(itE != dashboard->experiments.end())
@@ -154,19 +157,39 @@ void ScriptDashboardSendAction::GenerateCondor()
         bool found = false;
         while(itParam != (*itMeth).parameters.end())
           {
-          MString param = "${";
-          param += (*itParam).variable.c_str();
-          param += "}";
-          data += "\"";
-          data += (*itParam).name.c_str();
-          data += "\"";
-          data += " ";
-          data += "\"";
-          MString value = m_manager->Convert(param).toChar();
-          value = value.removeChar('\'');
-          data += value.toChar();
-          data += "\" ";
-          num++;
+          if( !strcmp((*itParam).type.c_str(),"png")
+            || !strcmp((*itParam).type.c_str(),"jpg"))
+            {
+            MString param = "${";
+            param += (*itParam).variable.c_str();
+            param += "}";
+            imagedata += "\"";
+            imagedata += (*itParam).name.c_str();
+            imagedata += "\"";
+            imagedata += " ";
+            imagedata += "\"";
+            MString value = m_manager->Convert(param).toChar();
+            value = value.removeChar('\'');
+            imagedata += value.toChar();
+            imagedata += "\" ";
+            imagenum++;
+            }
+          else
+            {
+            MString param = "${";
+            param += (*itParam).variable.c_str();
+            param += "}";
+            data += "\"";
+            data += (*itParam).name.c_str();
+            data += "\"";
+            data += " ";
+            data += "\"";
+            MString value = m_manager->Convert(param).toChar();
+            value = value.removeChar('\'');
+            data += value.toChar();
+            data += "\" ";
+            num++;
+            }
           itParam++;
           }
         }
@@ -182,6 +205,20 @@ void ScriptDashboardSendAction::GenerateCondor()
   numParam += data;
   delete [] numParams;
   app.SetParameterValue("data.NumberOfValues","",numParam);
+
+  numParams = new char[10];
+  sprintf(numParams,"%d",imagenum*2);
+  numParam = numParams;
+  numParam += " ";
+  numParam += imagedata;
+  delete [] numParams;
+  app.SetParameterValue("imagedata.NumberOfValues","",numParam);
+
+  if(imagenum>0)
+    {
+    app.SetParameterValue("imagedata","","1");
+    }
+
   app.SetParameterValue("inputFile","","1");
   app.SetParameterValue("inputFile.inputFile","",m_GridModule->GetCurrentScopeFile());
 

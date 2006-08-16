@@ -28,3 +28,6 @@ TARGET_LINK_LIBRARIES(bmGridSend BatchMakeDashboard BatchMakeUtilities)
 
 ADD_EXECUTABLE(bmGridStore bmGridStore.cxx)
 TARGET_LINK_LIBRARIES(bmGridStore BatchMakeDashboard BatchMakeUtilities)
+
+ADD_EXECUTABLE(bmSliceExtractor bmSliceExtractor.cxx)
+TARGET_LINK_LIBRARIES(bmSliceExtractor BatchMakeDashboard BatchMakeUtilities)

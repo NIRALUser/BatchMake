@@ -56,7 +56,8 @@ int main(int argc, char* argv[])
 
   // Send the data
   command.SetOption("data","data",false,"Send data to the dashboard",MetaCommand::LIST);
-  
+  command.SetOption("imagedata","imagedata",false,"Send image data to the dashboard",MetaCommand::LIST);
+
   // Parse an input file to find the values
   command.SetOption("inputFile","i",false,
     "Parse input file to find the missing values",MetaCommand::STRING,"",MetaCommand::DATA_IN);
@@ -177,6 +178,25 @@ int main(int argc, char* argv[])
         }
       m_request.AddParam(name,value.c_str());
       //std::cout << name.c_str() << " : " << value.c_str() << std::endl;
+      }
+
+    std::list<std::string> imagevalues = command.GetValueAsList("imagedata");
+    it = imagevalues.begin();
+    while(it!=imagevalues.end())
+      {
+      std::string name = *it;
+      it++;
+      std::string value = *it;
+      it++;
+
+      std::string val = value+":";
+      int pos = buffer.find(val);
+      if(pos != -1)
+        {
+        unsigned int size = buffer.find("\n",pos);
+        value = buffer.substr(pos+val.size(),size-pos-val.size());
+        }
+      m_request.SetFile(name,value.c_str());
       }
     }
 
