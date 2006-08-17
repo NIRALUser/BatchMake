@@ -4,8 +4,8 @@ SliceExtractor::SliceExtractor()
 {
   m_inputimage = 0;
   m_outputimage = 0;
-  m_slice = 0;
-  m_orientation = 0;
+  m_slice = -1;
+  m_orientation = -1;
 }
 
 SliceExtractor::~SliceExtractor()
@@ -21,16 +21,15 @@ void SliceExtractor::Extract(std::string input,std::string output)
   ReaderType::Pointer m_reader = ReaderType::New();
   m_reader->SetFileName(input.c_str());
   try
-  {
+    {
     m_reader->Update();
-  }
+    }
   catch (itk::ExceptionObject & e)
-  {
+    {
     std::cerr << "Exception in file writer " << std::endl;
     std::cerr << e.GetDescription() << std::endl;
     std::cerr << e.GetLocation() << std::endl;
-  }
-
+    }
   
   SetInput(m_reader->GetOutput());
   Update();
@@ -46,15 +45,15 @@ void SliceExtractor::Extract(std::string input,std::string output)
   m_writer->SetInput(m_caster->GetOutput());
   m_writer->SetFileName(output.c_str());
   try
-  {
+    {
     m_writer->Update();
-  }
+    }
   catch (itk::ExceptionObject & e)
-  {
+    {
     std::cerr << "Exception in file writer " << std::endl;
     std::cerr << e.GetDescription() << std::endl;
     std::cerr << e.GetLocation() << std::endl;
-  }
+    }
 }
 
 
@@ -84,7 +83,18 @@ void SliceExtractor::Update()
 {
   Image3DType::SizeType m_size = m_inputimage->GetLargestPossibleRegion().GetSize();
   Iterator3DType itS(m_inputimage,m_inputimage->GetLargestPossibleRegion());
-    
+ 
+  if(m_orientation == -1)
+    {
+    m_orientation = 0;
+    }
+
+  if(m_slice == -1)
+    {
+    m_slice = m_size[m_orientation]/2;;
+    }
+
+
   //Create 2D image
   int imagesize[2];
 
@@ -127,7 +137,6 @@ void SliceExtractor::Update()
   m_outputimage->SetSpacing(values);
 
   Iterator2DType itS2(m_outputimage,m_outputimage->GetLargestPossibleRegion());
-
 
   if (m_slice > m_size[m_orientation])
     m_slice = m_size[m_orientation]-1;

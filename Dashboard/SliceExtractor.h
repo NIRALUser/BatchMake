@@ -32,8 +32,8 @@ public:
 private:
   Image3DTypePointer m_inputimage;
   Image2DTypePointer m_outputimage;
-  unsigned int m_slice;
-  unsigned int m_orientation;
+  int m_slice;
+  int m_orientation;
 };
 
 #endif
