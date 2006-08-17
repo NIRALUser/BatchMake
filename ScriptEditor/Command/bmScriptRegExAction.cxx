@@ -67,6 +67,7 @@ MString ScriptRegExAction::Help()
 
 void ScriptRegExAction::Execute()
 {
+  m_manager->SetVariable(m_parameters[0],"");
   itksys::RegularExpression regEx;
 
   MString expression = m_manager->Convert(m_parameters[2]);
