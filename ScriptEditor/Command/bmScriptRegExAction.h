@@ -36,6 +36,17 @@ public:
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();
 
+private:
+  class RegexReplacement
+  {
+  public:
+    RegexReplacement(const char* s): number(-1), value(s) {}
+    RegexReplacement(const std::string& s): number(-1), value(s) {}
+    RegexReplacement(int n): number(n), value() {}
+    RegexReplacement() {};
+    int number;
+    std::string value;
+  };
 };
 
 } // end namespace bm
