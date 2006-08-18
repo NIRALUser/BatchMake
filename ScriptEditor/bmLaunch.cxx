@@ -55,9 +55,6 @@ void Launch::Execute(MString m_command)
   m_output = "";
   m_error = "";
 
-
-  std::cout << m_command.toChar() << std::endl;
-
 #ifdef WIN32
 
   char buffer[BUFSIZ+1];
