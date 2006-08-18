@@ -86,7 +86,7 @@ void SliceExtractor::Update()
  
   if(m_orientation == -1)
     {
-    m_orientation = 0;
+    m_orientation = 2;
     }
 
   if(m_slice == -1)
@@ -98,7 +98,7 @@ void SliceExtractor::Update()
   //Create 2D image
   int imagesize[2];
 
-  if (m_orientation == 0)
+  if (m_orientation == 2)
   {
     imagesize[0] = m_size[0];
     imagesize[1] = m_size[1];
@@ -110,7 +110,7 @@ void SliceExtractor::Update()
     imagesize[1] = m_size[2];
   }
 
-  if (m_orientation == 2)
+  if (m_orientation == 0)
   {
     imagesize[0] = m_size[1];
     imagesize[1] = m_size[2];
@@ -141,7 +141,7 @@ void SliceExtractor::Update()
   if (m_slice > m_size[m_orientation])
     m_slice = m_size[m_orientation]-1;
 
-  if (m_orientation == 0)
+  if (m_orientation == 2)
   {
     for (int z=0;z<m_size[2];z++)
       for (int y=0;y<m_size[1];y++)
@@ -174,7 +174,7 @@ void SliceExtractor::Update()
           }
   }
 
-  if (m_orientation == 2)
+  if (m_orientation == 0)
   {
     for (int z=0;z<m_size[2];z++)
       for (int y=0;y<m_size[1];y++)
