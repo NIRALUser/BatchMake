@@ -269,7 +269,12 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
 
     if( (post!=NULL) && postLength )
       {
-      send(sock,(const char*)post,postLength,0);
+      long int remaining = postLength;
+      do
+        {
+        long int n = send(sock,(const char*)post,postLength,0);
+        remaining -= n;
+        } while(remaining>0);
       }
 
  /*
@@ -443,7 +448,7 @@ void HttpRequest::AddParam(std::string name,const char* value,unsigned long size
   m_paramlist.push_back(m_param);
 }
 
-void HttpRequest::SetFile(std::string name,std::string filename)
+void HttpRequest::AddFile(std::string name,std::string filename)
 {
   FilePairType file;
   file.first = name;

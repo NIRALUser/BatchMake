@@ -51,7 +51,7 @@ public:
   virtual ~HttpRequest();
 
   void AddParam(std::string name,const char* value,unsigned long size=0);
-  void SetFile(std::string name,std::string filename);
+  void AddFile(std::string name,std::string filename);
   char* Send(std::string url);
   std::string GetHostName();
   std::string GetHostIp();
