@@ -273,6 +273,13 @@ void Launch::Execute(MString m_command)
           inword = true;
           }
         }
+     
+      
+      if(com[com.size()-1]!= ' ')
+       {
+       std::string arg = com.substr(start,com.size()-start);
+       args.push_back(arg);
+       }
 
       if(args.size()==0)
         {
