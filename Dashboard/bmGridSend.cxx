@@ -196,7 +196,7 @@ int main(int argc, char* argv[])
         unsigned int size = buffer.find("\n",pos);
         value = buffer.substr(pos+val.size(),size-pos-val.size());
         }
-      m_request.SetFile(name,value.c_str());
+      m_request.AddFile(name,value.c_str());
       }
     }
 
