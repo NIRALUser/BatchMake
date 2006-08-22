@@ -331,7 +331,7 @@ void ScriptDashboardSendAction::Execute()
               imageFilename = imageFilename.replace(pos,1,"");
               pos = imageFilename.find("'");
               }
-            m_request.SetFile((*itParam).name.c_str(),imageFilename.c_str());
+            m_request.AddFile((*itParam).name.c_str(),imageFilename.c_str());
             }
           else
             {
