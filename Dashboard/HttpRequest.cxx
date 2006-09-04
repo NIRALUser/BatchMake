@@ -273,6 +273,7 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
       do
         {
         long int n = send(sock,(const char*)post,postLength,0);
+        post += n;
         remaining -= n;
         } while(remaining>0);
       }
