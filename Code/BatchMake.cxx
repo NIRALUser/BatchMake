@@ -19,9 +19,11 @@
 #include "ApplicationWrapper.h"
 #include <iostream>
 #include "metaCommand.h"
-#include "bmGrid.h"
+#ifdef BM_GRID
+  #include "bmGrid.h"
+#endif
 
-#define BatchMakeVersion "0.2 Beta"
+#define BatchMakeVersion "1.0"
 
 int main(int argc, char **argv)
 {
@@ -141,38 +143,47 @@ int main(int argc, char **argv)
       }
     if(command.GetOptionWasSet("generateShell"))
       {
+#ifdef BM_GRID 
       std::string scriptname = command.GetValueAsString("generateShell","scriptname");
       std::string outputname = command.GetValueAsString("generateShell","outputname");
       bm::ScriptParser m_parser;
       m_parser.SetApplicationPath(m_applicationpath);
      
-      std::cout << "Generating shell script ...";
-        
+      std::cout << "Generating shell script ...";       
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
       m_parser.SetGridModule(&grid);
       m_parser.Execute(scriptname);
       grid.WriteShell();
+#else
+       std::cout << "Cannot write Shell scripts with this version of BatchMake."
+        << " Please contact Kitware for more information." << std::endl;
+#endif
       std::cout << "Done." << std::endl;
       }
     if(command.GetOptionWasSet("generateCondor"))
       {
+#ifdef BM_GRID
       std::string scriptname = command.GetValueAsString("generateCondor","scriptname");
       std::string outputname = command.GetValueAsString("generateCondor","outputname");
       bm::ScriptParser m_parser;
       m_parser.SetApplicationPath(m_applicationpath);
      
       std::cout << "Generating condor script ...";
-        
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
       m_parser.SetGridModule(&grid);
       m_parser.Execute(scriptname);
       grid.WriteCondor();
       std::cout << "Done." << std::endl;
+#else
+       std::cout << "Cannot write Condor scripts with this version of BatchMake."
+        << " Please contact Kitware for more information." << std::endl;
+#endif
       }
     if(command.GetOptionWasSet("generateGAD"))
       {
+#ifdef BM_GRID
       std::string scriptname = command.GetValueAsString("generateGAD","scriptname");
       std::string outputname = command.GetValueAsString("generateGAD","outputname");
       bm::ScriptParser m_parser;
@@ -186,6 +197,10 @@ int main(int argc, char **argv)
       m_parser.Execute(scriptname);
       grid.WriteGAD();
       std::cout << "Done." << std::endl;
+#else
+       std::cout << "Cannot write KWGrid scripts with this version of BatchMake."
+        << " Please contact Kitware for more information." << std::endl;
+#endif
       }
   }
 

@@ -52,6 +52,24 @@ IF(NOT DART_ROOT)
   SET(DROP_LOCATION /DartClient/BatchMake)
 ENDIF(NOT DART_ROOT)
 
+# Validation dashboard Support
+OPTION(DASHBOARD_SUPPORT "Validation Dashboard Support" OFF)
+IF(DASHBOARD_SUPPORT)
+ ADD_DEFINITIONS(-DBM_DASHBOARD)
+ENDIF(DASHBOARD_SUPPORT)
+
+# Grid Support
+OPTION(GRID_SUPPORT "Grid Support" OFF)
+IF(GRID_SUPPORT )
+ ADD_DEFINITIONS(-DBM_GRID)
+ENDIF(GRID_SUPPORT )
+
+# Display the splashscreen or not
+OPTION(SPLASHSCREEN "Display the splashscreen" OFF)
+IF(SPLASHSCREEN)
+ ADD_DEFINITIONS(-DBMSPLASHSCREEN)
+ENDIF(SPLASHSCREEN)
+
 
 SET (LIBRARY_OUTPUT_PATH ${BatchMake_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
 SET (EXECUTABLE_OUTPUT_PATH ${BatchMake_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
@@ -73,11 +91,22 @@ INCLUDE_DIRECTORIES(
   ${BatchMake_SOURCE_DIR}/ScriptEditor/Command
   ${BatchMake_SOURCE_DIR}/GUI/SplashScreen
   ${BatchMake_SOURCE_DIR}/Dashboard
-
   ${BatchMake_BINARY_DIR}
   ${BatchMake_BINARY_DIR}/GUI
   ${BatchMake_BINARY_DIR}/GUI/CondorWatcher
 )
+
+IF(GRID_SUPPORT)
+  INCLUDE_DIRECTORIES(
+  ${BatchMake_SOURCE_DIR}/ScriptEditor/Grid
+  )
+ENDIF(GRID_SUPPORT)
+
+IF(DASHBOARD_SUPPORT)
+  INCLUDE_DIRECTORIES(
+  ${BatchMake_SOURCE_DIR}/ScriptEditor/Dashboard
+  )
+ENDIF(DASHBOARD_SUPPORT)
 
 #Compile Utilities
 SUBDIRS(Utilities)
@@ -98,7 +127,9 @@ SUBDIRS(Code)
 SUBDIRS(External)
 
 #Compile Dashboard Library
-SUBDIRS(Dashboard)
+IF(DASHBOARD_SUPPORT)
+  SUBDIRS(Dashboard)
+ENDIF(DASHBOARD_SUPPORT)
 
 #Copy example directories
 MAKE_DIRECTORY(${BatchMake_BINARY_DIR}/bin/RelWithDebInfo/Applications)
