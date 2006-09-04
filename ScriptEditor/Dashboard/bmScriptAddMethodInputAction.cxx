@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptAddMethodOutputAction.cxx
+  Module:    bmScriptAddMethodInputAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,28 +13,28 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#include "bmScriptAddMethodOutputAction.h"
+#include "bmScriptAddMethodInputAction.h"
 #include "HttpRequest.h"
 
 namespace bm {
 
 /** */
-ScriptAddMethodOutputAction::ScriptAddMethodOutputAction()
+ScriptAddMethodInputAction::ScriptAddMethodInputAction()
 : ScriptAction()
 {
 }
 
 /** */
-ScriptAddMethodOutputAction::~ScriptAddMethodOutputAction()
+ScriptAddMethodInputAction::~ScriptAddMethodInputAction()
 {
 }
 
 /** */
-bool ScriptAddMethodOutputAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptAddMethodInputAction::TestParam(ScriptError* error,int linenumber)
 {
   if (m_parameters.size() < 3)
     {
-    error->SetError(MString("No enough parameter for AddMethodOutput"),linenumber);
+    error->SetError(MString("No enough parameter for AddMethodInput"),linenumber);
     return false;
     }
 
@@ -48,110 +48,16 @@ bool ScriptAddMethodOutputAction::TestParam(ScriptError* error,int linenumber)
 }
 
 /** */
-MString ScriptAddMethodOutputAction::Help()
+MString ScriptAddMethodInputAction::Help()
 {
-  return "AddMethodOutput(methodVariable ExperimentVariable 'MethodName')";
+  return "AddMethodInput(methodVariable ExperimentVariable 'MethodName')";
 }
 
 /** */
-void ScriptAddMethodOutputAction::GenerateCondor()
-{
- // We create the bmGridSend application and send it to condor
-  ApplicationWrapper app;
-  MString appName = "bmGridSend";
-  bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator itApp = m_manager->GetApplicationWrapperList()->begin();
-  while (itApp != m_manager->GetApplicationWrapperList()->end())
-    {
-    if(!strcmp((*itApp)->GetName().toChar(),appName.toChar()))
-      {
-      app = *(*itApp);
-      appFound = true;
-      break;
-      }
-    itApp++;
-  }
-
-  if(!appFound)
-    {
-    std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend " 
-              << appName.toChar() << std::endl;
-    return;
-    }
- 
-  // Get the project name
-  const ScriptActionManager::Dashboard * dashboard = m_manager->GetDashboard();
-  const ScriptActionManager::DashboardExperiment* exp = NULL;
-  const ScriptActionManager::DashboardMethod* meth = NULL;
-  std::vector<ScriptActionManager::DashboardExperiment>::const_iterator it = dashboard->experiments.begin();
-  while(it != dashboard->experiments.end())
-    {
-    std::vector<ScriptActionManager::DashboardMethod>::const_iterator itM = (*it).methods.begin();
-    while(itM != (*it).methods.end())
-      {
-      if(!strcmp((*itM).variable.c_str(),m_parameters[1].toChar()))
-        {
-        exp = &(*it);
-        meth = &(*itM);
-        break;
-        }
-      itM++;
-      }
-    it++;
-    }
-
-   if(!meth)
-    {
-    std::cout << "BMDashboard: Cannot find method" << std::endl;
-    return;
-    }
-
-  if(!exp)
-    {
-    std::cout << "BMDashboard: Cannot find experiment" << std::endl;
-    return;
-    }
-
-  std::string withslash = "\"";
-  withslash += m_manager->GetDashboardUser();
-  withslash += "\"";
-  app.SetParameterValue("hostname","",m_manager->GetDashboardURL());
-  app.SetParameterValue("user","",withslash);
-  withslash = "\"";
-  withslash += exp->project;
-  withslash += "\"";
-  app.SetParameterValue("project","",withslash);
-  app.SetParameterValue("createMethodParameter","","1");
-  withslash = "\"";
-  withslash += exp->name;
-  withslash += "\"";
-  app.SetParameterValue("createMethodParameter.experiment","",withslash);
-  withslash = "\"";
-  withslash += meth->name;
-  withslash += "\"";
-  app.SetParameterValue("createMethodParameter.method","",withslash);
-  withslash = "\"";
-  withslash += m_parameters[2].toChar();
-  withslash += "\"";
-  app.SetParameterValue("createMethodParameter.name","",withslash);
-  app.SetParameterValue("createMethodParameter.type","","1");
-
-  if(m_parameters.size() > 3)
-    {
-    app.SetParameterValue("createMethodParameter.paramtype","",m_parameters[3].toChar());
-    }
-  else
-    {
-    app.SetParameterValue("createMethodParameter.paramtype","","string");
-    }
-
-  m_GridModule->AddApplication(&app);
-}
-
-/** */
-void ScriptAddMethodOutputAction::Execute()
+void ScriptAddMethodInputAction::Execute()
 {
   std::string parameterType = "";
+
   if(m_parameters.size() > 3)
     {
     parameterType = m_parameters[3].toChar();
@@ -159,16 +65,16 @@ void ScriptAddMethodOutputAction::Execute()
 
   m_manager->AddDashboardMethodParameter(m_parameters[0].toChar(),
                                m_parameters[1].toChar(),
-                               m_parameters[2].toChar(),
-                               true,false,
-                               parameterType.c_str()
-                               );
-  
+                               m_parameters[2].toChar(),false,false,
+                               parameterType.c_str());
+
+#ifdef BM_GRID
   if(m_GridModule)
     {
-    this->GenerateCondor();
+    this->GenerateGrid();
     return;
     }
+#endif
 
   // Create the experiment on the dashboard
   std::string url = m_manager->GetDashboardURL();
@@ -217,7 +123,7 @@ void ScriptAddMethodOutputAction::Execute()
   m_request.AddParam("experiment",exp->name.c_str());
 
   m_request.AddParam("methodname",meth->name.c_str());
-  m_request.AddParam("type","1"); //output
+  m_request.AddParam("type","0"); //input
   m_request.AddParam("paramtype",parameterType.c_str()); // type of the parameter
 
   m_request.AddParam("hostname",m_request.GetHostName().c_str());
@@ -250,7 +156,6 @@ void ScriptAddMethodOutputAction::Execute()
         }  
       }
     }
-
 }
 
 } // end namespace bm

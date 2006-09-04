@@ -21,9 +21,15 @@ SET(BATCHMAKE_LIBS
  BatchMakeApplicationWrapper
  BatchMakeScriptEditor
  BatchMakeUtilities
- CondorWatcher
  FLU
 )
+
+IF(DASHBOARD_SUPPORT)
+ SET(BATCHMAKE_LIBS
+  ${BATCHMAKE_LIBS}
+  BatchMakeDashboard)
+ENDIF(DASHBOARD_SUPPORT)
+
 # Add an option to hide the console
 OPTION("HIDE_CONSOLE",OFF)
 IF(HIDE_CONSOLE)
@@ -32,4 +38,3 @@ ENDIF(HIDE_CONSOLE)
 
 ADD_EXECUTABLE(BatchMake ${BatchMake_SRCS})
 TARGET_LINK_LIBRARIES(BatchMake ${BATCHMAKE_LIBS})
-

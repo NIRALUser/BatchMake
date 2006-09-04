@@ -25,7 +25,10 @@
 #include "bmScriptParser.h"
 #include "ApplicationWrapper.h"
 #include <vector>
-#include "CondorWatcher.h"
+
+#ifdef BM_GRID
+  #include "CondorWatcher.h"
+#endif
 
 namespace bm {
 
@@ -62,7 +65,10 @@ protected:
   std::vector<ApplicationWrapper*> m_applicationlist;
   MString m_title;
 
+#ifdef BM_GRID
   CondorWatcher* m_CondorWatcher;
+#endif
+  std::string m_SplashBuffer;
 };
 
 } // end namespace bm

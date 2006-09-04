@@ -20,7 +20,9 @@ namespace bm {
 ScriptAction::ScriptAction()
 {
   m_parent = 0;
+#ifdef BM_GRID
   m_GridModule = NULL;
+#endif
 }
 
 ScriptAction::~ScriptAction()

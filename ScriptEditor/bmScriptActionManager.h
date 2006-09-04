@@ -35,8 +35,11 @@
 #include <vector>
 #include <iostream>
 #include "MString.h"
-#include "bmGrid.h"
 #include "TCPSocket.h"
+
+#ifdef BM_GRID
+  #include "bmGrid.h"
+#endif BM_GRID
 
 namespace bm {
 
@@ -138,8 +141,11 @@ public:
 
   std::vector<MString> GetKeywordList();
 
+#ifdef BM_GRID
   void SetGridModule(Grid* grid) {m_GridModule = grid;}
-  
+#endif BM_GRID
+
+#ifdef BM_DASHBOARD 
   /** Set/Get variables relative to the dashboard */
   void SetDashboardURL(const char* url) {m_Dashboard.url = url;}
   const char* GetDashboardURL() {return m_Dashboard.url.c_str();}
@@ -155,6 +161,7 @@ public:
 
   /** Get the dashboard as a const method, onlt to retrieve data from it */
   const Dashboard * GetDashboard() const {return &m_Dashboard;}
+#endif
 
   TCPSocket* GetVariableSocket(MString name);
   bool RemoveSocket(MString name);
@@ -174,11 +181,15 @@ protected:
   ApplicationsListType* m_ApplicationsList;
   void* m_Parser;
 
-  // Tells the output of the Run command to generate condor scripts
+  // Tells the output of the Run command to generate grid scripts
+#ifdef BM_GRID 
   Grid* m_GridModule;
+#endif
 
+#ifdef BM_DASHBOARD 
   // The Script Action manager keeps global variables regarding the dashboard
   Dashboard m_Dashboard;
+#endif
 };
 
 } // end namespace bm

@@ -42,10 +42,13 @@ public:
   void Execute();
   /** Return the help for the current action */
   MString Help();
-  /** Generate condor script. The function delegate to the bmCondor */
-  void GenerateCondor(const char* appname);
   /** Parse the XML output */
   void ParseXMLOutput(const char* output);
+
+#ifdef BM_GRID
+  /** Generate grid scripts.*/
+  void GenerateGrid(const char* appname);
+#endif
 
 };
 

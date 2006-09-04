@@ -70,7 +70,6 @@ void ScriptForEachAction::Execute()
   ScriptAction::ParametersType m_params;
   MString m_value = "";
 
-
   for (unsigned int i=0; i<m_parameters.size();i++)
   {
      while ((m_paramlist != "") && (m_paramlist != m_value))
@@ -99,6 +98,7 @@ void ScriptForEachAction::Execute()
      }
   }
 
+#ifdef BM_GRID
   // We put a grid barrier
   if(m_GridModule)
     {
@@ -126,8 +126,8 @@ void ScriptForEachAction::Execute()
     // Remove Grid barrier
     m_GridModule->RemoveGridBarrier();
     }
+#endif
 }
-
 
 void ScriptForEachAction::Delete()
 {

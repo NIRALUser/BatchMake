@@ -27,7 +27,10 @@
 #include <iostream>
 #include "MString.h"
 #include "bmScriptActionManager.h"
-#include "bmGrid.h"
+
+#ifdef BM_GRID
+  #include "bmGrid.h"
+#endif
 
 namespace bm {
 
@@ -54,7 +57,10 @@ public:
   void LoadWrappedApplication(MString applicationpath);
   std::vector<ApplicationWrapper*>* GetApplicationList();
   void Reset();
+
+#ifdef BM_GRID
   void SetGridModule(Grid* grid) {m_scriptactionmanager->SetGridModule(grid);}
+#endif
 
   /** Return the ScriptActionManager */
   ScriptActionManager* GetScriptActionManager() {return m_scriptactionmanager;}

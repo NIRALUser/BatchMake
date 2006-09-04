@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptDashboardSendAction.h
+  Module:    bmScriptAddMethodIdealOutputAction.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,8 +13,8 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#ifndef __ScriptDashboardSendAction_h_
-#define __ScriptDashboardSendAction_h_
+#ifndef __ScriptAddMethodIdealOutputAction_h_
+#define __ScriptAddMethodIdealOutputAction_h_
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -27,16 +27,19 @@
 
 namespace bm {
 
-class ScriptDashboardSendAction : public ScriptAction
+class ScriptAddMethodIdealOutputAction : public ScriptAction
 {
 public:
-  ScriptDashboardSendAction();
-  ~ScriptDashboardSendAction();
+  ScriptAddMethodIdealOutputAction();
+  ~ScriptAddMethodIdealOutputAction();
   void Execute();
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();
 
-  void GenerateCondor();
+#ifdef BM_GRID
+  void GenerateGrid();
+#endif
+
 };
 
 } // end namespace bm

@@ -54,83 +54,20 @@ MString ScriptCreateExperimentAction::Help()
 }
 
 /** */
-void ScriptCreateExperimentAction::GenerateCondor()
-{
-  // We create the bmGridSend application and send it to condor
-  ApplicationWrapper app;
-  MString appName = "bmGridSend";
-  bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_manager->GetApplicationWrapperList()->begin();
-  while (it != m_manager->GetApplicationWrapperList()->end())
-    {
-    if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
-      {
-      app = *(*it);
-      appFound = true;
-      break;
-      }
-    it++;
-  }
-
-  if(!appFound)
-    {
-    std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend " 
-              << appName.toChar() << std::endl;
-    return;
-    }
-  /*
-  ApplicationWrapperParam p;
-  p.SetName("hostname");
-  app->AddParam(p);
-  p.SetName("user");
-  app->AddParam(p);
-  p.SetName("project");
-  app->AddParam(p);
-  p.SetName("tag");
-  app->AddParam(p);
-  p.SetName("experimentname");
-  app->AddParam(p);
-  p.SetName("experimentdescription");
-  app->AddParam(p);
-  */
-
-  std::string withslash = "\"";
-  withslash += m_manager->GetDashboardUser();
-  withslash += "\"";
-  app.SetParameterValue("hostname","",m_manager->GetDashboardURL());
-  app.SetParameterValue("user","",withslash);
-  withslash = "\"";
-  withslash += m_parameters[1].toChar();
-  withslash += "\"";
-  app.SetParameterValue("project","",withslash);
-  app.SetParameterValue("createExperiment","","1");
-  withslash = "\"";
-  withslash += m_parameters[2].toChar();
-  withslash += "\"";
-  app.SetParameterValue("createExperiment.name","",withslash);
-  if(m_parameters.size()>3)
-    {
-    withslash = "\"";
-    withslash += m_parameters[3].toChar();
-    withslash += "\"";
-    app.SetParameterValue("createExperiment.description","",withslash);
-    }
-  m_GridModule->AddApplication(&app);
-}
-
-/** */
 void ScriptCreateExperimentAction::Execute()
 {
   // Add the experiment to the dashboard
   m_manager->AddDashboardExperiment(m_parameters[0].toChar(),
                                     m_parameters[1].toChar(),
                                     m_parameters[2].toChar());
-  
+ 
+#ifdef BM_GRID
   if(m_GridModule)
     {
-    this->GenerateCondor();
+    this->GenerateGrid();
     return;
     }
+#endif
 
   // Create the experiment on the dashboard
   std::string url = m_manager->GetDashboardURL();

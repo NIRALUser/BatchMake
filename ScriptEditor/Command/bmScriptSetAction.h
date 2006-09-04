@@ -36,7 +36,9 @@ public:
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();
 
+#ifdef BM_GRID
   void GenerateGrid(std::string name,std::string value);
+#endif
 
 };
 

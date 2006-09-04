@@ -20,7 +20,7 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
       Fl_Text_Display g_output {
         xywh {0 525 655 135} labelsize 12 textsize 12
       }
-      Fl_Group {} {open
+      Fl_Group {} {open selected
         xywh {0 0 640 35} align 225
       } {
         Fl_Button {} {
@@ -44,10 +44,6 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
           tooltip {Application Wrapper} image {../../Images/applicationwrapper.gif} xywh {145 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
-          callback {OnGenerateScripts()}
-          tooltip {Script Generation} image {../../Images/script.gif} xywh {180 5 30 25} box PLASTIC_UP_BOX color 48
-        }
-        Fl_Button {} {
           callback {OnGenerateCondor()}
           tooltip {Generate Condor Script} image {../../Images/condor.gif} xywh {215 5 30 25} box PLASTIC_UP_BOX color 48
         }
@@ -56,7 +52,7 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
           tooltip {Generate KWGrid script} image {../../Images/kwgrid.gif} xywh {250 5 30 25} box PLASTIC_UP_BOX color 48
         }
         Fl_Button {} {
-          callback {OnGenerateShell()} selected
+          callback {OnGenerateShell()}
           tooltip {Generate Shell  script} image {../../Images/sh.png} xywh {285 5 30 25} box PLASTIC_UP_BOX color 48
         }
       }

@@ -3,8 +3,6 @@ PROJECT(BatchMakeDashboard)
 SET(BatchMakeDashboard_SRCS
   HttpRequest.cxx
   HttpRequest.h
-  SliceExtractor.cxx
-  SliceExtractor.h
 )
 
 IF(WIN32)

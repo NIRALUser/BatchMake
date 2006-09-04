@@ -48,39 +48,6 @@ MString ScriptSetAction::Help()
   return "Set(<variable> <name1> <name2> ...)";
 }
 
-/** Generate the condor script */
-void ScriptSetAction::GenerateGrid(std::string name,std::string value)
-{
-  // We create the bmGridStore application and send it to condor
-  ApplicationWrapper app;
-  MString appName = "bmGridStore";
-  bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator itApp = m_manager->GetApplicationWrapperList()->begin();
-  while (itApp != m_manager->GetApplicationWrapperList()->end())
-    {
-    if(!strcmp((*itApp)->GetName().toChar(),appName.toChar()))
-      {
-      app = *(*itApp);
-      appFound = true;
-      break;
-      }
-    itApp++;
-    }
-
-  if(!appFound)
-    {
-    std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend " 
-              << appName.toChar() << std::endl;
-    return;
-    }   
-
-  app.SetParameterValue("filename","",m_GridModule->GetCurrentScopeFile());
-  app.SetParameterValue("name","",name);
-  app.SetParameterValue("value","",value);
-
-  m_GridModule->AddApplication(&app);
-}
-
 void ScriptSetAction::Execute()
 {
   MString m_value;
@@ -112,12 +79,15 @@ void ScriptSetAction::Execute()
 
   m_manager->SetVariable(m_parameters[0],m_value);
 
+#ifdef BM_GRID
   // If we are on the grid we use the bmGridStore to store the variable
   if(m_GridModule)
     {
     this->GenerateGrid(m_parameters[0].toChar(),m_value.toChar());
     return;
     }
+#endif
+
 }
 
 } // end namespace bm

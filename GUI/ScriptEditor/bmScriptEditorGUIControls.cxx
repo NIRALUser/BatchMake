@@ -56,14 +56,17 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
   g_editor->SetParser(m_parser);
   g_editor->SetScriptEditorGUI(this);
 
+#ifdef BM_GRID
   m_CondorWatcher = new CondorWatcher;
-
+#endif
 }
 
 ScriptEditorGUIControls::~ScriptEditorGUIControls()
 {
   delete m_parser;
+#ifdef BM_GRID
   delete m_CondorWatcher;
+#endif
 }
 
 void ScriptEditorGUIControls::SetApplicationPath(MString applicationpath)
@@ -90,20 +93,37 @@ void ScriptEditorGUIControls::Timer(void* ui)
 void ScriptEditorGUIControls::Show()
 {
   // disable the splash screen for the moment
-  /*if(!g_Scripteditorgui->shown())
+#ifdef BMSPLASHSCREEN
+  if(!g_Scripteditorgui->shown())
   {
     SplashScreenControls* ui = new SplashScreenControls();
     g_Scripteditorgui->show();
     int x = g_Scripteditorgui->x() + (g_Scripteditorgui->h() - ui->g_Splashscreen->h())/2;
     int y = g_Scripteditorgui->y() + (g_Scripteditorgui->w() - ui->g_Splashscreen->w())/2;
-
     ui->g_Splashscreen->position(x,y);
+
+    m_SplashBuffer = "BatchMake 1.0\n";
+    m_SplashBuffer += "Copyright (c) 2006 Kitware Inc.\n\n";
+#ifdef BM_DASHBOARD     
+    m_SplashBuffer += "Dashboard Module: [enabled]\n";
+#else
+    m_SplashBuffer += "Dashboard Module: [disabled]\n";
+#endif
+
+#ifdef BM_GRID    
+    m_SplashBuffer += "Grid Module: [enabled]\n";
+#else
+    m_SplashBuffer += "Grid Module: [disabled]\n";
+#endif
+     
+    m_SplashBuffer += "\nWebsite: http://public.kitware.com/BatchMake\n";
+    ui->copyright->label(m_SplashBuffer.c_str());
     g_Scripteditorgui->show();
     ui->Show();
-    ui->g_progress->maximum(10);
+    ui->g_progress->maximum(100);
     Fl::add_timeout(0.1,Timer,ui);
-  }*/
-
+  }
+#endif
 
   //Load .ini
   XMLIniIO* m_inifile = new XMLIniIO();
@@ -276,6 +296,7 @@ void ScriptEditorGUIControls::OnApplicationWrapper()
 /** Generate a KWGrid script */
 void ScriptEditorGUIControls::OnGenerateGAD()
 {
+#ifdef BM_GRID
   const char* filename = 0;
   filename = fl_file_chooser("Save KWGrid script", "Grid Script(*.gad)", NULL);
 
@@ -316,56 +337,15 @@ void ScriptEditorGUIControls::OnGenerateGAD()
   grid.WriteGAD();
 
   m_parser->SetGridModule(NULL);
-}
-
-/** Generate a Shell script */
-void ScriptEditorGUIControls::OnGenerateShell()
-{
-  const char* filename = 0;
-  filename = fl_file_chooser("Save Shell script", "Shell script (*.sh)", NULL);
-
-  if(!filename)
-    {
-    return;
-    }
-
-  // Check first if the script is valid
-  m_parser->Reset();
-  m_errorgui->Reset();
-  m_errorbuffer->text("");
-  m_errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_errorgui);
-  int m_offset = 0;
-  for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
-    {
-    const char* text = g_editor->buffer()->line_text(m_offset);
-    m_parser->AddCodeLine(MString(text));
-    m_offset = g_editor->buffer()->line_end(m_offset)+1;
-    }
-
-  m_errorgui->SetStatus(MString("Generating shell script ..."));
-    
-  Grid grid;
-  grid.SetFileName(filename);
-  m_parser->SetGridModule(&grid);
-  if (m_parser->Parse())
-    {
-    m_errorgui->DisplaySummary();
-    m_parser->Execute();
-    }
-  else
-    {
-    m_errorgui->DisplaySummary();
-    }
-
-  grid.WriteShell();
-
-  m_parser->SetGridModule(NULL);
+#else
+  fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
+#endif
 }
 
 /** Generate a Condor script */
 void ScriptEditorGUIControls::OnGenerateCondor()
 {
+#ifdef BM_GRID
   const char* filename = 0;
   filename = fl_file_chooser("Save Condor script", "Condor Script(*.bmc)", NULL);
 
@@ -429,6 +409,58 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     }
 
   m_parser->SetGridModule(NULL);
+#else
+   fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
+#endif
+}
+
+/** Generate a Shell script */
+void ScriptEditorGUIControls::OnGenerateShell()
+{
+#ifdef BM_GRID
+  const char* filename = 0;
+  filename = fl_file_chooser("Save Shell script", "Shell script (*.sh)", NULL);
+
+  if(!filename)
+    {
+    return;
+    }
+
+  // Check first if the script is valid
+  m_parser->Reset();
+  m_errorgui->Reset();
+  m_errorbuffer->text("");
+  m_errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_errorgui);
+  int m_offset = 0;
+  for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
+    {
+    const char* text = g_editor->buffer()->line_text(m_offset);
+    m_parser->AddCodeLine(MString(text));
+    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    }
+
+  m_errorgui->SetStatus(MString("Generating shell script ..."));
+    
+  Grid grid;
+  grid.SetFileName(filename);
+  m_parser->SetGridModule(&grid);
+  if (m_parser->Parse())
+    {
+    m_errorgui->DisplaySummary();
+    m_parser->Execute();
+    }
+  else
+    {
+    m_errorgui->DisplaySummary();
+    }
+
+  grid.WriteShell();
+
+  m_parser->SetGridModule(NULL);
+#else
+  fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
+#endif
 }
 
 /** Generate a batch scripts */
@@ -436,12 +468,6 @@ void ScriptEditorGUIControls::OnGenerateScripts()
 {
   // Check first if the script is valid
   this->OnCompile();
-
-
-
-
-
-
 }
 
 } // end namespace bm

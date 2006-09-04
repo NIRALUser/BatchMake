@@ -30,34 +30,40 @@
 #include "bmScriptIntAction.h"
 #include "bmScriptWriteFileAction.h"
 #include "bmScriptAppendFileAction.h"
-#include "bmScriptDbSendValueAction.h"
-#include "bmScriptDbSendFileAction.h"
-#include "bmScriptDbClearAction.h"
 #include "bmScriptExtractSliceAction.h"
 #include "bmScriptExtractStringAction.h"
 #include "bmScriptIncludeAction.h"
-#include "bmScriptDashboardHostAction.h"
-#include "bmScriptDashboardUserAction.h"
-#include "bmScriptCreateExperimentAction.h"
-#include "bmScriptCreateMethodAction.h"
-#include "bmScriptDashboardSendAction.h"
-#include "bmScriptDashboardNotifyAction.h"
 #include "bmScriptSinAction.h"
 #include "bmScriptDeleteFileAction.h"
-#include "bmScriptOpenTCPSocketAction.h"
-#include "bmScriptSendTCPAction.h"
-#include "bmScriptCloseTCPSocketAction.h"
-#include "bmScriptAddMethodInputAction.h"
-#include "bmScriptAddMethodOutputAction.h"
-#include "bmScriptGridDataHostAction.h"
-#include "bmScriptGridOutputHostAction.h"
-#include "bmScriptDataDirectoryAction.h"
-#include "bmScriptOutputDirectoryAction.h"
-#include "bmScriptGridSingleNodeAction.h"
-#include "bmScriptAddMethodIdealOutputAction.h"
-#include "bmScriptSetIdealOutputAction.h"
 #include "bmScriptRegExAction.h"
 #include "bmScriptMakeDirectoryAction.h"
+
+#ifdef BM_GRID
+  #include "bmScriptGridSingleNodeAction.h"
+  #include "bmScriptGridDataHostAction.h"
+  #include "bmScriptGridOutputHostAction.h"
+  #include "bmScriptDataDirectoryAction.h"
+  #include "bmScriptOutputDirectoryAction.h"
+#endif
+
+#ifdef BM_DASHBOARD
+  #include "bmScriptDbSendValueAction.h"
+  #include "bmScriptDbSendFileAction.h"
+  #include "bmScriptDbClearAction.h"
+  #include "bmScriptDashboardHostAction.h"
+  #include "bmScriptDashboardUserAction.h"
+  #include "bmScriptCreateExperimentAction.h"
+  #include "bmScriptCreateMethodAction.h"
+  #include "bmScriptDashboardSendAction.h"
+  #include "bmScriptDashboardNotifyAction.h"
+  #include "bmScriptOpenTCPSocketAction.h"
+  #include "bmScriptSendTCPAction.h"
+  #include "bmScriptAddMethodIdealOutputAction.h"
+  #include "bmScriptCloseTCPSocketAction.h"
+  #include "bmScriptAddMethodInputAction.h"
+  #include "bmScriptAddMethodOutputAction.h"
+  #include "bmScriptSetIdealOutputAction.h"
+#endif
 
 #include "Timer.h"
 
@@ -72,8 +78,11 @@ ScriptActionManager::ScriptActionManager()
   m_ApplicationWrapperList = 0;
   m_ApplicationsList = 0;
   m_scriptpath = "";
-  m_GridModule = NULL;
   m_Parser = NULL;
+
+#ifdef BM_GRID
+  m_GridModule = NULL;
+#endif
 }
 
 ScriptActionManager::~ScriptActionManager()
@@ -197,34 +206,41 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(Int);
   BM_NEWACTION(AppendFile);
   BM_NEWACTION(WriteFile);
-  BM_NEWACTION(DbSendValue);
-  BM_NEWACTION(DbSendFile);
-  BM_NEWACTION(DbClear);
   BM_NEWACTION(ExtractSlice);
   BM_NEWACTION(ExtractString);
   BM_NEWACTION(Include);
+  BM_NEWACTION(Sin);
+  BM_NEWACTION(DeleteFile);
+  BM_NEWACTION(RegEx);
+  BM_NEWACTION(MakeDirectory);
+
+#ifdef BM_GRID
+  BM_NEWACTION(GridDataHost);
+  BM_NEWACTION(GridOutputHost);
+  BM_NEWACTION(GridSingleNode);
+  BM_NEWACTION(OutputDirectory);
+  BM_NEWACTION(DataDirectory);
+#endif
+
+#ifdef BM_DASHBOARD
+  BM_NEWACTION(DbSendValue);
+  BM_NEWACTION(DbSendFile);
+  BM_NEWACTION(DbClear);
   BM_NEWACTION(DashboardHost);
   BM_NEWACTION(DashboardUser);
   BM_NEWACTION(DashboardSend);
   BM_NEWACTION(DashboardNotify);
   BM_NEWACTION(CreateExperiment);
   BM_NEWACTION(CreateMethod);
-  BM_NEWACTION(Sin);
-  BM_NEWACTION(DeleteFile);
   BM_NEWACTION(OpenTCPSocket);
   BM_NEWACTION(SendTCP);
   BM_NEWACTION(CloseTCPSocket);
   BM_NEWACTION(AddMethodInput);
   BM_NEWACTION(AddMethodOutput);
-  BM_NEWACTION(GridDataHost);
-  BM_NEWACTION(GridOutputHost);
-  BM_NEWACTION(DataDirectory);
-  BM_NEWACTION(OutputDirectory);
-  BM_NEWACTION(GridSingleNode);
   BM_NEWACTION(AddMethodIdealOutput);
   BM_NEWACTION(SetIdealOutput);
-  BM_NEWACTION(RegEx);
-  BM_NEWACTION(MakeDirectory);
+#endif
+  
   return 0;
 }
 
@@ -264,10 +280,12 @@ void ScriptActionManager::Reset()
   
    m_actionlist.clear();
 
+#ifdef BM_DASHBOARD
    m_Dashboard.url = "";
    m_Dashboard.user = "";
    m_Dashboard.password = "";
    m_Dashboard.experiments.clear();
+#endif
 }
 
 void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
@@ -299,7 +317,11 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
       m_action->SetParent(m_parentaction);
       m_action->SetManager(this);
       m_action->SetProgressManager(m_progressmanager);
+
+#ifdef BM_GRID
       m_action->SetGridModule(m_GridModule);
+#endif
+
       if (!m_action->TestParam(m_error,m_linenumber))
         {
         if (m_action->Help() != "")
@@ -315,7 +337,10 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
       m_action->SetParent(m_parentaction);
       m_action->SetManager(this);
       m_action->SetProgressManager(m_progressmanager);
+
+#ifdef BM_GRID
       m_action->SetGridModule(m_GridModule);
+#endif
 
       if (!m_action->TestParam(m_error,m_linenumber))
         {
@@ -694,113 +719,6 @@ bool ScriptActionManager::RemoveSocket(MString name)
      ++it;
   }
   return found;
-}
-
-/** Add an experiement to the dashboard */
-bool ScriptActionManager::AddDashboardExperiment(const char* var, const char* projectName, const char* experimentName)
-{
-  // Check that the experiment does not exist
-  std::vector<DashboardExperiment>::const_iterator it = m_Dashboard.experiments.begin();
-  while(it != m_Dashboard.experiments.end())
-    {
-    if((!strcmp((*it).project.c_str(),projectName)) 
-      && (!strcmp((*it).name.c_str(),experimentName)))
-      {
-      return false;
-      }
-    it++;
-    }
-
-  DashboardExperiment exp;
-  exp.variable = var;
-  exp.project = projectName;
-  exp.name = experimentName;
-  m_Dashboard.experiments.push_back(exp);
-  return true;
-}
-
-/** Add a method to an experiment */
-bool ScriptActionManager::AddDashboardMethod(const char* var, const char* expvar, const char* methodName)
-{
-  // Check that the experiment exist
-  std::vector<DashboardExperiment>::iterator it = m_Dashboard.experiments.begin();
-  while(it != m_Dashboard.experiments.end())
-    {
-    if((!strcmp((*it).variable.c_str(),expvar)))
-      {
-      // Check that the method doesn't exit
-      std::vector<DashboardMethod>::const_iterator itMeth = (*it).methods.begin();
-      while(itMeth != (*it).methods.end())
-        {
-        if((!strcmp((*itMeth).expVariable.c_str(),expvar))
-          && (!strcmp((*itMeth).name.c_str(),methodName))
-          )
-          {
-          return false;
-          }
-        itMeth++;
-        }
-      DashboardMethod meth;
-      meth.variable = var;
-      meth.expVariable = expvar;
-      meth.name = methodName;  
-      (*it).methods.push_back(meth);
-      return true;
-      }
-    it++;
-    }
-  return false;
-}
-
-/** Add a parameter to a specific method */
-bool ScriptActionManager::AddDashboardMethodParameter(const char* var, 
-                                                      const char* methVar, 
-                                                      const char* name,
-                                                      bool output,
-                                                      bool ideal,
-                                                      const char* type)
-{
-  // Check that the experiment exist
-  std::vector<DashboardExperiment>::iterator it = m_Dashboard.experiments.begin();
-  while(it != m_Dashboard.experiments.end())
-    {
-    std::vector<DashboardMethod>::iterator itMeth = (*it).methods.begin();
-    while(itMeth != (*it).methods.end())
-      {
-      if((!strcmp((*itMeth).variable.c_str(),methVar)))
-        {
-        std::vector<DashboardMethodParameter>::const_iterator itParam 
-                                                    = (*itMeth).parameters.begin();
-        bool found = false;
-        while(itParam != (*itMeth).parameters.end())
-          {
-          if(!strcmp((*itParam).variable.c_str(),var) && (*itParam).ideal == ideal)
-            {
-            found = true;
-            break;
-            }
-          itParam++;
-          }
-        if(!found)
-          {
-          DashboardMethodParameter param;
-          param.variable = var;
-          param.method = methVar;
-          param.name = name;
-          param.output = output;
-          param.ideal = ideal;
-          if(type)
-            {
-            param.type = type;
-            }
-          (*itMeth).parameters.push_back(param);
-          }
-        }
-      itMeth++;
-      }
-    it++;
-    }
-  return false;
 }
 
 } // end namespace bm

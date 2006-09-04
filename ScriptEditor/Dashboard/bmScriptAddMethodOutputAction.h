@@ -36,7 +36,10 @@ public:
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();
 
-  void GenerateCondor();
+#ifdef BM_GRID
+  void GenerateGrid();
+#endif
+
 };
 
 } // end namespace bm

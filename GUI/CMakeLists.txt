@@ -6,7 +6,13 @@ IF(FLTK_FOUND)
 ENDIF(FLTK_FOUND)
 
 SUBDIRS(External/Flu)
-SUBDIRS(CondorWatcher)
+
+IF(GRID_SUPPORT)
+  SUBDIRS(CondorWatcher)
+  INCLUDE_DIRECTORIES(
+    ${BatchMakeGUI_BINARY_DIR}/CondorWatcher
+  )
+ENDIF(GRID_SUPPORT)
 
 INCLUDE_DIRECTORIES(
   ${BatchMakeGUI_SOURCE_DIR}
@@ -15,12 +21,11 @@ INCLUDE_DIRECTORIES(
   ${BatchMakeGUI_SOURCE_DIR}/ProgressGUI
   ${BatchMakeGUI_SOURCE_DIR}/ScriptEditor
   ${BatchMakeGUI_SOURCE_DIR}/CondorWatcher
-
   ${BatchMakeGUI_BINARY_DIR}/SplashScreen
   ${BatchMakeGUI_BINARY_DIR}/ApplicationWrapper
   ${BatchMakeGUI_BINARY_DIR}/ProgressGUI
   ${BatchMakeGUI_BINARY_DIR}/ScriptEditor
-  ${BatchMakeGUI_BINARY_DIR}/CondorWatcher
+
 )
 
 
@@ -54,6 +59,10 @@ SET(FLTK_WRAP_UI 1)
 FLTK_WRAP_UI( BatchMakeGUI ${BatchMakeGUI_GUI_SRCS} )
 
 ADD_LIBRARY(BatchMakeGUI ${BatchMakeGUI_SRCS} ${BatchMakeGUI_FLTK_UI_SRCS})
-ADD_DEPENDENCIES(BatchMakeGUI FLU CondorWatcher)
-TARGET_LINK_LIBRARIES(BatchMakeGUI CondorWatcher)
+ADD_DEPENDENCIES(BatchMakeGUI FLU)
+
+IF(GRID_SUPPORT)
+  ADD_DEPENDENCIES(BatchMakeGUI CondorWatcher)
+  TARGET_LINK_LIBRARIES(BatchMakeGUI CondorWatcher)
+ENDIF(GRID_SUPPORT)
 

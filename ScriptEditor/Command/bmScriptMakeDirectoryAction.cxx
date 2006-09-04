@@ -47,7 +47,6 @@ MString ScriptMakeDirectoryAction::Help()
 
 void ScriptMakeDirectoryAction::Execute()
 {
-  itksys::SystemTools systemTools;
   MString dirname = this->m_manager->Convert(this->m_parameters[0]);
 
   // If we have a variable MakeDirectory(${dir}), get the dirname
@@ -57,7 +56,7 @@ void ScriptMakeDirectoryAction::Execute()
     }
 
   dirname = dirname.removeChar('\'');
-  if (!systemTools.MakeDirectory(dirname.toChar()))
+  if (!itksys::SystemTools::MakeDirectory(dirname.toChar()))
     {
     // failed to create dir.. notify manager
     if (this->m_manager)

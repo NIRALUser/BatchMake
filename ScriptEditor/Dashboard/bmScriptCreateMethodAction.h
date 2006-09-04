@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptAddMethodInputAction.h
+  Module:    bmScriptCreateMethodAction.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,8 +13,8 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#ifndef __ScriptAddMethodInputAction_h_
-#define __ScriptAddMethodInputAction_h_
+#ifndef __ScriptCreateMethodAction_h_
+#define __ScriptCreateMethodAction_h_
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -27,16 +27,19 @@
 
 namespace bm {
 
-class ScriptAddMethodInputAction : public ScriptAction
+class ScriptCreateMethodAction : public ScriptAction
 {
 public:
-  ScriptAddMethodInputAction();
-  ~ScriptAddMethodInputAction();
+  ScriptCreateMethodAction();
+  ~ScriptCreateMethodAction();
   void Execute();
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();
 
-  void GenerateCondor();
+#ifdef BM_GRID
+  void GenerateGrid();
+#endif
+
 };
 
 } // end namespace bm

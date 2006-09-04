@@ -26,7 +26,10 @@
 #include "bmScriptActionManager.h"
 #include "bmProgressManager.h"
 #include "bmScriptError.h"
-#include "bmGrid.h"
+
+#ifdef BM_GRID
+  #include "bmGrid.h"
+#endif
 
 namespace bm {
 
@@ -54,7 +57,9 @@ public:
   virtual void Delete();
   virtual MString Help();
 
+#ifdef BM_GRID
   void SetGridModule(Grid* grid) {m_GridModule = grid;}
+#endif
 
 protected:
   ParametersType m_parameters;
@@ -62,7 +67,11 @@ protected:
   ScriptAction* m_parent;
   ScriptActionManager* m_manager;
   ProgressManager* m_progressmanager;
+
+#ifdef BM_GRID
   Grid* m_GridModule;
+#endif
+
 };
 
 } // end namespace bm
