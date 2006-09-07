@@ -1,0 +1,35 @@
+SET(BatchMakeGrid_SRCS
+  bmGrid.h
+  bmGrid.cxx
+  bmScriptGridSingleNodeAction.cxx
+  bmScriptGridDataHostAction.cxx
+  bmScriptGridOutputHostAction.cxx
+  bmScriptOutputDirectoryAction.cxx
+  bmScriptDataDirectoryAction.cxx
+  bmScriptExtractSliceActionGrid.cxx
+  bmScriptRunActionGrid.cxx
+  bmScriptSetActionGrid.cxx
+)
+
+IF(DASHBOARD_SUPPORT)
+  SET(BatchMakeGrid_SRCS
+  ${BatchMakeGrid_SRCS}
+  bmScriptSetIdealOutputActionGrid.cxx
+  bmScriptAddMethodIdealOutputActionGrid.cxx
+  bmScriptCreateExperimentActionGrid.cxx
+  bmScriptAddMethodOutputActionGrid.cxx
+  bmScriptAddMethodInputActionGrid.cxx
+  bmScriptDashboardSendActionGrid.cxx
+  bmScriptCreateMethodActionGrid.cxx
+  )
+ENDIF(DASHBOARD_SUPPORT)
+
+ADD_LIBRARY(BatchMakeGrid ${BatchMakeGrid_SRCS})
+
+# Installation file
+INSTALL(TARGETS BatchMakeGrid 
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+INSTALL(FILES ${BatchMakeGrid_HDRS} DESTINATION include/BatchMake/Grid)
+INSTALL(FILES CMakeLists.txt DESTINATION source/Grid)
+INSTALL(FILES ${BatchMakeGrid_SRCS} DESTINATION source/Grid)

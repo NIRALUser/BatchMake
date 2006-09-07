@@ -1,8 +1,14 @@
-PROJECT(BatchMakeUtilities)
+SUBDIRS(Flu CondorWatcher Zip)
 
-INCLUDE_DIRECTORIES(
-  ${BatchMakeUtilities_SOURCE_DIR}
-  ${BatchMakeUtilitiesr_BINARY_DIR}
+SET(BatchMakeUtilities_HDRS
+  MString.h
+  Timer.h
+  XMLReader.h
+  XMLWriter.h
+  XMLIniIO.h
+  TCPSocket.h
+  XMLBufferReader.h
+  SliceExtractor.h
 )
 
 
@@ -18,3 +24,9 @@ SET(BatchMakeUtilities_SRCS
 )
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
+
+# Installation file
+INSTALL(TARGETS BatchMakeUtilities
+        ARCHIVE DESTINATION lib)
+INSTALL(FILES ${BatchMakeUtilities_HDRS} DESTINATION include/BatchMake/Utilities)
+INSTALL(FILES ${BatchMakeUtilities_SRCS} DESTINATION source/Utilities)
