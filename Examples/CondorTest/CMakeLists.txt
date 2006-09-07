@@ -15,5 +15,5 @@ ADD_EXECUTABLE(bmCondorTest ${bmCondorTest_SRCS})
 # Installation file
 INSTALL(TARGETS bmCondorTest 
         RUNTIME DESTINATION bin)
-INSTALL(FILES bmCondorTest.cxx DESTINATION include/BatchMake/External/PixelCounter)
-INSTALL(FILES CMakeLists.txt DESTINATION include/BatchMake/External/PixelCounter)
+INSTALL(FILES bmCondorTest.cxx DESTINATION source/Examples/CondorTest)
+INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/CondorTest)

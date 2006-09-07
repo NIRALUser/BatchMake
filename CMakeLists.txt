@@ -58,7 +58,7 @@ IF(NOT DART_ROOT)
 ENDIF(NOT DART_ROOT)
 
 # Display the splashscreen or not
-OPTION(SPLASHSCREEN "Display the splashscreen" OFF)
+OPTION(SPLASHSCREEN "Display the splashscreen" ON)
 IF(SPLASHSCREEN)
  ADD_DEFINITIONS(-DBMSPLASHSCREEN)
 ENDIF(SPLASHSCREEN)
@@ -70,6 +70,25 @@ MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 SET(BatchMake_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
 SET(BatchMake_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
 SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
+
+# If this is the install version of BathMake we look for the include files
+FIND_PATH(BatchMake_INCLUDE_DIR ApplicationWrapper/ApplicationWrapper.h ${BatchMake_SOURCE_DIR}/../include/BatchMake)
+MARK_AS_ADVANCED(FORCE BatchMake_INCLUDE_DIR)
+
+IF(BatchMake_INCLUDE_DIR)
+  INCLUDE_DIRECTORIES(
+  ${BatchMake_INCLUDE_DIR}/Code
+  ${BatchMake_INCLUDE_DIR}/Grid
+  ${BatchMake_INCLUDE_DIR}/Utilities
+  ${BatchMake_INCLUDE_DIR}/ApplicationWrapper
+  ${BatchMake_INCLUDE_DIR}/Utilities/Flu
+  ${BatchMake_INCLUDE_DIR}/Utilities/Zip
+  ${BatchMake_INCLUDE_DIR}/Utilities/CondorWatcher
+  ${BatchMake_INCLUDE_DIR}/Dashboard
+  ${BatchMake_INCLUDE_DIR}/Code
+)
+ENDIF(BatchMake_INCLUDE_DIR)
+
 
 INCLUDE_DIRECTORIES(
   ${BatchMake_SOURCE_DIR}/Code
@@ -136,6 +155,12 @@ INSTALL(FILES ReadMe.txt DESTINATION source)
 INSTALL(FILES DartConfig.cmake DESTINATION source)
 INSTALL(FILES FindFLTK.cmake DESTINATION source)
 
+FILE(GLOB IMAGES Images/*.*)
+INSTALL(FILES ${IMAGES} DESTINATION source/Images)
+
+FILE(GLOB Doxygen Documentation/Doxygen/*.*)
+INSTALL(FILES ${Doxygen} DESTINATION source/Documentation/Doxygen)
+
 # CPack options
 INCLUDE(InstallRequiredSystemLibraries)
 
@@ -146,7 +171,7 @@ SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt")
 SET(CPACK_PACKAGE_VERSION_MAJOR ${BatchMake_VERSION_MAJOR})
 SET(CPACK_PACKAGE_VERSION_MINOR ${BatchMake_VERSION_MINOR})
 SET(CPACK_PACKAGE_VERSION_PATCH ${BatchMake_VERSION_PATCH})
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "KWStyle ${BatchMake_VERSION_MAJOR}.${BatchMake_VERSION_MINOR}.${BatchMake_VERSION_PATCH}")
+SET(CPACK_PACKAGE_INSTALL_DIRECTORY "BatchMake ${BatchMake_VERSION_MAJOR}.${BatchMake_VERSION_MINOR}.${BatchMake_VERSION_PATCH}")
 IF(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
   # sure there is at least one set of four (4) backlasshes.

@@ -9,6 +9,12 @@ SET(BatchMakeLib_SRCS
 )
 
 SET(BatchMakeLib_HDRS
+bmLaunch.h
+bmProgressManager.h
+bmScriptAction.h
+bmScriptActionManager.h
+bmScriptError.h
+bmScriptParser.h
 bmEditor.h
 bmScriptEditorGUIBase.h
 bmScriptEditorGUIControls.h
@@ -18,6 +24,35 @@ bmProgressManagerGUI.h
 bmScriptErrorGUI.h
 bmSplashScreenControls.h
 bmIcons.h
+bmScriptEchoAction.h
+bmScriptForEachAction.h
+bmScriptGetParamAction.h
+bmScriptIfAction.h
+bmScriptRandomizeAction.h
+bmScriptRunAction.h
+bmScriptSequenceAction.h
+bmScriptSetAction.h
+bmScriptSetAppAction.h
+bmScriptSetAppOptionAction.h
+bmScriptListFileInDirAction.h
+bmScriptListDirInDirAction.h
+bmScriptIncAction.h
+bmScriptIntAction.h
+bmScriptWriteFileAction.h
+bmScriptAppendFileAction.h
+bmScriptExtractSliceAction.h
+bmScriptExtractStringAction.h
+bmScriptIncludeAction.h
+bmScriptSinAction.h
+bmScriptDeleteFileAction.h
+bmScriptRegExAction.h
+bmScriptMakeDirectoryAction.h
+bmEditor.h
+bmScriptEditorGUIControls.h
+bmSplashScreenControls.h
+bmScriptErrorGUI.h
+bmProgressManagerGUI.h
+bmProgressGUIControls.h
 )
 
 #Add Commands
@@ -101,7 +136,7 @@ SET(BATCHMAKE_LIBS
 )
 
 # Add an option to hide the console
-OPTION("HIDE_CONSOLE",OFF)
+OPTION(HIDE_CONSOLE "Hide the console" OFF)
 IF(HIDE_CONSOLE)
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows") 
 ENDIF(HIDE_CONSOLE)
@@ -110,9 +145,12 @@ ADD_EXECUTABLE(BatchMake ${BatchMake_SRCS})
 TARGET_LINK_LIBRARIES(BatchMake ${BATCHMAKE_LIBS})
 
 # Installation file
-INSTALL(TARGETS BatchMake
+INSTALL(TARGETS BatchMake BatchMakeLib
         RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib)
-INSTALL(FILES ${BatchMake_HDRS} DESTINATION include/BatchMake)
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        )
+INSTALL(FILES ${BatchMake_HDRS}  ${BatchMakeLib_HDRS}  DESTINATION include/BatchMake/Code)
 INSTALL(FILES CMakeLists.txt DESTINATION source/Code)
-INSTALL(FILES ${BatchMake_SRCS} DESTINATION source/Code)
+INSTALL(FILES BatchMake.ico DESTINATION source/Code)
+INSTALL(FILES ${BatchMake_SRCS} ${BatchMakeLib_SRCS} ${BatchMakeLib_GUI_SRCS} DESTINATION source/Code)

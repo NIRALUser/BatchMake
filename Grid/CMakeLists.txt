@@ -1,5 +1,13 @@
-SET(BatchMakeGrid_SRCS
+SET(BatchMakeGrid_HDRS
   bmGrid.h
+  bmScriptDataDirectoryAction.h
+  bmScriptGridDataHostAction.h
+  bmScriptGridOutputHostAction.h
+  bmScriptGridSingleNodeAction.h
+  bmScriptOutputDirectoryAction.h
+)
+
+SET(BatchMakeGrid_SRCS
   bmGrid.cxx
   bmScriptGridSingleNodeAction.cxx
   bmScriptGridDataHostAction.cxx

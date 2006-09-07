@@ -5,25 +5,21 @@ INCLUDE_DIRECTORIES(
   ${Zip_BINARY_DIR}
 )
 
-SET(ZLib_HDRS
-  adler32.h  
-  gzio.h      
+SET(ZLib_HDRS   
   inftrees.h 
-  uncompr.h
-  compress.h 
   infblock.h  
   infutil.h   
   zutil.h    
-  infcodes.c  
+  infcodes.h 
   deflate.h  
-  inffast.h  
-  inflate.h   
+  inffast.h   
   trees.h 
   zip.h
-  zutils.h
-  unszip.h
+  unzip.h
   zconf.h
   itk_zlib_mangle.h
+  zlib.h
+  inffixed.h
 )
 
 SET(ZLib_SRCS
@@ -74,6 +70,6 @@ TARGET_LINK_LIBRARIES(Unzip
 INSTALL(TARGETS ZLib Zip Unzip 
         RUNTIME DESTINATION bin
         ARCHIVE DESTINATION lib)
-INSTALL(FILES ${ZLib_SRCS} ${Zip_SRCS} ${Unzip_SRCS} DESTINATION source/External/Zip)
-INSTALL(FILES ${ZLib_HDRS} DESTINATION include/BatchMake/External/Zip)
-INSTALL(FILES CMakeLists.txt DESTINATION include/BatchMake/External/Zip)
+INSTALL(FILES ${ZLib_HDRS} DESTINATION include/BatchMake/Utilities/Zip)
+INSTALL(FILES ${ZLib_SRCS} ${Zip_SRCS} ${Unzip_SRCS} DESTINATION source/Utilities/Zip)
+INSTALL(FILES CMakeLists.txt zlibDllConfig.h.in DESTINATION source/Utilities/Zip)

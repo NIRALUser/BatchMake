@@ -35,4 +35,5 @@ ADD_DEPENDENCIES(BatchMakeApplicationWrapper FLU)
 INSTALL(TARGETS BatchMakeApplicationWrapper
         ARCHIVE DESTINATION lib)
 INSTALL(FILES ${BatchMakeApplicationWrapper_HDRS} DESTINATION include/BatchMake/ApplicationWrapper)
-INSTALL(FILES ${BatchMakeApplicationWrapper_SRCS} DESTINATION source/ApplicationWrapper)
+INSTALL(FILES ${BatchMakeApplicationWrapper_SRCS} ${BatchMakeApplicationWrapper_GUI_SRCS} DESTINATION source/ApplicationWrapper)
+INSTALL(FILES CMakeLists.txt DESTINATION source/ApplicationWrapper)

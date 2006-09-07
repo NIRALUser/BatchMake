@@ -1,4 +1,8 @@
-SUBDIRS(Flu CondorWatcher Zip)
+IF(GRID_SUPPORT)
+  SUBDIRS(CondorWatcher)
+ENDIF(GRID_SUPPORT)
+
+SUBDIRS(Flu Zip)
 
 SET(BatchMakeUtilities_HDRS
   MString.h
@@ -30,3 +34,4 @@ INSTALL(TARGETS BatchMakeUtilities
         ARCHIVE DESTINATION lib)
 INSTALL(FILES ${BatchMakeUtilities_HDRS} DESTINATION include/BatchMake/Utilities)
 INSTALL(FILES ${BatchMakeUtilities_SRCS} DESTINATION source/Utilities)
+INSTALL(FILES CMakeLists.txt DESTINATION source/Utilities)

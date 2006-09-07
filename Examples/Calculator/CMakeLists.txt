@@ -5,5 +5,5 @@ TARGET_LINK_LIBRARIES(Calculator BatchMakeLib BatchMakeDashboard BatchMakeUtilit
 # Installation file
 INSTALL(TARGETS Calculator 
         RUNTIME DESTINATION bin)
-INSTALL(FILES main.cxx DESTINATION include/BatchMake/External/Calculator)
-INSTALL(FILES CmakeLists.txt DESTINATION include/BatchMake/External/Calculator)
+INSTALL(FILES main.cxx DESTINATION source/Examples/Calculator)
+INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/Calculator)

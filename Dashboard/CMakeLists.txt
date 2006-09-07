@@ -16,7 +16,6 @@ SET(BatchMakeDashboard_HDRS
   bmScriptCreateExperimentAction.h
   bmScriptCreateMethodAction.h   
   bmScriptAddMethodOutputAction.h  
-  bmScriptActionManagerDashboard.h  
 )
 
 SET(BatchMakeDashboard_SRCS
@@ -70,4 +69,5 @@ INSTALL(TARGETS BatchMakeDashboard bmSliceExtractor bmGridStore bmGridSend
         RUNTIME DESTINATION bin
         ARCHIVE DESTINATION lib)
 INSTALL(FILES ${BatchMakeDashboard_HDRS} DESTINATION include/BatchMake/Dashboard)
-INSTALL(FILES ${BatchMakeDashboard_SRCS} DESTINATION source/Dashboard)
+INSTALL(FILES ${BatchMakeDashboard_SRCS} bmGridSend.cxx bmGridStore.cxx bmSliceExtractor.cxx DESTINATION source/Dashboard)
+INSTALL(FILES CMakeLists.txt DESTINATION source/Dashboard)
