@@ -1,8 +1,43 @@
-PROJECT(BatchMakeDashboard)
+SET(BatchMakeDashboard_HDRS
+  HttpRequest.h
+  bmScriptDbSendValueAction.h
+  bmScriptDbSendFileAction.h
+  bmScriptDbClearAction.h
+  bmScriptOpenTCPSocketAction.h
+  bmScriptSendTCPAction.h
+  bmScriptCloseTCPSocketAction.h
+  bmScriptAddMethodInputAction.h
+  bmScriptAddMethodIdealOutputAction.h
+  bmScriptSetIdealOutputAction.h
+  bmScriptDashboardHostAction.h
+  bmScriptDashboardUserAction.h
+  bmScriptDashboardSendAction.h
+  bmScriptDashboardNotifyAction.h
+  bmScriptCreateExperimentAction.h
+  bmScriptCreateMethodAction.h   
+  bmScriptAddMethodOutputAction.h  
+  bmScriptActionManagerDashboard.h  
+)
 
 SET(BatchMakeDashboard_SRCS
   HttpRequest.cxx
-  HttpRequest.h
+  bmScriptDbSendValueAction.cxx
+  bmScriptDbSendFileAction.cxx
+  bmScriptDbClearAction.cxx
+  bmScriptOpenTCPSocketAction.cxx
+  bmScriptSendTCPAction.cxx
+  bmScriptCloseTCPSocketAction.cxx
+  bmScriptAddMethodInputAction.cxx
+  bmScriptAddMethodIdealOutputAction.cxx
+  bmScriptSetIdealOutputAction.cxx
+  bmScriptDashboardHostAction.cxx
+  bmScriptDashboardUserAction.cxx
+  bmScriptDashboardSendAction.cxx
+  bmScriptDashboardNotifyAction.cxx
+  bmScriptCreateExperimentAction.cxx
+  bmScriptCreateMethodAction.cxx   
+  bmScriptAddMethodOutputAction.cxx  
+  bmScriptActionManagerDashboard.cxx  
 )
 
 IF(WIN32)
@@ -11,7 +46,7 @@ SET(BatchMakeDashboard_LIBS
 )
 
 ELSE(WIN32)
-SET(Uploader_LIBS
+SET(BatchMakeDashboard_LIBS
  socket
  nsl
 )
@@ -29,3 +64,10 @@ TARGET_LINK_LIBRARIES(bmGridStore BatchMakeDashboard BatchMakeUtilities)
 
 ADD_EXECUTABLE(bmSliceExtractor bmSliceExtractor.cxx)
 TARGET_LINK_LIBRARIES(bmSliceExtractor BatchMakeDashboard BatchMakeUtilities)
+
+# Installation file
+INSTALL(TARGETS BatchMakeDashboard bmSliceExtractor bmGridStore bmGridSend
+        RUNTIME DESTINATION bin
+        ARCHIVE DESTINATION lib)
+INSTALL(FILES ${BatchMakeDashboard_HDRS} DESTINATION include/BatchMake/Dashboard)
+INSTALL(FILES ${BatchMakeDashboard_SRCS} DESTINATION source/Dashboard)
