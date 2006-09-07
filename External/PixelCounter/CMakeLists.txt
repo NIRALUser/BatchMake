@@ -1,3 +1,0 @@
-PROJECT(PixelCounter)
-ADD_EXECUTABLE(PixelCounter main.cxx)
-TARGET_LINK_LIBRARIES(PixelCounter BatchMakeDashboard BatchMakeUtilities)
