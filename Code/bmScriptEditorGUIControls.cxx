@@ -125,13 +125,15 @@ void ScriptEditorGUIControls::Show()
   }
 #endif
 
+  std::cout << "BatchMake 1.0.0 by Kitware Inc." << std::endl;
+
   //Load .ini
   XMLIniIO* m_inifile = new XMLIniIO();
   m_inifile->SetFileName(m_applicationpath + "/BatchMake.ini");
   if (m_inifile->Read() != -1)
   {
     MString m_inivalue = m_inifile->Find("Test .ini value");
-    std::cout << "Ini value: " << m_inivalue.toChar() << std::endl;
+    //std::cout << "Ini value: " << m_inivalue.toChar() << std::endl;
   }
   else
   {
