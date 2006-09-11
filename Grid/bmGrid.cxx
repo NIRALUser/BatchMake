@@ -155,6 +155,9 @@ void Grid::WriteGAD()
   unsigned int inFile = 1;
   unsigned int outFile = 1;
 
+  fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum); 
+  fprintf(fic,"<componentActionList>\n");
+
   // Add the applicationComponent
   std::vector<ApplicationWrapper>::iterator it = m_ApplicationsList.begin();
   while(it != m_ApplicationsList.end())
@@ -321,14 +324,24 @@ void Grid::WriteGAD()
              }
           itChildren++;
           }
-      
-        fprintf(fic,"  <group name=\"%s\" syntax=\"%s\" optional=\"%s\" selected=\"true\">\n"
+
+        itChildren = itParams;
+        itChildren++;
+
+        // If the group has no child we plan accordingly
+        if(itChildren == params.end() || !(*itChildren).GetParent())
+          {
+          fprintf(fic,"  <argument name=\"%s\" value=\"%s\"/>\n"
+                         ,(*itParams).GetName().toChar()
+                         ,syntax.c_str());
+          }
+        else
+          {
+          fprintf(fic,"  <group name=\"%s\" syntax=\"%s\" optional=\"%s\" selected=\"true\">\n"
                                 ,(*itParams).GetName().toChar()
                                 ,syntax.c_str()
                                 ,optional.c_str());
 
-        itChildren = itParams;
-        itChildren++;
         while(itChildren!=params.end() && (*itChildren).GetParent())
           {
           std::string value = (*itChildren).GetValue().toChar();          
@@ -374,7 +387,7 @@ void Grid::WriteGAD()
               }
             else
               {
-             fprintf(fic,"   <argument name=\"%s.%d\" value=\"%s\" type=\"%s\"/>\n",
+              fprintf(fic,"   <argument name=\"%s.%d\" value=\"%s\" type=\"%s\"/>\n",
                            (*itChildren).GetName().toChar(),i,(*itV).c_str(),
                            (*itChildren).GetTypeAsChar());
            
@@ -384,9 +397,8 @@ void Grid::WriteGAD()
             }
           itChildren++;
           }
-
-
         fprintf(fic,"  </group>\n");
+          }
         }
       else
         {
@@ -429,8 +441,11 @@ void Grid::WriteGAD()
       fprintf(fic,"  <parameter name=\"Description\" value=\"\"/>\n");
       fprintf(fic,"  <parameter name=\"Direction\" value=\"Out\"/>\n");
       fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
-      fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s\"/>\n",(*itParams).GetValue().toChar());
-      fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",(*it).GetOutputDirectory(),(*itParams).GetValue().toChar());
+
+      MString valwithoutquote = (*itParams).GetValue().removeChar('"');
+
+      fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s\"/>\n",valwithoutquote.toChar());
+      fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",(*it).GetOutputDirectory(),valwithoutquote.toChar());
       fprintf(fic," <dependency name=\"%s\"/>\n",appName);
       fprintf(fic," </componentAction>\n");
       char* dep = new char[255];
