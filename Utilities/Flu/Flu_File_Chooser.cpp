@@ -2790,7 +2790,7 @@ int Flu_File_Chooser :: popupContextMenu( Entry *entry )
   const Fl_Menu_Item *selection = entryPopup.popup();
   if( selection )
     {
-      int handler = (int)selection->user_data();
+      int handler = (long)selection->user_data();
       switch( handler )
   {
   case ACTION_NEW_FOLDER:
