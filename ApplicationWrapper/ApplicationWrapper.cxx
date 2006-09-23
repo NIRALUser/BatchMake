@@ -183,10 +183,10 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
           }
         }
       else
-        { 
+        {
         // Look for the child
         if(second.size() > 0)
-          {
+          {        
           //m_SequentialParams.push_back(*it);
           std::vector<ApplicationWrapperParam>::iterator itChild = m_params.begin();
           while(itChild != m_params.end())
@@ -195,9 +195,9 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
             childname += ".";
             childname += second;
              if(!strcmp((*itChild).GetName().toChar(),childname.c_str())
-              && ((*itChild).GetParent() == parent)
+              //&& ((*itChild).GetParent() == parent)
               )
-              {           
+              {
               (*itChild).SetValueDefined(true);
               (*itChild).SetValue(value.c_str());
               }

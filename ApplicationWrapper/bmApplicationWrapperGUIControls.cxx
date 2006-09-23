@@ -18,27 +18,11 @@
 #include <FL/Fl_File_Chooser.H>
 #include "ApplicationWrapperParam.h"
 #include "metaCommand.h"
+#include <itksys/Directory.hxx>
+#include <itksys/SystemTools.hxx>
 
 #include "MString.h"
-/*
-#ifndef WIN32
-  #include <unistd.h>
-#endif
 
-#ifdef WIN32
-  #include <Windows.h>
-  #include <fcntl.h>
-  #include <errno.h>
-  #include <io.h>
-  #include <stdio.h>
-  #include <process.h>
-#else
-  #include <unistd.h>
-  #include <sys/wait.h>
-  #include <fcntl.h>
-  #include <errno.h>
-#endif
-*/
 namespace bm {
 
 ApplicationWrapperGUIControls::ApplicationWrapperGUIControls():ApplicationWrapperGUI()
@@ -337,10 +321,28 @@ void ApplicationWrapperGUIControls::OnSaveModule()
   m_applicationwrapper->SetVersion(MString(g_moduleversion->value()));
 
   if (m_applicationwrapper->GetName() == "")
-  {
+    {
     fl_alert("Please set a module name!");
     return;
-  }
+    }
+
+  // Check if the Applications directory exists
+  itksys::Directory directory;
+  std::string dirpath = m_applicationpath.toChar();
+  dirpath += "/Applications/";
+  if(!directory.Load(dirpath.c_str()))
+    {
+    int createdir = fl_ask("The Applications directory doesn't exist. Create it?");
+    if(createdir)
+      {
+      itksys::SystemTools::MakeDirectory(dirpath.c_str());
+      }
+    else
+      {
+      return;
+      }
+    }
+
 
   if (m_applicationwrapper->GetName().removeChar(' ') == m_currentfilename)
   {
@@ -358,7 +360,7 @@ void ApplicationWrapperGUIControls::OnSaveModule()
     if (m_file == 0)
     {
       m_applicationwrapper->Save(m_applicationpath + "/Applications/" + m_applicationwrapper->GetName().removeChar(' ') + ".bmm");
-      unlink((m_applicationpath + "/Applications/" + m_currentfilename + ".bmm").toChar());
+      itksys::SystemTools::RemoveFile((m_applicationpath + "/Applications/" + m_currentfilename + ".bmm").toChar());
       g_Applicationwrappergui->hide();
       if (m_currentfilename == "")
         m_applicationlistguicontrols->UpdateNew(m_applicationwrapper);
