@@ -46,13 +46,17 @@ SET(BatchMakeDashboard_LIBS
 
 ELSE(WIN32)
 SET(BatchMakeDashboard_LIBS
- socket
+  #socket
  nsl
 )
 ENDIF(WIN32)
 
 ADD_LIBRARY(BatchMakeDashboard ${BatchMakeDashboard_SRCS})
 TARGET_LINK_LIBRARIES(BatchMakeDashboard ${BatchMakeDashboard_LIBS})
+
+IF(GRID_SUPPORT)
+  TARGET_LINK_LIBRARIES(BatchMakeDashboard BatchMakeGrid)
+ENDIF(GRID_SUPPORT)
 
 # Create the dashboard send application
 ADD_EXECUTABLE(bmGridSend bmGridSend.cxx)
