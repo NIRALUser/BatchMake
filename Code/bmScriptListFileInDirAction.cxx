@@ -87,9 +87,18 @@ void ScriptListFileInDirAction::Execute()
 
   dirent** dirList;
   
-  unsigned int size = fl_filename_list(dir.c_str(),&dirList);
+  int size = fl_filename_list(dir.c_str(),&dirList);
   
-  for(unsigned int i=0;i<size;i++)
+  if(size == -1)
+    {
+    m_progressmanager->AddAction("Action: ListFileInDir()");
+    std::string error = dir;
+    error += " : cannot open directory";
+    m_progressmanager->AddError(error.c_str());
+    return;
+    }
+
+  for(int i=0;i<size;i++)
     {
     if(fl_filename_match((*dirList)->d_name,m_filter.toChar())
       && !fl_filename_match((*dirList)->d_name,"./")
