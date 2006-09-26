@@ -69,17 +69,32 @@ void ProgressManagerGUI::AddAction(MString name)
   m_group->end();
 
 
-  char* m_title = new char[500];
-  strcpy(m_title,name.toChar());
+  std::string title = name.toChar();
+  long int pos = title.find_last_of("/");
+  long int pos2 = title.find_last_of("\\");
+  if(pos != -1 || pos2 !=-1)
+    {
+    if(pos2>pos)
+      {
+      pos = pos2;
+      }
+    title = title.substr(pos+1,title.size()-pos-1);
+    }
+
+  char* title2 = new char[title.size()+1];
+  strcpy(title2,title.c_str());
+  
   Fl_Box *m_label = new Fl_Box(0, 0, 150, 20);
-  m_label->label(m_title);
+  m_label->label(title2);
   m_label->labelsize(12);
   m_label->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT );
 
-  m_progress = new Fl_Progress(150,5,150,10);
+  double sizechar = 100/14; // approximate
+
+  m_progress = new Fl_Progress(int(sizechar*title.size()),5,150,10);
   m_progress->box(FL_PLASTIC_UP_BOX);
   m_progress->selection_color((Fl_Color)180);
- m_progress->maximum(10);
+  m_progress->maximum(10);
 
   m_group->add(m_label);
   m_group->add(m_progress);

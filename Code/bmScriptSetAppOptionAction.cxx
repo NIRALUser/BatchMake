@@ -92,17 +92,29 @@ void ScriptSetAppOptionAction::Execute()
   std::string value = "";
   for(i=1;i<m_parameters.size();i++)
     {
-    if(m_parameters[i].find("$") != -1) // if the second parametershas been defined as a variable
+    std::string param = m_parameters[i].toChar();
+    long int currentpos = 0;
+    long int posvar = param.find("${");
+
+    while(posvar != -1) // if the second parameters has been defined as a variable
       {
-      value += m_manager->GetVariable(m_parameters[i])[0].toChar();
+      value +=  param.substr(currentpos,posvar-currentpos);
+
+      long int curly = param.find("}",posvar); 
+      if(curly!=-1)
+        {
+        currentpos = curly+1;
+        std::string var = param.substr(posvar,curly-posvar+1);
+        value += m_manager->GetVariable(var)[0].toChar();
+        }
+       posvar =param.find("$",posvar+1);
       }
-    else
+    if(param.size()-currentpos>0)
       {
-      value += m_parameters[i].toChar();
+      value +=  param.substr(currentpos,param.size()-currentpos);
       }
     value += " ";
     }
-
   ApplicationWrapper * app = NULL;
   MString appName = m_manager->GetVariable(first.c_str())[0];
   bool appFound = false;

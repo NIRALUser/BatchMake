@@ -339,6 +339,7 @@ void ScriptEditorGUIControls::OnGenerateGAD()
   grid.WriteGAD();
 
   m_parser->SetGridModule(NULL);
+  m_errorgui->SetStatus(MString("Generation done.")); 
 #else
   fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
 #endif
@@ -411,6 +412,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     }
 
   m_parser->SetGridModule(NULL);
+  m_errorgui->SetStatus(MString("Generation done.")); 
 #else
    fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
 #endif
@@ -460,6 +462,7 @@ void ScriptEditorGUIControls::OnGenerateShell()
   grid.WriteShell();
 
   m_parser->SetGridModule(NULL);
+  m_errorgui->SetStatus(MString("Generation done.")); 
 #else
   fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
 #endif

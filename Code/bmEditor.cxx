@@ -193,7 +193,7 @@ void Editor::UpdateApplicationsList()
   Flu_Tree_Browser::Node* m_node = m_ApplicationBrowser->first();
   m_node = m_node->next();
   m_node->select_only();
-  m_ApplicationBrowser->set_hilighted(m_node);
+  //m_ApplicationBrowser->set_hilighted(m_node);
 }
 
 /** Update the list of keywords */
@@ -563,8 +563,7 @@ void Editor::AddApplicationsToBrowse()
     MString lowercaseLine = line;
     lowercaseLine = lowercaseLine.toLower();
     std::string lowercaseLine2 = lowercaseLine.toChar();
-
-    if(pos = lowercaseLine2.find("SetApp")!=-1)
+    if(pos = lowercaseLine2.find("setapp(")!=-1)
       {
       long pos1 = line.find("(",pos);
       if(pos1 != -1)
@@ -963,7 +962,7 @@ int Editor::handle( int event )
         lowercaseLine = lowercaseLine.toLower();
         std::string lowercaseLine2 = lowercaseLine.toChar();
 
-        if(pos = lowercaseLine2.find("setapp")!=-1)
+        if(pos = lowercaseLine2.find("setapp(")!=-1)
           {
           long pos1 = line.find("(",pos);
           if(pos1 != -1)
