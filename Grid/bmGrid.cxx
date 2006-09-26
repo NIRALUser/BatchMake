@@ -62,9 +62,16 @@ void Grid::SetGridBarrier()
 /** Add an application to the list of applications to generate */
 void Grid::AddApplication(ApplicationWrapper* app,const char* datadir,const char* outputdir)
 {
-  (*app).SetDataHost(m_DataHost.c_str());
-  (*app).SetOutputHost(m_OutputHost.c_str());
-  
+  if(m_DataHost.size()>0)
+    {
+    (*app).SetDataHost(m_DataHost.c_str());
+    }
+
+  if(m_OutputHost.size()>0)
+    {
+    (*app).SetOutputHost(m_OutputHost.c_str());
+    }
+
   if(m_SingleNodeTransition)
     {
    (*app).SetSingleNode(2);
@@ -194,7 +201,9 @@ void Grid::WriteGAD()
     std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();
     while(itParams != params.end())
       {
-      if((*itParams).GetExternalData() == 1 && (*itParams).GetValue().length() > 0) // DATA_IN
+      if((*itParams).GetExternalData() == 1 
+         && (*itParams).GetValue().length() > 0
+         && strlen((*it).GetDataHost())>0) // DATA_IN
         {
         fprintf(fic," <componentAction type=\"DataRelocation\" name=\"InputFile%d\">\n",inFile);
         fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetDataHost());
@@ -207,7 +216,7 @@ void Grid::WriteGAD()
      
         if(dependApp)
           {
-          fprintf(fic,"  <dependency name=\"%s\"/>\n",dependApp->GetDependencyTag());
+          fprintf(fic,"  <dependency name=\"%s\" status=\"done\"/>\n",dependApp->GetDependencyTag());
           }
         fprintf(fic," </componentAction>\n");
         char* dep = new char[255];
@@ -434,7 +443,9 @@ void Grid::WriteGAD()
   itParams = params.begin();
   while(itParams != params.end())
     {
-    if((*itParams).GetExternalData() == 2 && (*itParams).GetValue().length() > 0) // DATA_OUT
+    if((*itParams).GetExternalData() == 2 
+      && (*itParams).GetValue().length() > 0
+      && strlen((*it).GetOutputHost())>0) // DATA_OUT
       {
       fprintf(fic," <componentAction type=\"DataRelocation\" name=\"OutputFile%d\">\n",outFile);
       fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetOutputHost());
@@ -446,7 +457,7 @@ void Grid::WriteGAD()
 
       fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s\"/>\n",valwithoutquote.toChar());
       fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",(*it).GetOutputDirectory(),valwithoutquote.toChar());
-      fprintf(fic," <dependency name=\"%s\"/>\n",appName);
+      fprintf(fic," <dependency name=\"%s\" status=\"done\"/>\n",appName);
       fprintf(fic," </componentAction>\n");
       char* dep = new char[255];
       sprintf(dep,"OutputFile%d",outFile);

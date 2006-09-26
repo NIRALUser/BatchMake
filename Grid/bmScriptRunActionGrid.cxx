@@ -14,10 +14,7 @@
 =========================================================================*/
 
 #include "bmScriptRunAction.h"
-/*#include "bmLaunch.h"
-#include "Timer.h"
-#include "XMLBufferReader.h"
-*/
+
 namespace bm {
 
 
