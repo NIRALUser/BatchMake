@@ -39,7 +39,7 @@
 
 #ifdef BM_GRID
   #include "bmGrid.h"
-#endif BM_GRID
+#endif // BM_GRID
 
 namespace bm {
 
@@ -143,7 +143,7 @@ public:
 
 #ifdef BM_GRID
   void SetGridModule(Grid* grid) {m_GridModule = grid;}
-#endif BM_GRID
+#endif // BM_GRID
 
 #ifdef BM_DASHBOARD 
   /** Set/Get variables relative to the dashboard */
