@@ -2,10 +2,13 @@ SetApp(pixelCounter @PixelCounter)
 SetAppOption(pixelCounter.GenerateXMLMetaOutput 1)
 SetAppOption(pixelCounter.threshold 10)
 
-GridDataHost(rigel.kitwarein.com)
-DataDirectory(/kwdspace/BatchMake/Demo/)
-GridOutputHost(rigel2.kitwarein.com)
-OutputDirectory(/temp/BatchMake/)
+GridMaxNodes(5)
+GridSetGrouping(0)
+
+#GridDataHost(rigel.kitwarein.com)
+#DataDirectory(/kwdspace/BatchMake/Demo/)
+#GridOutputHost(rigel2.kitwarein.com)
+#OutputDirectory(/temp/BatchMake/)
 
 # Describe the current experiment
 DashboardHost(http://www.insight-journal.org/batchmake)

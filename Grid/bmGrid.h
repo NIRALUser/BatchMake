@@ -76,7 +76,18 @@ public:
     m_SingleNode = single;
     }
 
+  /** Set the maximum number of nodes to the grid */
+  void SetMaxNodes(int nodes) {m_MaxNodes = nodes;}
+  int GetMaxNodes() {return m_MaxNodes;}
+  
+  /** Set if grouping should be used for GAD generation */
+  void SetGrouping(bool group) {m_Grouping = group;}
+  bool GetGrouping() {return m_Grouping;}
+
+
 protected:
+
+  std::string AddQuotes(std::string value);
 
   /** Return a filename for a full path */
   std::string GetFilename(const char* fullpath); 
@@ -94,6 +105,8 @@ protected:
   std::vector<int> m_DistributedSyncBarrier;
   bool             m_SingleNode;
   bool             m_SingleNodeTransition;
+  int              m_MaxNodes;
+  bool             m_Grouping;
 };
 
 } // end namespace bm

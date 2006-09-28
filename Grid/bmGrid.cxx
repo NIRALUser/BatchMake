@@ -32,6 +32,8 @@ Grid::Grid()
   m_SingleNode = false;
   m_SingleNodeTransition = false;
   m_DistributedTransition = false;
+  m_MaxNodes = -1;
+  m_Grouping = true;
 }
 
 /** Destructor */
@@ -51,6 +53,24 @@ const char* Grid::GetCurrentScopeFile()
     delete [] tempchar;
     }
   return m_CurrentScopeFile.c_str();
+}
+
+/** Add quotes if necessary */
+std::string Grid::AddQuotes(std::string value)
+{
+  std::string temp;
+  if(value.find(' ') != -1)
+    {
+    temp = "'";
+    temp += value;
+    temp += "'";
+    }
+  else
+    {
+    temp = value;
+    }
+
+  return temp;
 }
 
 /** */
@@ -161,6 +181,17 @@ void Grid::WriteGAD()
   unsigned int appnum = 1;
   unsigned int inFile = 1;
   unsigned int outFile = 1;
+  int applicationComponent = 1;
+
+  int applicationChunckSize = 1;
+  if(m_MaxNodes>0)
+    {
+    double chunckSize = m_ApplicationsList.size();
+    chunckSize /= m_MaxNodes;
+    applicationChunckSize = (int)chunckSize;
+    }
+
+  std::cout << "applicationChunckSize = " << applicationChunckSize << std::endl;
 
   fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum); 
   fprintf(fic,"<componentActionList>\n");
@@ -186,8 +217,11 @@ void Grid::WriteGAD()
      
   // If this is not the first application 
   if(it != m_ApplicationsList.begin()
-    && ((*it).GetSingleNode() == 2))
+    && ((*it).GetSingleNode() == 2)
+    && (applicationComponent>applicationChunckSize)
+    )
     {
+    applicationComponent=0;
     fprintf(fic,"</componentActionList>\n");
     fprintf(fic,"</applicationComponent>\n\n");
     fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum); 
@@ -259,15 +293,44 @@ void Grid::WriteGAD()
   unsigned int nParams = 0;
   while(itParams != params.end())
     {
-    if((*itParams).IsValueDefined() && !(*itParams).GetParent())
+    if((*itParams).IsValueDefined() && (!(*itParams).GetParent() || !m_Grouping))
       {
       if(nParams>0)
         {
         commandline += " ";
         }
-      commandline += "{";
-      commandline += (*itParams).GetName().toChar();
-      commandline += "}";
+      
+      bool hasChildren = false;
+      
+      if(!m_Grouping)
+        {
+        std::string command = (*itParams).GetName().toChar();
+        command += ".";
+        std::vector<ApplicationWrapperParam>::const_iterator itParamsChildren = params.begin();
+        while(itParamsChildren != params.end())
+          {
+          std::string child = (*itParamsChildren).GetName().toChar();
+          if(child.find(command)==0)
+            {
+            hasChildren = true;
+            break;
+            }
+          itParamsChildren++;
+          }
+        }
+      
+      if(hasChildren && !(*itParams).GetParent())
+        {
+        commandline += " ";
+        commandline += (*itParams).GetValue().toChar(); 
+        commandline += " ";
+        }
+      else
+        {
+        commandline += "{";
+        commandline += (*itParams).GetName().toChar();
+        commandline += "}";
+        }
       nParams++;
       }
     itParams++;
@@ -337,20 +400,23 @@ void Grid::WriteGAD()
         itChildren = itParams;
         itChildren++;
 
+       
         // If the group has no child we plan accordingly
         if(itChildren == params.end() || !(*itChildren).GetParent())
           {
           fprintf(fic,"  <argument name=\"%s\" value=\"%s\"/>\n"
                          ,(*itParams).GetName().toChar()
-                         ,syntax.c_str());
+                         ,this->AddQuotes(syntax).c_str());
           }
         else
           {
-          fprintf(fic,"  <group name=\"%s\" syntax=\"%s\" optional=\"%s\" selected=\"true\">\n"
+          if(m_Grouping)
+            { 
+            fprintf(fic,"  <group name=\"%s\" syntax=\"%s\" optional=\"%s\" selected=\"true\">\n"
                                 ,(*itParams).GetName().toChar()
                                 ,syntax.c_str()
                                 ,optional.c_str());
-
+            }
         while(itChildren!=params.end() && (*itChildren).GetParent())
           {
           std::string value = (*itChildren).GetValue().toChar();          
@@ -391,13 +457,13 @@ void Grid::WriteGAD()
             if(itV==values.begin())
               {
               fprintf(fic,"   <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itChildren).GetName().toChar(),(*itV).c_str(),
+                           (*itChildren).GetName().toChar(),this->AddQuotes((*itV)).c_str(),
                            (*itChildren).GetTypeAsChar());
               }
             else
               {
               fprintf(fic,"   <argument name=\"%s.%d\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itChildren).GetName().toChar(),i,(*itV).c_str(),
+                           (*itChildren).GetName().toChar(),i,this->AddQuotes((*itV)).c_str(),
                            (*itChildren).GetTypeAsChar());
            
               }
@@ -406,15 +472,19 @@ void Grid::WriteGAD()
             }
           itChildren++;
           }
-        fprintf(fic,"  </group>\n");
+        if(m_Grouping)
+          {    
+          fprintf(fic,"  </group>\n");
+          }
           }
         }
       else
         {
-        MString value = (*itParams).GetValue();
-        value = value.removeChar('\"');
+        MString value2 = (*itParams).GetValue();
+        value2 = value2.removeChar('\"');
+        std::string value3 = value2.toChar();
         fprintf(fic,"  <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itParams).GetName().toChar(),value.toChar(),
+                           (*itParams).GetName().toChar(),this->AddQuotes(value3).c_str(),
                            (*itParams).GetTypeAsChar());
         }
       }
@@ -472,6 +542,7 @@ void Grid::WriteGAD()
   delete [] appName;
   it++;
   appnum++;
+  applicationComponent++;
   }
 
   fprintf(fic,"</componentActionList>\n");

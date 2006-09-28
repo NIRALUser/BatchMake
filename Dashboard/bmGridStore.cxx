@@ -85,7 +85,7 @@ void ParseXMLOutput(const char* filename,
     }
   catch(...)
     {
-    std::cout << "Cannot parse output" << std::endl;
+    //std::cout << "Cannot parse output" << std::endl;
     return;
     }
   XMLParserType::TagVectorType tags = xmlReader->GetTags();
