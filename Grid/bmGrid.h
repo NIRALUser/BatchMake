@@ -52,9 +52,12 @@ public:
   void SetOutputHost(const char* hostname) {m_OutputHost = hostname;}
   void SetDataDirectory(const char* directory) {m_DataDirectory = directory;}
   void SetOutputDirectory(const char* directory) {m_OutputDirectory = directory;}
+  void SetGridTempDirectory(const char* directory) {m_GridTempDirectory = directory;}
+  
   const char* GetDataDirectory() {return m_DataDirectory.c_str();}
   const char* GetOutputDirectory() {return m_OutputDirectory.c_str();}
-
+  const char* GetGridTempDirectory() {return m_GridTempDirectory.c_str();}
+ 
   void SetDistributed(bool val) 
     {
     //if(val != m_Distributed)
@@ -99,6 +102,7 @@ protected:
   std::string m_OutputHost;
   std::string m_DataDirectory;
   std::string m_OutputDirectory;
+  std::string m_GridTempDirectory;
 
   bool             m_Distributed;
   bool             m_DistributedTransition;

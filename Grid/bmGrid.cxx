@@ -34,6 +34,7 @@ Grid::Grid()
   m_DistributedTransition = false;
   m_MaxNodes = -1;
   m_Grouping = true;
+  m_GridTempDirectory = "";
 }
 
 /** Destructor */
@@ -191,8 +192,6 @@ void Grid::WriteGAD()
     applicationChunckSize = (int)chunckSize;
     }
 
-  std::cout << "applicationChunckSize = " << applicationChunckSize << std::endl;
-
   fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum); 
   fprintf(fic,"<componentActionList>\n");
 
@@ -230,10 +229,15 @@ void Grid::WriteGAD()
 
     std::vector<std::string> dependencies;
 
-    // Check if we have external data
     const std::vector<ApplicationWrapperParam> & params = (*it).GetParams();
     std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();
-    while(itParams != params.end())
+  
+    // Check if we have external data
+    // For now we skip bmGridStore
+    if(strcmp((*it).GetName().toChar(),"bmGridStore")
+       && strcmp((*it).GetName().toChar(),"bmGridSend"))
+      {
+     while(itParams != params.end())
       {
       if((*itParams).GetExternalData() == 1 
          && (*itParams).GetValue().length() > 0
@@ -245,7 +249,7 @@ void Grid::WriteGAD()
         fprintf(fic,"  <parameter name=\"Direction\" value=\"In\"/>\n");
         fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
         fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s%s\"/>\n",(*it).GetDataDirectory(),(*itParams).GetValue().toChar());
-        fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s\"/>\n",
+        fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",m_GridTempDirectory.c_str(),
                               this->GetFilename((*itParams).GetValue().toChar()).c_str());
      
         if(dependApp)
@@ -262,6 +266,8 @@ void Grid::WriteGAD()
         }
       itParams++;
       }
+
+      } // end bmGridStore
 
   char* temp = new char[10];
   sprintf(temp,"app%d",appnum);
@@ -511,6 +517,10 @@ void Grid::WriteGAD()
   sprintf(appName,"app%d",appnum);
 
   itParams = params.begin();
+
+  if(strcmp((*it).GetName().toChar(),"bmGridStore") 
+    && strcmp((*it).GetName().toChar(),"bmGridSend"))
+    {
   while(itParams != params.end())
     {
     if((*itParams).GetExternalData() == 2 
@@ -538,6 +548,7 @@ void Grid::WriteGAD()
       }
     itParams++;
     }
+    } // end bmGridStore
 
   delete [] appName;
   it++;

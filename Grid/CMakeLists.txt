@@ -7,6 +7,7 @@ SET(BatchMakeGrid_HDRS
   bmScriptOutputDirectoryAction.h
   bmScriptGridSetGroupingAction.h
   bmScriptGridMaxNodesAction.h
+  bmScriptGridTempDirectoryAction.h
 )
 
 SET(BatchMakeGrid_SRCS
@@ -21,6 +22,7 @@ SET(BatchMakeGrid_SRCS
   bmScriptSetActionGrid.cxx
   bmScriptGridSetGroupingAction.cxx
   bmScriptGridMaxNodesAction.cxx
+  bmScriptGridTempDirectoryAction.cxx
 )
 
 IF(DASHBOARD_SUPPORT)

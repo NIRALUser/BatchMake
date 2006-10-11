@@ -126,8 +126,10 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   style[0] = '\0';
   stylebuf = new Fl_Text_Buffer(m_buffer->length());
   stylebuf->text(style);
-  delete[] style;
-  free(text);
+  delete [] style;
+  style = NULL;
+  delete [] text;
+  text = NULL;
 
   buffer(m_buffer);
   highlight_data(stylebuf, styletable,
@@ -265,49 +267,46 @@ void Editor::style_unfinished_cb(int, void*) {
 }
 
 void Editor::style_update(int        pos,          // I - Position of update
-             int        nInserted,    // I - Number of inserted chars
-             int        nDeleted,     // I - Number of deleted chars
-             int        nRestyled,    // I - Number of restyled chars
-             const char *deletedText, // I - Text that was deleted
-             void       *cbArg) {     // I - Callback data
+                          int        nInserted,    // I - Number of inserted chars
+                          int        nDeleted,     // I - Number of deleted chars
+                          int        nRestyled,    // I - Number of restyled chars
+                          const char *deletedText, // I - Text that was deleted
+                          void       *cbArg)       // I - Callback data
+{  
   int  start,                         // Start of text
        end;                           // End of text
   char last;                          // Last style on line
   char *style = NULL;                 // Style data
   char *text  = NULL;                 // Text data
 
-
   if ((nInserted || nDeleted)) SetModified(true);
   Fl_Text_Buffer* stylebuf = ((Editor *)cbArg)->stylebuf;
   Fl_Text_Buffer* textbuf = ((Editor *)cbArg)->m_buffer;
 
- /* if (nInserted == 1)
-    if (MString(textbuf->text_range(pos, pos+1)) == "\t")
-  {
-    TabPressed(cbArg);
-    //textbuf->replace(pos,pos+1,"  ");
-    return;
-  }*/
-
  // If this is just a selection change, just unselect the style buffer...
-  if (nInserted == 0 && nDeleted == 0) {
+  if (nInserted == 0 && nDeleted == 0) 
+    {
     stylebuf->unselect();
     return;
-  }
-
+    }
+    
   // Track changes in the text buffer...
-  if (nInserted > 0) {
+  if (nInserted > 0) 
+    {
     // Insert characters into the style buffer...
     style = new char[nInserted + 1];
     memset(style, 'A', nInserted);
     style[nInserted] = '\0';
 
     stylebuf->replace(pos, pos + nDeleted, style);
-    delete[] style;
-  } else {
+    delete [] style;
+    style = NULL;
+    } 
+  else 
+    {
     // Just delete characters in the style buffer...
     stylebuf->remove(pos, pos + nDeleted);
-  }
+    }
 
   // Select the area that was just updated to avoid unnecessary
   // callbacks...
@@ -326,32 +325,26 @@ void Editor::style_update(int        pos,          // I - Position of update
   last  = style[end - start - 1];
 
   if ((pos == start))
-  {
+    {
     style[0] = stylebuf->text_range(start-1,start)[0];
     style[1] = '\0';
    }
 
-
- /* printf("start = %d, end = %d, text = \"%s\", style = \"%s\"...\n",
-         start, end, text, style);*/
-
   if ((end - start) != 0)
-  {
-   style_parse(text, style, end - start);
+    {
+    style_parse(text, style, end - start);
+    stylebuf->replace(start, end, style);
+    ((Editor *)cbArg)->redisplay_range(start, end);
+    }
 
-  //printf("new style = \"%s\"...\n", style);
-
-  stylebuf->replace(start, end, style);
-  ((Editor *)cbArg)->redisplay_range(start, end);
-  }
-
-  if (last != style[end - start - 1]) {
+  if (last != style[end - start - 1])
+    {
     // The last character on the line changed styles, so reparse the
     // remainder of the buffer...
-    delete text;
-  text = NULL;
-    delete style;
-  style = NULL;
+    delete [] text;
+    text = NULL;
+    delete [] style;
+    style = NULL;
 
     end   = textbuf->length();
     text  = textbuf->text_range(start, end);
@@ -361,14 +354,10 @@ void Editor::style_update(int        pos,          // I - Position of update
 
     stylebuf->replace(start, end, style);
     ((Editor *)cbArg)->redisplay_range(start, end);
-  }
+    }
 
-  delete text;
+  delete [] text;
   text = NULL;
-
-  // MAKE THINGS CRASH
-  //delete style;
-  //style = NULL;
    
   int m_x;
   int m_y;
