@@ -61,6 +61,12 @@ const char* Grid::GetCurrentScopeFile()
 std::string Grid::AddQuotes(std::string value)
 {
   std::string temp;
+  // Remove the last space of the string
+  if(value[value.size()-1] == ' ')
+    {
+    value.resize(value.size()-1);
+    }
+
   if(value.find(' ') != -1)
     {
     temp = "'";
