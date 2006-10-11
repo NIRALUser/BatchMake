@@ -53,10 +53,12 @@ public:
   void SetDataDirectory(const char* directory) {m_DataDirectory = directory;}
   void SetOutputDirectory(const char* directory) {m_OutputDirectory = directory;}
   void SetGridTempDirectory(const char* directory) {m_GridTempDirectory = directory;}
-  
+  void SetGridExecutableDirectory(const char* directory) {m_GridExecutableDirectory = directory;}
+ 
   const char* GetDataDirectory() {return m_DataDirectory.c_str();}
   const char* GetOutputDirectory() {return m_OutputDirectory.c_str();}
   const char* GetGridTempDirectory() {return m_GridTempDirectory.c_str();}
+  const char* GetGridExecutableDirectory() {return m_GridExecutableDirectory.c_str();}
  
   void SetDistributed(bool val) 
     {
@@ -103,6 +105,7 @@ protected:
   std::string m_DataDirectory;
   std::string m_OutputDirectory;
   std::string m_GridTempDirectory;
+  std::string m_GridExecutableDirectory;
 
   bool             m_Distributed;
   bool             m_DistributedTransition;

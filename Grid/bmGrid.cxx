@@ -35,6 +35,7 @@ Grid::Grid()
   m_MaxNodes = -1;
   m_Grouping = true;
   m_GridTempDirectory = "";
+  m_GridExecutableDirectory = "";
 }
 
 /** Destructor */
@@ -291,8 +292,8 @@ void Grid::WriteGAD()
     applicationName = applicationName.substr(pos+1,applicationName.size()-pos-1);
     }
 
-  fprintf(fic,"  <parameter name=\"Executable\" value=\"%s\"/>\n"
-                                       ,applicationName.c_str());
+  fprintf(fic,"  <parameter name=\"Executable\" value=\"%s%s\"/>\n",
+                                       m_GridExecutableDirectory.c_str(),applicationName.c_str());
 
   std::string commandline = "";
   itParams = params.begin();
@@ -334,7 +335,7 @@ void Grid::WriteGAD()
       else
         {
         commandline += "{";
-        commandline += (*itParams).GetName().toChar();
+        commandline += (*itParams).GetName().replaceChar('.','_').toChar();
         commandline += "}";
         }
       nParams++;
@@ -395,7 +396,7 @@ void Grid::WriteGAD()
              syntax += (*itChildren).GetName().toChar();
              char* num = new char[10];
              sprintf(num,"%d",j);
-             syntax += ".";
+             syntax += "_";
              syntax += num;
              syntax += "}";
              delete [] num;
@@ -409,9 +410,9 @@ void Grid::WriteGAD()
        
         // If the group has no child we plan accordingly
         if(itChildren == params.end() || !(*itChildren).GetParent())
-          {
+          {        
           fprintf(fic,"  <argument name=\"%s\" value=\"%s\"/>\n"
-                         ,(*itParams).GetName().toChar()
+                         ,(*itParams).GetName().replaceChar('.','_').toChar()
                          ,this->AddQuotes(syntax).c_str());
           }
         else
@@ -463,13 +464,13 @@ void Grid::WriteGAD()
             if(itV==values.begin())
               {
               fprintf(fic,"   <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itChildren).GetName().toChar(),this->AddQuotes((*itV)).c_str(),
+                           (*itChildren).GetName().replaceChar('.','_').toChar(),this->AddQuotes((*itV)).c_str(),
                            (*itChildren).GetTypeAsChar());
               }
             else
               {
-              fprintf(fic,"   <argument name=\"%s.%d\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itChildren).GetName().toChar(),i,this->AddQuotes((*itV)).c_str(),
+              fprintf(fic,"   <argument name=\"%s_%d\" value=\"%s\" type=\"%s\"/>\n",
+                           (*itChildren).GetName().replaceChar('.','_').toChar(),i,this->AddQuotes((*itV)).c_str(),
                            (*itChildren).GetTypeAsChar());
            
               }

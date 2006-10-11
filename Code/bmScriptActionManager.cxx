@@ -47,6 +47,7 @@
   #include "bmScriptOutputDirectoryAction.h"
   #include "bmScriptGridMaxNodesAction.h"
   #include "bmScriptGridSetGroupingAction.h"
+  #include "bmScriptGridExecutableDirectoryAction.h"
 #endif
 
 #ifdef BM_DASHBOARD
@@ -190,6 +191,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(GridSetGrouping);
   BM_NEWKEYWORD(GridMaxNodes);
   BM_NEWKEYWORD(GridTempDirectory);
+  BM_NEWKEYWORD(GridExecutableDirectory);
   return m_list;
 }
 
@@ -229,6 +231,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(GridSetGrouping);
   BM_NEWACTION(GridMaxNodes);
   BM_NEWACTION(GridTempDirectory);
+  BM_NEWACTION(GridExecutableDirectory);
 #endif
 
 #ifdef BM_DASHBOARD

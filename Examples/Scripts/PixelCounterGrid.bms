@@ -8,6 +8,7 @@ GridSetGrouping(0)
 GridDataHost(diaspar.kitwarein.com)
 DataDirectory(/usr/local/batchmake_demo/data/Ellipse_Images/)
 # Where to transfer the file on each node
+GridExecutableDirectory(/usr/local/batchmake_demo/bin/)
 GridTempDirectory(/tmp/)
 GridOutputHost(diaspar.kitwarein.com)
 # Output directory on the node
