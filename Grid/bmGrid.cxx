@@ -255,9 +255,10 @@ void Grid::WriteGAD()
         fprintf(fic,"  <parameter name=\"Description\" value=\"\"/>\n");
         fprintf(fic,"  <parameter name=\"Direction\" value=\"In\"/>\n");
         fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
-        fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s%s\"/>\n",(*it).GetDataDirectory(),(*itParams).GetValue().toChar());
+        fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s%s\"/>\n",(*it).GetDataDirectory(),
+                                                                  this->AddQuotes((*itParams).GetValue().toChar()).c_str());
         fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",m_GridTempDirectory.c_str(),
-                              this->GetFilename((*itParams).GetValue().toChar()).c_str());
+                              this->AddQuotes(this->GetFilename((*itParams).GetValue().toChar()).c_str()).c_str());
      
         if(dependApp)
           {
@@ -322,7 +323,7 @@ void Grid::WriteGAD()
         std::vector<ApplicationWrapperParam>::const_iterator itParamsChildren = params.begin();
         while(itParamsChildren != params.end())
           {
-          std::string child = (*itParamsChildren).GetName().toChar();
+          std::string child = (*itParamsChildren).GetName().toChar();        
           if(child.find(command)==0)
             {
             hasChildren = true;
@@ -340,14 +341,86 @@ void Grid::WriteGAD()
         }
       else
         {
-        commandline += "{";
-        commandline += (*itParams).GetName().replaceChar('.','_').toChar();
-        commandline += "}";
+        // If this is an input file we use the correct filename
+        // WARNING WORKS ONLY IF ONE INPUT IMAGE
+        if((*itParams).GetExternalData() == 1 
+         && (*itParams).GetValue().length() > 0
+         && strlen((*it).GetDataHost())>0
+         && (strcmp((*it).GetName().toChar(),"bmGridStore") 
+         && strcmp((*it).GetName().toChar(),"bmGridSend"))
+         ) // DATA_IN
+          {
+          char* num = new char[10];
+          sprintf(num,"%d",inFile-1);
+          commandline += "{InputFile";
+          commandline += num;
+          commandline += "}";
+          delete [] num; 
+          }
+        else
+          {
+          commandline += "{";
+          commandline += (*itParams).GetName().replaceChar('.','_').toChar();
+          commandline += "}";
+          }
+        }
+
+      // This is a hack because grouping was not working...
+      if(!m_Grouping && !hasChildren)
+        {
+        std::vector<ApplicationWrapperParam>::const_iterator itChildren = itParams;
+ 
+        std::string value = (*itParams).GetValue().toChar();          
+        // Extract the values
+        std::vector<std::string> values;
+        unsigned int startWord = 0;
+        for(unsigned int i=0;i<value.size();i++)
+          {
+          if(value[i]=='\"')
+            {
+            startWord=i+1;
+            // Go to the next '\"' and increase the nValues
+            long int pos = value.find("\"",i+1);
+            if(pos != -1)
+              {
+              values.push_back(value.substr(startWord,pos-i-1));
+              i=pos+1;
+              }
+            }
+          else if(value[i] == ' ')
+            {
+            values.push_back(value.substr(startWord,i-startWord));
+            startWord =i+1; // WARNING this is not always true!
+            }
+          }
+
+        // ignoring the first value
+        std::vector<std::string>::const_iterator itValues = values.begin();
+        if(values.size()>0)
+          {
+          itValues++;
+          }
+
+        unsigned int numid = 1;
+        while(itValues!=values.end())
+          {
+          char* num = new char[10];
+          sprintf(num,"%d",numid);
+          commandline += " {";
+          commandline += (*itParams).GetName().replaceChar('.','_').toChar();
+          commandline += "_";
+          commandline += num;
+          commandline += "}";
+          delete [] num; 
+          itValues++;
+          numid++;
+          }
         }
       nParams++;
       }
     itParams++;
     }
+
   fprintf(fic,"  <parameter name=\"Arguments\"  value=\"%s\"/>\n",commandline.c_str());
 
   // Write each argument out
@@ -416,7 +489,7 @@ void Grid::WriteGAD()
        
         // If the group has no child we plan accordingly
         if(itChildren == params.end() || !(*itChildren).GetParent())
-          {        
+          {
           fprintf(fic,"  <argument name=\"%s\" value=\"%s\"/>\n"
                          ,(*itParams).GetName().replaceChar('.','_').toChar()
                          ,this->AddQuotes(syntax).c_str());
@@ -493,12 +566,26 @@ void Grid::WriteGAD()
         }
       else
         {
+        // If this is an input file we use the correct filename
+        // WARNING WORKS ONLY IF ONE INPUT IMAGE
+        if((*itParams).GetExternalData() == 1 
+         && (*itParams).GetValue().length() > 0
+         && strlen((*it).GetDataHost())>0
+         && (strcmp((*it).GetName().toChar(),"bmGridStore") 
+         && strcmp((*it).GetName().toChar(),"bmGridSend"))
+         ) // DATA_IN
+          {
+          // Do nothing
+          }
+        else
+          {
         MString value2 = (*itParams).GetValue();
         value2 = value2.removeChar('\"');
         std::string value3 = value2.toChar();
         fprintf(fic,"  <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
                            (*itParams).GetName().toChar(),this->AddQuotes(value3).c_str(),
                            (*itParams).GetTypeAsChar());
+          }
         }
       }
     nParams++;
