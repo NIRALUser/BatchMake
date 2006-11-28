@@ -45,7 +45,7 @@ bool ScriptExtractStringAction::TestParam(ScriptError* error,int linenumber)
 
 MString ScriptExtractStringAction::Help()
 {
-  return "ExtractString(<output> <input> <lenght> [FROMEND])";
+  return "ExtractString(<output> <input> <lenght> [FROMEND] [KEEPEND])";
 }
 
 
@@ -59,8 +59,29 @@ void ScriptExtractStringAction::Execute()
     {
     if(!strcmp(m_parameters[3].toChar(),"FROMEND"))
       {
+      if(m_parameters.size() > 4 && !strcmp(m_parameters[4].toChar(),"KEEPEND"))
+        {
+        unsigned int lenght = strlen(m_manager->Convert(m_parameters[1]).toChar());
+        for(unsigned int i=lenght-size-1;i<lenght;i++)
+          {
+          char v = m_manager->Convert(m_parameters[1])[i];
+          m_value+=v;
+          }
+        }
+      else
+        {
+        unsigned int lenght = strlen(m_manager->Convert(m_parameters[1]).toChar());
+        for(unsigned int i=1;i<lenght-size-1;i++)
+          {
+          char v = m_manager->Convert(m_parameters[1])[i];
+          m_value+=v;
+          }
+        }
+      }
+    if(!strcmp(m_parameters[3].toChar(),"KEEPEND"))
+      {
       unsigned int lenght = strlen(m_manager->Convert(m_parameters[1]).toChar());
-      for(unsigned int i=1;i<lenght-size-1;i++)
+      for(unsigned int i=size+1;i<lenght;i++)
         {
         char v = m_manager->Convert(m_parameters[1])[i];
         m_value+=v;
