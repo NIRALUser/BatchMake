@@ -45,9 +45,8 @@ bool ScriptListDirInDirAction::TestParam(ScriptError* error,int linenumber)
 
 MString ScriptListDirInDirAction::Help()
 {
-  return "ListDirInDir(<dirlist> 'directory' *.*))";
+  return "ListDirInDir(<dirlist> 'directory' *.* [NOOVERWRITE])";
 }
-
 
 
 void ScriptListDirInDirAction::Execute()
@@ -57,8 +56,8 @@ void ScriptListDirInDirAction::Execute()
     m_initdir = m_initdir.rbegin("'") + 1;
 
   MString m_filter = "*";
-  if (m_parameters.size() == 3)
-  {
+  if (m_parameters.size() == 3 && strcmp(m_parameters[2].toChar(),"NOOVERWRITE"))
+    {
     m_filter = m_manager->Convert(m_parameters[2]);
     if (m_filter.startWith('\''))
       m_filter = m_filter.rbegin("'") + 1;
@@ -67,10 +66,29 @@ void ScriptListDirInDirAction::Execute()
       {
       m_filter += '/';
       }
-  }
+    }
 
-  MString m_value;
-
+  // By default the value is the current value of the first variable
+  MString value = "";
+ 
+  // We do not overwrite the variable if specified
+  if( (m_parameters.size() == 4 && !strcmp(m_parameters[3].toChar(),"NOOVERWRITE"))
+    || (m_parameters.size() == 3 && !strcmp(m_parameters[2].toChar(),"NOOVERWRITE"))
+    )
+    {
+    std::vector<MString> values = m_manager->GetVariable(m_parameters[0]);
+    for(unsigned int i=0;i<values.size();i++)
+      {
+      if(i>0)
+        {
+        value += " ";
+        }
+      value += "'";
+      value += values[i].toChar();
+      value += "'";
+      }
+    }
+ 
   std::string dir = m_initdir.toChar();
 
   if( (dir[dir.length()-1] != '/') && (dir[dir.length()-1] != '\\') )
@@ -89,8 +107,7 @@ void ScriptListDirInDirAction::Execute()
 
   dirent** dirList;
   
-  int size = fl_filename_list(dir.c_str(),&dirList);
-  
+  int size = fl_filename_list(dir.c_str(),&dirList); 
   for(int i=0;i<size;i++)
     {
     if(fl_filename_match((*dirList)->d_name,m_filter.toChar())
@@ -99,16 +116,29 @@ void ScriptListDirInDirAction::Execute()
       && !fl_filename_match((*dirList)->d_name,"../") 
       )
       {
-      if (m_value != "")
+      // Check that the value doesn't exists already
+      bool exists = false;
+      std::vector<MString> values = m_manager->GetVariable(m_parameters[0]);
+      for(unsigned int i=0;i<values.size();i++)
         {
-        m_value += " ";
+        if(!strcmp(values[i].toChar(),(*dirList)->d_name))
+          {
+          exists = true;
+          break;
+          }
         }
-      m_value += MString("'") + MString((*dirList)->d_name) + MString("'");
+      if(!exists)
+        {
+        if (value != "")
+          {
+          value += " ";
+          }
+        value += MString("'") + MString((*dirList)->d_name) + MString("'");
+        }
       }
     dirList++;
     }
-
-  m_manager->SetVariable(m_parameters[0],m_value);
+   m_manager->SetVariable(m_parameters[0],value);
 }
 
 } // end namespace bm

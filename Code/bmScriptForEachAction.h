@@ -39,7 +39,11 @@ public:
   MString Help();
 
 protected:
+
+  void CreateLoop();
+
   std::vector<ScriptAction*> m_action;
+  std::vector<MString> m_ForLoop;
 
 };
 

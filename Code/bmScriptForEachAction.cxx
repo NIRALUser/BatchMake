@@ -46,7 +46,6 @@ bool ScriptForEachAction::TestParam(ScriptError* error,int linenumber)
   m_manager->SetTestVariable(m_parameters[0]);
   
 
-
   for (unsigned int i=0;i<m_action.size();i++)
   {
     if (!m_action[i]->TestParam(error))
@@ -62,10 +61,9 @@ MString ScriptForEachAction::Help()
   return "ForEach(<variable> <$variable>|'value1 value2 ...') ... EndForEach(<variable>)";
 }
 
-
-void ScriptForEachAction::Execute()
-{
-  std::vector<MString> m_loopvalue;
+void ScriptForEachAction::CreateLoop()
+{ 
+  m_ForLoop.clear();
   MString m_paramlist = m_manager->Convert(m_parameters[1]);
   ScriptAction::ParametersType m_params;
   MString m_value = "";
@@ -93,10 +91,15 @@ void ScriptForEachAction::Execute()
         
         if (m_value.length() != 0)
         {
-            m_loopvalue.push_back(MString("'") + m_value + "'");
+        m_ForLoop.push_back(MString("'") + m_value + "'");
         }
      }
   }
+}
+
+void ScriptForEachAction::Execute()
+{
+  
 
 #ifdef BM_GRID
   // We put a grid barrier
@@ -104,14 +107,18 @@ void ScriptForEachAction::Execute()
     {
     m_GridModule->SetGridBarrier();
     }
+#endif
 
-  for (unsigned int loop=0;loop<m_loopvalue.size();loop++)
+  this->CreateLoop();
+  for (unsigned int loop=0;loop<m_ForLoop.size();loop++)
     {
+#ifdef BM_GRID
     if(m_GridModule)
       {
       m_GridModule->SetDistributed(true);
       }
-    m_manager->SetVariable(m_parameters[0],m_loopvalue[loop]); 
+#endif
+    m_manager->SetVariable(m_parameters[0],m_ForLoop[loop]); 
     for (unsigned int i=0;i<m_action.size();i++)
       {
       if (!m_progressmanager->IsStop())
@@ -119,7 +126,10 @@ void ScriptForEachAction::Execute()
         m_action[i]->Execute();
         }
       }
+
+    this->CreateLoop();
     }
+#ifdef BM_GRID
   if(m_GridModule)
     {
     m_GridModule->SetDistributed(false);
