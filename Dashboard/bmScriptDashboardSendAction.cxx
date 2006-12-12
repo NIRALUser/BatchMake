@@ -147,9 +147,10 @@ void ScriptDashboardSendAction::Execute()
 
           std::string value = m_manager->Convert(param).toChar();
 
-          // if this is an image we load it and send the data
+          // if this is an image or a graph we load it and send the data
           if( !strcmp((*itParam).type.c_str(),"png")
             || !strcmp((*itParam).type.c_str(),"jpg")
+            || !strcmp((*itParam).type.c_str(),"bmg")
             )
             {
             std::string imageFilename = m_manager->Convert(param).toChar();
