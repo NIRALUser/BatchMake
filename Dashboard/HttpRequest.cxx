@@ -402,7 +402,7 @@ std::string HttpRequest::CreateFile(std::string name,std::string filename)
   std::string m_text = "--29772313742745\n";
   m_text += "Content-Disposition: form-data; name=\"MAX_FILE_SIZE\"\n";
   m_text += "\n";
-  m_text += "100000\n";
+  m_text += "10000000\n";
   m_text += "--29772313742745\n";
   m_text += "Content-Disposition: form-data; name=\"";
   m_text += name;
@@ -482,12 +482,11 @@ char* HttpRequest::Send(std::string url)
     }
   for(unsigned int i=0;i<m_Filenames.size();i++)
     {
-
     FilePairType p = m_Filenames[i];
     std::string m_file = CreateFile(p.first,p.second);
     if (m_file.length() == 0)
       {
-      return "-3";
+      //return "-3";
       }
     else
       {
@@ -495,6 +494,7 @@ char* HttpRequest::Send(std::string url)
       }
     }
 
+  
   m_text += "--29772313742745--\r\n";
 
   if (SendHTTP(  url.c_str(),
