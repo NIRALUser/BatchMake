@@ -73,7 +73,7 @@ void ScriptExtractSliceAction::Execute()
     m_sliceextractor.SetSlice(m_slice.toInt());
     }
 
-  if(m_parameters.size()>4 && !strcmp(m_parameters[3].toChar(),"FROM_MIDDLE"))
+  if(m_parameters.size()>4 && !strcmp(m_parameters[4].toChar(),"FROM_MIDDLE"))
     {
     m_sliceextractor.SetFromMiddleSlice(true);
     }

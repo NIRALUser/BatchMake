@@ -60,6 +60,21 @@ void ScriptRunAction::ParseXMLOutput(const char* output)
   typedef itk::XMLBufferReader XMLParserType;
   XMLParserType::Pointer xmlReader = XMLParserType::New();
   std::string Buffer = output;
+
+  // Trim the buffer
+  long int begin = Buffer.find("<?xml");
+  std::string endstring = "</MetaOutputFile>";
+  long int end = Buffer.find(endstring);
+
+  if(begin == -1 || end == -1)
+    {
+    std::cout << "ScriptRunAction::ParseXMLOutput cannot find XML description" 
+              << std::endl;
+    return;
+    }
+
+  Buffer = Buffer.substr(begin,end-begin+endstring.size());
+
   try
     {
     xmlReader->Parse(Buffer.c_str(),Buffer.size());
