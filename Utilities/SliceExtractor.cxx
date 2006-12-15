@@ -6,6 +6,7 @@ SliceExtractor::SliceExtractor()
   m_outputimage = 0;
   m_slice = -1;
   m_orientation = -1;
+  m_FromMiddleSlice = false;
 }
 
 SliceExtractor::~SliceExtractor()
@@ -62,6 +63,10 @@ void SliceExtractor::SetInput(Image3DTypePointer inputimage)
   m_inputimage = inputimage;
 }
 
+void SliceExtractor::SetFromMiddleSlice(bool fromMiddle)
+{
+  m_FromMiddleSlice = fromMiddle;
+}
 
 SliceExtractor::Image2DTypePointer SliceExtractor::GetOutput()
 {
@@ -89,11 +94,16 @@ void SliceExtractor::Update()
     m_orientation = 2;
     }
 
-  if(m_slice == -1)
+  int slice = 0;
+  if(m_slice == -1 && !m_FromMiddleSlice)
     {
-    m_slice = m_size[m_orientation]/2;;
+    slice = m_size[m_orientation]/2;;
     }
 
+  if(m_FromMiddleSlice)
+    {
+    slice =  m_size[m_orientation]/2+m_slice;
+    }
 
   //Create 2D image
   int imagesize[2];
@@ -138,8 +148,8 @@ void SliceExtractor::Update()
 
   Iterator2DType itS2(m_outputimage,m_outputimage->GetLargestPossibleRegion());
 
-  if (m_slice > m_size[m_orientation])
-    m_slice = m_size[m_orientation]-1;
+  if (slice > m_size[m_orientation])
+    slice = m_size[m_orientation]-1;
 
   if (m_orientation == 2)
   {
@@ -147,7 +157,7 @@ void SliceExtractor::Update()
       for (int y=0;y<m_size[1];y++)
          for (int x=0;x<m_size[0];x++)
          {
-            if(z == m_slice)
+            if(z == slice)
             {
               itS2.Set((ImagePixelType)itS.Get());
               ++itS2;
@@ -164,7 +174,7 @@ void SliceExtractor::Update()
       for (int y=0;y<m_size[1];y++)
          for (int x=0;x<m_size[0];x++)
          {
-            if(y == m_slice)
+            if(y == slice)
             {
               itS2.Set((ImagePixelType)itS.Get());
               ++itS2;
@@ -180,7 +190,7 @@ void SliceExtractor::Update()
       for (int y=0;y<m_size[1];y++)
          for (int x=0;x<m_size[0];x++)
          {
-            if(x == m_slice)
+            if(x == slice)
             {
               itS2.Set((ImagePixelType)itS.Get());
               ++itS2;

@@ -43,7 +43,7 @@ bool ScriptExtractSliceAction::TestParam(ScriptError* error,int linenumber)
 
 MString ScriptExtractSliceAction::Help()
 {
-  return "ExtractSlice(<3D image filename> <2D image filename> [orientation] [slice])";
+  return "ExtractSlice(<3D image filename> <2D image filename> [orientation] [slice] [FROM_MIDDLE])";
 }
 
 void ScriptExtractSliceAction::Execute()
@@ -71,6 +71,11 @@ void ScriptExtractSliceAction::Execute()
     {
     MString m_slice = m_manager->Convert(m_parameters[3]).removeChar('\'').latin1();
     m_sliceextractor.SetSlice(m_slice.toInt());
+    }
+
+  if(m_parameters.size()>4 && !strcmp(m_parameters[3].toChar(),"FROM_MIDDLE"))
+    {
+    m_sliceextractor.SetFromMiddleSlice(true);
     }
 
   m_sliceextractor.Extract(m_input.toChar(),m_output.toChar());

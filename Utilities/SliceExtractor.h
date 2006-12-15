@@ -24,6 +24,7 @@ public:
 
   void SetInput(Image3DTypePointer);
   void Update();
+  void SetFromMiddleSlice(bool fromMiddle);
   void SetSlice(unsigned int slice);
   void SetOrientation(unsigned int orientation);
   Image2DTypePointer GetOutput();
@@ -34,6 +35,7 @@ private:
   Image2DTypePointer m_outputimage;
   int m_slice;
   int m_orientation;
+  bool m_FromMiddleSlice;
 };
 
 #endif
