@@ -91,6 +91,14 @@ ScriptActionManager::ScriptActionManager()
 
 ScriptActionManager::~ScriptActionManager()
 {
+  std::vector<variablestruct*>::iterator it = m_variablelist.begin();
+  while(it != m_variablelist.end())
+   {
+   variablestruct* var = *it;
+   it = m_variablelist.erase(it);
+   delete var;
+   }
+
   delete m_error;
   delete m_progressmanager;
 }
@@ -424,21 +432,21 @@ void ScriptActionManager::SetVariable(MString name,MString value)
 {
   bool m_detected = false;
   for (unsigned int i=0;i<m_variablelist.size();i++)
-  {
+    {
      if (m_variablelist[i]->name == name)
-     {
-        m_detected = true;
-        m_variablelist[i]->value = value;
-     }
-  }
+       {
+       m_detected = true;
+       m_variablelist[i]->value = value;
+       }
+    }
 
   if (m_detected == false)
-  {
+    {
     variablestruct* m_newvar = new variablestruct;
     m_newvar->name = name;
     m_newvar->value = value;
     m_variablelist.push_back(m_newvar);
-  }
+    }
 }
 
 

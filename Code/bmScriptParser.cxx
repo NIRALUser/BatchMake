@@ -236,9 +236,6 @@ bool  ScriptParser::Execute(MString filename,unsigned long pos)
 
   delete [] data;
  
-  // TO REMOVE
-  return true;
- 
   if (this->Parse())
     {
     m_scriptactionmanager->Execute();
