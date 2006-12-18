@@ -113,9 +113,8 @@ void ScriptListDirInDirAction::Execute()
     {
     std::string dname = directory.GetFile(i);
     if(fl_filename_match(dname.c_str(),m_filter.toChar())
-      && fl_filename_match(dname.c_str(),"*/")
-      && !fl_filename_match(dname.c_str(),"./")
-      && !fl_filename_match(dname.c_str(),"../") 
+      && !fl_filename_match(dname.c_str(),".")
+      && !fl_filename_match(dname.c_str(),"..") 
       )
       {
       // Check that the value doesn't exists already
