@@ -7,12 +7,19 @@ HttpRequest::HttpRequest()
 
 HttpRequest::~HttpRequest()
 {
+  std::vector<Paramstruct>::iterator it =  m_paramlist.begin();
+  while(it != m_paramlist.end())
+    {
+    Paramstruct ps = *it;
+    delete [] ps.value;
+    it = m_paramlist.erase(it);
+    }
 }
 
 void HttpRequest::MemBufferCreate(MemBuffer *b)
 {
    b->size = MEM_BUFFER_SIZE;
-   b->buffer =(unsigned  char *) malloc( b->size );
+   b->buffer = new unsigned char[b->size];
    b->position = b->buffer;
 }
 
@@ -20,17 +27,21 @@ void HttpRequest::MemBufferGrow(MemBuffer *b)
 {
     size_t sz;
     sz = b->position - b->buffer;
+    unsigned char* buffer = new unsigned char[b->size*2];
+    memcpy(buffer,b->buffer,b->size);
     b->size = b->size *2;
-    b->buffer =(unsigned  char *) realloc(b->buffer,b->size);
+    delete [] b->buffer;
+    b->buffer = buffer;
     b->position = b->buffer + sz;  // readjust current position
 }
 
 void HttpRequest::MemBufferAddByte(MemBuffer *b,unsigned char byt)
 {
-    if( (size_t)(b->position-b->buffer) >= b->size )
-        MemBufferGrow(b);
-
-    *(b->position++) = byt;
+  if( (size_t)(b->position-b->buffer) >= b->size )
+    { 
+    MemBufferGrow(b);
+    }
+  *(b->position++) = byt;
 }
 
 void HttpRequest::MemBufferAddBuffer(MemBuffer *b,
@@ -376,17 +387,20 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
         MemBufferAddBuffer(&messageBuffer, (unsigned char*)&buffer, l);
     } while(l>0);
     *messageBuffer.position = 0;
-    req->message = (char*) messageBuffer.buffer;
-    req->messageLength = (messageBuffer.position - messageBuffer.buffer);
-
+    
+    req->message = (const char*) messageBuffer.buffer;
+ 
     shutdown(sock,2);
 #ifdef WIN32
     closesocket(sock);
 #else
     close(sock);  
 #endif
-  // std::cout << "Close Socket!" << std::endl;
-    return 0;
+  
+  // Deleting memory
+  delete [] headersBuffer.buffer;
+  delete [] messageBuffer.buffer;
+  return 0;
 }
 
 std::string HttpRequest::CreateFile(std::string name,std::string filename)
@@ -457,7 +471,7 @@ void HttpRequest::AddFile(std::string name,std::string filename)
   m_Filenames.push_back(file);
 }
 
-char* HttpRequest::Send(std::string url)
+std::string HttpRequest::Send(std::string url)
 {
   MessageStruct  req;
 
@@ -502,10 +516,20 @@ char* HttpRequest::Send(std::string url)
     (unsigned char*)m_text.c_str(),
     m_text.length(),
     &req) == 1)
-  return "-1";
-
+    {
+    return "-1";
+    }
+ 
+  std::vector<Paramstruct>::iterator it =  m_paramlist.begin();
+  while(it != m_paramlist.end())
+    {
+    Paramstruct ps = *it;
+    delete [] ps.value;
+    it = m_paramlist.erase(it);
+    } 
+ 
   m_paramlist.clear();
   m_Filenames.clear();
 
-  return req.message ;
+  return req.message;
 }

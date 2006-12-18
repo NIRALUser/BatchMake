@@ -26,15 +26,14 @@ typedef struct
 { 
   char* headerSend;            
   char* headerReceive;
-  char* message;              
-  long messageLength;
+  std::string message;              
 } MessageStruct;
 
 typedef struct
 {
-    unsigned  char *buffer;
-    unsigned  char *position;
-    size_t    size;
+  unsigned  char *buffer;
+  unsigned  char *position;
+  size_t    size;
 } MemBuffer;
 
 typedef struct
@@ -52,7 +51,7 @@ public:
 
   void AddParam(std::string name,const char* value,unsigned long size=0);
   void AddFile(std::string name,std::string filename);
-  char* Send(std::string url);
+  std::string Send(std::string url);
   std::string GetHostName();
   std::string GetHostIp();
 

@@ -149,7 +149,14 @@ void MString::operator=(const MString & value)
 
 void MString::operator=(const char* value)
 {
-   m_value=value;
+  if(strlen(value)>0)
+    {  
+    m_value = value;
+    }
+  else
+   {
+   m_value = "";
+   }
 }
 
 void MString::operator+=(MString value)

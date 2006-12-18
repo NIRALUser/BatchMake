@@ -87,8 +87,8 @@ void ScriptCreateExperimentAction::Execute()
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());
 
   url += "/dashboard.php";
-  MString m_output = m_request.Send(url.c_str());
- 
+  std::string m_output = m_request.Send(url.c_str());
+/* 
   if (m_output.length()>3)
     {
     m_progressmanager->AddError("Bad Host or connexion problem");
@@ -113,6 +113,7 @@ void ScriptCreateExperimentAction::Execute()
         }  
       }
     }
+*/
 }
 
 } // end namespace bm

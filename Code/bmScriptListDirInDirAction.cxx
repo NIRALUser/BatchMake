@@ -64,10 +64,10 @@ void ScriptListDirInDirAction::Execute()
     if (m_filter.startWith('\''))
       m_filter = m_filter.rbegin("'") + 1;
 
-    if(m_filter[m_filter.length()-1] != '/')
+    /*if(m_filter[m_filter.length()-1] != '/')
       {
       m_filter += '/';
-      }
+      }*/
     }
 
   // By default the value is the current value of the first variable

@@ -41,7 +41,7 @@ MString XMLReader::GetValue()
 
 MString XMLReader::GetBalise()
 {
-  char* data = (char*)malloc(1000);
+  char* data = new char[1000];
   networkfile.getline(data,1000);
   MString line = data;
   int begin_balise_start = line.find("<");
@@ -52,12 +52,16 @@ MString XMLReader::GetBalise()
   m_balise = line.mid(begin_balise_start+1,begin_balise_end-begin_balise_start-1);
 
   if (end_balise_begin != -1)
+    {
     m_value = line.mid(begin_balise_end+1,end_balise_begin-begin_balise_end-1);
+    }
   else
-       {
-           m_value = "";
-       }
+    {
+    m_value = "";
+    }
 
+  delete [] data;
+ 
   return m_balise;
 }
 
