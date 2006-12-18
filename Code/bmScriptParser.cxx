@@ -15,6 +15,8 @@
 
 #include "bmScriptParser.h"
 #include <fstream>
+#include <itksys/Directory.hxx>
+#include <itksys/SystemTools.hxx>
 
 #ifdef WIN32
   #include <windows.h>
@@ -35,7 +37,18 @@ ScriptParser::ScriptParser()
 ScriptParser::~ScriptParser()
 {
   delete m_scriptactionmanager;
-  delete m_applicationlist;
+
+  if(m_applicationlist)
+    {
+    std::vector<ApplicationWrapper*>::iterator it = m_applicationlist->begin();
+    while(it != m_applicationlist->end())
+      {
+      ApplicationWrapper* app = (*it);
+      it = m_applicationlist->erase(it);
+      delete app;
+      }
+    delete m_applicationlist;
+    }
   delete m_error;
 }
 
@@ -51,8 +64,6 @@ void ScriptParser::SetScriptPath(MString scriptpath)
    m_scriptactionmanager->SetScriptPath(scriptpath.rbegin("/"));
 }
 
-
-
 void  ScriptParser::LoadWrappedApplication(MString applicationpath) 
 {
   if(m_applicationlist)
@@ -61,7 +72,25 @@ void  ScriptParser::LoadWrappedApplication(MString applicationpath)
     }
   m_applicationlist = new std::vector<ApplicationWrapper*>;
 
-  #ifdef WIN32
+  itksys::Directory directory;
+  std::string dirpath = applicationpath.toChar();
+  dirpath += "/Applications/";
+  if(directory.Load(dirpath.c_str()))
+    {
+    for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
+      {
+      std::string extension = itksys::SystemTools::GetFilenameExtension( directory.GetFile(i) );
+      if(extension == ".bmm")
+        {
+        std::string file = directory.GetFile(i);
+        ApplicationWrapper* m_newapplication = new ApplicationWrapper();  
+        m_newapplication->Load(applicationpath + "/Applications/" + file.c_str());
+        m_applicationlist->push_back(m_newapplication);
+        }
+      }
+    }
+
+  /*#ifdef WIN32
    WIN32_FIND_DATA File;
    HANDLE hSearch;
    int re;
@@ -100,7 +129,7 @@ void  ScriptParser::LoadWrappedApplication(MString applicationpath)
        }
       }
     }
-  #endif
+  #endif*/
 
  m_scriptactionmanager->SetApplicationWrapperList(m_applicationlist);
 
