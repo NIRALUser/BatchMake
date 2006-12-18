@@ -34,6 +34,9 @@ ScriptParser::ScriptParser()
 
 ScriptParser::~ScriptParser()
 {
+  delete m_scriptactionmanager;
+  delete m_applicationlist;
+  delete m_error;
 }
 
 void ScriptParser::SetApplicationPath(MString applicationpath)
@@ -52,6 +55,10 @@ void ScriptParser::SetScriptPath(MString scriptpath)
 
 void  ScriptParser::LoadWrappedApplication(MString applicationpath) 
 {
+  if(m_applicationlist)
+    {
+    delete m_applicationlist;
+    }
   m_applicationlist = new std::vector<ApplicationWrapper*>;
 
   #ifdef WIN32
@@ -180,31 +187,38 @@ bool  ScriptParser::Execute(MString filename,unsigned long pos)
     std::cout << "Cannot open file: " << filename.toChar() << std::endl;
     return false;
     }
-  char* data = (char*)malloc(1000);
+  char* data = new char[1000];
   strcpy(data,"");
   MString m_currentline;
   unsigned long position = pos;
   while(!m_file.eof())
-  {
-    m_file.getline(data,1000);
-    if (data[strlen(data)-1] == '\r')
     {
+    m_file.getline(data,1000);
+   if (strlen(data)>0 && data[strlen(data)-1] == '\r')
+      {
       data[strlen(data)-1] = '\0';
-    }
-    m_currentline = data;
+      }
+   m_currentline = data;
    this->AddCodeLine(m_currentline,position);
+
    position++;
-  }
+   }
   m_file.close();
 
+  delete [] data;
+ 
+  // TO REMOVE
+  return true;
  
   if (this->Parse())
-  {
+    {
     m_scriptactionmanager->Execute();
     return true;
-  }
+    }
   else
+    {
     return false;
+    }
 }
 
 void ScriptParser::Load(MString filename)
