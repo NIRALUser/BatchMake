@@ -15,6 +15,8 @@
 
 #include "bmScriptListDirInDirAction.h"
 #include "FL/filename.H"
+#include <itksys/Directory.hxx>
+#include <itksys/SystemTools.hxx>
 
 namespace bm {
 
@@ -96,7 +98,9 @@ void ScriptListDirInDirAction::Execute()
     dir += '/';
     }
  
-  if(!fl_filename_isdir(dir.c_str()))
+  itksys::Directory directory;
+
+  if(!directory.Load(dir.c_str()))
     {
     m_progressmanager->AddAction("Action: ListDirInDir()");
     std::string error = dir;
@@ -105,15 +109,13 @@ void ScriptListDirInDirAction::Execute()
     return;
     }
 
-  dirent** dirList;
-  
-  int size = fl_filename_list(dir.c_str(),&dirList); 
-  for(int i=0;i<size;i++)
+  for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
     {
-    if(fl_filename_match((*dirList)->d_name,m_filter.toChar())
-      && fl_filename_match((*dirList)->d_name,"*/")
-      && !fl_filename_match((*dirList)->d_name,"./")
-      && !fl_filename_match((*dirList)->d_name,"../") 
+    std::string dname = directory.GetFile(i);
+    if(fl_filename_match(dname.c_str(),m_filter.toChar())
+      && fl_filename_match(dname.c_str(),"*/")
+      && !fl_filename_match(dname.c_str(),"./")
+      && !fl_filename_match(dname.c_str(),"../") 
       )
       {
       // Check that the value doesn't exists already
@@ -121,7 +123,7 @@ void ScriptListDirInDirAction::Execute()
       std::vector<MString> values = m_manager->GetVariable(m_parameters[0]);
       for(unsigned int i=0;i<values.size();i++)
         {
-        if(!strcmp(values[i].toChar(),(*dirList)->d_name))
+        if(!strcmp(values[i].toChar(),dname.c_str()))
           {
           exists = true;
           break;
@@ -133,10 +135,9 @@ void ScriptListDirInDirAction::Execute()
           {
           value += " ";
           }
-        value += MString("'") + MString((*dirList)->d_name) + MString("'");
+        value += MString("'") + MString(dname) + MString("'");
         }
       }
-    dirList++;
     }
    m_manager->SetVariable(m_parameters[0],value);
 }
