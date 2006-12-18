@@ -34,7 +34,7 @@ bool ScriptSetAppOptionAction::TestParam(ScriptError* error,int linenumber)
      return false;
     }
 
-   m_manager->SetTestVariable(m_parameters[0]);
+  m_manager->SetTestVariable(m_parameters[0]);
 
   for (unsigned int i=1;i<m_parameters.size();i++)
     {

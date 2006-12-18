@@ -38,7 +38,7 @@ public:
 
 private:
 
-  MString m_value;
+  std::string m_Value;
 
 };
 

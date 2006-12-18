@@ -39,7 +39,7 @@ class ScriptAction
 {
 public:
   ScriptAction();
-  ~ScriptAction();
+  virtual ~ScriptAction();
   
   typedef std::vector<MString> ParametersType;
   typedef char* (*Help_Func)(void);

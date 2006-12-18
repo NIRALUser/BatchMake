@@ -99,6 +99,15 @@ ScriptActionManager::~ScriptActionManager()
    delete var;
    }
 
+
+  std::vector<ScriptAction*>::iterator itA = m_InternalActionList.begin();
+  while(itA != m_InternalActionList.end())
+   {
+   ScriptAction* var = *itA;
+   itA = m_InternalActionList.erase(itA);
+   delete var;
+   }
+
   delete m_error;
   delete m_progressmanager;
 }
@@ -329,6 +338,11 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
   else
     {
     ScriptAction* m_action = CreateAction(option);
+
+    if(m_action != 0)
+     {
+     m_InternalActionList.push_back(m_action);
+     }    
 
     if (m_action == 0)
       {

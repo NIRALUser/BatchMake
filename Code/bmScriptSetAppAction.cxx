@@ -50,9 +50,6 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
     {
     if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
       {
-      m_value = "'";
-      m_value +=(*it)->GetApplicationPath();
-      m_value +="'";
       appFound = true;
       
       // Set all the variables of the application to off
@@ -103,10 +100,12 @@ void ScriptSetAppAction::Execute()
     {
     if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
       {
-      m_value = "'";
-      m_value +=(*it)->GetApplicationPath();
-      m_value +="'";
+      m_Value = "'";
+      std::string val = (*it)->GetApplicationPath().toChar();
+      m_Value += val.c_str();
+      m_Value += "'";
       appFound = true;
+     
       
       // Set all the variables of the application to off
       std::vector<ApplicationWrapperParam> & params = (*it)->GetParams();
@@ -130,7 +129,7 @@ void ScriptSetAppAction::Execute()
       }
     it++;
     }
-  m_manager->SetVariable(m_parameters[0],m_value);
+  m_manager->SetVariable(m_parameters[0],m_Value);
 }
 
 } // end namespace bm

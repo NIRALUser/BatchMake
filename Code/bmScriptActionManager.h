@@ -190,6 +190,11 @@ protected:
   // The Script Action manager keeps global variables regarding the dashboard
   Dashboard m_Dashboard;
 #endif
+
+private:
+  
+  std::vector<ScriptAction*> m_InternalActionList;
+
 };
 
 } // end namespace bm
