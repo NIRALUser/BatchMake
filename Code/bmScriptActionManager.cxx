@@ -91,6 +91,8 @@ ScriptActionManager::ScriptActionManager()
 
 ScriptActionManager::~ScriptActionManager()
 {
+  delete m_error;
+  delete m_progressmanager;
 }
 
 void ScriptActionManager::SetApplicationPath(MString applicationpath)
@@ -111,8 +113,9 @@ void ScriptActionManager::AddAction(ScriptAction* action)
 void ScriptActionManager::SetProgressManager(ProgressManager* progressmanager)
 {
   if (m_progressmanager)
+    {
     delete m_progressmanager;
-
+    }
   m_progressmanager = progressmanager;
 };
 
@@ -124,8 +127,9 @@ ProgressManager* ScriptActionManager::GetProgressManager()
 void ScriptActionManager::SetError(ScriptError* error)
 {
   if (m_error != error)
+    {
     delete m_error;
-
+    }
   m_error = error;
 }
 
