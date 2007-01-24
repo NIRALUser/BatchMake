@@ -25,7 +25,7 @@ class ScriptEditorGUI {open : {bm::ScriptEditorGUIBase}
       } {
         Fl_Button {} {
           callback {OnOpenScript()}
-          tooltip {Open script} image {../Images/open.gif} xywh {5 5 30 25} box PLASTIC_UP_BOX color 48 labelsize 11 align 192 hotspot
+          tooltip {Open script} image {../Images/open.gif} xywh {5 5 30 25} box PLASTIC_UP_BOX color 48 labelsize 11 align 192
         }
         Fl_Button saveBt {
           callback {OnSaveScript()}

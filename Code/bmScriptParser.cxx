@@ -61,7 +61,8 @@ void ScriptParser::SetApplicationPath(MString applicationpath)
 
 void ScriptParser::SetScriptPath(MString scriptpath)
 {
-   m_scriptactionmanager->SetScriptPath(scriptpath.rbegin("/"));
+  m_scriptactionmanager->SetScriptPath(scriptpath.rbegin("/"));
+  m_scriptactionmanager->SetScriptFullPath(scriptpath.toChar());
 }
 
 void  ScriptParser::LoadWrappedApplication(MString applicationpath) 
@@ -249,7 +250,7 @@ bool  ScriptParser::Execute(MString filename,unsigned long pos)
 
 void ScriptParser::Load(MString filename)
 {
-  SetScriptPath(filename);
+  this->SetScriptPath(filename);
   m_linenumber = 0;
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);

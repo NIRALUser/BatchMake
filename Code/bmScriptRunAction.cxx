@@ -149,7 +149,7 @@ void ScriptRunAction::Execute()
     m_actioname = m_actioname + 1;
 
   m_progressmanager->AddAction(m_actioname);
- 
+
   m_launch.Execute(m_manager->Convert(m_parameters[1]).removeChar('\''));
   MString m_output = m_launch.GetOutput();
   MString m_error = m_launch.GetError();

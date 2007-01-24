@@ -83,6 +83,7 @@ ScriptActionManager::ScriptActionManager()
   m_ApplicationsList = 0;
   m_scriptpath = "";
   m_Parser = NULL;
+  m_ScriptFullPath = "";
 
 #ifdef BM_GRID
   m_GridModule = NULL;
@@ -120,6 +121,11 @@ void ScriptActionManager::SetApplicationPath(MString applicationpath)
 void ScriptActionManager::SetScriptPath(MString scriptpath)
 {
   m_scriptpath = scriptpath;
+}
+
+void ScriptActionManager::SetScriptFullPath(const char* scriptpath)
+{
+  m_ScriptFullPath = scriptpath;
 }
 
 void ScriptActionManager::AddAction(ScriptAction* action)

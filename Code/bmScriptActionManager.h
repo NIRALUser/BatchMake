@@ -106,6 +106,8 @@ public:
   ScriptAction* CreateAction(MString option);
   void SetApplicationPath(MString applicationpath);
   void SetScriptPath(MString scriptpath);
+  void SetScriptFullPath(const char* scriptpath);
+  const char* GetScriptFullPath() {return m_ScriptFullPath.c_str();}
   void AddAction(ScriptAction* action);
   void AddAction(MString option,std::vector<MString> param);
   void Execute(); 
@@ -177,6 +179,7 @@ protected:
   ProgressManager* m_progressmanager;
   MString m_applicationpath;
   MString m_scriptpath;
+  std::string m_ScriptFullPath;
   ApplicationWrapperListType* m_ApplicationWrapperList;
   ApplicationsListType* m_ApplicationsList;
   void* m_Parser;

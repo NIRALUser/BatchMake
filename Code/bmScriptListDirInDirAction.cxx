@@ -63,21 +63,19 @@ void ScriptListDirInDirAction::Execute()
     m_filter = m_manager->Convert(m_parameters[2]);
     if (m_filter.startWith('\''))
       m_filter = m_filter.rbegin("'") + 1;
-
-    /*if(m_filter[m_filter.length()-1] != '/')
-      {
-      m_filter += '/';
-      }*/
     }
 
   // By default the value is the current value of the first variable
   MString value = "";
+
+  bool checkOverwrite = false;
  
   // We do not overwrite the variable if specified
   if( (m_parameters.size() == 4 && !strcmp(m_parameters[3].toChar(),"NOOVERWRITE"))
     || (m_parameters.size() == 3 && !strcmp(m_parameters[2].toChar(),"NOOVERWRITE"))
     )
     {
+    checkOverwrite = true;
     std::vector<MString> values = m_manager->GetVariable(m_parameters[0]);
     for(unsigned int i=0;i<values.size();i++)
       {
@@ -119,13 +117,16 @@ void ScriptListDirInDirAction::Execute()
       {
       // Check that the value doesn't exists already
       bool exists = false;
-      std::vector<MString> values = m_manager->GetVariable(m_parameters[0]);
-      for(unsigned int i=0;i<values.size();i++)
+      if(checkOverwrite)
         {
-        if(!strcmp(values[i].toChar(),dname.c_str()))
+        std::vector<MString> values = m_manager->GetVariable(m_parameters[0]);
+        for(unsigned int i=0;i<values.size();i++)
           {
-          exists = true;
-          break;
+          if(!strcmp(values[i].toChar(),dname.c_str()))
+            {
+            exists = true;
+            break;
+            }
           }
         }
       if(!exists)
@@ -134,7 +135,7 @@ void ScriptListDirInDirAction::Execute()
           {
           value += " ";
           }
-        value += MString("'") + MString(dname) + MString("'");
+        value += MString("'") + MString(dname.c_str()) + MString("'");
         }
       }
     }
