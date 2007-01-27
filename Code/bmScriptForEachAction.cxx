@@ -29,7 +29,7 @@ ScriptForEachAction::~ScriptForEachAction()
 
 void ScriptForEachAction::AddAction(ScriptAction* action)
 {
-  m_action.push_back(action);
+  m_Action.push_back(action);
 }
 
 bool ScriptForEachAction::TestParam(ScriptError* error,int linenumber)
@@ -49,9 +49,9 @@ bool ScriptForEachAction::TestParam(ScriptError* error,int linenumber)
 
   m_manager->SetTestVariable(m_parameters[0]);
 
-  for (unsigned int i=0;i<m_action.size();i++)
+  for (unsigned int i=0;i<m_Action.size();i++)
     {
-    if (!m_action[i]->TestParam(error))
+    if (!m_Action[i]->TestParam(error))
       {
       return false;
       }
@@ -125,11 +125,11 @@ void ScriptForEachAction::Execute()
       }
 #endif
     m_manager->SetVariable(m_parameters[0],m_ForLoop[loop]); 
-    for (unsigned int i=0;i<m_action.size();i++)
+    for (unsigned int i=0;i<m_Action.size();i++)
       {
       if (!m_progressmanager->IsStop())
         {
-        m_action[i]->Execute();
+        m_Action[i]->Execute();
         }
       }
 
@@ -147,10 +147,10 @@ void ScriptForEachAction::Execute()
 
 void ScriptForEachAction::Delete()
 {
-  for (unsigned int i=0;i<m_action.size();i++)
+  for (unsigned int i=0;i<m_Action.size();i++)
     {
-    m_action[i]->Delete();
-    delete m_action[i];
+    m_Action[i]->Delete();
+    delete m_Action[i];
     }
 }
 
