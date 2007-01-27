@@ -35,22 +35,27 @@ void ScriptForEachAction::AddAction(ScriptAction* action)
 bool ScriptForEachAction::TestParam(ScriptError* error,int linenumber)
 {
   if (m_parameters.size() < 2)
-  {
-    error->SetError(MString("Not enough parameters - foreach function accepts only 2 parameters"),linenumber);
+    {
+    error->SetError(
+           MString("Not enough parameters - foreach requires 2 parameters"),
+           linenumber);
     return false;
-  }
+    }
 
   for (unsigned int k=0;k<m_parameters.size();k++)
-      m_manager->TestConvert(m_parameters[k],linenumber);
+    {
+    m_manager->TestConvert(m_parameters[k],linenumber);
+    }
 
   m_manager->SetTestVariable(m_parameters[0]);
-  
 
   for (unsigned int i=0;i<m_action.size();i++)
-  {
+    {
     if (!m_action[i]->TestParam(error))
+      {
       return false;
-  }
+      }
+    }
 
   return true;
 }
@@ -69,37 +74,38 @@ void ScriptForEachAction::CreateLoop()
   MString m_value = "";
 
   for (unsigned int i=0; i<m_parameters.size();i++)
-  {
-     while ((m_paramlist != "") && (m_paramlist != m_value))
-     {
-        m_paramlist = m_paramlist.removeChar(' ',true);
+    {
+    while ((m_paramlist != "") && (m_paramlist != m_value))
+      {
+      m_paramlist = m_paramlist.removeChar(' ',true);
 
-        if (m_paramlist.startWith('\''))
+      if (m_paramlist.startWith('\''))
         {
-          m_paramlist = m_paramlist.removeChar('\'',true);
-          m_value = m_paramlist.begin("\'");
-          m_paramlist = m_paramlist.end("\'");
+        m_paramlist = m_paramlist.removeChar('\'',true);
+        m_value = m_paramlist.begin("\'");
+        m_paramlist = m_paramlist.end("\'");
 
-          if (m_paramlist.length() != 0)
-            m_paramlist = m_paramlist + 1;
+        if (m_paramlist.length() != 0)
+          {
+          m_paramlist = m_paramlist + 1;
+          }
         }
-        else
+      else
         {
-          m_value = m_paramlist.begin(" ");
-          m_paramlist = m_paramlist.end(" ");
+        m_value = m_paramlist.begin(" ");
+        m_paramlist = m_paramlist.end(" ");
         }
         
-        if (m_value.length() != 0)
+      if (m_value.length() != 0)
         {
         m_ForLoop.push_back(MString("'") + m_value + "'");
         }
-     }
-  }
+      }
+    }
 }
 
 void ScriptForEachAction::Execute()
 {
-  
 
 #ifdef BM_GRID
   // We put a grid barrier
@@ -142,10 +148,10 @@ void ScriptForEachAction::Execute()
 void ScriptForEachAction::Delete()
 {
   for (unsigned int i=0;i<m_action.size();i++)
-  {
-      m_action[i]->Delete();
-      delete m_action[i];
-  }
+    {
+    m_action[i]->Delete();
+    delete m_action[i];
+    }
 }
 
 } // end namespace bm
