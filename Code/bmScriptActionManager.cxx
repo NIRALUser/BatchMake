@@ -425,14 +425,17 @@ void ScriptActionManager::SetTestVariable(MString name)
 {
   bool m_detected = false;
   for (unsigned int i=0;i<m_variabletestlist.size();i++)
-  {
-     if (m_variabletestlist[i] == name)
-        m_detected = true;
-  }
+    {
+    if (m_variabletestlist[i] == name)
+      {
+      m_detected = true;
+      }
+    }
 
   if (m_detected == false)
+    {
     m_variabletestlist.push_back(name);
-
+    }
 }
 
 
@@ -588,52 +591,74 @@ MString ScriptActionManager::Convert(MString param)
   bool m_isquote = false;
 
   for (int i=0;i<param.length();i++)
-  {
-    if (param[i] == '$')
     {
+    if (param[i] == '$')
+      {
       m_vardetected=true;
       m_var = "";
-    }
+      }
     else if (m_vardetected)
-    {
-       if ((m_var.length() == 0) && (param[i] == '{'))
-       {
-          m_var = "";
-       }
-       else if ((param[i] == ' ') || (param[i] == '}') || (param[i] == '\'')  || (i==param.length()-1))
-       {
-         if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\''))
-          m_var+=param[i];
+      {
+      if ((m_var.length() == 0) && (param[i] == '{'))
+        {
+        m_var = "";
+        }
+      else if ((param[i] == ' ') || (param[i] == '}') || 
+               (param[i] == '\'')  || (i==param.length()-1))
+        {
+        if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\''))
+          {
+          m_var += param[i];
+          }
 
-         m_vardetected=false;
-         //MString m_variable;
-         std::vector<MString> m_variable =  GetVariable(m_var);
-         for (unsigned int k=0;k<m_variable.size();k++)
-         {
-           if (k!=0)
-             m_value += "'";
+        m_vardetected = false;
 
-           if (m_variable[k] != "null")
+        //MString m_variable;
+        std::vector<MString> m_variable =  GetVariable(m_var);
+        for (unsigned int k=0;k<m_variable.size();k++)
+          {
+          if (k!=0)
+            {
+            m_value += "'";
+            }
+
+          if (m_variable[k] != "null")
+            {
             m_value += m_variable[k];
-           if (k != m_variable.size()-1)
-              m_value += "' ";
-         }
+            }
+          if (k != m_variable.size()-1)
+            {
+            m_value += "' ";
+            }
+          }
 
-         if (param[i] == ' ')
+        if (param[i] == ' ')
+          {
           m_value += " ";
-       }
-       else
-         m_var+=param[i];
-    }
-    else if (param[i] != '\'')
-      if (param[i] == ' ')
-        m_value += " ";
+          }
+        }
       else
+        {
+        m_var += param[i];
+        }
+      }
+    else if (param[i] != '\'')
+      {
+      if (param[i] == ' ')
+        {
+        m_value += " ";
+        }
+      else
+        {
         m_value += param[i];
-  }
+        }
+      }
+    }
 
   m_value += "'";
+
   return m_value;
+
 }
 
 
@@ -694,42 +719,46 @@ MString ScriptActionManager::ConvertExtra(MString param)
 }
 
 
-bool ScriptActionManager::TestConvert(MString param,int linenumber)
+bool ScriptActionManager::TestConvert(MString param, int linenumber)
 {
   bool m_vardetected = false;
   MString m_var;
-  for (int i=0;i<param.length();i++)
-  {
+  for (int i=0; i<param.length(); i++)
+    {
     if (param[i] == '$')
-    {
-      m_vardetected=true;
+      {
+      m_vardetected = true;
       m_var = "";
-    }
+      }
     else if (m_vardetected)
-    {
-       if ((m_var.length() == 0) && (param[i] == '{'))
-       {
-          m_var = "";
-       }
-       else if ((param[i] == ' ') || (param[i] == '}') || (param[i] == '\'')  || (i==param.length()-1))
-       {
-         if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\'')   )
-          m_var+=param[i];
+      {
+      if ((m_var.length() == 0) && (param[i] == '{'))
+        {
+        m_var = "";
+        }
+      else if ((param[i] == ' ') || (param[i] == '}') || 
+               (param[i] == '\'')  || (i == param.length()-1))
+        {
+        if ((i == param.length()-1) && (param[i] != '}') && (param[i] != '\''))
+          {
+          m_var += param[i];
+          }
 
+        m_vardetected = false;
 
-         m_vardetected=false;
-
-         if (IsTestVariable(m_var) == false)
-         {
-           m_error->SetError(MString("Undefined variable [") + m_var + "]" ,m_linenumber);
-           return false;
-         }
-       }
-       else
-         m_var+=param[i];
+        if (IsTestVariable(m_var) == false)
+          {
+          m_error->SetError(MString("Undefined variable [") 
+                            + m_var + "]", m_linenumber);
+          return false;
+          }
+        }
+      else
+        {
+        m_var += param[i];
+        }
+      }
     }
-  }
-
   return true;
 }
 

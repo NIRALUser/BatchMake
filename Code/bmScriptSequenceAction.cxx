@@ -47,7 +47,8 @@ bool ScriptSequenceAction::TestParam(ScriptError* error,int linenumber)
     {
     if (!m_parameters[j].isFloat())
       {
-      error->SetError(MString("Parameter %1 should be a float for Sequence ").arg(j) + m_parameters[j],linenumber);
+      error->SetError(MString("Parameter %1 should be a float for Sequence ").
+                      arg(j) + m_parameters[j], linenumber);
       return false;
       }
     }
@@ -69,8 +70,10 @@ MString ScriptSequenceAction::Help()
 void ScriptSequenceAction::Execute()
 {
   MString m_value;
-  for (float i=m_parameters[1].toFloat();i<=m_parameters[2].toFloat();i+=m_parameters[3].toFloat())
-  {
+  for (float i=m_parameters[1].toFloat();
+       i<=m_parameters[2].toFloat();
+       i+=m_parameters[3].toFloat())
+    {
     int j=(int)i;
     if(j-i == 0) // if the given number is an int then we write an int
       {  
@@ -80,8 +83,8 @@ void ScriptSequenceAction::Execute()
       {
       m_value+= MString("'%1' ").arg(i);
       }
-  }
-  m_manager->SetVariable(m_parameters[0],m_value);
+    }
+  m_manager->SetVariable(m_parameters[0], m_value);
 }
 
 } // end namespace bm

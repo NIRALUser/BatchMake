@@ -44,7 +44,9 @@ void ScriptAction::SetParameters(ParametersType parameters)
 {
   m_parameters.clear();
   for (unsigned int i=0;i<parameters.size();i++)
+    {
     m_parameters.push_back(parameters[i]);
+    }
 }
 
 
@@ -79,7 +81,7 @@ void ScriptAction::SetProgressManager(ProgressManager* progressmanager)
 }
 
 
-bool ScriptAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptAction::TestParam(ScriptError* error, int linenumber)
 {
   return true;
 }
