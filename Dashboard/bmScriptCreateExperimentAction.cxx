@@ -85,6 +85,7 @@ void ScriptCreateExperimentAction::Execute()
     }
   m_request.AddParam("hostname",m_request.GetHostName().c_str());
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());
+  m_request.AddFile("script",m_Manager->GetScriptFullPath());
 
   url += "/dashboard.php";
   std::string m_Output = m_request.Send(url.c_str());
