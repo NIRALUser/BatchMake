@@ -28,9 +28,9 @@
 int main(int argc, char **argv)
 {
    #ifdef WIN32
-     MString m_applicationpath = MString(argv[0]).rbegin("\\");
+     MString m_ApplicationPath = MString(argv[0]).rbegin("\\");
    #else
-     MString m_applicationpath = MString(argv[0]).rbegin("/");
+     MString m_ApplicationPath = MString(argv[0]).rbegin("/");
    #endif
 
   if (argc < 2)
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     MString m_windowtitle("BatchMake - ");
     m_windowtitle += BatchMakeVersion;
     ui->g_Scripteditorgui->label(m_windowtitle.toChar());
-    ui->SetApplicationPath(m_applicationpath);
+    ui->SetApplicationPath(m_ApplicationPath);
     // Initialize FLTK
     Fl::visual(FL_DOUBLE|FL_INDEX); 
     Fl::background(236,233,216);
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
       
     if(command.GetOptionWasSet("path"))
       {
-      m_applicationpath = command.GetValueAsString("path","path");
+      m_ApplicationPath = command.GetValueAsString("path","path");
       }
 
     if(command.GetOptionWasSet("compileScript"))
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
       std::string filename = command.GetValueAsString("compileScript","filename");
       std::cout << "Compiling ..." << std::endl;
       bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_applicationpath);
+      m_parser.SetApplicationPath(m_ApplicationPath);
       m_parser.Compile(filename);
       return 0;
       }
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
       std::string filename = command.GetValueAsString("executeScript","filename");
       std::cout << "Executing ..." << std::endl;
       bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_applicationpath);
+      m_parser.SetApplicationPath(m_ApplicationPath);
       m_parser.Execute(filename);
       return 0;
       }
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
       m_ApplicationWrapper.AutomaticCommandLineParsing(appname.c_str());
       std::string moduleName = m_ApplicationWrapper.GetName().toChar();
        
-      std::string output = m_applicationpath.toChar();
+      std::string output = m_ApplicationPath.toChar();
       output += "/Applications/";
       output += moduleName; 
       output += ".bmm";
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateShell","scriptname");
       std::string outputname = command.GetValueAsString("generateShell","outputname");
       bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_applicationpath);
+      m_parser.SetApplicationPath(m_ApplicationPath);
      
       std::cout << "Generating shell script ...";       
       bm::Grid grid;
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateCondor","scriptname");
       std::string outputname = command.GetValueAsString("generateCondor","outputname");
       bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_applicationpath);
+      m_parser.SetApplicationPath(m_ApplicationPath);
      
       std::cout << "Generating condor script ...";
       bm::Grid grid;
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateGAD","scriptname");
       std::string outputname = command.GetValueAsString("generateGAD","outputname");
       bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_applicationpath);
+      m_parser.SetApplicationPath(m_ApplicationPath);
      
       std::cout << "Generating kwgrid script ...";
         

@@ -78,10 +78,10 @@ void ScriptListFileInDirAction::Execute()
   // Check if the given filename is a directory
   if(!fl_filename_isdir(dir.c_str()))
     {
-    m_progressmanager->AddAction("Action: ListFileInDir()");
+    m_ProgressManager->AddAction("Action: ListFileInDir()");
     std::string error = dir;
     error += " is not a valid directory";
-    m_progressmanager->AddError(error.c_str());
+    m_ProgressManager->AddError(error.c_str());
     return;
     }
 
@@ -91,10 +91,10 @@ void ScriptListFileInDirAction::Execute()
   
   if(size == -1)
     {
-    m_progressmanager->AddAction("Action: ListFileInDir()");
+    m_ProgressManager->AddAction("Action: ListFileInDir()");
     std::string error = dir;
     error += " : cannot open directory";
-    m_progressmanager->AddError(error.c_str());
+    m_ProgressManager->AddError(error.c_str());
     return;
     }
 

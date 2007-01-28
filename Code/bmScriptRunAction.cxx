@@ -137,9 +137,9 @@ void ScriptRunAction::Execute()
   Launch m_launch;
   Timer m_timer;
   m_timer.start();
-  m_launch.SetProgressManager(m_progressmanager);
+  m_launch.SetProgressManager(m_ProgressManager);
 
-  m_progressmanager->SetStatus(MString("Start ") + m_manager->Convert(m_parameters[1]).removeChar('\''));
+  m_ProgressManager->SetStatus(MString("Start ") + m_manager->Convert(m_parameters[1]).removeChar('\''));
   MString m_actioname = m_manager->ConvertExtra(m_parameters[1]);
 
   m_actioname = m_actioname.removeChar(' ',true);
@@ -148,25 +148,25 @@ void ScriptRunAction::Execute()
   if (m_actioname.length() != 0)
     m_actioname = m_actioname + 1;
 
-  m_progressmanager->AddAction(m_actioname);
+  m_ProgressManager->AddAction(m_actioname);
 
   m_launch.Execute(m_manager->Convert(m_parameters[1]).removeChar('\''));
   MString m_output = m_launch.GetOutput();
-  MString m_error = m_launch.GetError();
+  MString m_Error = m_launch.GetError();
   
   // Parse the output of the application and set the variables
   this->ParseXMLOutput(m_output.toChar());
 
   m_manager->SetVariable(m_parameters[0],MString("'") + m_output + "'");
-  m_progressmanager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
-  m_progressmanager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
+  m_ProgressManager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
+  m_ProgressManager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
   
   int m_offset = 0;
   int m_offset2 = 0;
   while (m_offset != -1)
     {
     m_offset = m_output.find("\n");
-    m_progressmanager->AddOutput(m_output.begin("\n"));
+    m_ProgressManager->AddOutput(m_output.begin("\n"));
     if (m_offset != -1)
       {
       m_output = m_output.end("\n")+1;
@@ -176,11 +176,11 @@ void ScriptRunAction::Execute()
   m_offset = 0;
   while (m_offset != -1)
     {
-    m_offset = m_error.find("\n");
-    m_progressmanager->AddError(m_error.begin("\n"));
+    m_offset = m_Error.find("\n");
+    m_ProgressManager->AddError(m_Error.begin("\n"));
     if (m_offset != -1)
       {
-      m_error = m_error.end("\n")+1;
+      m_Error = m_Error.end("\n")+1;
       }
     }
 

@@ -68,14 +68,14 @@ public:
   std::vector<MString> & GetCode() {return m_code;}
   void RemoveCodeLine(unsigned int line);
 
-  unsigned long GetLineNumber() {return m_linenumber;}
+  unsigned long GetLineNumber() {return m_LineNumber;}
 
 protected:
-  int m_linenumber;
+  int m_LineNumber;
   ScriptActionManager* m_scriptactionmanager;
   std::vector<MString> m_code;
-  ScriptError* m_error;
-  MString m_applicationpath;
+  ScriptError* m_Error;
+  MString m_ApplicationPath;
   std::vector<ApplicationWrapper*>* m_applicationlist;
 };
 

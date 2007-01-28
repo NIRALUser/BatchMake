@@ -18,6 +18,7 @@
 #define __MString_h_
 
 #include "MString.h"
+#include <ostream>
 #include <iostream>
 #include <stdio.h>
 
@@ -34,6 +35,7 @@ public:
   ~MString();
 
   std::string GetValue();
+  const std::string GetConstValue() const;
   MString arg(int value);
   MString arg(float value);
   MString arg(unsigned int value);

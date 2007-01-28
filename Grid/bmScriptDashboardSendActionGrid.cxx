@@ -71,13 +71,13 @@ void ScriptDashboardSendAction::GenerateGrid()
 
    if(!meth)
     {
-    m_progressmanager->AddError("BMDashboard: Cannot find method");
+    m_ProgressManager->AddError("BMDashboard: Cannot find method");
     return;
     }
 
   if(!exp)
     {
-    m_progressmanager->AddError("BMDashboard: Cannot find experiment");
+    m_ProgressManager->AddError("BMDashboard: Cannot find experiment");
     return;
     }
 

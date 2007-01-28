@@ -26,6 +26,7 @@ bmSplashScreenControls.h
 bmIcons.h
 bmScriptEchoAction.h
 bmScriptForEachAction.h
+bmScriptForNFoldAction.h
 bmScriptGetParamAction.h
 bmScriptIfAction.h
 bmScriptRandomizeAction.h
@@ -60,6 +61,7 @@ SET(BatchMakeLib_SRCS
 ${BatchMakeLib_SRCS}
 bmScriptEchoAction.cxx
 bmScriptForEachAction.cxx
+bmScriptForNFoldAction.cxx
 bmScriptGetParamAction.cxx
 bmScriptIfAction.cxx
 bmScriptRandomizeAction.cxx

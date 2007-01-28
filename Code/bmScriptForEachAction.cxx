@@ -127,7 +127,7 @@ void ScriptForEachAction::Execute()
     m_manager->SetVariable(m_parameters[0],m_ForLoop[loop]); 
     for (unsigned int i=0;i<m_Action.size();i++)
       {
-      if (!m_progressmanager->IsStop())
+      if (!m_ProgressManager->IsStop())
         {
         m_Action[i]->Execute();
         }

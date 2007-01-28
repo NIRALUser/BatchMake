@@ -48,9 +48,9 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
   g_Scripteditorgui->position(Fl::w()/2-g_Scripteditorgui->w()/2,
                               Fl::h()/2-g_Scripteditorgui->h()/2);
 
-  m_errorgui = new ScriptErrorGUI();
-  m_errorbuffer = new Fl_Text_Buffer();
-  g_output->buffer(m_errorbuffer);
+  m_Errorgui = new ScriptErrorGUI();
+  m_Errorbuffer = new Fl_Text_Buffer();
+  g_output->buffer(m_Errorbuffer);
 
   // Give a pointer of the parser to the editor (to get the list of apps, etc...)
   g_editor->SetParser(m_parser);
@@ -71,8 +71,8 @@ ScriptEditorGUIControls::~ScriptEditorGUIControls()
 
 void ScriptEditorGUIControls::SetApplicationPath(MString applicationpath)
 {
-  m_applicationpath = applicationpath;
-  m_parser->SetApplicationPath(m_applicationpath);
+  m_ApplicationPath = applicationpath;
+  m_parser->SetApplicationPath(m_ApplicationPath);
 }
 
 
@@ -129,7 +129,7 @@ void ScriptEditorGUIControls::Show()
 
   //Load .ini
   XMLIniIO* m_inifile = new XMLIniIO();
-  m_inifile->SetFileName(m_applicationpath + "/BatchMake.ini");
+  m_inifile->SetFileName(m_ApplicationPath + "/BatchMake.ini");
   if (m_inifile->Read() != -1)
   {
     MString m_inivalue = m_inifile->Find("Test .ini value");
@@ -226,11 +226,11 @@ void ScriptEditorGUIControls::OnSaveScript()
 
 void ScriptEditorGUIControls::OnCompile()
 {
-  m_errorbuffer->text("");
+  m_Errorbuffer->text("");
   m_parser->Reset();
-  m_errorgui->Reset();
-  m_errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_errorgui);
+  m_Errorgui->Reset();
+  m_Errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_Errorgui);
   int m_offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
@@ -238,18 +238,18 @@ void ScriptEditorGUIControls::OnCompile()
     m_parser->AddCodeLine(MString(text));
     m_offset = g_editor->buffer()->line_end(m_offset)+1;
     }
-  m_errorgui->SetStatus(MString("Compiling ..."));
+  m_Errorgui->SetStatus(MString("Compiling ..."));
   m_parser->Parse();
-  m_errorgui->DisplaySummary();
+  m_Errorgui->DisplaySummary();
 }
 
 void ScriptEditorGUIControls::OnExecute()
 {
   m_parser->Reset();
-  m_errorgui->Reset();
-  m_errorbuffer->text("");
-  m_errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_errorgui);
+  m_Errorgui->Reset();
+  m_Errorbuffer->text("");
+  m_Errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_Errorgui);
   int m_offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
@@ -258,9 +258,9 @@ void ScriptEditorGUIControls::OnExecute()
     m_offset = g_editor->buffer()->line_end(m_offset)+1;
     }
 
-  m_errorgui->SetStatus(MString("Compiling ..."));
+  m_Errorgui->SetStatus(MString("Compiling ..."));
     
-  ProgressManagerGUI* m_progressmanagergui = new ProgressManagerGUI();
+  ProgressManagerGUI* m_ProgressManagergui = new ProgressManagerGUI();
   ProgressGUIControls* m_progressgui = new ProgressGUIControls();
   m_progressgui->g_progress->box( FL_DOWN_BOX );
   // m_progressgui->g_progress->auto_branches( true );  
@@ -270,19 +270,19 @@ void ScriptEditorGUIControls::OnExecute()
   m_progressgui->g_progress->insertion_mode(FLU_INSERT_BACK);
 
   m_progressgui->g_progress->label( "BatchMake processing ..." );
-  m_progressmanagergui->SetProgressGUI(m_progressgui);
-  m_parser->SetProgressManager(m_progressmanagergui);
+  m_ProgressManagergui->SetProgressGUI(m_progressgui);
+  m_parser->SetProgressManager(m_ProgressManagergui);
 
   if (m_parser->Parse())
     {
-    m_errorgui->DisplaySummary();
-    m_errorgui->SetStatus(MString("Running ..."));
+    m_Errorgui->DisplaySummary();
+    m_Errorgui->SetStatus(MString("Running ..."));
     m_progressgui->Show();
     m_parser->Execute();
     }
   else
     {
-    m_errorgui->DisplaySummary();
+    m_Errorgui->DisplaySummary();
     }
 }
 
@@ -290,7 +290,7 @@ void ScriptEditorGUIControls::OnExecute()
 void ScriptEditorGUIControls::OnApplicationWrapper()
 {
   ApplicationListGUIControls* ui = new ApplicationListGUIControls();
-  ui->SetApplicationPath(m_applicationpath);
+  ui->SetApplicationPath(m_ApplicationPath);
   ui->SetApplicationList(m_parser->GetApplicationList());
   ui->Show();
 }
@@ -309,10 +309,10 @@ void ScriptEditorGUIControls::OnGenerateGAD()
 
   // Check first if the script is valid
   m_parser->Reset();
-  m_errorgui->Reset();
-  m_errorbuffer->text("");
-  m_errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_errorgui);
+  m_Errorgui->Reset();
+  m_Errorbuffer->text("");
+  m_Errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_Errorgui);
   int m_offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
@@ -321,25 +321,25 @@ void ScriptEditorGUIControls::OnGenerateGAD()
     m_offset = g_editor->buffer()->line_end(m_offset)+1;
     }
 
-  m_errorgui->SetStatus(MString("Generating kwgrid script ..."));
+  m_Errorgui->SetStatus(MString("Generating kwgrid script ..."));
     
   Grid grid;
   grid.SetFileName(filename);
   m_parser->SetGridModule(&grid);
   if (m_parser->Parse())
     {
-    m_errorgui->DisplaySummary();
+    m_Errorgui->DisplaySummary();
     m_parser->Execute();
     }
   else
     {
-    m_errorgui->DisplaySummary();
+    m_Errorgui->DisplaySummary();
     }
 
   grid.WriteGAD();
 
   m_parser->SetGridModule(NULL);
-  m_errorgui->SetStatus(MString("Generation done.")); 
+  m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
   fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
 #endif
@@ -359,10 +359,10 @@ void ScriptEditorGUIControls::OnGenerateCondor()
 
   // Check first if the script is valid
   m_parser->Reset();
-  m_errorgui->Reset();
-  m_errorbuffer->text("");
-  m_errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_errorgui);
+  m_Errorgui->Reset();
+  m_Errorbuffer->text("");
+  m_Errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_Errorgui);
   int m_offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
@@ -371,19 +371,19 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     m_offset = g_editor->buffer()->line_end(m_offset)+1;
     }
 
-  m_errorgui->SetStatus(MString("Generating condor script ..."));
+  m_Errorgui->SetStatus(MString("Generating condor script ..."));
     
   Grid grid;
   grid.SetFileName(filename);
   m_parser->SetGridModule(&grid);
   if (m_parser->Parse())
     {
-    m_errorgui->DisplaySummary();
+    m_Errorgui->DisplaySummary();
     m_parser->Execute();
     }
   else
     {
-    m_errorgui->DisplaySummary();
+    m_Errorgui->DisplaySummary();
     }
 
   grid.WriteCondor();
@@ -404,15 +404,15 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     MString output = starter.GetOutput();
     output = output.replaceChar(13,' ');
     output = output.replaceChar(10,' ');
-    m_errorgui->SetStatus(output);
+    m_Errorgui->SetStatus(output);
     MString error = starter.GetError();
     error = error.replaceChar(13,' ');
     error = error.replaceChar(10,' ');
-    m_errorgui->SetStatus(error);
+    m_Errorgui->SetStatus(error);
     }
 
   m_parser->SetGridModule(NULL);
-  m_errorgui->SetStatus(MString("Generation done.")); 
+  m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
    fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
 #endif
@@ -432,10 +432,10 @@ void ScriptEditorGUIControls::OnGenerateShell()
 
   // Check first if the script is valid
   m_parser->Reset();
-  m_errorgui->Reset();
-  m_errorbuffer->text("");
-  m_errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_errorgui);
+  m_Errorgui->Reset();
+  m_Errorbuffer->text("");
+  m_Errorgui->SetTextDisplay(g_output);
+  m_parser->SetError(m_Errorgui);
   int m_offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
@@ -444,25 +444,25 @@ void ScriptEditorGUIControls::OnGenerateShell()
     m_offset = g_editor->buffer()->line_end(m_offset)+1;
     }
 
-  m_errorgui->SetStatus(MString("Generating shell script ..."));
+  m_Errorgui->SetStatus(MString("Generating shell script ..."));
     
   Grid grid;
   grid.SetFileName(filename);
   m_parser->SetGridModule(&grid);
   if (m_parser->Parse())
     {
-    m_errorgui->DisplaySummary();
+    m_Errorgui->DisplaySummary();
     m_parser->Execute();
     }
   else
     {
-    m_errorgui->DisplaySummary();
+    m_Errorgui->DisplaySummary();
     }
 
   grid.WriteShell();
 
   m_parser->SetGridModule(NULL);
-  m_errorgui->SetStatus(MString("Generation done.")); 
+  m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
   fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
 #endif

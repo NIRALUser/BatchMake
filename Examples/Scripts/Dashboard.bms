@@ -3,28 +3,23 @@ SetAppOption(test.operand +)
 SetAppOption(test.GenerateXMLMetaOutput 1)
 
 # Describe the current experiment
-#DashboardClient(external)
 DashboardHost(http://www.insight-journal.org/batchmake)
 DashboardUser('Julien Jomier')
-#DashboardPassword('$1$Poh8RTew$4BauBLo4/w9ZqgbpZ9edW0');
 CreateExperiment(exp 'BatchMake Test1' 'My Experiment' 'This is a description for this experiment')
 CreateMethod(meth exp 'Calculator' 'Compute between two numbers')
-AddMethodInput(first meth 'First Number')
-AddMethodInput(second meth 'Second Number')
+AddMethodInput(firstParam meth 'First Number')
+AddMethodInput(secondParam meth 'Second Number')
 AddMethodOutput(result meth 'Computation Result')
 
 Sequence(sequ 0 3.141597 0.2)
 foreach(i ${sequ})
  Sin(sinus ${i})
-# Sin(sinus 0.5)
  SetAppOption(test.firstNumber ${sinus})
  SetAppOption(test.secondNumber 0.5)
  Run(output ${test})
-# When writing a grid script. The Set() function parses the possible
-# output and store the result in a scope file
  Set(result test.Result)
- Set(first ${sinus})
- Set(second 0.5)
+ Set(firstParam ${sinus})
+ Set(secondParam 0.5)
 # Echo(${result})
  DashboardSend(meth)
 endforeach(i sequ)

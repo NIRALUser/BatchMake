@@ -15,6 +15,7 @@
 
 #include "bmScriptActionManager.h"
 #include "bmScriptForEachAction.h"
+#include "bmScriptForNFoldAction.h"
 #include "bmScriptSequenceAction.h"
 #include "bmScriptEchoAction.h"
 #include "bmScriptRandomizeAction.h"
@@ -71,17 +72,22 @@
 
 #include "Timer.h"
 
+#define BM_NEWACTION(option, iname)\
+if (option == MString(#iname).toLower())  return new Script##iname##Action();
+
+#define BM_NEWKEYWORD(keywordList, iname)\
+keywordList.push_back(MString(#iname));
 
 namespace bm {
 
 ScriptActionManager::ScriptActionManager()
 {
-  m_parentaction = 0;
-  m_error = new ScriptError();
-  m_progressmanager = new ProgressManager();
+  m_ParentAction = 0;
+  m_Error = new ScriptError();
+  m_ProgressManager = new ProgressManager();
   m_ApplicationWrapperList = 0;
   m_ApplicationsList = 0;
-  m_scriptpath = "";
+  m_ScriptPath = "";
   m_Parser = NULL;
   m_ScriptFullPath = "";
 
@@ -92,11 +98,11 @@ ScriptActionManager::ScriptActionManager()
 
 ScriptActionManager::~ScriptActionManager()
 {
-  std::vector<variablestruct*>::iterator it = m_variablelist.begin();
-  while(it != m_variablelist.end())
+  std::vector<variablestruct*>::iterator it = m_VariableList.begin();
+  while(it != m_VariableList.end())
    {
    variablestruct* var = *it;
-   it = m_variablelist.erase(it);
+   it = m_VariableList.erase(it);
    delete var;
    }
 
@@ -109,18 +115,18 @@ ScriptActionManager::~ScriptActionManager()
    delete var;
    }
 
-  delete m_error;
-  delete m_progressmanager;
+  delete m_Error;
+  delete m_ProgressManager;
 }
 
 void ScriptActionManager::SetApplicationPath(MString applicationpath)
 {
-  m_applicationpath = applicationpath;
+  m_ApplicationPath = applicationpath;
 }
 
 void ScriptActionManager::SetScriptPath(MString scriptpath)
 {
-  m_scriptpath = scriptpath;
+  m_ScriptPath = scriptpath;
 }
 
 void ScriptActionManager::SetScriptFullPath(const char* scriptpath)
@@ -130,154 +136,156 @@ void ScriptActionManager::SetScriptFullPath(const char* scriptpath)
 
 void ScriptActionManager::AddAction(ScriptAction* action)
 {
-  m_actionlist.push_back(action);
+  m_ActionList.push_back(action);
 }
 
 void ScriptActionManager::SetProgressManager(ProgressManager* progressmanager)
 {
-  if (m_progressmanager)
+  if (m_ProgressManager)
     {
-    delete m_progressmanager;
+    delete m_ProgressManager;
     }
-  m_progressmanager = progressmanager;
+  m_ProgressManager = progressmanager;
 };
 
 ProgressManager* ScriptActionManager::GetProgressManager()
 {
-  return m_progressmanager;
+  return m_ProgressManager;
 }
 
 void ScriptActionManager::SetError(ScriptError* error)
 {
-  if (m_error != error)
+  if (m_Error != error)
     {
-    delete m_error;
+    delete m_Error;
     }
-  m_error = error;
+  m_Error = error;
 }
 
 ScriptError* ScriptActionManager::GetError()
 {
-  return m_error;
+  return m_Error;
 }
 
 
 void ScriptActionManager::SetLineNumber(int linenumber)
 {
-  m_linenumber = linenumber;
+  m_LineNumber = linenumber;
 }
 
 
 std::vector<MString> ScriptActionManager::GetKeywordList()
 {
-  std::vector<MString> m_list;
-  BM_NEWKEYWORD(ForEach);
-  BM_NEWKEYWORD(Sequence);
-  BM_NEWKEYWORD(Echo);
-  BM_NEWKEYWORD(If);
-  BM_NEWKEYWORD(Run);
-  BM_NEWKEYWORD(Set);
-  BM_NEWKEYWORD(SetApp);
-  BM_NEWKEYWORD(SetAppOption);
-  BM_NEWKEYWORD(ListDirInDir);
-  BM_NEWKEYWORD(ListFileInDir);
-  BM_NEWKEYWORD(GetParam);
-  BM_NEWKEYWORD(Randomize);
-  BM_NEWKEYWORD(Inc);
-  BM_NEWKEYWORD(Int);
-  BM_NEWKEYWORD(AppendFile);
-  BM_NEWKEYWORD(WriteFile);
-  BM_NEWKEYWORD(DbSendValue);
-  BM_NEWKEYWORD(DbSendFile);
-  BM_NEWKEYWORD(DbClear);
-  BM_NEWKEYWORD(ExtractSlice);
-  BM_NEWKEYWORD(ExtractString);
-  BM_NEWKEYWORD(Include);
-  BM_NEWKEYWORD(DashboardHost);
-  BM_NEWKEYWORD(DashboardUser);
-  BM_NEWKEYWORD(DashboardSend);
-  BM_NEWKEYWORD(DashboardNotify);
-  BM_NEWKEYWORD(CreateExperiment);
-  BM_NEWKEYWORD(CreateMethod);
-  BM_NEWKEYWORD(Sin);
-  BM_NEWKEYWORD(DeleteFile);
-  BM_NEWKEYWORD(OpenTCPSocket);
-  BM_NEWKEYWORD(SendTCP);
-  BM_NEWKEYWORD(CloseTCPSocket);
-  BM_NEWKEYWORD(AddMethodInput);
-  BM_NEWKEYWORD(AddMethodOutput);
-  BM_NEWKEYWORD(GridDataHost);
-  BM_NEWKEYWORD(GridOutputHost);
-  BM_NEWKEYWORD(DataDirectory);
-  BM_NEWKEYWORD(OutputDirectory);
-  BM_NEWKEYWORD(GridSingleNode);
-  BM_NEWKEYWORD(AddMethodIdealOutput);
-  BM_NEWKEYWORD(SetIdealOutput);
-  BM_NEWKEYWORD(RegEx);
-  BM_NEWKEYWORD(MakeDirectory);
-  BM_NEWKEYWORD(GridSetGrouping);
-  BM_NEWKEYWORD(GridMaxNodes);
-  BM_NEWKEYWORD(GridTempDirectory);
-  BM_NEWKEYWORD(GridExecutableDirectory);
-  return m_list;
+  std::vector<MString> _list;
+  BM_NEWKEYWORD(_list, ForEach);
+  BM_NEWKEYWORD(_list, ForNFold);
+  BM_NEWKEYWORD(_list, Sequence);
+  BM_NEWKEYWORD(_list, Echo);
+  BM_NEWKEYWORD(_list, If);
+  BM_NEWKEYWORD(_list, Run);
+  BM_NEWKEYWORD(_list, Set);
+  BM_NEWKEYWORD(_list, SetApp);
+  BM_NEWKEYWORD(_list, SetAppOption);
+  BM_NEWKEYWORD(_list, ListDirInDir);
+  BM_NEWKEYWORD(_list, ListFileInDir);
+  BM_NEWKEYWORD(_list, GetParam);
+  BM_NEWKEYWORD(_list, Randomize);
+  BM_NEWKEYWORD(_list, Inc);
+  BM_NEWKEYWORD(_list, Int);
+  BM_NEWKEYWORD(_list, AppendFile);
+  BM_NEWKEYWORD(_list, WriteFile);
+  BM_NEWKEYWORD(_list, DbSendValue);
+  BM_NEWKEYWORD(_list, DbSendFile);
+  BM_NEWKEYWORD(_list, DbClear);
+  BM_NEWKEYWORD(_list, ExtractSlice);
+  BM_NEWKEYWORD(_list, ExtractString);
+  BM_NEWKEYWORD(_list, Include);
+  BM_NEWKEYWORD(_list, DashboardHost);
+  BM_NEWKEYWORD(_list, DashboardUser);
+  BM_NEWKEYWORD(_list, DashboardSend);
+  BM_NEWKEYWORD(_list, DashboardNotify);
+  BM_NEWKEYWORD(_list, CreateExperiment);
+  BM_NEWKEYWORD(_list, CreateMethod);
+  BM_NEWKEYWORD(_list, Sin);
+  BM_NEWKEYWORD(_list, DeleteFile);
+  BM_NEWKEYWORD(_list, OpenTCPSocket);
+  BM_NEWKEYWORD(_list, SendTCP);
+  BM_NEWKEYWORD(_list, CloseTCPSocket);
+  BM_NEWKEYWORD(_list, AddMethodInput);
+  BM_NEWKEYWORD(_list, AddMethodOutput);
+  BM_NEWKEYWORD(_list, GridDataHost);
+  BM_NEWKEYWORD(_list, GridOutputHost);
+  BM_NEWKEYWORD(_list, DataDirectory);
+  BM_NEWKEYWORD(_list, OutputDirectory);
+  BM_NEWKEYWORD(_list, GridSingleNode);
+  BM_NEWKEYWORD(_list, AddMethodIdealOutput);
+  BM_NEWKEYWORD(_list, SetIdealOutput);
+  BM_NEWKEYWORD(_list, RegEx);
+  BM_NEWKEYWORD(_list, MakeDirectory);
+  BM_NEWKEYWORD(_list, GridSetGrouping);
+  BM_NEWKEYWORD(_list, GridMaxNodes);
+  BM_NEWKEYWORD(_list, GridTempDirectory);
+  BM_NEWKEYWORD(_list, GridExecutableDirectory);
+  return _list;
 }
 
 
 ScriptAction* ScriptActionManager::CreateAction(MString option)
 {
-  BM_NEWACTION(ForEach);
-  BM_NEWACTION(Sequence);
-  BM_NEWACTION(Echo);
-  BM_NEWACTION(If);
-  BM_NEWACTION(Run);
-  BM_NEWACTION(Set);
-  BM_NEWACTION(SetApp);
-  BM_NEWACTION(SetAppOption);
-  BM_NEWACTION(ListDirInDir);
-  BM_NEWACTION(ListFileInDir);
-  BM_NEWACTION(GetParam);
-  BM_NEWACTION(Randomize);
-  BM_NEWACTION(Inc);
-  BM_NEWACTION(Int);
-  BM_NEWACTION(AppendFile);
-  BM_NEWACTION(WriteFile);
-  BM_NEWACTION(ExtractSlice);
-  BM_NEWACTION(ExtractString);
-  BM_NEWACTION(Include);
-  BM_NEWACTION(Sin);
-  BM_NEWACTION(DeleteFile);
-  BM_NEWACTION(RegEx);
-  BM_NEWACTION(MakeDirectory);
+  BM_NEWACTION(option, ForEach);
+  BM_NEWACTION(option, ForNFold);
+  BM_NEWACTION(option, Sequence);
+  BM_NEWACTION(option, Echo);
+  BM_NEWACTION(option, If);
+  BM_NEWACTION(option, Run);
+  BM_NEWACTION(option, Set);
+  BM_NEWACTION(option, SetApp);
+  BM_NEWACTION(option, SetAppOption);
+  BM_NEWACTION(option, ListDirInDir);
+  BM_NEWACTION(option, ListFileInDir);
+  BM_NEWACTION(option, GetParam);
+  BM_NEWACTION(option, Randomize);
+  BM_NEWACTION(option, Inc);
+  BM_NEWACTION(option, Int);
+  BM_NEWACTION(option, AppendFile);
+  BM_NEWACTION(option, WriteFile);
+  BM_NEWACTION(option, ExtractSlice);
+  BM_NEWACTION(option, ExtractString);
+  BM_NEWACTION(option, Include);
+  BM_NEWACTION(option, Sin);
+  BM_NEWACTION(option, DeleteFile);
+  BM_NEWACTION(option, RegEx);
+  BM_NEWACTION(option, MakeDirectory);
 
 #ifdef BM_GRID
-  BM_NEWACTION(GridDataHost);
-  BM_NEWACTION(GridOutputHost);
-  BM_NEWACTION(GridSingleNode);
-  BM_NEWACTION(OutputDirectory);
-  BM_NEWACTION(DataDirectory);
-  BM_NEWACTION(GridSetGrouping);
-  BM_NEWACTION(GridMaxNodes);
-  BM_NEWACTION(GridTempDirectory);
-  BM_NEWACTION(GridExecutableDirectory);
+  BM_NEWACTION(option, GridDataHost);
+  BM_NEWACTION(option, GridOutputHost);
+  BM_NEWACTION(option, GridSingleNode);
+  BM_NEWACTION(option, OutputDirectory);
+  BM_NEWACTION(option, DataDirectory);
+  BM_NEWACTION(option, GridSetGrouping);
+  BM_NEWACTION(option, GridMaxNodes);
+  BM_NEWACTION(option, GridTempDirectory);
+  BM_NEWACTION(option, GridExecutableDirectory);
 #endif
 
 #ifdef BM_DASHBOARD
-  BM_NEWACTION(DbSendValue);
-  BM_NEWACTION(DbSendFile);
-  BM_NEWACTION(DbClear);
-  BM_NEWACTION(DashboardHost);
-  BM_NEWACTION(DashboardUser);
-  BM_NEWACTION(DashboardSend);
-  BM_NEWACTION(DashboardNotify);
-  BM_NEWACTION(CreateExperiment);
-  BM_NEWACTION(CreateMethod);
-  BM_NEWACTION(OpenTCPSocket);
-  BM_NEWACTION(SendTCP);
-  BM_NEWACTION(CloseTCPSocket);
-  BM_NEWACTION(AddMethodInput);
-  BM_NEWACTION(AddMethodOutput);
-  BM_NEWACTION(AddMethodIdealOutput);
-  BM_NEWACTION(SetIdealOutput);
+  BM_NEWACTION(option, DbSendValue);
+  BM_NEWACTION(option, DbSendFile);
+  BM_NEWACTION(option, DbClear);
+  BM_NEWACTION(option, DashboardHost);
+  BM_NEWACTION(option, DashboardUser);
+  BM_NEWACTION(option, DashboardSend);
+  BM_NEWACTION(option, DashboardNotify);
+  BM_NEWACTION(option, CreateExperiment);
+  BM_NEWACTION(option, CreateMethod);
+  BM_NEWACTION(option, OpenTCPSocket);
+  BM_NEWACTION(option, SendTCP);
+  BM_NEWACTION(option, CloseTCPSocket);
+  BM_NEWACTION(option, AddMethodInput);
+  BM_NEWACTION(option, AddMethodOutput);
+  BM_NEWACTION(option, AddMethodIdealOutput);
+  BM_NEWACTION(option, SetIdealOutput);
 #endif
   
   return 0;
@@ -290,14 +298,14 @@ void ScriptActionManager::SetApplicationWrapperList(std::vector<ApplicationWrapp
 
 void ScriptActionManager::Reset()
 {
-   m_variabletestlist.clear();
-   m_variablelist.clear();
-   SetVariable(MString("applicationpath"),MString("'") + m_applicationpath + "'");
+   m_VariableTestList.clear();
+   m_VariableList.clear();
+   SetVariable(MString("applicationpath"),MString("'") + m_ApplicationPath + "'");
   
-   if (m_scriptpath.length() == 0)
-      SetVariable(MString("scriptpath"),MString("'") + m_applicationpath + "'");
+   if (m_ScriptPath.length() == 0)
+      SetVariable(MString("scriptpath"),MString("'") + m_ApplicationPath + "'");
    else
-      SetVariable(MString("scriptpath"),MString("'") + m_scriptpath + "'");
+      SetVariable(MString("scriptpath"),MString("'") + m_ScriptPath + "'");
    
    SetTestVariable(MString("applicationpath"));
    SetTestVariable(MString("scriptpath"));
@@ -311,13 +319,13 @@ void ScriptActionManager::Reset()
      }
    }
 
-   m_parentaction = 0;
-   for (unsigned int i=0;i<m_actionlist.size();i++)
+   m_ParentAction = 0;
+   for (unsigned int i=0;i<m_ActionList.size();i++)
      {
-     m_actionlist[i]->Delete();
+     m_ActionList[i]->Delete();
      }
   
-   m_actionlist.clear();
+   m_ActionList.clear();
 
 #ifdef BM_DASHBOARD
    m_Dashboard.url = "";
@@ -330,81 +338,83 @@ void ScriptActionManager::Reset()
 void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
 {
 
-  if ((option == "endforeach") || (option == "endif"))
+  if ((option == "endforeach") || (option == "endif") ||
+       option == "endfornfold")
     {
-    if (m_parentaction != 0)
+    if (m_ParentAction != 0)
       {
-      m_parentaction = m_parentaction->GetParent();
+      m_ParentAction = m_ParentAction->GetParent();
       }
     }
   else if (option == "else")
     {
-    ((ScriptIfAction*)m_parentaction)->SetMode(1);
+    ((ScriptIfAction*)m_ParentAction)->SetMode(1);
     }
   else
     {
-    ScriptAction* m_action = CreateAction(option);
+    ScriptAction* _action = CreateAction(option);
 
-    if(m_action != 0)
+    if(_action != 0)
      {
-     m_InternalActionList.push_back(m_action);
+     m_InternalActionList.push_back(_action);
      }    
 
-    if (m_action == 0)
+    if (_action == 0)
       {
-      m_error->SetError(MString("Undefined parameter [") + option + "]" ,m_linenumber);
+      m_Error->SetError(MString("Undefined parameter [") + option + "]" ,
+                        m_LineNumber);
       }
     else if(option == "include")
       {
-      m_action->SetName(option);
-      m_action->SetParameters(param);
-      m_action->SetParent(m_parentaction);
-      m_action->SetManager(this);
-      m_action->SetProgressManager(m_progressmanager);
+      _action->SetName(option);
+      _action->SetParameters(param);
+      _action->SetParent(m_ParentAction);
+      _action->SetManager(this);
+      _action->SetProgressManager(m_ProgressManager);
 
 #ifdef BM_GRID
-      m_action->SetGridModule(m_GridModule);
+      _action->SetGridModule(m_GridModule);
 #endif
 
-      if (!m_action->TestParam(m_error,m_linenumber))
+      if (!_action->TestParam(m_Error,m_LineNumber))
         {
-        if (m_action->Help() != "")
+        if (_action->Help() != "")
           {
-          m_error->SetStatus(MString("\tCommand: ") + m_action->Help());
+          m_Error->SetStatus(MString("\tCommand: ") + _action->Help());
           }
         }
       }
     else
       {
-      m_action->SetName(option);
-      m_action->SetParameters(param);
-      m_action->SetParent(m_parentaction);
-      m_action->SetManager(this);
-      m_action->SetProgressManager(m_progressmanager);
+      _action->SetName(option);
+      _action->SetParameters(param);
+      _action->SetParent(m_ParentAction);
+      _action->SetManager(this);
+      _action->SetProgressManager(m_ProgressManager);
 
 #ifdef BM_GRID
-      m_action->SetGridModule(m_GridModule);
+      _action->SetGridModule(m_GridModule);
 #endif
 
-      if (!m_action->TestParam(m_error,m_linenumber))
+      if (!_action->TestParam(m_Error,m_LineNumber))
         {
-        if (m_action->Help() != "")
+        if (_action->Help() != "")
           {
-          m_error->SetStatus(MString("\tCommand: ") + m_action->Help());
+          m_Error->SetStatus(MString("\tCommand: ") + _action->Help());
           }
         }
         
-        if (m_parentaction == 0)
+        if (m_ParentAction == 0)
           {
-          AddAction(m_action);
+          AddAction(_action);
           }
         else
           {
-          m_parentaction->AddAction(m_action);
+          m_ParentAction->AddAction(_action);
           }
         if ((option == "foreach")  || (option == "if"))
           {
-          m_parentaction = m_action;
+          m_ParentAction = _action;
           }
         }
     }
@@ -414,36 +424,36 @@ void ScriptActionManager::Execute()
 {
   Timer m_timer;
   m_timer.start();
-  for (unsigned int i=0;i<m_actionlist.size();i++)
+  for (unsigned int i=0;i<m_ActionList.size();i++)
   {
-    m_actionlist[i]->Execute();
+    m_ActionList[i]->Execute();
   }
-  m_progressmanager->SetFinished(MString("Total Execution time: %1ms").arg(m_timer.getMilliseconds()));
+  m_ProgressManager->SetFinished(MString("Total Execution time: %1ms").arg(m_timer.getMilliseconds()));
 }
 
 void ScriptActionManager::SetTestVariable(MString name)
 {
-  bool m_detected = false;
-  for (unsigned int i=0;i<m_variabletestlist.size();i++)
+  bool _detected = false;
+  for (unsigned int i=0;i<m_VariableTestList.size();i++)
     {
-    if (m_variabletestlist[i] == name)
+    if (m_VariableTestList[i] == name)
       {
-      m_detected = true;
+      _detected = true;
       }
     }
 
-  if (m_detected == false)
+  if (_detected == false)
     {
-    m_variabletestlist.push_back(name);
+    m_VariableTestList.push_back(name);
     }
 }
 
 
 bool ScriptActionManager::IsTestVariable(MString name)
 {
-  for (unsigned int i=0;i<m_variabletestlist.size();i++)
+  for (unsigned int i=0;i<m_VariableTestList.size();i++)
   {
-     if (m_variabletestlist[i] == name)
+     if (m_VariableTestList[i] == name)
         return true;
   }
 
@@ -453,22 +463,22 @@ bool ScriptActionManager::IsTestVariable(MString name)
 
 void ScriptActionManager::SetVariable(MString name,MString value)
 {
-  bool m_detected = false;
-  for (unsigned int i=0;i<m_variablelist.size();i++)
+  bool _detected = false;
+  for (unsigned int i=0;i<m_VariableList.size();i++)
     {
-     if (m_variablelist[i]->name == name)
+     if (m_VariableList[i]->name == name)
        {
-       m_detected = true;
-       m_variablelist[i]->value = value;
+       _detected = true;
+       m_VariableList[i]->value = value;
        }
     }
 
-  if (m_detected == false)
+  if (_detected == false)
     {
     variablestruct* m_newvar = new variablestruct;
     m_newvar->name = name;
     m_newvar->value = value;
-    m_variablelist.push_back(m_newvar);
+    m_VariableList.push_back(m_newvar);
     }
 }
 
@@ -482,102 +492,114 @@ std::vector<MString> ScriptActionManager::GetVariable(MString name)
   varname = varname.removeChar('{');
   varname = varname.removeChar('}');
 
-  std::vector<MString> m_list;
-  for (unsigned int i=0;i<m_variablelist.size();i++)
+  std::vector<MString> _list;
+  for (unsigned int i=0;i<m_VariableList.size();i++)
     {
-    if (m_variablelist[i]->name == varname)
+    if (m_VariableList[i]->name == varname)
       {
-      MString m_param = m_variablelist[i]->value;
-      while (m_param != "")
+      MString _param = m_VariableList[i]->value;
+      while (_param != "")
         {
-        m_param = m_param.removeChar(' ',true);
-        m_param = m_param.removeChar('\'',true);
-        MString m_value = m_param.begin("\'");
-        if (m_value != "")
+        _param = _param.removeChar(' ',true);
+        _param = _param.removeChar('\'',true);
+        MString _value = _param.begin("\'");
+        if (_value != "")
           {
-          m_list.push_back(m_value);
+          _list.push_back(_value);
           }
-        m_param = m_param.end("\'");
-        if (m_param.length() != 0)
+        _param = _param.end("\'");
+        if (_param.length() != 0)
           {
-          m_param = m_param+1;
+          _param = _param+1;
           }
         }
-      return m_list;
+      return _list;
       }
     }
 
-  return m_list;
+  return _list;
 }
 
 void ScriptActionManager::SetSocketVariable(MString name)
 {
-  bool m_detected = false;
-  for (unsigned int i=0;i<m_variablesocketlist.size();i++)
-  {
-     if (m_variablesocketlist[i]->name == name)
-     {
-        m_detected = true;
-        return;
-     }
-  }
+  bool _detected = false;
+  for (unsigned int i=0;i<m_VariableSocketList.size();i++)
+    {
+    if (m_VariableSocketList[i]->name == name)
+      {
+      _detected = true;
+      return;
+      }
+    }
 
-  if (m_detected == false)
-  {
+  if (_detected == false)
+    {
     variablestructsocket* m_newvar = new variablestructsocket;
     m_newvar->name = name;
-    m_variablesocketlist.push_back(m_newvar);
-  }
+    m_VariableSocketList.push_back(m_newvar);
+    }
 }
 
 TCPSocket* ScriptActionManager::GetVariableSocket(MString name)
 {
-  for (unsigned int i=0;i<m_variablesocketlist.size();i++)
+  for (unsigned int i=0;i<m_VariableSocketList.size();i++)
   {
-     if (m_variablesocketlist[i]->name == name)
+     if (m_VariableSocketList[i]->name == name)
      {
-        return &(m_variablesocketlist[i]->socket);
+        return &(m_VariableSocketList[i]->socket);
      }
   }
   return NULL;
 }
 
-std::vector<MString> ScriptActionManager::GetParamsFromVariable(MString name)
+std::vector<MString> ScriptActionManager::GetParamsFromVariable(MString var)
 {
+  std::vector<MString> params;
+  MString tmpVar = var;
 
-  std::vector<MString> m_params;
-  MString m_param = name;
-  /*for (unsigned int i=0;i<m_variablelist.size();i++)
-  {
-   if (m_variablelist[i]->name == name)
-     m_param = m_variablelist[i]->value;
-  }
+  MString curParam = "";
 
-  if (m_param == "")
-    return m_params;*/
+  while ((tmpVar != "") && (tmpVar != curParam))
+    {
+    tmpVar = tmpVar.removeChar(' ', true);
+    curParam = tmpVar.begin(" ");
+    if (curParam.length() != 0)
+      {
+      params.push_back(curParam);
+      }
+    tmpVar = tmpVar.end(" ");
+    }
 
-  MString m_value = "";
+  return params;
+}
 
-  while ((m_param != "") && (m_param != m_value))
-  {
-    m_param = m_param.removeChar(' ',true);
-    m_value = m_param.begin(" ");
-    if (m_value.length() != 0)
-        m_params.push_back(m_value);
-      m_param = m_param.end(" ");
-  }
+MString ScriptActionManager::GetVariableFromParams(const 
+                                                   std::vector<MString> &  
+                                                   params)
+{
+  MString var = "";
 
-  return m_params;
+  unsigned int i;
+  for(i=0; i<params.size(); i++)
+    {
+    var += params[i];
+    if(i<params.size()-1)
+      {
+      var += " ";
+      }
+    }
+
+  return var;
 }
 
 
 void ScriptActionManager::DisplayVariableList()
 {
   std::cout << "Variable List" << std::endl;
-  for (unsigned int i=0;i<m_variablelist.size();i++)
+  for (unsigned int i=0;i<m_VariableList.size();i++)
     {
-    std::cout << m_variablelist[i]->name.toChar() 
-              << "\t" << m_variablelist[i]->value.toChar() << std::endl;
+    std::cout << m_VariableList[i]->name.toChar() 
+              << "\t" << m_VariableList[i]->value.toChar() << std::endl;
     }
 }
 
@@ -585,177 +607,175 @@ void ScriptActionManager::DisplayVariableList()
 
 MString ScriptActionManager::Convert(MString param)
 {
-  MString m_value="'";
-  bool m_vardetected = false;
-  MString m_var;
-  bool m_isquote = false;
+  MString _value="'";
+  bool _vardetected = false;
+  MString _var;
 
   for (int i=0;i<param.length();i++)
     {
     if (param[i] == '$')
       {
-      m_vardetected=true;
-      m_var = "";
+      _vardetected=true;
+      _var = "";
       }
-    else if (m_vardetected)
+    else if (_vardetected)
       {
-      if ((m_var.length() == 0) && (param[i] == '{'))
+      if ((_var.length() == 0) && (param[i] == '{'))
         {
-        m_var = "";
+        _var = "";
         }
       else if ((param[i] == ' ') || (param[i] == '}') || 
                (param[i] == '\'')  || (i==param.length()-1))
         {
         if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\''))
           {
-          m_var += param[i];
+          _var += param[i];
           }
 
-        m_vardetected = false;
+        _vardetected = false;
 
-        //MString m_variable;
-        std::vector<MString> m_variable =  GetVariable(m_var);
-        for (unsigned int k=0;k<m_variable.size();k++)
+        //MString _variable;
+        std::vector<MString> _variable =  GetVariable(_var);
+        for (unsigned int k=0;k<_variable.size();k++)
           {
           if (k!=0)
             {
-            m_value += "'";
+            _value += "'";
             }
 
-          if (m_variable[k] != "null")
+          if (_variable[k] != "null")
             {
-            m_value += m_variable[k];
+            _value += _variable[k];
             }
-          if (k != m_variable.size()-1)
+          if (k != _variable.size()-1)
             {
-            m_value += "' ";
+            _value += "' ";
             }
           }
 
         if (param[i] == ' ')
           {
-          m_value += " ";
+          _value += " ";
           }
         }
       else
         {
-        m_var += param[i];
+        _var += param[i];
         }
       }
     else if (param[i] != '\'')
       {
       if (param[i] == ' ')
         {
-        m_value += " ";
+        _value += " ";
         }
       else
         {
-        m_value += param[i];
+        _value += param[i];
         }
       }
     }
 
-  m_value += "'";
+  _value += "'";
 
-  return m_value;
+  return _value;
 
 }
 
 
 MString ScriptActionManager::ConvertExtra(MString param)
 {
-  MString m_value="'";
-  bool m_vardetected = false;
-  MString m_var;
-  bool m_isquote = false;
+  MString _value="'";
+  bool _vardetected = false;
+  MString _var;
 
   for (int i=0;i<param.length();i++)
   {
     if (param[i] == '$')
     {
-      m_vardetected=true;
-      m_var = "";
+      _vardetected=true;
+      _var = "";
     }
-    else if (m_vardetected)
+    else if (_vardetected)
     {
-       if ((m_var.length() == 0) && (param[i] == '{'))
+       if ((_var.length() == 0) && (param[i] == '{'))
        {
-          m_var = "";
+          _var = "";
        }
        else if ((param[i] == ' ') || (param[i] == '}') || (param[i] == '\'')  || (i==param.length()-1))
        {
          if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\''))
-          m_var+=param[i];
+          _var+=param[i];
 
-         m_vardetected=false;
-         //MString m_variable;
-         std::vector<MString> m_variable =  GetVariable(m_var);
-         for (unsigned int k=0;k<m_variable.size();k++)
+         _vardetected=false;
+         //MString _variable;
+         std::vector<MString> _variable =  GetVariable(_var);
+         for (unsigned int k=0;k<_variable.size();k++)
          {
            if (k!=0)
-             m_value += "'";
+             _value += "'";
 
-           if (m_variable[k] != "null")
-            m_value += m_variable[k];
-           if (k != m_variable.size()-1)
-              m_value += "' ";
+           if (_variable[k] != "null")
+            _value += _variable[k];
+           if (k != _variable.size()-1)
+              _value += "' ";
          }
 
          if (param[i] == ' ')
-          m_value += "' '";
+          _value += "' '";
        }
        else
-         m_var+=param[i];
+         _var+=param[i];
     }
     else if (param[i] != '\'')
       if (param[i] == ' ')
-        m_value += "' '";
+        _value += "' '";
       else
-        m_value += param[i];
+        _value += param[i];
   }
 
-  m_value += "'";
-  return m_value;
+  _value += "'";
+  return _value;
 }
 
 
 bool ScriptActionManager::TestConvert(MString param, int linenumber)
 {
-  bool m_vardetected = false;
-  MString m_var;
+  bool _vardetected = false;
+  MString _var;
   for (int i=0; i<param.length(); i++)
     {
     if (param[i] == '$')
       {
-      m_vardetected = true;
-      m_var = "";
+      _vardetected = true;
+      _var = "";
       }
-    else if (m_vardetected)
+    else if (_vardetected)
       {
-      if ((m_var.length() == 0) && (param[i] == '{'))
+      if ((_var.length() == 0) && (param[i] == '{'))
         {
-        m_var = "";
+        _var = "";
         }
       else if ((param[i] == ' ') || (param[i] == '}') || 
                (param[i] == '\'')  || (i == param.length()-1))
         {
         if ((i == param.length()-1) && (param[i] != '}') && (param[i] != '\''))
           {
-          m_var += param[i];
+          _var += param[i];
           }
 
-        m_vardetected = false;
+        _vardetected = false;
 
-        if (IsTestVariable(m_var) == false)
+        if (IsTestVariable(_var) == false)
           {
-          m_error->SetError(MString("Undefined variable [") 
-                            + m_var + "]", m_linenumber);
+          m_Error->SetError(MString("Undefined variable [") 
+                            + _var + "]", m_LineNumber);
           return false;
           }
         }
       else
         {
-        m_var += param[i];
+        _var += param[i];
         }
       }
     }
@@ -765,9 +785,9 @@ bool ScriptActionManager::TestConvert(MString param, int linenumber)
 bool ScriptActionManager::TestParam()
 {
   bool flag = true;
-  for (unsigned int i=0;i<m_actionlist.size();i++)
+  for (unsigned int i=0;i<m_ActionList.size();i++)
   {
-    if (!m_actionlist[i]->TestParam(m_error))
+    if (!m_ActionList[i]->TestParam(m_Error))
       flag = false;
 
   }
@@ -779,13 +799,13 @@ bool ScriptActionManager::RemoveSocket(MString name)
 {
   bool found = false;
   std::vector<variablestructsocket*>::iterator it;
-  it = m_variablesocketlist.begin();
+  it = m_VariableSocketList.begin();
   
-  while( it != m_variablesocketlist.end() )
+  while( it != m_VariableSocketList.end() )
   {
      if( (*it)->name == name)
      {
-        m_variablesocketlist.erase(it);
+        m_VariableSocketList.erase(it);
         found = true;
         return found;
      }

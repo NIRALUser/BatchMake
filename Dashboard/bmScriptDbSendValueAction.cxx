@@ -49,8 +49,8 @@ MString ScriptDbSendValueAction::Help()
 
 void ScriptDbSendValueAction::Execute()
 {
-  m_progressmanager->AddAction("Send data to Dashboard");
-  m_progressmanager->IsRunning();
+  m_ProgressManager->AddAction("Send data to Dashboard");
+  m_ProgressManager->IsRunning();
   HttpRequest m_request;
 
   MString m_host = m_manager->Convert(m_parameters[0]).removeChar('\'').latin1();
@@ -75,22 +75,22 @@ void ScriptDbSendValueAction::Execute()
   MString m_output = m_request.Send(m_host.toChar());
  
   if (m_output.length()>3)
-    m_progressmanager->AddError("Bad Host or connexion problem");
+    m_ProgressManager->AddError("Bad Host or connexion problem");
   else
   {
     if (m_output.toInt() == 0)
-      m_progressmanager->FinishAction(MString("Data sent"));
+      m_ProgressManager->FinishAction(MString("Data sent"));
     else
     {
-      m_progressmanager->FinishAction(MString("Dashboard problem when sending data"));
+      m_ProgressManager->FinishAction(MString("Dashboard problem when sending data"));
       switch(m_output.toInt())
       {
-        case 1 :  m_progressmanager->AddError("Bad account name"); break;
-        case 2 :  m_progressmanager->AddError("Bad password"); break;
-        case 3 :  m_progressmanager->AddError("Bad project name"); break;
-        case 4 :  m_progressmanager->AddError("Over quota: please use DbClear function first"); break;
-        case 5 :  m_progressmanager->AddError("Host Database error"); break;
-        case -1 : m_progressmanager->AddError("Connexion problem"); break;
+        case 1 :  m_ProgressManager->AddError("Bad account name"); break;
+        case 2 :  m_ProgressManager->AddError("Bad password"); break;
+        case 3 :  m_ProgressManager->AddError("Bad project name"); break;
+        case 4 :  m_ProgressManager->AddError("Over quota: please use DbClear function first"); break;
+        case 5 :  m_ProgressManager->AddError("Host Database error"); break;
+        case -1 : m_ProgressManager->AddError("Connexion problem"); break;
       }  
     }
   }

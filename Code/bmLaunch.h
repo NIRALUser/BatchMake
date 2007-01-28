@@ -37,9 +37,9 @@ public:
   MString GetError();
 
 protected:
- ProgressManager* m_progressmanager;
+ ProgressManager* m_ProgressManager;
  MString m_output;
- MString m_error;
+ MString m_Error;
 
 };
 

@@ -25,7 +25,7 @@ ProgressManagerGUI::ProgressManagerGUI()
   m_progress = 0;
   m_currentnode = 0;
   m_outputnode = 0;
-  m_errornode = 0;
+  m_Errornode = 0;
   m_offset = 1;
 }
 
@@ -100,7 +100,7 @@ void ProgressManagerGUI::AddAction(MString name)
   m_group->add(m_progress);
 
   m_outputnode = 0;
-  m_errornode = 0;
+  m_Errornode = 0;
 
   //(MString("%1 - ").arg(m_offset++) + name).toChar();
   MString m_index;
@@ -152,16 +152,16 @@ void ProgressManagerGUI::AddError(MString error)
   if (error == "")
     return;
 
-  if (!m_errornode)
+  if (!m_Errornode)
   {
-    m_errornode = m_currentnode->add_branch("Error");
-    m_errornode->branch_icon( &image_error );
+    m_Errornode = m_currentnode->add_branch("Error");
+    m_Errornode->branch_icon( &image_error );
     m_currentnode->branch_icon( &image_problem );
   }
 
-  if (m_errornode)
+  if (m_Errornode)
   {
-      m_errornode->add_leaf(error.replaceChar('/','\\').toChar());
+      m_Errornode->add_leaf(error.replaceChar('/','\\').toChar());
   }
  
   m_ProgressGUI->g_Progressgui->redraw();

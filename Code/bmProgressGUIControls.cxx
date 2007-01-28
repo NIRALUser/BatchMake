@@ -57,14 +57,14 @@ void ProgressGUIControls::OnCancel()
   if (MString(g_cancel->label()) == "Ok")
     g_Progressgui->hide();
   
-  if (m_progressmanagergui)
-    m_progressmanagergui->Stop();
+  if (m_ProgressManagergui)
+    m_ProgressManagergui->Stop();
 
 }
 
 void ProgressGUIControls::SetProgressManagerGUI(ProgressManagerGUI* progressmanagergui)
 {
-  m_progressmanagergui = progressmanagergui;
+  m_ProgressManagergui = progressmanagergui;
 }
 
 } // end namespace bm

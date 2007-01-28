@@ -30,7 +30,7 @@ ScriptParser::ScriptParser()
 {
   m_scriptactionmanager = new ScriptActionManager();
   m_scriptactionmanager->SetParser(this);
-  m_error = 0;
+  m_Error = 0;
   m_applicationlist = 0;
 }
 
@@ -49,14 +49,14 @@ ScriptParser::~ScriptParser()
       }
     delete m_applicationlist;
     }
-  delete m_error;
+  delete m_Error;
 }
 
 void ScriptParser::SetApplicationPath(MString applicationpath)
 {
- m_applicationpath = applicationpath;
- m_scriptactionmanager->SetApplicationPath(m_applicationpath);
- LoadWrappedApplication(m_applicationpath);
+ m_ApplicationPath = applicationpath;
+ m_scriptactionmanager->SetApplicationPath(m_ApplicationPath);
+ LoadWrappedApplication(m_ApplicationPath);
 }
 
 void ScriptParser::SetScriptPath(MString scriptpath)
@@ -148,7 +148,7 @@ void ScriptParser::SetProgressManager(ProgressManager* progressmanager)
 
 void ScriptParser::SetError(ScriptError* error)
 {
-  m_error = error;
+  m_Error = error;
   m_scriptactionmanager->SetError(error);
 }
 
@@ -251,7 +251,7 @@ bool  ScriptParser::Execute(MString filename,unsigned long pos)
 void ScriptParser::Load(MString filename)
 {
   this->SetScriptPath(filename);
-  m_linenumber = 0;
+  m_LineNumber = 0;
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);
   char* data = (char*)malloc(1000);
@@ -262,7 +262,7 @@ void ScriptParser::Load(MString filename)
   while(!m_file.eof())
   {
     m_file.getline(data,1000);
-    m_linenumber++;
+    m_LineNumber++;
 
     m_currentline = data;
     if (m_currentline.startWith('#'))
@@ -313,7 +313,7 @@ bool ScriptParser::AddOption(MString option, MString param)
 {
   if (CheckOption(param))
   {
-    m_scriptactionmanager->SetLineNumber(m_linenumber);
+    m_scriptactionmanager->SetLineNumber(m_LineNumber);
     m_scriptactionmanager->AddAction(option,GetParams(param));
     return true;
   }
@@ -324,8 +324,8 @@ bool ScriptParser::CheckOption(MString param)
 {
   if (param.count('(') != param.count(')'))
   {
-     if (m_error)
-        m_error->SetError(MString("Missing '(' or ')'"),m_linenumber);
+     if (m_Error)
+        m_Error->SetError(MString("Missing '(' or ')'"),m_LineNumber);
      return false;
   }
  
@@ -391,14 +391,14 @@ void ScriptParser::AddCodeLine(MString line,unsigned long pos)
 bool ScriptParser::Parse()
 {
   m_scriptactionmanager->Reset();
-  m_linenumber = 0;
+  m_LineNumber = 0;
   MString m_currentline;
   MString m_line;
   bool inComment = false;
 
   for (unsigned int i=0;i<m_code.size();i++)
   {
-    m_linenumber++;
+    m_LineNumber++;
     m_currentline = m_code[i];
       
     MString optionName = m_currentline.begin("(").removeChar(' ').removeChar('\t').toLower();

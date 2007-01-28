@@ -55,13 +55,13 @@ public:
 
   static void Timer(void*);
 
-  Fl_Text_Buffer* m_errorbuffer;
+  Fl_Text_Buffer* m_Errorbuffer;
 
 protected:
   MString m_filename;
   ScriptParser* m_parser;
-  ScriptErrorGUI* m_errorgui;
-  MString m_applicationpath;
+  ScriptErrorGUI* m_Errorgui;
+  MString m_ApplicationPath;
   std::vector<ApplicationWrapper*> m_applicationlist;
   MString m_title;
 

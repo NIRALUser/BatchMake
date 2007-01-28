@@ -53,7 +53,7 @@ protected:
   ProgressGUIControls* m_ProgressGUI;
   Flu_Tree_Browser::Node* m_currentnode;
   Flu_Tree_Browser::Node* m_outputnode;
-  Flu_Tree_Browser::Node* m_errornode;
+  Flu_Tree_Browser::Node* m_Errornode;
   Fl_Progress* m_progress;
   int m_offset;
 

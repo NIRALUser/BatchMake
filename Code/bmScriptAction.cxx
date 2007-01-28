@@ -77,7 +77,7 @@ void ScriptAction::SetManager(ScriptActionManager* manager)
 
 void ScriptAction::SetProgressManager(ProgressManager* progressmanager)
 {
-  m_progressmanager = progressmanager;
+  m_ProgressManager = progressmanager;
 }
 
 

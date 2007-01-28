@@ -93,6 +93,11 @@ std::string MString::GetValue()
   return m_value;
 }
 
+const std::string MString::GetConstValue() const
+{
+  return m_value;
+}
+
 const char* MString::latin1()
 {
   return m_value.c_str();
@@ -420,3 +425,4 @@ bool MString::isInt()
 
   return true;
 }
+

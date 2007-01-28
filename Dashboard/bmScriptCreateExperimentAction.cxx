@@ -71,8 +71,8 @@ void ScriptCreateExperimentAction::Execute()
 
   // Create the experiment on the dashboard
   std::string url = m_manager->GetDashboardURL();
-  m_progressmanager->AddAction("BMDashboard: Creating Experiment");
-  m_progressmanager->IsRunning();
+  m_ProgressManager->AddAction("BMDashboard: Creating Experiment");
+  m_ProgressManager->IsRunning();
 
   HttpRequest m_request;
   m_request.AddParam("user",m_manager->GetDashboardUser());
@@ -91,25 +91,25 @@ void ScriptCreateExperimentAction::Execute()
 /* 
   if (m_output.length()>3)
     {
-    m_progressmanager->AddError("Bad Host or connexion problem");
+    m_ProgressManager->AddError("Bad Host or connexion problem");
     }
   else
     {
     if (m_output.toInt() == 0)
       {
-      m_progressmanager->FinishAction(MString("Data sent"));
+      m_ProgressManager->FinishAction(MString("Data sent"));
       }
     else
       {
-      m_progressmanager->FinishAction(MString("Dashboard problem when sending data"));
+      m_ProgressManager->FinishAction(MString("Dashboard problem when sending data"));
       switch(m_output.toInt())
         {
-        case 1 :  m_progressmanager->AddError("Bad user name"); break;
-        case 2 :  m_progressmanager->AddError("Bad project name"); break;
-        case 3 :  m_progressmanager->AddError("User doesn't belong to project"); break;
-        case 4 :  m_progressmanager->AddError("Over quota: please use DbClear function first"); break;
-        case 5 :  m_progressmanager->AddError("Host Database error"); break;
-        case -1 : m_progressmanager->AddError("Connexion problem"); break;
+        case 1 :  m_ProgressManager->AddError("Bad user name"); break;
+        case 2 :  m_ProgressManager->AddError("Bad project name"); break;
+        case 3 :  m_ProgressManager->AddError("User doesn't belong to project"); break;
+        case 4 :  m_ProgressManager->AddError("Over quota: please use DbClear function first"); break;
+        case 5 :  m_ProgressManager->AddError("Host Database error"); break;
+        case -1 : m_ProgressManager->AddError("Connexion problem"); break;
         }  
       }
     }

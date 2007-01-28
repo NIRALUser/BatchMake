@@ -36,9 +36,9 @@ namespace bm {
 
 Launch::Launch()
 {
-  m_progressmanager = 0;
+  m_ProgressManager = 0;
   m_output = "";
-  m_error = "";
+  m_Error = "";
 }
 
 Launch::~Launch()
@@ -47,13 +47,13 @@ Launch::~Launch()
   
 void Launch::SetProgressManager(ProgressManager* progressmanager)
 {
- m_progressmanager = progressmanager;
+ m_ProgressManager = progressmanager;
 }
 
 void Launch::Execute(MString m_command)
 {
   m_output = "";
-  m_error = "";
+  m_Error = "";
 
 #ifdef WIN32
 
@@ -106,7 +106,7 @@ void Launch::Execute(MString m_command)
   ) 
     {
     std::cout << "BatchMake - CreateProcess failed!" << std::endl;
-    m_error = "BatchMake - CreateProcess failed!";
+    m_Error = "BatchMake - CreateProcess failed!";
     return;
     }
 
@@ -118,10 +118,10 @@ void Launch::Execute(MString m_command)
 
   while(m_run)
     {
-    if (m_progressmanager)
+    if (m_ProgressManager)
       {
-      m_progressmanager->IsRunning();
-      if (m_progressmanager->IsStop())
+      m_ProgressManager->IsRunning();
+      if (m_ProgressManager->IsStop())
         {
         m_run = false;
         }
@@ -153,9 +153,9 @@ void Launch::Execute(MString m_command)
 
         if (m_nbreaded != 0)
           {
-          if (m_progressmanager)
+          if (m_ProgressManager)
             {
-            //m_progressmanager->DisplayOutput(MString(buffer).removeChar('\r'));
+            //m_ProgressManager->DisplayOutput(MString(buffer).removeChar('\r'));
             }
 
           for (unsigned int k=0;k<m_nbreaded;k++)
@@ -181,15 +181,15 @@ void Launch::Execute(MString m_command)
     
         if (m_nberrorreaded != 0)
           {
-          if (m_progressmanager)
+          if (m_ProgressManager)
             {
-            m_progressmanager->DisplayError(MString(buffer_err).removeChar('\r'));
+            m_ProgressManager->DisplayError(MString(buffer_err).removeChar('\r'));
             }
           for (unsigned int k=0;k<strlen(buffer_err);k++)
             {
             if (buffer[k] != '\r') 
               {
-              m_error += buffer_err[k];
+              m_Error += buffer_err[k];
               }
             }
           memset(buffer_err,'\0',sizeof(buffer_err)); 
@@ -230,7 +230,7 @@ void Launch::Execute(MString m_command)
     if (fork_result == -1)
       {
       std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
-      m_error = "Create Process failed (Pipe error) ! "; 
+      m_Error = "Create Process failed (Pipe error) ! "; 
       exit(EXIT_FAILURE);
       }  
     else if (fork_result == 0)
@@ -334,12 +334,12 @@ void Launch::Execute(MString m_command)
           {
           for (unsigned int k=0;k<strlen(buffer_err);k++)
             {
-            m_error += buffer_err[k];
+            m_Error += buffer_err[k];
             }
 
-          if (m_progressmanager)
+          if (m_ProgressManager)
             {
-            m_progressmanager->DisplayError(MString(buffer_err));
+            m_ProgressManager->DisplayError(MString(buffer_err));
             }       
           memset(buffer_err,'\0',sizeof(buffer));
           }
@@ -350,16 +350,16 @@ void Launch::Execute(MString m_command)
             {
             m_output += buffer[k];
             }       
-          if (m_progressmanager)
+          if (m_ProgressManager)
             {
-            m_progressmanager->DisplayOutput(MString(buffer));
+            m_ProgressManager->DisplayOutput(MString(buffer));
             }
           memset(buffer,'\0',sizeof(buffer));
           }
-        if (m_progressmanager)
+        if (m_ProgressManager)
           {
-          m_progressmanager->IsRunning();
-          if (m_progressmanager->IsStop())
+          m_ProgressManager->IsRunning();
+          if (m_ProgressManager->IsStop())
             {
             break;
             }
@@ -386,7 +386,7 @@ MString Launch::GetOutput()
 
 MString Launch::GetError()
 {
-  return m_error;
+  return m_Error;
 }
 
 } // end namespace bm

@@ -66,7 +66,7 @@ protected:
   MString m_name;
   ScriptAction* m_parent;
   ScriptActionManager* m_manager;
-  ProgressManager* m_progressmanager;
+  ProgressManager* m_ProgressManager;
 
 #ifdef BM_GRID
   Grid* m_GridModule;

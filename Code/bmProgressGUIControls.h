@@ -39,7 +39,7 @@ public:
   Fl_Text_Buffer* m_buffer;
 
 protected:
-  ProgressManagerGUI* m_progressmanagergui;
+  ProgressManagerGUI* m_ProgressManagergui;
 };
 
 }

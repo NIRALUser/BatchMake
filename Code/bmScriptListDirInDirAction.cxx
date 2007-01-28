@@ -100,10 +100,10 @@ void ScriptListDirInDirAction::Execute()
 
   if(!directory.Load(dir.c_str()))
     {
-    m_progressmanager->AddAction("Action: ListDirInDir()");
+    m_ProgressManager->AddAction("Action: ListDirInDir()");
     std::string error = dir;
     error += " is not a valid directory";
-    m_progressmanager->AddError(error.c_str());
+    m_ProgressManager->AddError(error.c_str());
     return;
     }
 
