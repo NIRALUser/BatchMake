@@ -28,26 +28,26 @@ namespace bm {
 
 ScriptParser::ScriptParser()
 {
-  m_scriptactionmanager = new ScriptActionManager();
-  m_scriptactionmanager->SetParser(this);
+  m_ScriptActionManager = new ScriptActionManager();
+  m_ScriptActionManager->SetParser(this);
   m_Error = 0;
-  m_applicationlist = 0;
+  m_ApplicationList = 0;
 }
 
 ScriptParser::~ScriptParser()
 {
-  delete m_scriptactionmanager;
+  delete m_ScriptActionManager;
 
-  if(m_applicationlist)
+  if(m_ApplicationList)
     {
-    std::vector<ApplicationWrapper*>::iterator it = m_applicationlist->begin();
-    while(it != m_applicationlist->end())
+    std::vector<ApplicationWrapper*>::iterator it = m_ApplicationList->begin();
+    while(it != m_ApplicationList->end())
       {
       ApplicationWrapper* app = (*it);
-      it = m_applicationlist->erase(it);
+      it = m_ApplicationList->erase(it);
       delete app;
       }
-    delete m_applicationlist;
+    delete m_ApplicationList;
     }
   delete m_Error;
 }
@@ -55,23 +55,23 @@ ScriptParser::~ScriptParser()
 void ScriptParser::SetApplicationPath(MString applicationpath)
 {
  m_ApplicationPath = applicationpath;
- m_scriptactionmanager->SetApplicationPath(m_ApplicationPath);
+ m_ScriptActionManager->SetApplicationPath(m_ApplicationPath);
  LoadWrappedApplication(m_ApplicationPath);
 }
 
 void ScriptParser::SetScriptPath(MString scriptpath)
 {
-  m_scriptactionmanager->SetScriptPath(scriptpath.rbegin("/"));
-  m_scriptactionmanager->SetScriptFullPath(scriptpath.toChar());
+  m_ScriptActionManager->SetScriptPath(scriptpath.rbegin("/"));
+  m_ScriptActionManager->SetScriptFullPath(scriptpath.toChar());
 }
 
 void  ScriptParser::LoadWrappedApplication(MString applicationpath) 
 {
-  if(m_applicationlist)
+  if(m_ApplicationList)
     {
-    delete m_applicationlist;
+    delete m_ApplicationList;
     }
-  m_applicationlist = new std::vector<ApplicationWrapper*>;
+  m_ApplicationList = new std::vector<ApplicationWrapper*>;
 
   itksys::Directory directory;
   std::string dirpath = applicationpath.toChar();
@@ -86,7 +86,7 @@ void  ScriptParser::LoadWrappedApplication(MString applicationpath)
         std::string file = directory.GetFile(i);
         ApplicationWrapper* m_newapplication = new ApplicationWrapper();  
         m_newapplication->Load(applicationpath + "/Applications/" + file.c_str());
-        m_applicationlist->push_back(m_newapplication);
+        m_ApplicationList->push_back(m_newapplication);
         }
       }
     }
@@ -108,7 +108,7 @@ void  ScriptParser::LoadWrappedApplication(MString applicationpath)
         {
           ApplicationWrapper* m_newapplication = new ApplicationWrapper();
           m_newapplication->Load(applicationpath + "/Applications/" + MString(File.cFileName));
-          m_applicationlist->push_back(m_newapplication);
+          m_ApplicationList->push_back(m_newapplication);
         }
       }
     }
@@ -126,40 +126,40 @@ void  ScriptParser::LoadWrappedApplication(MString applicationpath)
        {
           ApplicationWrapper* m_newapplication = new ApplicationWrapper();  
           m_newapplication->Load(applicationpath + "/Applications/" + MString(dir->d_name));
-          m_applicationlist->push_back(m_newapplication);
+          m_ApplicationList->push_back(m_newapplication);
        }
       }
     }
   #endif*/
 
- m_scriptactionmanager->SetApplicationWrapperList(m_applicationlist);
+ m_ScriptActionManager->SetApplicationWrapperList(m_ApplicationList);
 
 }
 
 std::vector<ApplicationWrapper*>* ScriptParser::GetApplicationList()
 {
-  return m_applicationlist;
+  return m_ApplicationList;
 }
 
 void ScriptParser::SetProgressManager(ProgressManager* progressmanager)
 {
-  m_scriptactionmanager->SetProgressManager(progressmanager);
+  m_ScriptActionManager->SetProgressManager(progressmanager);
 }
 
 void ScriptParser::SetError(ScriptError* error)
 {
   m_Error = error;
-  m_scriptactionmanager->SetError(error);
+  m_ScriptActionManager->SetError(error);
 }
 
 void  ScriptParser::RemoveCodeLine(unsigned int line)
 {
-  std::vector<MString>::iterator it = m_code.begin();
+  std::vector<MString>::iterator it = m_Code.begin();
   for(unsigned int i=0;i<line;i++)
     {
     it++;
     }   
-  m_code.erase(it);
+  m_Code.erase(it);
 }
 
 
@@ -186,8 +186,8 @@ bool  ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
     m_currentline = data;
     if(isInclude && position == 0)
       {
-      std::vector<MString>::iterator it = m_code.begin();
-      m_code.insert(it,m_currentline);
+      std::vector<MString>::iterator it = m_Code.begin();
+      m_Code.insert(it,m_currentline);
       }
     else
       {
@@ -202,7 +202,7 @@ bool  ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
   if(!isInclude)
     {
     this->Parse();
-    m_scriptactionmanager->GetError()->DisplaySummary();
+    m_ScriptActionManager->GetError()->DisplaySummary();
     }
 
   return true;
@@ -239,7 +239,7 @@ bool  ScriptParser::Execute(MString filename,unsigned long pos)
  
   if (this->Parse())
     {
-    m_scriptactionmanager->Execute();
+    m_ScriptActionManager->Execute();
     return true;
     }
   else
@@ -293,7 +293,7 @@ void ScriptParser::Load(MString filename)
   }
   m_file.close();
 
-  m_scriptactionmanager->Execute();
+  m_ScriptActionManager->Execute();
 }
 
 
@@ -313,8 +313,8 @@ bool ScriptParser::AddOption(MString option, MString param)
 {
   if (CheckOption(param))
   {
-    m_scriptactionmanager->SetLineNumber(m_LineNumber);
-    m_scriptactionmanager->AddAction(option,GetParams(param));
+    m_ScriptActionManager->SetLineNumber(m_LineNumber);
+    m_ScriptActionManager->AddAction(option,GetParams(param));
     return true;
   }
   return false;
@@ -367,8 +367,8 @@ ScriptAction::ParametersType ScriptParser::GetParams(MString param)
 
 void ScriptParser::Reset()
 {
-  m_scriptactionmanager->Reset();
-  m_code.clear();
+  m_ScriptActionManager->Reset();
+  m_Code.clear();
 }
 
 
@@ -376,30 +376,30 @@ void ScriptParser::AddCodeLine(MString line,unsigned long pos)
 {
   if(pos==0)
     {
-    m_code.push_back(line);
+    m_Code.push_back(line);
     return;
     }
-  std::vector<MString>::iterator it = m_code.begin();
+  std::vector<MString>::iterator it = m_Code.begin();
   for(unsigned long i=0;i<pos;i++)
     {
     it++;
     }
-  m_code.insert(it,line);
+  m_Code.insert(it,line);
 }
 
 
 bool ScriptParser::Parse()
 {
-  m_scriptactionmanager->Reset();
+  m_ScriptActionManager->Reset();
   m_LineNumber = 0;
   MString m_currentline;
   MString m_line;
   bool inComment = false;
 
-  for (unsigned int i=0;i<m_code.size();i++)
+  for (unsigned int i=0;i<m_Code.size();i++)
   {
     m_LineNumber++;
-    m_currentline = m_code[i];
+    m_currentline = m_Code[i];
       
     MString optionName = m_currentline.begin("(").removeChar(' ').removeChar('\t').toLower();
 
@@ -428,7 +428,7 @@ bool ScriptParser::Parse()
       m_line += " ";
       m_line += m_currentline;
 
-      if ((m_currentline.find(")") != -1) || (i==m_code.size()-1))
+      if ((m_currentline.find(")") != -1) || (i==m_Code.size()-1))
         {
         if (this->Parse(m_line) == false)
           {
@@ -440,7 +440,7 @@ bool ScriptParser::Parse()
     }
   }
 
-  if (m_scriptactionmanager->GetError()->GetError() != 0)
+  if (m_ScriptActionManager->GetError()->GetError() != 0)
     return false;
 
   return true;
@@ -449,7 +449,7 @@ bool ScriptParser::Parse()
 
 bool ScriptParser::Execute()
 {
-  m_scriptactionmanager->Execute();
+  m_ScriptActionManager->Execute();
   return true;
 }
 

@@ -110,18 +110,18 @@ int main(int argc, char **argv)
       {
       std::string filename = command.GetValueAsString("compileScript","filename");
       std::cout << "Compiling ..." << std::endl;
-      bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_ApplicationPath);
-      m_parser.Compile(filename);
+      bm::ScriptParser m_Parser;
+      m_Parser.SetApplicationPath(m_ApplicationPath);
+      m_Parser.Compile(filename);
       return 0;
       }
     if(command.GetOptionWasSet("executeScript"))
       {
       std::string filename = command.GetValueAsString("executeScript","filename");
       std::cout << "Executing ..." << std::endl;
-      bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_ApplicationPath);
-      m_parser.Execute(filename);
+      bm::ScriptParser m_Parser;
+      m_Parser.SetApplicationPath(m_ApplicationPath);
+      m_Parser.Execute(filename);
       return 0;
       }
     if(command.GetOptionWasSet("addApplication"))
@@ -146,14 +146,14 @@ int main(int argc, char **argv)
 #ifdef BM_GRID 
       std::string scriptname = command.GetValueAsString("generateShell","scriptname");
       std::string outputname = command.GetValueAsString("generateShell","outputname");
-      bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_ApplicationPath);
+      bm::ScriptParser m_Parser;
+      m_Parser.SetApplicationPath(m_ApplicationPath);
      
       std::cout << "Generating shell script ...";       
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
-      m_parser.SetGridModule(&grid);
-      m_parser.Execute(scriptname);
+      m_Parser.SetGridModule(&grid);
+      m_Parser.Execute(scriptname);
       grid.WriteShell();
 #else
        std::cout << "Cannot write Shell scripts with this version of BatchMake."
@@ -166,14 +166,14 @@ int main(int argc, char **argv)
 #ifdef BM_GRID
       std::string scriptname = command.GetValueAsString("generateCondor","scriptname");
       std::string outputname = command.GetValueAsString("generateCondor","outputname");
-      bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_ApplicationPath);
+      bm::ScriptParser m_Parser;
+      m_Parser.SetApplicationPath(m_ApplicationPath);
      
       std::cout << "Generating condor script ...";
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
-      m_parser.SetGridModule(&grid);
-      m_parser.Execute(scriptname);
+      m_Parser.SetGridModule(&grid);
+      m_Parser.Execute(scriptname);
       grid.WriteCondor();
       std::cout << "Done." << std::endl;
 #else
@@ -186,15 +186,15 @@ int main(int argc, char **argv)
 #ifdef BM_GRID
       std::string scriptname = command.GetValueAsString("generateGAD","scriptname");
       std::string outputname = command.GetValueAsString("generateGAD","outputname");
-      bm::ScriptParser m_parser;
-      m_parser.SetApplicationPath(m_ApplicationPath);
+      bm::ScriptParser m_Parser;
+      m_Parser.SetApplicationPath(m_ApplicationPath);
      
       std::cout << "Generating kwgrid script ...";
         
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
-      m_parser.SetGridModule(&grid);
-      m_parser.Execute(scriptname);
+      m_Parser.SetGridModule(&grid);
+      m_Parser.Execute(scriptname);
       grid.WriteGAD();
       std::cout << "Done." << std::endl;
 #else

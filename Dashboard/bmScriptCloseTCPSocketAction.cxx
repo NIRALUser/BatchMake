@@ -31,12 +31,12 @@ ScriptCloseTCPSocketAction::~ScriptCloseTCPSocketAction()
 /** */
 bool ScriptCloseTCPSocketAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <1)
+  if (m_Parameters.size() <1)
     {
     error->SetError(MString("No enough parameter for SendTCP"),linenumber);
     return false;
     }
-  if (m_parameters.size() >1)
+  if (m_Parameters.size() >1)
     {
     error->SetError(MString("Too much parameters for SendTCP"),linenumber);
     return false;
@@ -54,9 +54,9 @@ MString ScriptCloseTCPSocketAction::Help()
 /** */
 void ScriptCloseTCPSocketAction::Execute()
 {
-  TCPSocket* socket = m_manager->GetVariableSocket(m_parameters[0]);
+  TCPSocket* socket = m_Manager->GetVariableSocket(m_Parameters[0]);
   socket->CloseSocket();
-  bool err = m_manager->RemoveSocket(m_parameters[0]);
+  bool err = m_Manager->RemoveSocket(m_Parameters[0]);
   
   if( err == false )
     {

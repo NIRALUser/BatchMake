@@ -42,9 +42,9 @@ public:
 
 protected:
 
-  std::vector<ScriptAction*> m_thenaction;
-  std::vector<ScriptAction*> m_elseaction;
-  int m_mode;
+  std::vector<ScriptAction*> m_ThenAction;
+  std::vector<ScriptAction*> m_ElseAction;
+  int m_Mode;
   bool TestCurrentCondition(unsigned int startingParameter,unsigned int conditionSize);
 };
 

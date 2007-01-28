@@ -26,8 +26,8 @@ namespace bm {
 ProgressGUIControls::ProgressGUIControls():ProgressGUI()
 {
   make_window();
-  m_buffer = new Fl_Text_Buffer();
-  g_output->buffer(m_buffer);
+  m_Buffer = new Fl_Text_Buffer();
+  g_output->buffer(m_Buffer);
   g_progress->set_hilighted( g_progress->get_root());
   g_progress->box( FL_DOWN_BOX );
   g_progress->show_root(false);

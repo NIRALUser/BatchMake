@@ -28,23 +28,23 @@ ScriptGetParamAction::~ScriptGetParamAction()
 
 bool ScriptGetParamAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_parameters.size() <3)
+   if (m_Parameters.size() <3)
    {
      error->SetError(MString("No enough parameter for GetParam"),linenumber);
      return false;
    }
 
-   m_manager->SetTestVariable(m_parameters[0]);
+   m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
     
-  /*for (unsigned int j=2;j<m_parameters.size();j++)
-    if (!m_parameters[j].isInt())
+  /*for (unsigned int j=2;j<m_Parameters.size();j++)
+    if (!m_Parameters[j].isInt())
     {
-      error->SetError(MString("Parameter %1 should be an int for GetParam ").arg(j) + m_parameters[j],linenumber);
+      error->SetError(MString("Parameter %1 should be an int for GetParam ").arg(j) + m_Parameters[j],linenumber);
       return false;
     }
 */
@@ -63,22 +63,22 @@ MString ScriptGetParamAction::Help()
 void ScriptGetParamAction::Execute()
 {
   MString m_value;
-  std::vector<MString> m_list = m_manager->GetParamsFromVariable(m_manager->Convert(m_parameters[1]));
+  std::vector<MString> m_list = m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
 
-  for (unsigned int i=2;i<m_parameters.size();i++)
+  for (unsigned int i=2;i<m_Parameters.size();i++)
   {
   // if we have the variable we want the value
-  MString m_param = m_parameters[i];
-  if(m_parameters[i][0] == '$')
+  MString m_param = m_Parameters[i];
+  if(m_Parameters[i][0] == '$')
     {
-    m_param = m_manager->Convert(m_parameters[i]);
+    m_param = m_Manager->Convert(m_Parameters[i]);
     }
 
    m_param = m_param.removeChar('\'');
 
     if (m_param.toInt() >= (int)m_list.size())
     {
-      m_manager->GetError()->SetStatus(MString("GetParam: Exeed value for param %1").arg(i));
+      m_Manager->GetError()->SetStatus(MString("GetParam: Exeed value for param %1").arg(i));
       return;
     }
 
@@ -88,7 +88,7 @@ void ScriptGetParamAction::Execute()
       m_value+= m_list[m_param.toInt()]; 
   }
 
-  m_manager->SetVariable(m_parameters[0],m_value);
+  m_Manager->SetVariable(m_Parameters[0],m_value);
 }
 
 } // end namespace bm

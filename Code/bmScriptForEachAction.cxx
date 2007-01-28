@@ -34,7 +34,7 @@ void ScriptForEachAction::AddAction(ScriptAction* action)
 
 bool ScriptForEachAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() < 2)
+  if (m_Parameters.size() < 2)
     {
     error->SetError(
            MString("Not enough parameters - foreach requires 2 parameters"),
@@ -42,12 +42,12 @@ bool ScriptForEachAction::TestParam(ScriptError* error,int linenumber)
     return false;
     }
 
-  for (unsigned int k=0;k<m_parameters.size();k++)
+  for (unsigned int k=0;k<m_Parameters.size();k++)
     {
-    m_manager->TestConvert(m_parameters[k],linenumber);
+    m_Manager->TestConvert(m_Parameters[k],linenumber);
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
   for (unsigned int i=0;i<m_Action.size();i++)
     {
@@ -69,11 +69,11 @@ MString ScriptForEachAction::Help()
 void ScriptForEachAction::CreateLoop()
 { 
   m_ForLoop.clear();
-  MString m_paramlist = m_manager->Convert(m_parameters[1]);
+  MString m_paramlist = m_Manager->Convert(m_Parameters[1]);
   ScriptAction::ParametersType m_params;
   MString m_value = "";
 
-  for (unsigned int i=0; i<m_parameters.size();i++)
+  for (unsigned int i=0; i<m_Parameters.size();i++)
     {
     while ((m_paramlist != "") && (m_paramlist != m_value))
       {
@@ -124,7 +124,7 @@ void ScriptForEachAction::Execute()
       m_GridModule->SetDistributed(true);
       }
 #endif
-    m_manager->SetVariable(m_parameters[0],m_ForLoop[loop]); 
+    m_Manager->SetVariable(m_Parameters[0],m_ForLoop[loop]); 
     for (unsigned int i=0;i<m_Action.size();i++)
       {
       if (!m_ProgressManager->IsStop())

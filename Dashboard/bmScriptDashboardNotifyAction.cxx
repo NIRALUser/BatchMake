@@ -32,17 +32,17 @@ ScriptDashboardNotifyAction::~ScriptDashboardNotifyAction()
 /** */
 bool ScriptDashboardNotifyAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <1)
+  if (m_Parameters.size() <1)
     {
     error->SetError(MString("No enough parameter for DashboardNotify"),linenumber);
     return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
   return true;
 }
@@ -56,34 +56,34 @@ MString ScriptDashboardNotifyAction::Help()
 /** */
 void ScriptDashboardNotifyAction::Execute()
 {
-  std::string url = m_manager->GetDashboardURL();
-  //const char* experiment = m_manager->GetDashboardExperiment();
+  std::string url = m_Manager->GetDashboardURL();
+  //const char* experiment = m_Manager->GetDashboardExperiment();
   m_ProgressManager->AddAction("Send notify to user");
   m_ProgressManager->IsRunning();
   HttpRequest m_request;
 
   //m_request.AddParam("experiment",experiment);
-  m_request.AddParam("message",m_parameters[0].toChar());
+  m_request.AddParam("message",m_Parameters[0].toChar());
   m_request.AddParam("hostname",m_request.GetHostName().c_str());
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());
 
   url += "/notify.php";
-  MString m_output = m_request.Send(url.c_str());
+  MString m_Output = m_request.Send(url.c_str());
  
-  if (m_output.length()>3)
+  if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
     }
   else
     {
-    if (m_output.toInt() == 0)
+    if (m_Output.toInt() == 0)
       {
       m_ProgressManager->FinishAction(MString("Data sent"));
       }
     else
       {
       m_ProgressManager->FinishAction(MString("Dashboard problem when sending data"));
-      switch(m_output.toInt())
+      switch(m_Output.toInt())
         {
         case 1 :  m_ProgressManager->AddError("Bad account name"); break;
         case 2 :  m_ProgressManager->AddError("Bad password"); break;

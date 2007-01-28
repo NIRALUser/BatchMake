@@ -29,24 +29,24 @@ ScriptIncludeAction::~ScriptIncludeAction()
 
 bool ScriptIncludeAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <1)
+  if (m_Parameters.size() <1)
    {
    error->SetError(MString("No enough parameter for Include"),linenumber);
    return false;
    }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
 
-  MString filename = m_manager->Convert(m_parameters[0]);
+  MString filename = m_Manager->Convert(m_Parameters[0]);
   filename = filename.removeChar('\'');
-  long line = static_cast<ScriptParser*>(m_manager->GetParser())->GetLineNumber();
-  static_cast<ScriptParser*>(m_manager->GetParser())->RemoveCodeLine(line-1);
-  static_cast<ScriptParser*>(m_manager->GetParser())->Compile(filename,line-1,true); // don't parse
+  long line = static_cast<ScriptParser*>(m_Manager->GetParser())->GetLineNumber();
+  static_cast<ScriptParser*>(m_Manager->GetParser())->RemoveCodeLine(line-1);
+  static_cast<ScriptParser*>(m_Manager->GetParser())->Compile(filename,line-1,true); // don't parse
 
   return true;
 }

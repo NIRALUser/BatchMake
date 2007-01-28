@@ -31,16 +31,16 @@ ScriptListDirInDirAction::~ScriptListDirInDirAction()
 
 bool ScriptListDirInDirAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_parameters.size() <2)
+   if (m_Parameters.size() <2)
    {
      error->SetError(MString("No enough parameter for ListDirInDir function !"),linenumber);
      return false;
    }
 
-   m_manager->SetTestVariable(m_parameters[0]);
+   m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
+  for (unsigned int i=1;i<m_Parameters.size();i++)
+      m_Manager->TestConvert(m_Parameters[i],linenumber);
 
   return true;
 }
@@ -53,14 +53,14 @@ MString ScriptListDirInDirAction::Help()
 
 void ScriptListDirInDirAction::Execute()
 {
-  MString m_initdir = m_manager->Convert(m_parameters[1]);
+  MString m_initdir = m_Manager->Convert(m_Parameters[1]);
   if (m_initdir.startWith('\''))
     m_initdir = m_initdir.rbegin("'") + 1;
 
   MString m_filter = "*";
-  if (m_parameters.size() == 3 && strcmp(m_parameters[2].toChar(),"NOOVERWRITE"))
+  if (m_Parameters.size() == 3 && strcmp(m_Parameters[2].toChar(),"NOOVERWRITE"))
     {
-    m_filter = m_manager->Convert(m_parameters[2]);
+    m_filter = m_Manager->Convert(m_Parameters[2]);
     if (m_filter.startWith('\''))
       m_filter = m_filter.rbegin("'") + 1;
     }
@@ -71,12 +71,12 @@ void ScriptListDirInDirAction::Execute()
   bool checkOverwrite = false;
  
   // We do not overwrite the variable if specified
-  if( (m_parameters.size() == 4 && !strcmp(m_parameters[3].toChar(),"NOOVERWRITE"))
-    || (m_parameters.size() == 3 && !strcmp(m_parameters[2].toChar(),"NOOVERWRITE"))
+  if( (m_Parameters.size() == 4 && !strcmp(m_Parameters[3].toChar(),"NOOVERWRITE"))
+    || (m_Parameters.size() == 3 && !strcmp(m_Parameters[2].toChar(),"NOOVERWRITE"))
     )
     {
     checkOverwrite = true;
-    std::vector<MString> values = m_manager->GetVariable(m_parameters[0]);
+    std::vector<MString> values = m_Manager->GetVariable(m_Parameters[0]);
     for(unsigned int i=0;i<values.size();i++)
       {
       if(i>0)
@@ -119,7 +119,7 @@ void ScriptListDirInDirAction::Execute()
       bool exists = false;
       if(checkOverwrite)
         {
-        std::vector<MString> values = m_manager->GetVariable(m_parameters[0]);
+        std::vector<MString> values = m_Manager->GetVariable(m_Parameters[0]);
         for(unsigned int i=0;i<values.size();i++)
           {
           if(!strcmp(values[i].toChar(),dname.c_str()))
@@ -139,7 +139,7 @@ void ScriptListDirInDirAction::Execute()
         }
       }
     }
-   m_manager->SetVariable(m_parameters[0],value);
+   m_Manager->SetVariable(m_Parameters[0],value);
 }
 
 } // end namespace bm

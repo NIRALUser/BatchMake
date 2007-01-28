@@ -28,25 +28,25 @@ ScriptSetAppAction::~ScriptSetAppAction()
 
 bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
 {  
-  if (m_parameters.size() < 2)
+  if (m_Parameters.size() < 2)
     {
      error->SetError(MString("SetApp() takes at least two arguments"),linenumber);
      return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
 
-  MString appName = m_parameters[1];
+  MString appName = m_Parameters[1];
   appName = appName.removeChar('@');
 
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_manager->GetApplicationWrapperList()->begin();
-  while (it != m_manager->GetApplicationWrapperList()->end())
+  ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  while (it != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
       {
@@ -63,9 +63,9 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
         }
 
       (*it)->SetSequentialParsing(false);
-      if(m_parameters.size()==3)
+      if(m_Parameters.size()==3)
         {
-        if(m_parameters[2].toInt())
+        if(m_Parameters[2].toInt())
           {
           (*it)->SetSequentialParsing(true);
           }
@@ -92,11 +92,11 @@ MString ScriptSetAppAction::Help()
 
 void ScriptSetAppAction::Execute()
 {
-  MString appName = m_parameters[1];
+  MString appName = m_Parameters[1];
   appName = appName.removeChar('@');
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_manager->GetApplicationWrapperList()->begin();
-  while (it != m_manager->GetApplicationWrapperList()->end())
+  ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  while (it != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
       {
@@ -118,9 +118,9 @@ void ScriptSetAppAction::Execute()
         }
 
       (*it)->SetSequentialParsing(false);
-      if(m_parameters.size()==3)
+      if(m_Parameters.size()==3)
         {
-        if(m_parameters[2].toInt())
+        if(m_Parameters[2].toInt())
           {
           (*it)->SetSequentialParsing(true);
           }
@@ -129,7 +129,7 @@ void ScriptSetAppAction::Execute()
       }
     it++;
     }
-  m_manager->SetVariable(m_parameters[0],m_Value);
+  m_Manager->SetVariable(m_Parameters[0],m_Value);
 }
 
 } // end namespace bm

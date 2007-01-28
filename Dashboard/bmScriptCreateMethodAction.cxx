@@ -32,17 +32,17 @@ ScriptCreateMethodAction::~ScriptCreateMethodAction()
 /** */
 bool ScriptCreateMethodAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() < 3)
+  if (m_Parameters.size() < 3)
     {
     error->SetError(MString("No enough parameter for CreateMethod"),linenumber);
     return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
   return true;
 }
@@ -56,9 +56,9 @@ MString ScriptCreateMethodAction::Help()
 /** */
 void ScriptCreateMethodAction::Execute()
 {
-  m_manager->AddDashboardMethod(m_parameters[0].toChar(),
-                                m_parameters[1].toChar(),
-                                m_parameters[2].toChar());
+  m_Manager->AddDashboardMethod(m_Parameters[0].toChar(),
+                                m_Parameters[1].toChar(),
+                                m_Parameters[2].toChar());
   
 #ifdef BM_GRID
   if(m_GridModule)
@@ -69,20 +69,20 @@ void ScriptCreateMethodAction::Execute()
 #endif
 
   // Create the experiment on the dashboard
-  std::string url = m_manager->GetDashboardURL();
+  std::string url = m_Manager->GetDashboardURL();
   m_ProgressManager->AddAction("BMDashboard: Creating Method");
   m_ProgressManager->IsRunning();
 
   HttpRequest m_request;
-  m_request.AddParam("user",m_manager->GetDashboardUser());
+  m_request.AddParam("user",m_Manager->GetDashboardUser());
 
   // Get the project name
-  const ScriptActionManager::Dashboard * dashboard = m_manager->GetDashboard();
+  const ScriptActionManager::Dashboard * dashboard = m_Manager->GetDashboard();
   const ScriptActionManager::DashboardExperiment* exp = NULL;
   std::vector<ScriptActionManager::DashboardExperiment>::const_iterator it = dashboard->experiments.begin();
   while(it != dashboard->experiments.end())
     {
-    if(!strcmp((*it).variable.c_str(),m_parameters[1].toChar()))
+    if(!strcmp((*it).variable.c_str(),m_Parameters[1].toChar()))
       {
       exp = &(*it);
       break;
@@ -98,33 +98,33 @@ void ScriptCreateMethodAction::Execute()
 
   m_request.AddParam("project",exp->project.c_str());
   m_request.AddParam("method","CreateMethod");
-  m_request.AddParam("name",m_parameters[2].toChar());
+  m_request.AddParam("name",m_Parameters[2].toChar());
   m_request.AddParam("experiment",exp->name.c_str());
 
-  if(m_parameters.size()>3)
+  if(m_Parameters.size()>3)
     {
-    m_request.AddParam("description",m_parameters[3].toChar());
+    m_request.AddParam("description",m_Parameters[3].toChar());
     }
   m_request.AddParam("hostname",m_request.GetHostName().c_str());
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());
 
   url += "/dashboard.php";
-  MString m_output = m_request.Send(url.c_str());
+  MString m_Output = m_request.Send(url.c_str());
  
-  if (m_output.length()>3)
+  if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
     }
   else
     {
-    if (m_output.toInt() == 0)
+    if (m_Output.toInt() == 0)
       {
       m_ProgressManager->FinishAction(MString("Data sent"));
       }
     else
       {
       m_ProgressManager->FinishAction(MString("Dashboard problem when sending data"));
-      switch(m_output.toInt())
+      switch(m_Output.toInt())
         {
         case 1 :  m_ProgressManager->AddError("Bad user name"); break;
         case 2 :  m_ProgressManager->AddError("Bad project name"); break;

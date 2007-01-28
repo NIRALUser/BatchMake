@@ -202,22 +202,22 @@ int main(int argc, char* argv[])
 
   // Send the data to the dashboard
   url += "/dashboard.php";
-  MString m_output = m_request.Send(url.c_str());
+  MString m_Output = m_request.Send(url.c_str());
 
-  if (m_output.length()>3)
+  if (m_Output.length()>3)
     {
     std::cout << "Bad Host or connexion problem" << std::endl;
     }
   else
     {
-    if (m_output.toInt() == 0)
+    if (m_Output.toInt() == 0)
       {
       std::cout << "Data sent" << std::endl;
       }
     else
       {
       std::cout << "Dashboard problem when sending data" << std::endl;
-      switch(m_output.toInt())
+      switch(m_Output.toInt())
         {
         case 1 :  std::cout << "Bad user name" << std::endl; break;
         case 2 :  std::cout << "Bad project name" << std::endl; break;

@@ -25,8 +25,8 @@ void ScriptCreateExperimentAction::GenerateGrid()
   ApplicationWrapper app;
   MString appName = "bmGridSend";
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_manager->GetApplicationWrapperList()->begin();
-  while (it != m_manager->GetApplicationWrapperList()->end())
+  ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  while (it != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
       {
@@ -45,23 +45,23 @@ void ScriptCreateExperimentAction::GenerateGrid()
     }
 
   std::string withslash = "\"";
-  withslash += m_manager->GetDashboardUser();
+  withslash += m_Manager->GetDashboardUser();
   withslash += "\"";
-  app.SetParameterValue("hostname","",m_manager->GetDashboardURL());
+  app.SetParameterValue("hostname","",m_Manager->GetDashboardURL());
   app.SetParameterValue("user","",withslash);
   withslash = "\"";
-  withslash += m_parameters[1].toChar();
+  withslash += m_Parameters[1].toChar();
   withslash += "\"";
   app.SetParameterValue("project","",withslash);
   app.SetParameterValue("createExperiment","","1");
   withslash = "\"";
-  withslash += m_parameters[2].toChar();
+  withslash += m_Parameters[2].toChar();
   withslash += "\"";
   app.SetParameterValue("createExperiment.name","",withslash);
-  if(m_parameters.size()>3)
+  if(m_Parameters.size()>3)
     {
     withslash = "\"";
-    withslash += m_parameters[3].toChar();
+    withslash += m_Parameters[3].toChar();
     withslash += "\"";
     app.SetParameterValue("createExperiment.description","",withslash);
     }

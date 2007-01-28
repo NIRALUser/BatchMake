@@ -29,8 +29,8 @@ ScriptMakeDirectoryAction::~ScriptMakeDirectoryAction()
 
 bool ScriptMakeDirectoryAction::TestParam(ScriptError* error,int linenumber)
 {
-  m_manager->TestConvert(m_parameters[0],linenumber);
-  if (m_parameters.size() != 1)
+  m_Manager->TestConvert(m_Parameters[0],linenumber);
+  if (m_Parameters.size() != 1)
     {
     error->SetError(MString("No enough parameter for MakeDirectory"),linenumber);
     return false;
@@ -47,21 +47,21 @@ MString ScriptMakeDirectoryAction::Help()
 
 void ScriptMakeDirectoryAction::Execute()
 {
-  MString dirname = this->m_manager->Convert(this->m_parameters[0]);
+  MString dirname = this->m_Manager->Convert(this->m_Parameters[0]);
 
   // If we have a variable MakeDirectory(${dir}), get the dirname
-  if(m_parameters[0][0] == '$')
+  if(m_Parameters[0][0] == '$')
     {
-    dirname = m_manager->Convert(this->m_parameters[0]);
+    dirname = m_Manager->Convert(this->m_Parameters[0]);
     }
 
   dirname = dirname.removeChar('\'');
   if (!itksys::SystemTools::MakeDirectory(dirname.toChar()))
     {
     // failed to create dir.. notify manager
-    if (this->m_manager)
+    if (this->m_Manager)
       {
-      this->m_manager->GetError()->SetError(MString("Failed to create directory ") + dirname); 
+      this->m_Manager->GetError()->SetError(MString("Failed to create directory ") + dirname); 
       }
     }
 }

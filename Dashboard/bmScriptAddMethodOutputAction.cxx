@@ -32,17 +32,17 @@ ScriptAddMethodOutputAction::~ScriptAddMethodOutputAction()
 /** */
 bool ScriptAddMethodOutputAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() < 3)
+  if (m_Parameters.size() < 3)
     {
     error->SetError(MString("No enough parameter for AddMethodOutput"),linenumber);
     return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
   return true;
 }
@@ -57,14 +57,14 @@ MString ScriptAddMethodOutputAction::Help()
 void ScriptAddMethodOutputAction::Execute()
 {
   std::string parameterType = "";
-  if(m_parameters.size() > 3)
+  if(m_Parameters.size() > 3)
     {
-    parameterType = m_parameters[3].toChar();
+    parameterType = m_Parameters[3].toChar();
     }
 
-  m_manager->AddDashboardMethodParameter(m_parameters[0].toChar(),
-                               m_parameters[1].toChar(),
-                               m_parameters[2].toChar(),
+  m_Manager->AddDashboardMethodParameter(m_Parameters[0].toChar(),
+                               m_Parameters[1].toChar(),
+                               m_Parameters[2].toChar(),
                                true,false,
                                parameterType.c_str()
                                );
@@ -78,15 +78,15 @@ void ScriptAddMethodOutputAction::Execute()
 #endif
 
   // Create the experiment on the dashboard
-  std::string url = m_manager->GetDashboardURL();
+  std::string url = m_Manager->GetDashboardURL();
   m_ProgressManager->AddAction("BMDashboard: Creating Parameter");
   m_ProgressManager->IsRunning();
 
   HttpRequest m_request;
-  m_request.AddParam("user",m_manager->GetDashboardUser());
+  m_request.AddParam("user",m_Manager->GetDashboardUser());
 
   // Get the project name
-  const ScriptActionManager::Dashboard * dashboard = m_manager->GetDashboard();
+  const ScriptActionManager::Dashboard * dashboard = m_Manager->GetDashboard();
   const ScriptActionManager::DashboardExperiment* exp = NULL;
   const ScriptActionManager::DashboardMethod* meth = NULL;
   std::vector<ScriptActionManager::DashboardExperiment>::const_iterator it = dashboard->experiments.begin();
@@ -95,7 +95,7 @@ void ScriptAddMethodOutputAction::Execute()
     std::vector<ScriptActionManager::DashboardMethod>::const_iterator itM = (*it).methods.begin();
     while(itM != (*it).methods.end())
       {
-      if(!strcmp((*itM).variable.c_str(),m_parameters[1].toChar()))
+      if(!strcmp((*itM).variable.c_str(),m_Parameters[1].toChar()))
         {
         exp = &(*it);
         meth = &(*itM);
@@ -120,7 +120,7 @@ void ScriptAddMethodOutputAction::Execute()
 
   m_request.AddParam("project",exp->project.c_str());
   m_request.AddParam("method","CreateParameter");
-  m_request.AddParam("name",m_parameters[2].toChar());
+  m_request.AddParam("name",m_Parameters[2].toChar());
   m_request.AddParam("experiment",exp->name.c_str());
 
   m_request.AddParam("methodname",meth->name.c_str());
@@ -131,22 +131,22 @@ void ScriptAddMethodOutputAction::Execute()
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());
 
   url += "/dashboard.php";
-  MString m_output = m_request.Send(url.c_str());
+  MString m_Output = m_request.Send(url.c_str());
 
-  if (m_output.length()>3)
+  if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
     }
   else
     {
-    if (m_output.toInt() == 0)
+    if (m_Output.toInt() == 0)
       {
       m_ProgressManager->FinishAction(MString("Data sent"));
       }
     else
       {
       m_ProgressManager->FinishAction(MString("Dashboard problem when sending data"));
-      switch(m_output.toInt())
+      switch(m_Output.toInt())
         {
         case 1 :  m_ProgressManager->AddError("Bad user name"); break;
         case 2 :  m_ProgressManager->AddError("Bad project name"); break;

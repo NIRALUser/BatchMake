@@ -25,8 +25,8 @@ void ScriptCreateMethodAction::GenerateGrid()
   ApplicationWrapper app;
   MString appName = "bmGridSend";
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator itapp = m_manager->GetApplicationWrapperList()->begin();
-  while (itapp != m_manager->GetApplicationWrapperList()->end())
+  ScriptActionManager::ApplicationWrapperListType::iterator itapp = m_Manager->GetApplicationWrapperList()->begin();
+  while (itapp != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*itapp)->GetName().toChar(),appName.toChar()))
       {
@@ -45,12 +45,12 @@ void ScriptCreateMethodAction::GenerateGrid()
     }  
 
   // Get the project name
-  const ScriptActionManager::Dashboard * dashboard = m_manager->GetDashboard();
+  const ScriptActionManager::Dashboard * dashboard = m_Manager->GetDashboard();
   const ScriptActionManager::DashboardExperiment* exp = NULL;
   std::vector<ScriptActionManager::DashboardExperiment>::const_iterator it = dashboard->experiments.begin();
   while(it != dashboard->experiments.end())
     {
-    if(!strcmp((*it).variable.c_str(),m_parameters[1].toChar()))
+    if(!strcmp((*it).variable.c_str(),m_Parameters[1].toChar()))
       {
       exp = &(*it);
       break;
@@ -65,9 +65,9 @@ void ScriptCreateMethodAction::GenerateGrid()
     }
 
   std::string withslash = "\"";
-  withslash += m_manager->GetDashboardUser();
+  withslash += m_Manager->GetDashboardUser();
   withslash += "\"";
-  app.SetParameterValue("hostname","",m_manager->GetDashboardURL());
+  app.SetParameterValue("hostname","",m_Manager->GetDashboardURL());
   app.SetParameterValue("user","",withslash);
   withslash = "\"";
   withslash += exp->project;
@@ -79,13 +79,13 @@ void ScriptCreateMethodAction::GenerateGrid()
   withslash += "\"";
   app.SetParameterValue("createMethod.experimentName","",withslash);
   withslash = "\"";
-  withslash += m_parameters[2].toChar();
+  withslash += m_Parameters[2].toChar();
   withslash += "\"";
   app.SetParameterValue("createMethod.name","",withslash);
-  if(m_parameters.size()>3)
+  if(m_Parameters.size()>3)
     {
     withslash = "\"";
-    withslash += m_parameters[3].toChar();
+    withslash += m_Parameters[3].toChar();
     withslash += "\"";
     app.SetParameterValue("createMethod.description","",withslash);
     }

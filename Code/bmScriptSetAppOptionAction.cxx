@@ -28,17 +28,17 @@ ScriptSetAppOptionAction::~ScriptSetAppOptionAction()
 
 bool ScriptSetAppOptionAction::TestParam(ScriptError* error,int linenumber)
 {  
-  if (m_parameters.size() < 2)
+  if (m_Parameters.size() < 2)
     {
      error->SetError(MString("SetAppOption() takes at least two arguments"),linenumber);
      return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
 
    return true;
@@ -53,46 +53,46 @@ MString ScriptSetAppOptionAction::Help()
 void ScriptSetAppOptionAction::Execute()
 {
   MString m_value;
-  m_value=m_manager->Convert(m_parameters[1]);
+  m_value=m_Manager->Convert(m_Parameters[1]);
 
   unsigned int i; 
-  for (i=2;i<m_parameters.size();i++)
+  for (i=2;i<m_Parameters.size();i++)
     {
     if (m_value != "")
       {
       m_value+= " ";
       }
-    m_value+=m_manager->Convert(m_parameters[i]);
+    m_value+=m_Manager->Convert(m_Parameters[i]);
     }
 
 
   // First we search the name of the variable
-  long pos = m_parameters[0].find(".",0);
-  std::string first = m_parameters[0].mid(0,pos).toChar();
+  long pos = m_Parameters[0].find(".",0);
+  std::string first = m_Parameters[0].mid(0,pos).toChar();
 
-  long pos1 = m_parameters[0].find(".",pos+1);
+  long pos1 = m_Parameters[0].find(".",pos+1);
 
   std::string second = "";
   std::string third = "";  
   if(pos1 !=-1)
     {
-    second = m_parameters[0].mid(pos+1,pos1-pos-1).toChar();
+    second = m_Parameters[0].mid(pos+1,pos1-pos-1).toChar();
     }
   else if(pos>-1)
     {
-    second = m_parameters[0].mid(pos+1,m_parameters.size()-pos-1).toChar();
+    second = m_Parameters[0].mid(pos+1,m_Parameters.size()-pos-1).toChar();
     }
 
   if(pos1 > -1)
     {
-    third = m_parameters[0].mid(pos1+1,m_parameters.size()-pos1-1).toChar();
+    third = m_Parameters[0].mid(pos1+1,m_Parameters.size()-pos1-1).toChar();
     }
 
   // Copy the values
   std::string value = "";
-  for(i=1;i<m_parameters.size();i++)
+  for(i=1;i<m_Parameters.size();i++)
     {
-    std::string param = m_parameters[i].toChar();
+    std::string param = m_Parameters[i].toChar();
     long int currentpos = 0;
     long int posvar = param.find("${");
 
@@ -105,7 +105,7 @@ void ScriptSetAppOptionAction::Execute()
         {
         currentpos = curly+1;
         std::string var = param.substr(posvar,curly-posvar+1);
-        value += m_manager->GetVariable(var)[0].toChar();
+        value += m_Manager->GetVariable(var)[0].toChar();
         }
        posvar =param.find("$",posvar+1);
       }
@@ -116,10 +116,10 @@ void ScriptSetAppOptionAction::Execute()
     value += " ";
     }
   ApplicationWrapper * app = NULL;
-  MString appName = m_manager->GetVariable(first.c_str())[0];
+  MString appName = m_Manager->GetVariable(first.c_str())[0];
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_manager->GetApplicationWrapperList()->begin();
-  while (it != m_manager->GetApplicationWrapperList()->end())
+  ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  while (it != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*it)->GetApplicationPath().toChar(),appName.toChar()))
       {
@@ -143,7 +143,7 @@ void ScriptSetAppOptionAction::Execute()
   m_value += app->GetCurrentCommandLineArguments(false);
   m_value += "'";
 
-  m_manager->SetVariable(first.c_str(),m_value);
+  m_Manager->SetVariable(first.c_str(),m_value);
 }
 
 } // end namespace bm

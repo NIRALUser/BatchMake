@@ -31,14 +31,14 @@ class Launch
 public:
   Launch();
   ~Launch();
-  void Execute(MString m_command);
+  void Execute(MString _command);
   void SetProgressManager(ProgressManager* progressmanager);
   MString GetOutput();
   MString GetError();
 
 protected:
  ProgressManager* m_ProgressManager;
- MString m_output;
+ MString m_Output;
  MString m_Error;
 
 };

@@ -31,17 +31,17 @@ ScriptDashboardUserAction::~ScriptDashboardUserAction()
 /** */
 bool ScriptDashboardUserAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <1)
+  if (m_Parameters.size() <1)
     {
     error->SetError(MString("No enough parameter for DashboardUser"),linenumber);
     return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
   return true;
 }
@@ -55,7 +55,7 @@ MString ScriptDashboardUserAction::Help()
 /** */
 void ScriptDashboardUserAction::Execute()
 {
-  m_manager->SetDashboardUser(m_parameters[0].toChar());
+  m_Manager->SetDashboardUser(m_Parameters[0].toChar());
 }
 
 } // end namespace bm

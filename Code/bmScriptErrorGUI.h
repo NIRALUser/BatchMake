@@ -40,7 +40,7 @@ public:
   void DisplaySummary();
 
 protected:
-  Fl_Text_Display* m_textdisplay;
+  Fl_Text_Display* m_TextDisplay;
 };
 
 } // end namespace bm

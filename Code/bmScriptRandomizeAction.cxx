@@ -29,41 +29,41 @@ ScriptRandomizeAction::~ScriptRandomizeAction()
 
 bool ScriptRandomizeAction::TestParam(ScriptError* error,int linenumber)
 {
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  if (m_parameters.size() <4)
+  if (m_Parameters.size() <4)
     {
     error->SetError(MString("No enough parameter for Randomize"),linenumber);
     return false;
     }
 
-  if ((m_parameters[1].toLower() != "gaussian")\
-      && (m_parameters[1].toLower() != "uniform")\
-      && (m_parameters[1].toLower() != "categorical"))
+  if ((m_Parameters[1].toLower() != "gaussian")\
+      && (m_Parameters[1].toLower() != "uniform")\
+      && (m_Parameters[1].toLower() != "categorical"))
     {
     error->SetError(MString("No valid parameters for Randomize [") 
-                    + m_parameters[1] + "]",linenumber);
+                    + m_Parameters[1] + "]",linenumber);
     return false;
     }
 
-  if ((m_parameters[1].toLower() == "gaussian") \
-      && (m_parameters.size() != 4))
+  if ((m_Parameters[1].toLower() == "gaussian") \
+      && (m_Parameters.size() != 4))
     {
     error->SetError(MString("Incorret number of parameters for Randomize [")
-                    + m_parameters[1] + "]",linenumber);
+                    + m_Parameters[1] + "]",linenumber);
     return false;
     }
 
-  if ((m_parameters[1].toLower()== "uniform") \
-       && (m_parameters.size() != 4))
+  if ((m_Parameters[1].toLower()== "uniform") \
+       && (m_Parameters.size() != 4))
     {
     error->SetError(MString("Incorret number of parameters for Randomize [")
-                    + m_parameters[1] + "]",linenumber);
+                    + m_Parameters[1] + "]",linenumber);
     return false;
     }
 
-  if ((m_parameters[1].toLower() == "categorical") \
-       && (m_parameters.size() < 4))
+  if ((m_Parameters[1].toLower() == "categorical") \
+       && (m_Parameters.size() < 4))
     {
     error->SetError(MString("Incorret number of parameters for Randomize"),
                     linenumber);
@@ -82,17 +82,17 @@ MString ScriptRandomizeAction::Help()
 void ScriptRandomizeAction::Execute()
 {
   MString m_value;
-  if (m_parameters[1].toLower() == "uniform")
+  if (m_Parameters[1].toLower() == "uniform")
     {
     char* m_text = new char[100];
-    float m_min = m_parameters[2].toFloat();
-    float m_max = m_parameters[3].toFloat();
+    float m_min = m_Parameters[2].toFloat();
+    float m_max = m_Parameters[3].toFloat();
     sprintf(m_text,"'%f'",(((float)rand()*(m_max-m_min))/(float)RAND_MAX)+m_min);
     m_value = m_text;
     }
   
 
-  m_manager->SetVariable(m_parameters[0],m_value);
+  m_Manager->SetVariable(m_Parameters[0],m_value);
 }
 
 } // end namespace bm

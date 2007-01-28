@@ -2,17 +2,17 @@
 
 HttpRequest::HttpRequest()
 {
-  m_paramlist.clear();
+  m_ParamList.clear();
 }
 
 HttpRequest::~HttpRequest()
 {
-  std::vector<Paramstruct>::iterator it =  m_paramlist.begin();
-  while(it != m_paramlist.end())
+  std::vector<Paramstruct>::iterator it =  m_ParamList.begin();
+  while(it != m_ParamList.end())
     {
     Paramstruct ps = *it;
     delete [] ps.value;
-    it = m_paramlist.erase(it);
+    it = m_ParamList.erase(it);
     }
 }
 
@@ -460,7 +460,7 @@ void HttpRequest::AddParam(std::string name,const char* value,unsigned long size
   m_param.size = size;
   std::string temp = m_param.value;
 
-  m_paramlist.push_back(m_param);
+  m_ParamList.push_back(m_param);
 }
 
 void HttpRequest::AddFile(std::string name,std::string filename)
@@ -475,7 +475,7 @@ std::string HttpRequest::Send(std::string url)
 {
   MessageStruct  req;
 
-  if ((m_paramlist.size() == 0) && (m_Filenames.size() == 0))
+  if ((m_ParamList.size() == 0) && (m_Filenames.size() == 0))
   {
     std::cerr << "No Param or File defined !" << std::endl;
     return "-2";
@@ -484,14 +484,14 @@ std::string HttpRequest::Send(std::string url)
   unsigned long textLenght = 0;
 
   std::string m_text;
-  for (unsigned int i=0;i<m_paramlist.size();i++)
+  for (unsigned int i=0;i<m_ParamList.size();i++)
     {
     m_text += "--29772313742745\n";
     m_text += "Content-Disposition: form-data; name=\"";
-    m_text += m_paramlist[i].name;
+    m_text += m_ParamList[i].name;
     m_text += "\"\r\n";
     m_text += "\r\n";
-    m_text += m_paramlist[i].value;
+    m_text += m_ParamList[i].value;
     m_text += "\r\n";
     }
   for(unsigned int i=0;i<m_Filenames.size();i++)
@@ -520,15 +520,15 @@ std::string HttpRequest::Send(std::string url)
     return "-1";
     }
  
-  std::vector<Paramstruct>::iterator it =  m_paramlist.begin();
-  while(it != m_paramlist.end())
+  std::vector<Paramstruct>::iterator it =  m_ParamList.begin();
+  while(it != m_ParamList.end())
     {
     Paramstruct ps = *it;
     delete [] ps.value;
-    it = m_paramlist.erase(it);
+    it = m_ParamList.erase(it);
     } 
  
-  m_paramlist.clear();
+  m_ParamList.clear();
   m_Filenames.clear();
 
   return req.message;

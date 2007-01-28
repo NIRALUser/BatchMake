@@ -20,7 +20,7 @@ namespace bm {
 ScriptErrorGUI::ScriptErrorGUI() 
 : ScriptError()
 {
-  m_textdisplay = 0;
+  m_TextDisplay = 0;
 }
 
 ScriptErrorGUI::~ScriptErrorGUI()
@@ -29,17 +29,17 @@ ScriptErrorGUI::~ScriptErrorGUI()
 
 void ScriptErrorGUI::SetTextDisplay(Fl_Text_Display* textdisplay)
 {
-  m_textdisplay = textdisplay;
+  m_TextDisplay = textdisplay;
 }
 
 void ScriptErrorGUI::SetError(MString error,int linenumber)
 {
-   if (m_textdisplay)
+   if (m_TextDisplay)
    {
     if (linenumber != -1)
-     m_textdisplay->buffer()->append((MString(" Error (%1): ").arg(linenumber) + error + "\n").toChar());
+     m_TextDisplay->buffer()->append((MString(" Error (%1): ").arg(linenumber) + error + "\n").toChar());
     else
-     m_textdisplay->buffer()->append((MString(" Error: ").arg(linenumber) + error + "\n").toChar());
+     m_TextDisplay->buffer()->append((MString(" Error: ").arg(linenumber) + error + "\n").toChar());
    }
 
     nb_error++;
@@ -47,21 +47,21 @@ void ScriptErrorGUI::SetError(MString error,int linenumber)
 
 void ScriptErrorGUI::SetWarning(MString warning,int linenumber)
 {
-   if (m_textdisplay)
-      m_textdisplay->buffer()->append((MString(" Warning (%1): ").arg(linenumber) + warning + "\n").toChar());
+   if (m_TextDisplay)
+      m_TextDisplay->buffer()->append((MString(" Warning (%1): ").arg(linenumber) + warning + "\n").toChar());
   nb_warning++;
 }
 
 void ScriptErrorGUI::SetStatus(MString status)
 {
-   if (m_textdisplay)
-      m_textdisplay->buffer()->append( (status + "\n").toChar());
+   if (m_TextDisplay)
+      m_TextDisplay->buffer()->append( (status + "\n").toChar());
 }
 
 void ScriptErrorGUI::DisplaySummary()
 {
-  if (m_textdisplay)
-     m_textdisplay->buffer()->append((MString("%1 error(s), ").arg(nb_error) +  MString("%1 warning(s)").arg(nb_warning) + "\n").toChar());
+  if (m_TextDisplay)
+     m_TextDisplay->buffer()->append((MString("%1 error(s), ").arg(nb_error) +  MString("%1 warning(s)").arg(nb_warning) + "\n").toChar());
 
 }
 

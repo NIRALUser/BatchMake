@@ -21,7 +21,7 @@ namespace bm {
 ScriptIfAction::ScriptIfAction()
 : ScriptAction()
 {
-  m_mode = 0;
+  m_Mode = 0;
 }
 
 ScriptIfAction::~ScriptIfAction()
@@ -30,22 +30,22 @@ ScriptIfAction::~ScriptIfAction()
 
 void ScriptIfAction::SetMode(int mode)
 {
-  m_mode = mode;
+  m_Mode = mode;
 }
 
 bool ScriptIfAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <3)
+  if (m_Parameters.size() <3)
     {
     error->SetError(MString("if() takes at least 3 arguments"),linenumber);
     return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
    return true;
 }
@@ -53,13 +53,13 @@ bool ScriptIfAction::TestParam(ScriptError* error,int linenumber)
 
 void ScriptIfAction::AddAction(ScriptAction* action)
 {
-  if (m_mode == 0)
+  if (m_Mode == 0)
     {
-    m_thenaction.push_back(action);
+    m_ThenAction.push_back(action);
     }
   else
     {
-    m_elseaction.push_back(action);
+    m_ElseAction.push_back(action);
     }
 }
 
@@ -71,12 +71,12 @@ MString ScriptIfAction::Help()
 /** Return the status of the current condition*/
 bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigned int conditionSize)
 {
-  MString left = m_parameters[startingParameter];
+  MString left = m_Parameters[startingParameter];
   if(left[0] == '$')
     {
-    if ((m_manager->GetVariable(m_parameters[startingParameter])).size())
+    if ((m_Manager->GetVariable(m_Parameters[startingParameter])).size())
       {
-      left = m_manager->GetVariable(m_parameters[startingParameter])[0];
+      left = m_Manager->GetVariable(m_Parameters[startingParameter])[0];
       }
     else
       {
@@ -88,10 +88,10 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
 
   if(conditionSize>2)
     {
-    right = m_parameters[startingParameter+2];
+    right = m_Parameters[startingParameter+2];
     if(right[0] == '$')
       {
-      right = m_manager->GetVariable(m_parameters[startingParameter+2])[0];
+      right = m_Manager->GetVariable(m_Parameters[startingParameter+2])[0];
       }
     }
 
@@ -104,42 +104,42 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
       return true;
       }
     }
-  else if (m_parameters[startingParameter+1].toLower() == "==")
+  else if (m_Parameters[startingParameter+1].toLower() == "==")
     {
     if (left == right)
       {
       return true;
       }
     }
-  else if (m_parameters[startingParameter+1].toLower() == "!=")
+  else if (m_Parameters[startingParameter+1].toLower() == "!=")
     {
     if (left != right)
       {
       return true;
       }
     }
-  else if (m_parameters[startingParameter+1].toLower() == ">")
+  else if (m_Parameters[startingParameter+1].toLower() == ">")
     {
     if (left.toFloat() > right.toFloat())
       {
       return true;
       }
     } 
-  else if (m_parameters[startingParameter+1].toLower() == "<")
+  else if (m_Parameters[startingParameter+1].toLower() == "<")
     {
     if (left.toFloat() < right.toFloat())
       {
       return true;
       }
     }
-  else if (m_parameters[startingParameter+1].toLower() == ">=")
+  else if (m_Parameters[startingParameter+1].toLower() == ">=")
     {
     if (left.toFloat() >= right.toFloat())
       {
       return true;
       }
     }
-  else if (m_parameters[startingParameter+1].toLower() == "<=")
+  else if (m_Parameters[startingParameter+1].toLower() == "<=")
     {
     if (left.toFloat() <= right.toFloat())
       {
@@ -157,16 +157,16 @@ void ScriptIfAction::Execute()
 
   unsigned int currentPosition = 0;
   // We loop through the conditions
-  while(currentPosition < m_parameters.size())
+  while(currentPosition < m_Parameters.size())
     {
     std::string nextCondition = "";
-    unsigned int endPosition = m_parameters.size();
+    unsigned int endPosition = m_Parameters.size();
     // Find the end of the condition
-    for(unsigned int i=currentPosition;i<m_parameters.size();i++)
+    for(unsigned int i=currentPosition;i<m_Parameters.size();i++)
       {
-      if(m_parameters[i] == "&&" || m_parameters[i] == "||")
+      if(m_Parameters[i] == "&&" || m_Parameters[i] == "||")
         {
-        nextCondition = m_parameters[i].toChar();
+        nextCondition = m_Parameters[i].toChar();
         endPosition = i;
         break;
         }
@@ -195,32 +195,32 @@ void ScriptIfAction::Execute()
 
   if(thenAction)
     {
-    for (unsigned int i=0;i<m_thenaction.size();i++)
+    for (unsigned int i=0;i<m_ThenAction.size();i++)
       {
-      m_thenaction[i]->Execute();
+      m_ThenAction[i]->Execute();
       }
     }
   else
     {
-    for (unsigned int i=0;i<m_elseaction.size();i++)
+    for (unsigned int i=0;i<m_ElseAction.size();i++)
       {
-      m_elseaction[i]->Execute();
+      m_ElseAction[i]->Execute();
       }
     }
 }
 
 void ScriptIfAction::Delete()
 {
-  for (unsigned int i=0;i<m_thenaction.size();i++)
+  for (unsigned int i=0;i<m_ThenAction.size();i++)
     {
-    m_thenaction[i]->Delete();
-    delete m_thenaction[i];
+    m_ThenAction[i]->Delete();
+    delete m_ThenAction[i];
     }
 
-  for (unsigned int j=0;j<m_elseaction.size();j++)
+  for (unsigned int j=0;j<m_ElseAction.size();j++)
     {
-    m_elseaction[j]->Delete();
-    delete m_elseaction[j];
+    m_ElseAction[j]->Delete();
+    delete m_ElseAction[j];
     }
 }
 

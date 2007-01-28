@@ -37,7 +37,7 @@ namespace bm {
 Launch::Launch()
 {
   m_ProgressManager = 0;
-  m_output = "";
+  m_Output = "";
   m_Error = "";
 }
 
@@ -50,9 +50,9 @@ void Launch::SetProgressManager(ProgressManager* progressmanager)
  m_ProgressManager = progressmanager;
 }
 
-void Launch::Execute(MString m_command)
+void Launch::Execute(MString _command)
 {
-  m_output = "";
+  m_Output = "";
   m_Error = "";
 
 #ifdef WIN32
@@ -94,7 +94,7 @@ void Launch::Execute(MString m_command)
   ZeroMemory( &pi, sizeof(pi) );  
   // Start the child process. 
   if( !CreateProcess( NULL,       // No module name (use command line). 
-      (char*)m_command.latin1(),  // Command line. 
+      (char*)_command.latin1(),  // Command line. 
       NULL,                       // Process handle not inheritable. 
       NULL,                       // Thread handle not inheritable. 
       TRUE,                       // Set handle inheritance to FALSE. 
@@ -162,7 +162,7 @@ void Launch::Execute(MString m_command)
             {
             if (buffer[k] != '\r')
               {
-              m_output += buffer[k];
+              m_Output += buffer[k];
               }
             }
           memset(buffer,'\0',sizeof(buffer));
@@ -248,13 +248,13 @@ void Launch::Execute(MString m_command)
       dup(stderr_pipe[1]);     
       close(stderr_pipe[0]);      
       close(stderr_pipe[1]);   
-      MString m_prog = m_command.begin(" ");
-      MString m_param = m_command.end(" ");   
+      MString m_prog = _command.begin(" ");
+      MString m_param = _command.end(" ");   
    
       fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
       fcntl(stderr_pipe[1], F_SETFL, O_NONBLOCK);
 
-      std::string com = m_command.toChar();
+      std::string com = _command.toChar();
       std::vector<std::string> args;
       
       bool inword = false;
@@ -348,7 +348,7 @@ void Launch::Execute(MString m_command)
           {
           for (unsigned int k=0;k<strlen(buffer);k++)
             {
-            m_output += buffer[k];
+            m_Output += buffer[k];
             }       
           if (m_ProgressManager)
             {
@@ -380,7 +380,7 @@ void Launch::Execute(MString m_command)
 
 MString Launch::GetOutput()
 {
-  return m_output;
+  return m_Output;
 }
 
 

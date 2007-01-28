@@ -62,10 +62,10 @@ public:
 #endif
 
 protected:
-  ParametersType m_parameters;
-  MString m_name;
-  ScriptAction* m_parent;
-  ScriptActionManager* m_manager;
+  ParametersType m_Parameters;
+  MString m_Name;
+  ScriptAction* m_Parent;
+  ScriptActionManager* m_Manager;
   ProgressManager* m_ProgressManager;
 
 #ifdef BM_GRID

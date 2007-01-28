@@ -31,22 +31,22 @@ ScriptRunAction::~ScriptRunAction()
 
 bool ScriptRunAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_parameters.size() <2)
+   if (m_Parameters.size() <2)
    {
      error->SetError(MString("No enough parameter for Run"),linenumber);
      return false;
    }
 
-   if (m_parameters.size() >2)
+   if (m_Parameters.size() >2)
    {
      error->SetWarning(MString("Too much parameter for Run"),linenumber);
      return false;
    }
   
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
 
-  return (m_manager->TestConvert(m_parameters[1],linenumber));
+  return (m_Manager->TestConvert(m_Parameters[1],linenumber));
 }
 
 MString ScriptRunAction::Help()
@@ -110,13 +110,13 @@ void ScriptRunAction::ParseXMLOutput(const char* output)
       // We only add the output values
       if((*it).name == "Output")
         {
-        MString app = m_parameters[1];
+        MString app = m_Parameters[1];
         app = app.removeChar('$');
         app = app.removeChar('{');
         app = app.removeChar('}');
         std::string fullname = app.toChar();
         fullname += "."+name;
-        m_manager->SetVariable(fullname,value);
+        m_Manager->SetVariable(fullname,value);
         }
       }
     it++;
@@ -129,7 +129,7 @@ void ScriptRunAction::Execute()
 #ifdef BM_GRID
   if(m_GridModule)
     {
-    this->GenerateGrid(m_parameters[1].toChar());
+    this->GenerateGrid(m_Parameters[1].toChar());
     return;
     }
 #endif
@@ -139,8 +139,8 @@ void ScriptRunAction::Execute()
   m_timer.start();
   m_launch.SetProgressManager(m_ProgressManager);
 
-  m_ProgressManager->SetStatus(MString("Start ") + m_manager->Convert(m_parameters[1]).removeChar('\''));
-  MString m_actioname = m_manager->ConvertExtra(m_parameters[1]);
+  m_ProgressManager->SetStatus(MString("Start ") + m_Manager->Convert(m_Parameters[1]).removeChar('\''));
+  MString m_actioname = m_Manager->ConvertExtra(m_Parameters[1]);
 
   m_actioname = m_actioname.removeChar(' ',true);
   m_actioname = m_actioname.removeChar('\'',true);
@@ -150,35 +150,35 @@ void ScriptRunAction::Execute()
 
   m_ProgressManager->AddAction(m_actioname);
 
-  m_launch.Execute(m_manager->Convert(m_parameters[1]).removeChar('\''));
-  MString m_output = m_launch.GetOutput();
+  m_launch.Execute(m_Manager->Convert(m_Parameters[1]).removeChar('\''));
+  MString m_Output = m_launch.GetOutput();
   MString m_Error = m_launch.GetError();
   
   // Parse the output of the application and set the variables
-  this->ParseXMLOutput(m_output.toChar());
+  this->ParseXMLOutput(m_Output.toChar());
 
-  m_manager->SetVariable(m_parameters[0],MString("'") + m_output + "'");
+  m_Manager->SetVariable(m_Parameters[0],MString("'") + m_Output + "'");
   m_ProgressManager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
   m_ProgressManager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
   
-  int m_offset = 0;
-  int m_offset2 = 0;
-  while (m_offset != -1)
+  int m_Offset = 0;
+  int m_Offset2 = 0;
+  while (m_Offset != -1)
     {
-    m_offset = m_output.find("\n");
-    m_ProgressManager->AddOutput(m_output.begin("\n"));
-    if (m_offset != -1)
+    m_Offset = m_Output.find("\n");
+    m_ProgressManager->AddOutput(m_Output.begin("\n"));
+    if (m_Offset != -1)
       {
-      m_output = m_output.end("\n")+1;
+      m_Output = m_Output.end("\n")+1;
       }
     }
 
-  m_offset = 0;
-  while (m_offset != -1)
+  m_Offset = 0;
+  while (m_Offset != -1)
     {
-    m_offset = m_Error.find("\n");
+    m_Offset = m_Error.find("\n");
     m_ProgressManager->AddError(m_Error.begin("\n"));
-    if (m_offset != -1)
+    if (m_Offset != -1)
       {
       m_Error = m_Error.end("\n")+1;
       }

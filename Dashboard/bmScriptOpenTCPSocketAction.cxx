@@ -31,18 +31,18 @@ ScriptOpenTCPSocketAction::~ScriptOpenTCPSocketAction()
 /** */
 bool ScriptOpenTCPSocketAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <3)
+  if (m_Parameters.size() <3)
     {
     error->SetError(MString("No enough parameter for OpenTCPSocket"),linenumber);
     return false;
     }
-  if (m_parameters.size() >3)
+  if (m_Parameters.size() >3)
     {
     error->SetError(MString("Too much parameters for OpenTCPSocket"),linenumber);
     return false;
     }
 
-  m_manager->SetSocketVariable(m_parameters[0]);
+  m_Manager->SetSocketVariable(m_Parameters[0]);
 
   return true;
 }
@@ -56,8 +56,8 @@ MString ScriptOpenTCPSocketAction::Help()
 /** */
 void ScriptOpenTCPSocketAction::Execute()
 {
-  TCPSocket* socket = m_manager->GetVariableSocket(m_parameters[0]);
-  int err = socket->OpenSocket(m_parameters[1].toChar(),m_parameters[2].toInt());
+  TCPSocket* socket = m_Manager->GetVariableSocket(m_Parameters[0]);
+  int err = socket->OpenSocket(m_Parameters[1].toChar(),m_Parameters[2].toInt());
   
   if( err == -1 )
     {

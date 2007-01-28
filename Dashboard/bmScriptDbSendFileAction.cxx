@@ -29,10 +29,10 @@ ScriptDbSendFileAction::~ScriptDbSendFileAction()
 
 bool ScriptDbSendFileAction::TestParam(ScriptError* error,int linenumber)
 {
-  for (unsigned int i=0;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
+  for (unsigned int i=0;i<m_Parameters.size();i++)
+      m_Manager->TestConvert(m_Parameters[i],linenumber);
      
-  if (m_parameters.size() != 6)
+  if (m_Parameters.size() != 6)
   {
     error->SetError(MString("No enough parameter for DbSendFile"),linenumber);
     return false;
@@ -53,12 +53,12 @@ void ScriptDbSendFileAction::Execute()
   m_ProgressManager->IsRunning();
   HttpRequest m_request;
 
-  MString m_host = m_manager->Convert(m_parameters[0]).removeChar('\'').latin1();
-  MString m_account = m_manager->Convert(m_parameters[1]).removeChar('\'').latin1();
-  MString m_password = m_manager->Convert(m_parameters[2]).removeChar('\'').latin1(); 
-  MString m_project = m_manager->Convert(m_parameters[3]).removeChar('\'').latin1();
-  MString m_caption = m_manager->Convert(m_parameters[4]).removeChar('\'').latin1();
-  MString m_filename = m_manager->Convert(m_parameters[5]).removeChar('\'').latin1();
+  MString m_host = m_Manager->Convert(m_Parameters[0]).removeChar('\'').latin1();
+  MString m_account = m_Manager->Convert(m_Parameters[1]).removeChar('\'').latin1();
+  MString m_password = m_Manager->Convert(m_Parameters[2]).removeChar('\'').latin1(); 
+  MString m_project = m_Manager->Convert(m_Parameters[3]).removeChar('\'').latin1();
+  MString m_caption = m_Manager->Convert(m_Parameters[4]).removeChar('\'').latin1();
+  MString m_Filename = m_Manager->Convert(m_Parameters[5]).removeChar('\'').latin1();
 
   m_request.AddParam("hostname",m_request.GetHostName().c_str());
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());
@@ -67,29 +67,29 @@ void ScriptDbSendFileAction::Execute()
   m_request.AddParam("password",m_password.toChar());
   m_request.AddParam("caption",m_caption.toChar());
 
-  if (m_filename.rend(".") == ".jpg")
+  if (m_Filename.rend(".") == ".jpg")
     {
     m_request.AddParam("type","2");
     }
 
-  //m_request.SetFile(m_filename.toChar());
+  //m_request.SetFile(m_Filename.toChar());
    
 
   //m_request.AddParam("clear","1");
   //m_request.AddParam("type","1");
 
-  MString m_output = m_request.Send(m_host.toChar());
-  std::cout << "Output: " << m_output.toChar() << std::endl;
-  if (m_output.length()>3)
+  MString m_Output = m_request.Send(m_host.toChar());
+  std::cout << "Output: " << m_Output.toChar() << std::endl;
+  if (m_Output.length()>3)
     m_ProgressManager->AddError("Bad Host or connexion problem");
   else
   {
-    if (m_output.toInt() == 0)
+    if (m_Output.toInt() == 0)
       m_ProgressManager->FinishAction(MString("Data sent"));
     else
     {
       m_ProgressManager->FinishAction(MString("Dashboard problem when sending data"));
-      switch(m_output.toInt())
+      switch(m_Output.toInt())
       {
         case 1 :  m_ProgressManager->AddError("Bad account name"); break;
         case 2 :  m_ProgressManager->AddError("Bad password"); break;

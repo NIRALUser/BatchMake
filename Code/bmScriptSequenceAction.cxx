@@ -28,34 +28,34 @@ ScriptSequenceAction::~ScriptSequenceAction()
 
 bool ScriptSequenceAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_parameters.size() < 4)
+   if (m_Parameters.size() < 4)
    {
      error->SetError(MString("No enough parameter for Sequence"),linenumber);
      return false;
    }
 
-   if (m_parameters.size() > 4)
+   if (m_Parameters.size() > 4)
    {
      error->SetError(MString("Too much parameters for Sequence"),linenumber);
      return false;
    }
 
 
-   m_manager->SetTestVariable(m_parameters[0]);
+   m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int j=1;j<m_parameters.size();j++)
+  for (unsigned int j=1;j<m_Parameters.size();j++)
     {
-    if (!m_parameters[j].isFloat())
+    if (!m_Parameters[j].isFloat())
       {
       error->SetError(MString("Parameter %1 should be a float for Sequence ").
-                      arg(j) + m_parameters[j], linenumber);
+                      arg(j) + m_Parameters[j], linenumber);
       return false;
       }
     }
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
 
    return true;
@@ -70,9 +70,9 @@ MString ScriptSequenceAction::Help()
 void ScriptSequenceAction::Execute()
 {
   MString m_value;
-  for (float i=m_parameters[1].toFloat();
-       i<=m_parameters[2].toFloat();
-       i+=m_parameters[3].toFloat())
+  for (float i=m_Parameters[1].toFloat();
+       i<=m_Parameters[2].toFloat();
+       i+=m_Parameters[3].toFloat())
     {
     int j=(int)i;
     if(j-i == 0) // if the given number is an int then we write an int
@@ -84,7 +84,7 @@ void ScriptSequenceAction::Execute()
       m_value+= MString("'%1' ").arg(i);
       }
     }
-  m_manager->SetVariable(m_parameters[0], m_value);
+  m_Manager->SetVariable(m_Parameters[0], m_value);
 }
 
 } // end namespace bm

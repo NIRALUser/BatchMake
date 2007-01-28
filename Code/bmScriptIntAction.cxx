@@ -28,16 +28,16 @@ ScriptIntAction::~ScriptIntAction()
 
 bool ScriptIntAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_parameters.size() <1)
+   if (m_Parameters.size() <1)
    {
      error->SetError(MString("No enough parameter for Int"),linenumber);
      return false;
    }
 
-   m_manager->SetTestVariable(m_parameters[0]);
+   m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
+  for (unsigned int i=1;i<m_Parameters.size();i++)
+      m_Manager->TestConvert(m_Parameters[i],linenumber);
 
    return true;
 }
@@ -50,15 +50,15 @@ MString ScriptIntAction::Help()
 
 void ScriptIntAction::Execute()
 {
-  MString m_value = m_manager->Convert(m_parameters[0]);
+  MString m_value = m_Manager->Convert(m_Parameters[0]);
 
   // if we have the variable we want the value
-  if(m_parameters[0][0] != '$')
+  if(m_Parameters[0][0] != '$')
     {
     MString temp = "${";
-    temp += m_parameters[0];
+    temp += m_Parameters[0];
     temp += "}";
-    m_value = m_manager->Convert(temp);
+    m_value = m_Manager->Convert(temp);
     }
 
   // get the value without the ''
@@ -69,14 +69,14 @@ void ScriptIntAction::Execute()
   m_value += newval;
   m_value +="'";
 
-  MString param = m_parameters[0];
+  MString param = m_Parameters[0];
   // if we have the $ we want to set the var not the value
-  if(m_parameters[0][0] == '$')
+  if(m_Parameters[0][0] == '$')
     {
-    param= m_parameters[0].rbegin("}")+2;
+    param= m_Parameters[0].rbegin("}")+2;
     }
 
-  m_manager->SetVariable(param,m_value);
+  m_Manager->SetVariable(param,m_value);
 }
 
 } // end namespace bm

@@ -70,7 +70,7 @@ private:
   typedef std::string StringType;
   typedef std::pair<StringType,StringType> FilePairType;
   std::vector<FilePairType> m_Filenames;
-  std::vector<Paramstruct> m_paramlist;
+  std::vector<Paramstruct> m_ParamList;
 };
 
 #endif

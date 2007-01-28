@@ -19,7 +19,7 @@ namespace bm {
 
 ProgressManager::ProgressManager()
 {
-  m_stop = false;
+  m_Stop = false;
 }
 
 ProgressManager::~ProgressManager()
@@ -56,7 +56,7 @@ void ProgressManager::AddError(MString output)
 
 bool ProgressManager::IsStop()
 {
-  return m_stop;
+  return m_Stop;
 }
 
 void ProgressManager::SetFinished(MString message)

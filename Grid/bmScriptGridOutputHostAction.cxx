@@ -31,17 +31,17 @@ ScriptGridOutputHostAction::~ScriptGridOutputHostAction()
 /** */
 bool ScriptGridOutputHostAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <1)
+  if (m_Parameters.size() <1)
     {
     error->SetError(MString("No enough parameter for GridOutputHost"),linenumber);
     return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
   return true;
 }
@@ -57,7 +57,7 @@ void ScriptGridOutputHostAction::Execute()
 {
   if(m_GridModule)
     {
-    m_GridModule->SetOutputHost(m_parameters[0].toChar());
+    m_GridModule->SetOutputHost(m_Parameters[0].toChar());
     }
 }
 

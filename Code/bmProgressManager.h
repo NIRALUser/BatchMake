@@ -42,7 +42,7 @@ public:
   virtual void DisplayError(MString message);
 
 protected:
-  bool m_stop;
+  bool m_Stop;
 
 
 };

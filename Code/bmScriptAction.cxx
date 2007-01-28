@@ -19,7 +19,7 @@ namespace bm {
 
 ScriptAction::ScriptAction()
 {
-  m_parent = 0;
+  m_Parent = 0;
 #ifdef BM_GRID
   m_GridModule = NULL;
 #endif
@@ -31,21 +31,21 @@ ScriptAction::~ScriptAction()
 
 void ScriptAction::SetName(MString name)
 {
-  m_name = name;
+  m_Name = name;
 }
 
 MString ScriptAction::GetName()
 {
-  return m_name;
+  return m_Name;
 }
 
 
 void ScriptAction::SetParameters(ParametersType parameters)
 {
-  m_parameters.clear();
+  m_Parameters.clear();
   for (unsigned int i=0;i<parameters.size();i++)
     {
-    m_parameters.push_back(parameters[i]);
+    m_Parameters.push_back(parameters[i]);
     }
 }
 
@@ -57,12 +57,12 @@ void ScriptAction::Execute()
 
 void ScriptAction::SetParent(ScriptAction* parent)
 { 
-  m_parent = parent;
+  m_Parent = parent;
 } 
 
 ScriptAction* ScriptAction::GetParent()
 {
-  return m_parent;
+  return m_Parent;
 }
 
 void  ScriptAction::AddAction(ScriptAction* action)
@@ -72,7 +72,7 @@ void  ScriptAction::AddAction(ScriptAction* action)
 
 void ScriptAction::SetManager(ScriptActionManager* manager)
 {
-  m_manager = manager;
+  m_Manager = manager;
 }
 
 void ScriptAction::SetProgressManager(ProgressManager* progressmanager)

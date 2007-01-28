@@ -31,12 +31,12 @@ ScriptSendTCPAction::~ScriptSendTCPAction()
 /** */
 bool ScriptSendTCPAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <2)
+  if (m_Parameters.size() <2)
     {
     error->SetError(MString("No enough parameter for SendTCP"),linenumber);
     return false;
     }
-  if (m_parameters.size() >2)
+  if (m_Parameters.size() >2)
     {
     error->SetError(MString("Too much parameters for SendTCP"),linenumber);
     return false;
@@ -54,9 +54,9 @@ MString ScriptSendTCPAction::Help()
 /** */
 void ScriptSendTCPAction::Execute()
 {
-  MString m_value = m_manager->Convert(m_parameters[1]).removeChar('\'').latin1();
+  MString m_value = m_Manager->Convert(m_Parameters[1]).removeChar('\'').latin1();
 
-  TCPSocket* socket = m_manager->GetVariableSocket(m_parameters[0]);
+  TCPSocket* socket = m_Manager->GetVariableSocket(m_Parameters[0]);
   int err = socket->SendMessage(m_value.toChar());
   
   if( err == -1 )

@@ -38,7 +38,7 @@ void ScriptForNFoldAction::AddAction(ScriptAction* action)
 
 bool ScriptForNFoldAction::TestParam(ScriptError* error, int linenumber)
 {
-  if (m_parameters.size() < 5)
+  if (m_Parameters.size() < 5)
     {
     error->SetError(
            MString("Not enough parameters - ForNFold requires 4 parameters."),
@@ -47,19 +47,19 @@ bool ScriptForNFoldAction::TestParam(ScriptError* error, int linenumber)
     }
 
   // Ensure all variables used are defined
-  for (unsigned int k=0;k<m_parameters.size();k++)
+  for (unsigned int k=0;k<m_Parameters.size();k++)
     {
-    m_manager->TestConvert(m_parameters[k], linenumber);
+    m_Manager->TestConvert(m_Parameters[k], linenumber);
     }
 
   // Define first arg as the variable that will contain iteration count
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
   // Define second arg as the variable that will contain training data
-  m_manager->SetTestVariable(m_parameters[1]);
+  m_Manager->SetTestVariable(m_Parameters[1]);
 
   // Define third arg as the variable that will contain testing data
-  m_manager->SetTestVariable(m_parameters[2]);
+  m_Manager->SetTestVariable(m_Parameters[2]);
 
   // I have no idea what Julien is trying to do here
   for (unsigned int i=0;i<m_Action.size();i++)
@@ -84,11 +84,10 @@ MString ScriptForNFoldAction::Help()
 
 void ScriptForNFoldAction::CreateLoop()
 { 
-  unsigned int numberOfFolds = m_parameters[3].toInt();
-  std::cout << "nfold = " << numberOfFolds << std::endl;
+  unsigned int numberOfFolds = m_Parameters[3].toInt();
 
   std::vector<MString> forDataList;
-  MString forDataString = m_manager->Convert(m_parameters[4]);
+  MString forDataString = m_Manager->Convert(m_Parameters[4]);
   MString forDataItem = "";
 
   while ((forDataString != "") && (forDataString != forDataItem))
@@ -115,7 +114,6 @@ void ScriptForNFoldAction::CreateLoop()
     if (forDataItem.length() != 0)
       {
       forDataList.push_back(MString("'") + forDataItem + "'");
-      std::cout << "New item = " << forDataItem.GetValue() << std::endl;
       }
     }
 
@@ -133,7 +131,6 @@ void ScriptForNFoldAction::CreateLoop()
       {
       foldSize[i] += 1;
       }
-    std::cout << "foldSize[" << i << "] = " << foldSize[i] << std::endl;
     }
   
   unsigned int c = 0;
@@ -142,8 +139,6 @@ void ScriptForNFoldAction::CreateLoop()
     {
     for(j=0; j<foldSize[i]; j++)
       {
-      std::cout << "fold[" << i << "] = " << forDataList[c].GetValue() 
-                << std::endl;
       m_Folds[i].push_back(forDataList[c++]);
       }
     }
@@ -162,6 +157,7 @@ void ScriptForNFoldAction::Execute()
 
   this->CreateLoop();
 
+  MString loopCount;
   MString loopTrain;
   MString loopTest;
   unsigned int i, loop;
@@ -174,20 +170,24 @@ void ScriptForNFoldAction::Execute()
       }
 #endif
 
+    loopCount = MString((int)loop);
     loopTest = "";
     loopTrain = "";
     for(i=0; i<m_Folds.size(); i++)
       {
       if(i == m_Folds.size()-loop-1)
         {
-        loopTest = m_manager->GetVariableFromParams(m_Folds[i]);
+        loopTest = m_Manager->GetVariableFromParams(m_Folds[i]);
         }
       else
         {
-        loopTrain += m_manager->GetVariableFromParams(m_Folds[i]);
+        loopTrain += m_Manager->GetVariableFromParams(m_Folds[i]);
         }
       }
-    for (unsigned int i=0;i<m_Action.size();i++)
+    m_Manager->SetVariable(m_Parameters[0], loopCount);
+    m_Manager->SetVariable(m_Parameters[1], loopTrain);
+    m_Manager->SetVariable(m_Parameters[2], loopTest);
+    for (i=0; i<m_Action.size(); i++)
       {
       if (!m_ProgressManager->IsStop())
         {

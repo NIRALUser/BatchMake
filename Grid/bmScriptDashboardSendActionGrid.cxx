@@ -24,8 +24,8 @@ void ScriptDashboardSendAction::GenerateGrid()
   ApplicationWrapper app;
   MString appName = "bmGridSend";
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_manager->GetApplicationWrapperList()->begin();
-  while (it != m_manager->GetApplicationWrapperList()->end())
+  ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  while (it != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
       {
@@ -49,7 +49,7 @@ void ScriptDashboardSendAction::GenerateGrid()
   typedef ScriptActionManager::DashboardMethodParameter DashboardMethodParameterType;
 
   // Get the project name
-  const DashboardType * dashboard = m_manager->GetDashboard();
+  const DashboardType * dashboard = m_Manager->GetDashboard();
   const DashboardExperimentType* exp = NULL;
   const DashboardMethodType* meth = NULL;
   std::vector<DashboardExperimentType>::const_iterator it2 = dashboard->experiments.begin();
@@ -58,7 +58,7 @@ void ScriptDashboardSendAction::GenerateGrid()
     std::vector<ScriptActionManager::DashboardMethod>::const_iterator itM = (*it2).methods.begin();
     while(itM != (*it2).methods.end())
       {
-      if(!strcmp((*itM).variable.c_str(),m_parameters[0].toChar()))
+      if(!strcmp((*itM).variable.c_str(),m_Parameters[0].toChar()))
         {
         exp = &(*it2);
         meth = &(*itM);
@@ -82,9 +82,9 @@ void ScriptDashboardSendAction::GenerateGrid()
     }
 
   std::string withslash = "\"";
-  withslash += m_manager->GetDashboardUser();
+  withslash += m_Manager->GetDashboardUser();
   withslash += "\"";
-  app.SetParameterValue("hostname","",m_manager->GetDashboardURL());
+  app.SetParameterValue("hostname","",m_Manager->GetDashboardURL());
   app.SetParameterValue("user","",withslash);
   withslash = "\"";
   withslash += exp->project;
@@ -114,7 +114,7 @@ void ScriptDashboardSendAction::GenerateGrid()
     std::vector<DashboardMethodType>::const_iterator itMeth = (*itE).methods.begin();
     while(itMeth != (*itE).methods.end())
       {
-      if((!strcmp((*itMeth).variable.c_str(),m_parameters[0].toChar())))
+      if((!strcmp((*itMeth).variable.c_str(),m_Parameters[0].toChar())))
         {
         std::vector<DashboardMethodParameterType>::const_iterator itParam 
                                                     = (*itMeth).parameters.begin();
@@ -132,7 +132,7 @@ void ScriptDashboardSendAction::GenerateGrid()
             imagedata += "\"";
             imagedata += " ";
             imagedata += "\"";
-            MString value = m_manager->Convert(param).toChar();
+            MString value = m_Manager->Convert(param).toChar();
             value = value.removeChar('\'');
             imagedata += value.toChar();
             imagedata += "\" ";
@@ -148,7 +148,7 @@ void ScriptDashboardSendAction::GenerateGrid()
             data += "\"";
             data += " ";
             data += "\"";
-            MString value = m_manager->Convert(param).toChar();
+            MString value = m_Manager->Convert(param).toChar();
             value = value.removeChar('\'');
             data += value.toChar();
             data += "\" ";

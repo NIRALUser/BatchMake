@@ -39,8 +39,8 @@ namespace bm {
 
 ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
 {
-  m_filename = "";
-  m_parser = new ScriptParser();
+  m_Filename = "";
+  m_Parser = new ScriptParser();
 
   MakeWindow();
 
@@ -53,7 +53,7 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
   g_output->buffer(m_Errorbuffer);
 
   // Give a pointer of the parser to the editor (to get the list of apps, etc...)
-  g_editor->SetParser(m_parser);
+  g_editor->SetParser(m_Parser);
   g_editor->SetScriptEditorGUI(this);
 
 #ifdef BM_GRID
@@ -63,7 +63,7 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
 
 ScriptEditorGUIControls::~ScriptEditorGUIControls()
 {
-  delete m_parser;
+  delete m_Parser;
 #ifdef BM_GRID
   delete m_CondorWatcher;
 #endif
@@ -72,7 +72,7 @@ ScriptEditorGUIControls::~ScriptEditorGUIControls()
 void ScriptEditorGUIControls::SetApplicationPath(MString applicationpath)
 {
   m_ApplicationPath = applicationpath;
-  m_parser->SetApplicationPath(m_ApplicationPath);
+  m_Parser->SetApplicationPath(m_ApplicationPath);
 }
 
 
@@ -142,8 +142,8 @@ void ScriptEditorGUIControls::Show()
   }
 
   g_Scripteditorgui->show();
-  m_title = MString(g_Scripteditorgui->label()) + " [script]";
-  g_Scripteditorgui->label(m_title.toChar());
+  m_Title = MString(g_Scripteditorgui->label()) + " [script]";
+  g_Scripteditorgui->label(m_Title.toChar());
   g_editor->SetParentWindow(g_Scripteditorgui);
 }
 
@@ -155,11 +155,11 @@ void ScriptEditorGUIControls::OnOpenScript()
  
   if(filename)
     {
-    m_filename = filename;
-    g_editor->Load(m_filename.toChar());
-    m_parser->SetScriptPath(m_filename);
-    m_title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_filename.rend("/")+1) + "]" ;
-    g_Scripteditorgui->label(m_title.toChar());
+    m_Filename = filename;
+    g_editor->Load(m_Filename.toChar());
+    m_Parser->SetScriptPath(m_Filename);
+    m_Title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_Filename.rend("/")+1) + "]" ;
+    g_Scripteditorgui->label(m_Title.toChar());
     }
 }
 
@@ -185,7 +185,7 @@ void ScriptEditorGUIControls::OnSaveScript()
 
   const char* filename = 0;
   int result = 2;
-  if (m_filename == "")
+  if (m_Filename == "")
     {
     result = 2;
     }
@@ -204,22 +204,22 @@ void ScriptEditorGUIControls::OnSaveScript()
     filename = fl_file_chooser("Save script", "BatchMake Script(*.bms)", NULL);
     }
 
-  if(filename || (m_filename != ""))
+  if(filename || (m_Filename != ""))
     {
     if (filename != 0)
       {
-      m_filename = filename;
-      if (MString(m_filename).rend(".") != ".bms")
+      m_Filename = filename;
+      if (MString(m_Filename).rend(".") != ".bms")
         {
-        m_filename = MString(m_filename) +  ".bms";
+        m_Filename = MString(m_Filename) +  ".bms";
         }
       }
 
-    g_editor->Save(m_filename.toChar());
-    m_parser->SetScriptPath(m_filename);
+    g_editor->Save(m_Filename.toChar());
+    m_Parser->SetScriptPath(m_Filename);
 
-    m_title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_filename.rend("/")+1) + "]" ;
-    g_Scripteditorgui->label(m_title.toChar());
+    m_Title = MString(g_Scripteditorgui->label()).begin("[") + " [" + (m_Filename.rend("/")+1) + "]" ;
+    g_Scripteditorgui->label(m_Title.toChar());
     }
 }
 
@@ -227,58 +227,58 @@ void ScriptEditorGUIControls::OnSaveScript()
 void ScriptEditorGUIControls::OnCompile()
 {
   m_Errorbuffer->text("");
-  m_parser->Reset();
+  m_Parser->Reset();
   m_Errorgui->Reset();
   m_Errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_Errorgui);
-  int m_offset = 0;
+  m_Parser->SetError(m_Errorgui);
+  int m_Offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
-    const char* text = g_editor->buffer()->line_text(m_offset);
-    m_parser->AddCodeLine(MString(text));
-    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    const char* text = g_editor->buffer()->line_text(m_Offset);
+    m_Parser->AddCodeLine(MString(text));
+    m_Offset = g_editor->buffer()->line_end(m_Offset)+1;
     }
   m_Errorgui->SetStatus(MString("Compiling ..."));
-  m_parser->Parse();
+  m_Parser->Parse();
   m_Errorgui->DisplaySummary();
 }
 
 void ScriptEditorGUIControls::OnExecute()
 {
-  m_parser->Reset();
+  m_Parser->Reset();
   m_Errorgui->Reset();
   m_Errorbuffer->text("");
   m_Errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_Errorgui);
-  int m_offset = 0;
+  m_Parser->SetError(m_Errorgui);
+  int m_Offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
-    const char* text = g_editor->buffer()->line_text(m_offset);
-    m_parser->AddCodeLine(MString(text));
-    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    const char* text = g_editor->buffer()->line_text(m_Offset);
+    m_Parser->AddCodeLine(MString(text));
+    m_Offset = g_editor->buffer()->line_end(m_Offset)+1;
     }
 
   m_Errorgui->SetStatus(MString("Compiling ..."));
     
   ProgressManagerGUI* m_ProgressManagergui = new ProgressManagerGUI();
-  ProgressGUIControls* m_progressgui = new ProgressGUIControls();
-  m_progressgui->g_progress->box( FL_DOWN_BOX );
-  // m_progressgui->g_progress->auto_branches( true );  
-  m_progressgui->g_progress->show_leaves( true );
-  m_progressgui->g_progress->show_branches( true );
-  m_progressgui->g_progress->get_root()->always_open( true );
-  m_progressgui->g_progress->insertion_mode(FLU_INSERT_BACK);
+  ProgressGUIControls* m_Progressgui = new ProgressGUIControls();
+  m_Progressgui->g_progress->box( FL_DOWN_BOX );
+  // m_Progressgui->g_progress->auto_branches( true );  
+  m_Progressgui->g_progress->show_leaves( true );
+  m_Progressgui->g_progress->show_branches( true );
+  m_Progressgui->g_progress->get_root()->always_open( true );
+  m_Progressgui->g_progress->insertion_mode(FLU_INSERT_BACK);
 
-  m_progressgui->g_progress->label( "BatchMake processing ..." );
-  m_ProgressManagergui->SetProgressGUI(m_progressgui);
-  m_parser->SetProgressManager(m_ProgressManagergui);
+  m_Progressgui->g_progress->label( "BatchMake processing ..." );
+  m_ProgressManagergui->SetProgressGUI(m_Progressgui);
+  m_Parser->SetProgressManager(m_ProgressManagergui);
 
-  if (m_parser->Parse())
+  if (m_Parser->Parse())
     {
     m_Errorgui->DisplaySummary();
     m_Errorgui->SetStatus(MString("Running ..."));
-    m_progressgui->Show();
-    m_parser->Execute();
+    m_Progressgui->Show();
+    m_Parser->Execute();
     }
   else
     {
@@ -291,7 +291,7 @@ void ScriptEditorGUIControls::OnApplicationWrapper()
 {
   ApplicationListGUIControls* ui = new ApplicationListGUIControls();
   ui->SetApplicationPath(m_ApplicationPath);
-  ui->SetApplicationList(m_parser->GetApplicationList());
+  ui->SetApplicationList(m_Parser->GetApplicationList());
   ui->Show();
 }
 
@@ -308,28 +308,28 @@ void ScriptEditorGUIControls::OnGenerateGAD()
     }
 
   // Check first if the script is valid
-  m_parser->Reset();
+  m_Parser->Reset();
   m_Errorgui->Reset();
   m_Errorbuffer->text("");
   m_Errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_Errorgui);
-  int m_offset = 0;
+  m_Parser->SetError(m_Errorgui);
+  int m_Offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
-    const char* text = g_editor->buffer()->line_text(m_offset);
-    m_parser->AddCodeLine(MString(text));
-    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    const char* text = g_editor->buffer()->line_text(m_Offset);
+    m_Parser->AddCodeLine(MString(text));
+    m_Offset = g_editor->buffer()->line_end(m_Offset)+1;
     }
 
   m_Errorgui->SetStatus(MString("Generating kwgrid script ..."));
     
   Grid grid;
   grid.SetFileName(filename);
-  m_parser->SetGridModule(&grid);
-  if (m_parser->Parse())
+  m_Parser->SetGridModule(&grid);
+  if (m_Parser->Parse())
     {
     m_Errorgui->DisplaySummary();
-    m_parser->Execute();
+    m_Parser->Execute();
     }
   else
     {
@@ -338,7 +338,7 @@ void ScriptEditorGUIControls::OnGenerateGAD()
 
   grid.WriteGAD();
 
-  m_parser->SetGridModule(NULL);
+  m_Parser->SetGridModule(NULL);
   m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
   fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
@@ -358,28 +358,28 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     }
 
   // Check first if the script is valid
-  m_parser->Reset();
+  m_Parser->Reset();
   m_Errorgui->Reset();
   m_Errorbuffer->text("");
   m_Errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_Errorgui);
-  int m_offset = 0;
+  m_Parser->SetError(m_Errorgui);
+  int m_Offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
-    const char* text = g_editor->buffer()->line_text(m_offset);
-    m_parser->AddCodeLine(MString(text));
-    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    const char* text = g_editor->buffer()->line_text(m_Offset);
+    m_Parser->AddCodeLine(MString(text));
+    m_Offset = g_editor->buffer()->line_end(m_Offset)+1;
     }
 
   m_Errorgui->SetStatus(MString("Generating condor script ..."));
     
   Grid grid;
   grid.SetFileName(filename);
-  m_parser->SetGridModule(&grid);
-  if (m_parser->Parse())
+  m_Parser->SetGridModule(&grid);
+  if (m_Parser->Parse())
     {
     m_Errorgui->DisplaySummary();
-    m_parser->Execute();
+    m_Parser->Execute();
     }
   else
     {
@@ -411,7 +411,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     m_Errorgui->SetStatus(error);
     }
 
-  m_parser->SetGridModule(NULL);
+  m_Parser->SetGridModule(NULL);
   m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
    fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
@@ -431,28 +431,28 @@ void ScriptEditorGUIControls::OnGenerateShell()
     }
 
   // Check first if the script is valid
-  m_parser->Reset();
+  m_Parser->Reset();
   m_Errorgui->Reset();
   m_Errorbuffer->text("");
   m_Errorgui->SetTextDisplay(g_output);
-  m_parser->SetError(m_Errorgui);
-  int m_offset = 0;
+  m_Parser->SetError(m_Errorgui);
+  int m_Offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
-    const char* text = g_editor->buffer()->line_text(m_offset);
-    m_parser->AddCodeLine(MString(text));
-    m_offset = g_editor->buffer()->line_end(m_offset)+1;
+    const char* text = g_editor->buffer()->line_text(m_Offset);
+    m_Parser->AddCodeLine(MString(text));
+    m_Offset = g_editor->buffer()->line_end(m_Offset)+1;
     }
 
   m_Errorgui->SetStatus(MString("Generating shell script ..."));
     
   Grid grid;
   grid.SetFileName(filename);
-  m_parser->SetGridModule(&grid);
-  if (m_parser->Parse())
+  m_Parser->SetGridModule(&grid);
+  if (m_Parser->Parse())
     {
     m_Errorgui->DisplaySummary();
-    m_parser->Execute();
+    m_Parser->Execute();
     }
   else
     {
@@ -461,7 +461,7 @@ void ScriptEditorGUIControls::OnGenerateShell()
 
   grid.WriteShell();
 
-  m_parser->SetGridModule(NULL);
+  m_Parser->SetGridModule(NULL);
   m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
   fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");

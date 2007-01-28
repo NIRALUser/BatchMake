@@ -36,7 +36,7 @@ public:
   void Show();
   void OnCancel();
   void SetProgressManagerGUI(ProgressManagerGUI* progressmanagergui);
-  Fl_Text_Buffer* m_buffer;
+  Fl_Text_Buffer* m_Buffer;
 
 protected:
   ProgressManagerGUI* m_ProgressManagergui;

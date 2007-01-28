@@ -28,10 +28,10 @@ ScriptAppendFileAction::~ScriptAppendFileAction()
 
 bool ScriptAppendFileAction::TestParam(ScriptError* error,int linenumber)
 {
-  for (unsigned int i=0;i<m_parameters.size();i++)
-    m_manager->TestConvert(m_parameters[i],linenumber);
+  for (unsigned int i=0;i<m_Parameters.size();i++)
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     
-  if (m_parameters.size() < 2)
+  if (m_Parameters.size() < 2)
   {
     error->SetError(MString("No enough parameter for AppendFile"),linenumber);
     return false;
@@ -49,13 +49,13 @@ MString ScriptAppendFileAction::Help()
 void ScriptAppendFileAction::Execute()
 {
   std::ofstream m_file;
-   m_file.open((m_manager->Convert(m_parameters[0]).removeChar('\'')).latin1(),std::ofstream::binary | ios_base::app);
+   m_file.open((m_Manager->Convert(m_Parameters[0]).removeChar('\'')).latin1(),std::ofstream::binary | ios_base::app);
 
 
   MString m_value;
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
   {
-    MString m_text = m_manager->Convert(m_parameters[i]).removeChar('\'').latin1();
+    MString m_text = m_Manager->Convert(m_Parameters[i]).removeChar('\'').latin1();
     bool m_insert;
     for (int l=0;l<m_text.length();l++)
     {

@@ -23,8 +23,8 @@ void ScriptSetAction::GenerateGrid(std::string name,std::string value)
   ApplicationWrapper app;
   MString appName = "bmGridStore";
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator itApp = m_manager->GetApplicationWrapperList()->begin();
-  while (itApp != m_manager->GetApplicationWrapperList()->end())
+  ScriptActionManager::ApplicationWrapperListType::iterator itApp = m_Manager->GetApplicationWrapperList()->begin();
+  while (itApp != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*itApp)->GetName().toChar(),appName.toChar()))
       {

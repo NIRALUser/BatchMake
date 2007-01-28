@@ -59,24 +59,24 @@ public:
   void Reset();
 
 #ifdef BM_GRID
-  void SetGridModule(Grid* grid) {m_scriptactionmanager->SetGridModule(grid);}
+  void SetGridModule(Grid* grid) {m_ScriptActionManager->SetGridModule(grid);}
 #endif
 
   /** Return the ScriptActionManager */
-  ScriptActionManager* GetScriptActionManager() {return m_scriptactionmanager;}
+  ScriptActionManager* GetScriptActionManager() {return m_ScriptActionManager;}
 
-  std::vector<MString> & GetCode() {return m_code;}
+  std::vector<MString> & GetCode() {return m_Code;}
   void RemoveCodeLine(unsigned int line);
 
   unsigned long GetLineNumber() {return m_LineNumber;}
 
 protected:
   int m_LineNumber;
-  ScriptActionManager* m_scriptactionmanager;
-  std::vector<MString> m_code;
+  ScriptActionManager* m_ScriptActionManager;
+  std::vector<MString> m_Code;
   ScriptError* m_Error;
   MString m_ApplicationPath;
-  std::vector<ApplicationWrapper*>* m_applicationlist;
+  std::vector<ApplicationWrapper*>* m_ApplicationList;
 };
 
 } // end namespace bm

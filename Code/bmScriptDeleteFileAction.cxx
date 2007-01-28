@@ -28,15 +28,15 @@ ScriptDeleteFileAction::~ScriptDeleteFileAction()
 
 bool ScriptDeleteFileAction::TestParam(ScriptError* error,int linenumber)
 {
-  for (unsigned int i=0;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
+  for (unsigned int i=0;i<m_Parameters.size();i++)
+      m_Manager->TestConvert(m_Parameters[i],linenumber);
     
-  if (m_parameters.size() > 1)
+  if (m_Parameters.size() > 1)
   {
     error->SetError(MString("too many parameters for DeleteFile"),linenumber);
     return false;
   } 
-  if (m_parameters.size() < 1)
+  if (m_Parameters.size() < 1)
   {
     error->SetError(MString("No enough parameter for DeleteFile"),linenumber);
     return false;
@@ -54,7 +54,7 @@ MString ScriptDeleteFileAction::Help()
 void ScriptDeleteFileAction::Execute()
 {
   std::ifstream m_file;
-  MString location = (m_manager->Convert(m_parameters[0]).rbegin("'")+1).latin1();
+  MString location = (m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1();
   
   m_file.open(location.toChar());
 

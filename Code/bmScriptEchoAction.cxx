@@ -28,8 +28,8 @@ ScriptEchoAction::~ScriptEchoAction()
 
 bool ScriptEchoAction::TestParam(ScriptError* error,int linenumber)
 {
-  for (unsigned int i=0;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
+  for (unsigned int i=0;i<m_Parameters.size();i++)
+      m_Manager->TestConvert(m_Parameters[i],linenumber);
     
   return true;
 }
@@ -43,11 +43,11 @@ MString ScriptEchoAction::Help()
 void ScriptEchoAction::Execute()
 {
   MString m_value;
-  for (unsigned int i=0;i<m_parameters.size();i++)
+  for (unsigned int i=0;i<m_Parameters.size();i++)
     {
-    m_value += m_manager->Convert(m_parameters[i]).removeChar('\'');
+    m_value += m_Manager->Convert(m_Parameters[i]).removeChar('\'');
     }
-  m_manager->GetProgressManager()->DisplayOutput(m_value+"\n");
+  m_Manager->GetProgressManager()->DisplayOutput(m_value+"\n");
 }
 
 } // end namespace bm

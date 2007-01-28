@@ -30,16 +30,16 @@ ScriptListFileInDirAction::~ScriptListFileInDirAction()
 
 bool ScriptListFileInDirAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_parameters.size() <2)
+   if (m_Parameters.size() <2)
    {
      error->SetError(MString("No enough parameter for ListFileInDir function !"),linenumber);
      return false;
    }
 
-   m_manager->SetTestVariable(m_parameters[0]);
+   m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
+  for (unsigned int i=1;i<m_Parameters.size();i++)
+      m_Manager->TestConvert(m_Parameters[i],linenumber);
 
   return true;
 }
@@ -53,14 +53,14 @@ MString ScriptListFileInDirAction::Help()
 
 void ScriptListFileInDirAction::Execute()
 {
-  MString m_initdir = m_manager->Convert(m_parameters[1]);
+  MString m_initdir = m_Manager->Convert(m_Parameters[1]);
   if (m_initdir.startWith('\''))
     m_initdir = m_initdir.rbegin("'") + 1;
 
   MString m_filter = "*";
-  if (m_parameters.size() == 3)
+  if (m_Parameters.size() == 3)
   {
-    m_filter = m_manager->Convert(m_parameters[2]);
+    m_filter = m_Manager->Convert(m_Parameters[2]);
     if (m_filter.startWith('\''))
       m_filter = m_filter.rbegin("'") + 1;
   }
@@ -114,7 +114,7 @@ void ScriptListFileInDirAction::Execute()
     dirList++;
     }
 
-  m_manager->SetVariable(m_parameters[0],m_value);
+  m_Manager->SetVariable(m_Parameters[0],m_value);
 }
 
 } // end namespace bm

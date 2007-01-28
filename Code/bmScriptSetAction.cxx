@@ -28,17 +28,17 @@ ScriptSetAction::~ScriptSetAction()
 
 bool ScriptSetAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() <2)
+  if (m_Parameters.size() <2)
     {
     error->SetError(MString("No enough parameter for Set"),linenumber);
     return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
   return true;
 }
@@ -54,36 +54,36 @@ void ScriptSetAction::Execute()
   MString param;
   // We check if the parameter 1 is a defined variable
   // This is used by the output application
-  std::vector<MString> vars = m_manager->GetVariable(m_parameters[1]);
-  if(vars.size()>0 && m_parameters[1][0] != '$' && m_parameters[1][1] != '{')
+  std::vector<MString> vars = m_Manager->GetVariable(m_Parameters[1]);
+  if(vars.size()>0 && m_Parameters[1][0] != '$' && m_Parameters[1][1] != '{')
     {
     param = "${";
-    param += m_parameters[1].toChar();
+    param += m_Parameters[1].toChar();
     param += "}\0";
     }
   else
     {
-    param = m_parameters[1];
+    param = m_Parameters[1];
     }
 
-  m_value = m_manager->Convert(param);
+  m_value = m_Manager->Convert(param);
 
-  for (unsigned int i=2;i<m_parameters.size();i++)
+  for (unsigned int i=2;i<m_Parameters.size();i++)
     {
     if (m_value != "")
       {
       m_value+= " ";
       }
-    m_value+=m_manager->Convert(m_parameters[i]);
+    m_value+=m_Manager->Convert(m_Parameters[i]);
     }
 
-  m_manager->SetVariable(m_parameters[0],m_value);
+  m_Manager->SetVariable(m_Parameters[0],m_value);
 
 #ifdef BM_GRID
   // If we are on the grid we use the bmGridStore to store the variable
   if(m_GridModule)
     {
-    this->GenerateGrid(m_parameters[0].toChar(),m_value.toChar());
+    this->GenerateGrid(m_Parameters[0].toChar(),m_value.toChar());
     return;
     }
 #endif

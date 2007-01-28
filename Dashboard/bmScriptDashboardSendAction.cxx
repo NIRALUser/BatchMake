@@ -32,17 +32,17 @@ ScriptDashboardSendAction::~ScriptDashboardSendAction()
 /** */
 bool ScriptDashboardSendAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_parameters.size() < 1)
+  if (m_Parameters.size() < 1)
     {
     error->SetError(MString("No enough parameter for DashboardSend"),linenumber);
     return false;
     }
 
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
+  for (unsigned int i=1;i<m_Parameters.size();i++)
     {
-    m_manager->TestConvert(m_parameters[i],linenumber);
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
   return true;
 }
@@ -71,15 +71,15 @@ void ScriptDashboardSendAction::Execute()
   typedef ScriptActionManager::DashboardMethodParameter DashboardMethodParameterType;
   
   // Create the experiment on the dashboard
-  std::string url = m_manager->GetDashboardURL();
+  std::string url = m_Manager->GetDashboardURL();
   m_ProgressManager->AddAction("BMDashboard: Creating Parameter");
   m_ProgressManager->IsRunning();
 
   HttpRequest m_request;
-  m_request.AddParam("user",m_manager->GetDashboardUser());
+  m_request.AddParam("user",m_Manager->GetDashboardUser());
 
   // Get the project name
-  const DashboardType * dashboard = m_manager->GetDashboard();
+  const DashboardType * dashboard = m_Manager->GetDashboard();
   const DashboardExperimentType* exp = NULL;
   const DashboardMethodType* meth = NULL;
   std::vector<DashboardExperimentType>::const_iterator it = dashboard->experiments.begin();
@@ -88,7 +88,7 @@ void ScriptDashboardSendAction::Execute()
     std::vector<ScriptActionManager::DashboardMethod>::const_iterator itM = (*it).methods.begin();
     while(itM != (*it).methods.end())
       {
-      if(!strcmp((*itM).variable.c_str(),m_parameters[0].toChar()))
+      if(!strcmp((*itM).variable.c_str(),m_Parameters[0].toChar()))
         {
         exp = &(*it);
         meth = &(*itM);
@@ -129,7 +129,7 @@ void ScriptDashboardSendAction::Execute()
     std::vector<DashboardMethodType>::const_iterator itMeth = (*itE).methods.begin();
     while(itMeth != (*itE).methods.end())
       {
-      if((!strcmp((*itMeth).variable.c_str(),m_parameters[0].toChar())))
+      if((!strcmp((*itMeth).variable.c_str(),m_Parameters[0].toChar())))
         {
         std::vector<DashboardMethodParameterType>::const_iterator itParam 
                                                     = (*itMeth).parameters.begin();
@@ -145,7 +145,7 @@ void ScriptDashboardSendAction::Execute()
             }
           param += "}";
 
-          std::string value = m_manager->Convert(param).toChar();
+          std::string value = m_Manager->Convert(param).toChar();
 
           // if this is an image or a graph we load it and send the data
           if( !strcmp((*itParam).type.c_str(),"png")
@@ -153,7 +153,7 @@ void ScriptDashboardSendAction::Execute()
             || !strcmp((*itParam).type.c_str(),"bmg")
             )
             {
-            std::string imageFilename = m_manager->Convert(param).toChar();
+            std::string imageFilename = m_Manager->Convert(param).toChar();
             long pos = imageFilename.find("'");
             while(pos != -1)
               {
@@ -176,22 +176,22 @@ void ScriptDashboardSendAction::Execute()
     }
   
 
-  MString m_output = m_request.Send(url.c_str());
+  MString m_Output = m_request.Send(url.c_str());
 
-  if (m_output.length()>3)
+  if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
     }
   else
     {
-    if (m_output.toInt() == 0)
+    if (m_Output.toInt() == 0)
       {
       m_ProgressManager->FinishAction(MString("Data sent"));
       }
     else
       {
       m_ProgressManager->FinishAction(MString("Dashboard problem when sending data"));
-      switch(m_output.toInt())
+      switch(m_Output.toInt())
         {
         case 1 :  m_ProgressManager->AddError("Bad user name"); break;
         case 2 :  m_ProgressManager->AddError("Bad project name"); break;

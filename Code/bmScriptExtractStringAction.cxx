@@ -28,16 +28,16 @@ ScriptExtractStringAction::~ScriptExtractStringAction()
 
 bool ScriptExtractStringAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_parameters.size() <2)
+   if (m_Parameters.size() <2)
    {
      error->SetError(MString("No enough parameter for ExtractString"),linenumber);
      return false;
    }
 
-   m_manager->SetTestVariable(m_parameters[0]);
+   m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_parameters.size();i++)
-      m_manager->TestConvert(m_parameters[i],linenumber);
+  for (unsigned int i=1;i<m_Parameters.size();i++)
+      m_Manager->TestConvert(m_Parameters[i],linenumber);
 
 
    return true;
@@ -53,37 +53,37 @@ void ScriptExtractStringAction::Execute()
 {
   MString m_value="";
   m_value = "'";
-  unsigned int size = m_parameters[2].toInt();
+  unsigned int size = m_Parameters[2].toInt();
 
-  if(m_parameters.size() > 3)
+  if(m_Parameters.size() > 3)
     {
-    if(!strcmp(m_parameters[3].toChar(),"FROMEND"))
+    if(!strcmp(m_Parameters[3].toChar(),"FROMEND"))
       {
-      if(m_parameters.size() > 4 && !strcmp(m_parameters[4].toChar(),"KEEPEND"))
+      if(m_Parameters.size() > 4 && !strcmp(m_Parameters[4].toChar(),"KEEPEND"))
         {
-        unsigned int lenght = strlen(m_manager->Convert(m_parameters[1]).toChar());
+        unsigned int lenght = strlen(m_Manager->Convert(m_Parameters[1]).toChar());
         for(unsigned int i=lenght-size-1;i<lenght;i++)
           {
-          char v = m_manager->Convert(m_parameters[1])[i];
+          char v = m_Manager->Convert(m_Parameters[1])[i];
           m_value+=v;
           }
         }
       else
         {
-        unsigned int lenght = strlen(m_manager->Convert(m_parameters[1]).toChar());
+        unsigned int lenght = strlen(m_Manager->Convert(m_Parameters[1]).toChar());
         for(unsigned int i=1;i<lenght-size-1;i++)
           {
-          char v = m_manager->Convert(m_parameters[1])[i];
+          char v = m_Manager->Convert(m_Parameters[1])[i];
           m_value+=v;
           }
         }
       }
-    if(!strcmp(m_parameters[3].toChar(),"KEEPEND"))
+    if(!strcmp(m_Parameters[3].toChar(),"KEEPEND"))
       {
-      unsigned int lenght = strlen(m_manager->Convert(m_parameters[1]).toChar());
+      unsigned int lenght = strlen(m_Manager->Convert(m_Parameters[1]).toChar());
       for(unsigned int i=size+1;i<lenght;i++)
         {
-        char v = m_manager->Convert(m_parameters[1])[i];
+        char v = m_Manager->Convert(m_Parameters[1])[i];
         m_value+=v;
         }
       }
@@ -92,12 +92,12 @@ void ScriptExtractStringAction::Execute()
     {
     for(unsigned int i=1;i<size+1;i++)
       {
-      char v = m_manager->Convert(m_parameters[1])[i];
+      char v = m_Manager->Convert(m_Parameters[1])[i];
       m_value+=v;
       }
     }
   m_value+="'";
-  m_manager->SetVariable(m_parameters[0],m_value);
+  m_Manager->SetVariable(m_Parameters[0],m_value);
 }
 
 } // end namespace bm

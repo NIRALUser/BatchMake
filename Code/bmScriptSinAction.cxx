@@ -29,9 +29,9 @@ ScriptSinAction::~ScriptSinAction()
 
 bool ScriptSinAction::TestParam(ScriptError* error,int linenumber)
 {
-  m_manager->SetTestVariable(m_parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
-  if (m_parameters.size()<2)
+  if (m_Parameters.size()<2)
     {
     error->SetError(MString("No enough parameter for Sin"),linenumber);
     return false;
@@ -50,12 +50,12 @@ void ScriptSinAction::Execute()
 {
   MString m_value;
   char* m_text = new char[100];
-  MString test = m_manager->Convert(m_parameters[1]);
+  MString test = m_Manager->Convert(m_Parameters[1]);
   test = test.removeChar('\'');
   float m_X = test.toFloat();
   sprintf(m_text,"'%f'",(float)sin(m_X));
   m_value = m_text;
-  m_manager->SetVariable(m_parameters[0],m_value);
+  m_Manager->SetVariable(m_Parameters[0],m_value);
 }
 
 } // end namespace bm

@@ -58,12 +58,12 @@ public:
   Fl_Text_Buffer* m_Errorbuffer;
 
 protected:
-  MString m_filename;
-  ScriptParser* m_parser;
+  MString m_Filename;
+  ScriptParser* m_Parser;
   ScriptErrorGUI* m_Errorgui;
   MString m_ApplicationPath;
-  std::vector<ApplicationWrapper*> m_applicationlist;
-  MString m_title;
+  std::vector<ApplicationWrapper*> m_ApplicationList;
+  MString m_Title;
 
 #ifdef BM_GRID
   CondorWatcher* m_CondorWatcher;

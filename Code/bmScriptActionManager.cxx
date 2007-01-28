@@ -412,7 +412,8 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
           {
           m_ParentAction->AddAction(_action);
           }
-        if ((option == "foreach")  || (option == "if"))
+        if ((option == "foreach")  || (option == "if") ||
+            (option == "fornfold"))
           {
           m_ParentAction = _action;
           }
