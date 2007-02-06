@@ -136,6 +136,48 @@ Utilities
 ApplicationWrapper
 Code)
 
+
+#-----------------------------------------------------------------------------
+# BatchMake uses KWStyle for checking the coding style
+OPTION(BatchMake_USE_KWSTYLE "Run KWStyle in order to check for violations of the coding standard." OFF)
+MARK_AS_ADVANCED(BatchMake_USE_KWSTYLE)
+
+IF(BatchMake_USE_KWSTYLE)
+  FIND_PROGRAM(KWSTYLE_EXECUTABLE
+  NAMES KWStyle 
+  PATHS
+  /usr/local/bin
+  )
+  
+  OPTION(KWSTYLE_USE_VIM_FORMAT "Set KWStyle to generate errors with a VIM-compatible format." OFF)
+  OPTION(KWSTYLE_USE_MSVC_FORMAT "Set KWStyle to generate errors with a VisualStudio-compatible format." OFF)
+
+  IF(KWSTYLE_USE_VIM_FORMAT)
+    SET(KWSTYLE_ARGUMENTS -vim ${KWSTYLE_ARGUMENTS})
+  ENDIF(KWSTYLE_USE_VIM_FORMAT)
+
+  IF(KWSTYLE_USE_MSVC_FORMAT)
+    SET(KWSTYLE_ARGUMENTS -msvc ${KWSTYLE_ARGUMENTS})
+  ENDIF(KWSTYLE_USE_MSVC_FORMAT)
+
+  MARK_AS_ADVANCED(KWSTYLE_EXECUTABLE)
+  ADD_CUSTOM_COMMAND(
+    OUTPUT ${BatchMake_BINARY_DIR}/KWStyleReport.txt
+    COMMAND ${KWSTYLE_EXECUTABLE}
+    ARGS    -xml ${BatchMake_BINARY_DIR}/BatchMake.kws.xml -o ${BatchMake_SOURCE_DIR}/Utilities/KWStyle/BatchMakeOverwrite.txt ${KWSTYLE_ARGUMENTS} -D ${BatchMake_BINARY_DIR}/BatchMakeFiles.txt  
+    COMMENT "Coding Style Checker"
+    )
+  ADD_CUSTOM_TARGET(StyleCheck DEPENDS ${BatchMake_BINARY_DIR}/KWStyleReport.txt)
+
+CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Utilities/KWStyle/BatchMake.kws.xml.in
+               ${BatchMake_BINARY_DIR}/BatchMake.kws.xml)
+
+CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Utilities/KWStyle/BatchMakeFiles.txt.in
+               ${BatchMake_BINARY_DIR}/BatchMakeFiles.txt)
+
+ENDIF(BatchMake_USE_KWSTYLE)
+
+
 #Copy example directories
 MAKE_DIRECTORY(${BatchMake_BINARY_DIR}/bin/RelWithDebInfo/Applications)
 CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Examples/WrappedApplications/RViewAffineRegistration2.bmm ${BatchMake_BINARY_DIR}/bin/RelWithDebInfo/Applications/RViewAffineRegistration2.bmm COPYONLY IMMEDIATE)
