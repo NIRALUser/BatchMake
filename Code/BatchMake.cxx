@@ -5,12 +5,14 @@
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
+
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
+
 =========================================================================*/
 
 #include "bmScriptEditorGUIControls.h"
@@ -27,11 +29,11 @@
 
 int main(int argc, char **argv)
 {
-   #ifdef WIN32
-     MString m_ApplicationPath = MString(argv[0]).rbegin("\\");
-   #else
-     MString m_ApplicationPath = MString(argv[0]).rbegin("/");
-   #endif
+#ifdef WIN32
+  MString m_ApplicationPath = MString(argv[0]).rbegin("\\");
+#else
+  MString m_ApplicationPath = MString(argv[0]).rbegin("/");
+#endif
 
   if (argc < 2)
     {
@@ -93,8 +95,6 @@ int main(int argc, char **argv)
     command.AddOptionField("generateGAD","scriptname",MetaCommand::STRING,true);
     command.AddOptionField("generateGAD","outputname",MetaCommand::STRING,true);
 
-
-
     // Parsing
     if(!command.Parse(argc,argv))
       {
@@ -149,15 +149,15 @@ int main(int argc, char **argv)
       bm::ScriptParser m_Parser;
       m_Parser.SetApplicationPath(m_ApplicationPath);
      
-      std::cout << "Generating shell script ...";       
+      std::cout << "Generating shell script ...";
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
       m_Parser.SetGridModule(&grid);
       m_Parser.Execute(scriptname);
       grid.WriteShell();
 #else
-       std::cout << "Cannot write Shell scripts with this version of BatchMake."
-        << " Please contact Kitware for more information." << std::endl;
+      std::cout << "Cannot write Shell scripts with this version of BatchMake."
+                << " Please contact Kitware for more information." << std::endl;
 #endif
       std::cout << "Done." << std::endl;
       }
@@ -177,8 +177,8 @@ int main(int argc, char **argv)
       grid.WriteCondor();
       std::cout << "Done." << std::endl;
 #else
-       std::cout << "Cannot write Condor scripts with this version of BatchMake."
-        << " Please contact Kitware for more information." << std::endl;
+      std::cout << "Cannot write Condor scripts with this version of BatchMake."
+                << " Please contact Kitware for more information." << std::endl;
 #endif
       }
     if(command.GetOptionWasSet("generateGAD"))
@@ -198,11 +198,10 @@ int main(int argc, char **argv)
       grid.WriteGAD();
       std::cout << "Done." << std::endl;
 #else
-       std::cout << "Cannot write KWGrid scripts with this version of BatchMake."
-        << " Please contact Kitware for more information." << std::endl;
+      std::cout << "Cannot write KWGrid scripts with this version of BatchMake."
+                << " Please contact Kitware for more information." << std::endl;
 #endif
       }
-  }
-
+    }
   return 0;
 }

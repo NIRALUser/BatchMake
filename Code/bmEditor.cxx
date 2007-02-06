@@ -5,22 +5,23 @@
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
+
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
+
 =========================================================================*/
 
 #include "bmEditor.h"
 #include "MString.h"
 #include "bmScriptEditorGUIControls.h"
 
-
 namespace bm {
 
-  Fl_Text_Display::Style_Table_Entry styletable[] = {  // Style table
+Fl_Text_Display::Style_Table_Entry styletable[] = {  // Style table
          { FL_BLACK,      FL_COURIER,        12 }, // A - Plain
          { FL_DARK_GREEN, FL_COURIER_ITALIC, 12 }, // B - Line comments
          { FL_RED,        FL_COURIER,        12 }, // C - Variables
@@ -34,14 +35,13 @@ namespace bm {
 
 static std::list<MString> m_keywords;
 
-  const char         *code_types[] = {  // List of known C/C++ types...
-         "else",
-         "endforeach",
-         "endif",  
-         "foreach",
-         "if",
-         "null",
-       };
+const char *code_types[] = {  // List of known C/C++ types...
+    "else",
+    "endforeach",
+    "endif",  
+    "foreach",
+    "if",
+    "null"};
 
 static Fl_Window* m_Parentwindow;
 char m_Title[256];
@@ -75,8 +75,10 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_ApplicationBrowser = new Flu_Tree_Browser(0, 0,200,80);
   m_ApplicationBrowser->box( FL_DOWN_BOX );
   m_ApplicationBrowser->show_root(false);
-  m_ApplicationBrowser->branch_text(m_ApplicationBrowser->branch_color(),m_ApplicationBrowser->branch_font(),10);
-  m_ApplicationBrowser->leaf_text(m_ApplicationBrowser->leaf_color(),m_ApplicationBrowser->leaf_font(),10);
+  m_ApplicationBrowser->branch_text(m_ApplicationBrowser->branch_color(),
+                                    m_ApplicationBrowser->branch_font(),10);
+  m_ApplicationBrowser->leaf_text(m_ApplicationBrowser->leaf_color(),
+                                  m_ApplicationBrowser->leaf_font(),10);
   m_ApplicationBrowser->vertical_gap(-2);
   m_ApplicationBrowser->selection_color(87);
   m_ApplicationBrowser->show_leaves( true );
@@ -89,15 +91,15 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_ApplicationBrowser->resize(13,15,200,80);
   m_ApplicationBrowser->end();
 
-
-
   // Specification for the applications completion browser (for wrapped applications)
   m_DrawApplicationOptionBrowser = false;
   m_ApplicationOptionBrowser = new Flu_Tree_Browser(0, 0,200,80);
   m_ApplicationOptionBrowser->box( FL_DOWN_BOX );
   m_ApplicationOptionBrowser->show_root(false);
-  m_ApplicationOptionBrowser->branch_text(m_ApplicationOptionBrowser->branch_color(),m_ApplicationOptionBrowser->branch_font(),10);
-  m_ApplicationOptionBrowser->leaf_text(m_ApplicationOptionBrowser->leaf_color(),m_ApplicationOptionBrowser->leaf_font(),10);
+  m_ApplicationOptionBrowser->branch_text(m_ApplicationOptionBrowser->branch_color(),
+                                          m_ApplicationOptionBrowser->branch_font(),10);
+  m_ApplicationOptionBrowser->leaf_text(m_ApplicationOptionBrowser->leaf_color(),
+                                        m_ApplicationOptionBrowser->leaf_font(),10);
   m_ApplicationOptionBrowser->vertical_gap(-2);
   m_ApplicationOptionBrowser->selection_color(87);
   m_ApplicationOptionBrowser->show_leaves( true );
@@ -109,8 +111,6 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   m_ApplicationOptionBrowser->callback((Fl_Callback*)SelectApplicationOption,this);
   m_ApplicationOptionBrowser->resize(13,15,200,80);
   m_ApplicationOptionBrowser->end();
-
-
 
   m_DrawHelper = false;
   m_Helper = new Fl_Output(0, 0,200,15);
@@ -124,15 +124,15 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
   char *style = new char[3];
   char *text = m_Buffer->text();
   style[0] = '\0';
-  stylebuf = new Fl_Text_Buffer(m_Buffer->length());
-  stylebuf->text(style);
+  m_Stylebuf = new Fl_Text_Buffer(m_Buffer->length());
+  m_Stylebuf->text(style);
   delete [] style;
   style = NULL;
   delete [] text;
   text = NULL;
 
   buffer(m_Buffer);
-  highlight_data(stylebuf, styletable,
+  highlight_data(m_Stylebuf, styletable,
                           sizeof(styletable) / sizeof(styletable[0]),
                           'A', style_unfinished_cb, 0);
 
@@ -180,7 +180,8 @@ void Editor::UpdateApplicationsList()
 
   m_ApplicationBrowser->clear();
   
-  ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  ScriptActionManager::ApplicationWrapperListType::const_iterator it = 
+                              m_Manager->GetApplicationWrapperList()->begin();
   if(m_Manager->GetApplicationWrapperList()->size() == 0)
     {
     return;
@@ -233,14 +234,14 @@ void Editor::SetParentWindow(Fl_Window* parentwindow)
 void Editor::SetModified(bool flag)
 {
   if (m_Parentwindow)
-  {
+    {
     strcpy(m_Title,m_Parentwindow->label());
     if (MString(m_Title).rfind("*") == -1)
       {
-        strcpy(m_Title,(MString(m_Title).rbegin("]") + "*]").toChar());
-        m_Parentwindow->label(m_Title);
+      strcpy(m_Title,(MString(m_Title).rbegin("]") + "*]").toChar());
+      m_Parentwindow->label(m_Title);
       }
-  }
+    }
 }
 
 
@@ -248,12 +249,14 @@ bool Editor::Find(std::list<MString> array,MString key)
 {
   std::list<MString>::iterator it = m_keywords.begin();
   while (it != m_keywords.end())
-  {
-      if ((*it).toLower() == key)
-        return true;
-      it++;
-  }
-   return false;
+    {
+    if ((*it).toLower() == key)
+      {
+      return true;
+      }
+    it++;
+    }
+  return false;
 }
 
 
@@ -280,10 +283,10 @@ void Editor::style_update(int        pos,          // I - Position of update
   char *text  = NULL;                 // Text data
 
   if ((nInserted || nDeleted)) SetModified(true);
-  Fl_Text_Buffer* stylebuf = ((Editor *)cbArg)->stylebuf;
+  Fl_Text_Buffer* stylebuf = ((Editor *)cbArg)->m_Stylebuf;
   Fl_Text_Buffer* textbuf = ((Editor *)cbArg)->m_Buffer;
 
- // If this is just a selection change, just unselect the style buffer...
+  // If this is just a selection change, just unselect the style buffer...
   if (nInserted == 0 && nDeleted == 0) 
     {
     stylebuf->unselect();
@@ -328,7 +331,7 @@ void Editor::style_update(int        pos,          // I - Position of update
     {
     style[0] = stylebuf->text_range(start-1,start)[0];
     style[1] = '\0';
-   }
+    }
 
   if ((end - start) != 0)
     {
@@ -361,182 +364,152 @@ void Editor::style_update(int        pos,          // I - Position of update
    
   int m_x;
   int m_y;
- ((Editor *)cbArg)->position_to_xy(pos,&m_x,&m_y);
- ((Editor *)cbArg)->ShowOptionFinder(m_x,m_y);
+  ((Editor *)cbArg)->position_to_xy(pos,&m_x,&m_y);
+  ((Editor *)cbArg)->ShowOptionFinder(m_x,m_y);
 }
 
 void Editor:: style_parse(const char *text,char *style,int length) 
 {
-  char             current;
-  int             col;
-  int             last;
-  char             buf[255],
-             *bufptr;
+  char  current;
+  int   col;
+  int   last;
+  char  buf[255],*bufptr;
   const char *temp;
 
-//if (length == 0)
-{
-  if ((style[0] != 'C') && (style[0] != 'D')) style[0] = 'A';
-}
-
-for (current = *style, col = 0, last = 0; length > 0; length --, text ++) {
-
-    if (current == 'B') current = 'A';
-    if (current == 'A') 
+  if ((style[0] != 'C') && (style[0] != 'D')) 
     {
+    style[0] = 'A';
+    }
+
+  for (current = *style, col = 0, last = 0; length > 0; length --, text ++) 
+    {
+    if (current == 'B') 
+      {
+      current = 'A';
+      }
+    if (current == 'A') 
+      {
       // Check for directives, comments, strings, and keywords...
-      /*if (col == 0 && *text == '#') 
-      {
-        // Set style to directive
-        current = 'E';
-      } 
-      else */
       if (strncmp(text, "#", 1) == 0) 
-      {
+        {
         current = 'B';
-          for (; length > 0 && *text != '\n'; length --, text ++) *style++ = 'B';
+        for (; length > 0 && *text != '\n'; length --, text ++)
+          {
+          *style++ = 'B';
+          }
         if (length == 0) break;
-      } 
-      /*else if (strncmp(text, "${", 2) == 0) 
-      {
-        current = 'C';
-      } */
+        }
       else if (strncmp(text, "$", 1) == 0) 
-      {
+        {
         current = 'C';
-      } 
+        }
       else if (strncmp(text, "\\'", 2) == 0) 
-      {
-              // Quoted quote...
+        {
+        // Quoted quote...
         *style++ = current;
         *style++ = current;
         text ++;
         length --;
         col += 2;
         continue;
-      } 
+        } 
       else if (*text == '\'') 
-      {
+        {
         current = 'D';
-      } 
+        } 
       else 
-      { //if (!last && islower(*text)) {
-         // Might be a keyword...
-       /*for (temp = text, bufptr = buf;
-              islower(*temp) && bufptr < (buf + sizeof(buf) - 1);
-              *bufptr++ = *temp++);*/
-
+        {
         temp = text;  
         bufptr = buf;
 
         unsigned int offset =0;
-        while ((text[offset] != ' ') && (offset<strlen(text)) && (text[offset] != '\n') && (text[offset] != '('))
-        {
+        while ((text[offset] != ' ') 
+               && (offset<strlen(text)) && (text[offset] != '\n') 
+               && (text[offset] != '('))
+          {
            *bufptr++ = tolower(*temp++);
            offset++;
-        }
+          }
 
-       // std::cout << offset << std::endl;
-       // bufptr[offset] = '\0';
-        //if (!islower(*temp)) {
-         {
-           *bufptr = '\0';
-           bufptr = buf;
+    //{
+        *bufptr = '\0';
+        bufptr = buf;
 
-           //std::cout << "Buffer: " << bufptr << std::endl;
-
-            if (bsearch(&bufptr, code_types,
-                        sizeof(code_types) / sizeof(code_types[0]),
-                  sizeof(code_types[0]), compare_keywords)) 
+        if (bsearch(&bufptr, code_types,
+            sizeof(code_types) / sizeof(code_types[0]),
+            sizeof(code_types[0]), compare_keywords)) 
+          {
+          while (text < temp) 
             {
-                while (text < temp) 
-                {
-                  *style++ = 'F';
-                  text ++;
-                  length --;
-                  col ++;
-                }
-
-              text --;
-              length ++;
-              last = 1;
-              continue;
-            } 
-            /*else if (bsearch(&bufptr, code_keywords,
-                     sizeof(code_keywords) / sizeof(code_keywords[0]),
-               sizeof(code_keywords[0]), compare_keywords)) */
-
-            else if (Find(m_keywords,bufptr))
-            {
-              while (text < temp) 
-              {
-                *style++ = 'G';
-                text ++;
-                length --;
-                col ++;
-              }
-
-              text --;
-              length ++;
-              last = 1;
-              continue;
+            *style++ = 'F';
+            text ++;
+            length --;
+            col ++;
             }
-        }
-     }
-    } else if (current == 'C' && ((strncmp(text+1, ")", 1)== 0) || (strncmp(text, " ", 1)== 0) || (strncmp(text, "}", 1) == 0)) )
-      {
-        // Close a C comment...
-        *style++ = current;
-        current = 'A';
-        col += 1;
-        continue;
-      } else if (current == 'D') 
-      {
-        // Continuing in string...
-        if (strncmp(text, "$", 1) == 0) 
-           current = 'H';
-        /*if (strncmp(text, "\\\"", 2) == 0) 
-        {
-          // Quoted end quote...
-          *style++ = current;
-          *style++ = current;
-          text ++;
-          length --;
-          col += 2;
+
+          text --;
+          length ++;
+          last = 1;
           continue;
-        } 
-        else */if (*text == '\'') 
-        {
-                // End quote...
-          *style++ = current;
-          col ++;
-          current = 'A';
+          }
+        else if (Find(m_keywords,bufptr))
+          {
+          while (text < temp) 
+            {
+            *style++ = 'G';
+            text ++;
+            length --;
+            col ++;
+            }
+
+          text --;
+          length ++;
+          last = 1;
           continue;
+          }
         }
       }
-      else if (current == 'H' && ((strncmp(text+1, ")", 1)== 0) || (strncmp(text, " ", 1)== 0) || (strncmp(text, "}", 1) == 0)) )
+    //} 
+    else if (current == 'C' && ((strncmp(text+1, ")", 1) == 0) 
+               || (strncmp(text, " ", 1) == 0) || (strncmp(text, "}", 1) == 0)) )
       {
-        // Close a C comment...
+      // Close a C comment...
+      *style++ = current;
+      current = 'A';
+      col += 1;
+      continue;
+      }
+    else if (current == 'D') 
+      {
+      // Continuing in string...
+      if (strncmp(text, "$", 1) == 0) 
+        {
+        current = 'H';
+        }
+      if (*text == '\'') 
+        {
+        // End quote...
         *style++ = current;
-        current = 'D';
-        col += 1;
+        col ++;
+        current = 'A';
         continue;
+        }
+      }
+    else if (current == 'H' && ((strncmp(text+1, ")", 1) == 0) 
+            || (strncmp(text, " ", 1) == 0) || (strncmp(text, "}", 1) == 0)) )
+      {
+      // Close a C comment...
+      *style++ = current;
+      current = 'D';
+      col += 1;
+      continue;
       }
 
     // Copy style info...
-    /*if (current == 'A' && (*text == '{' || *text == '}')) *style++ = 'G';
-    else *style++ = current;*/
     *style++ = current;
     col ++;
-
     last = isalnum(*text) || *text == '.';
-
-    /*if (*text == '\n') {
-      // Reset column and possibly reset the style
-      col = 0;
-      if (current == 'B' || current == 'E') current = 'A';
-    }*/
-  }
+    }
 }
 
 /** Add the application to browse */
@@ -552,7 +525,7 @@ void Editor::AddApplicationsToBrowse()
     MString lowercaseLine = line;
     lowercaseLine = lowercaseLine.toLower();
     std::string lowercaseLine2 = lowercaseLine.toChar();
-    if(pos = lowercaseLine2.find("setapp(")!=-1)
+    if(pos = lowercaseLine2.find("setapp(") != -1)
       {
       long pos1 = line.find("(",pos);
       if(pos1 != -1)
@@ -571,7 +544,8 @@ void Editor::AddApplicationsToBrowse()
             }
 
           // Search the correct app corresponding to the name
-          ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_Manager->GetApplicationWrapperList()->begin();
+          ScriptActionManager::ApplicationWrapperListType::const_iterator it = 
+                                                m_Manager->GetApplicationWrapperList()->begin();
           while (it != m_Manager->GetApplicationWrapperList()->end())
             { 
             if(!strcmp((*it)->GetName().toChar(),app.c_str()))
@@ -608,11 +582,11 @@ void Editor::Load(const char* filename)
 
 void Editor::Save(const char* filename)
 {
- if (m_Buffer->savefile(filename))
-   {
-   fl_alert("Error writing to file \'%s\':\n%s.", filename, strerror(errno));
-   }
- m_Buffer->call_modify_callbacks();
+  if (m_Buffer->savefile(filename))
+    {
+    fl_alert("Error writing to file \'%s\':\n%s.", filename, strerror(errno));
+    }
+  m_Buffer->call_modify_callbacks();
 }
 
 
@@ -681,45 +655,51 @@ void Editor::draw()
 void Editor::SelectOption(Flu_Tree_Browser* browser, void* widget)
 {
   if (browser->get_selected(1) != 0)
-  {
-    if (browser->callback_reason() == FLU_DOUBLE_CLICK)
     {
+    if (browser->callback_reason() == FLU_DOUBLE_CLICK)
+      {
       MString m_text(MString(browser->get_selected(1)->label()) + "()");
       m_text = m_text.mid(((Editor*)widget)->m_CurrentWord.length());
-     ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
-     ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length()-1);
-     ((Editor*) widget)->m_DrawBrowser = false;
-     ((Editor*)widget)->m_CurrentWord = "";
+      ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
+      ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length()-1);
+      ((Editor*) widget)->m_DrawBrowser = false;
+      ((Editor*)widget)->m_CurrentWord = "";
+      }
+
+    if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
+      {
+      MString m_text(MString(browser->get_selected(1)->label()) + "()");
+      m_text = m_text.mid(((Editor*)widget)->m_CurrentWord.length());
+      ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
+      ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length()-1);
+      ((Editor*) widget)->m_DrawBrowser = false;
+      ((Editor*)widget)->m_CurrentWord = "";
+
+      ScriptActionManager m_Manager;
+      ScriptAction* m_help = 
+                  m_Manager.CreateAction(MString(browser->get_selected(1)->label()).toLower());
+      if (m_help)
+        {
+        ((Editor*)widget)->m_Helper->value(m_help->Help().toChar());
+        if (MString(((Editor*)widget)->m_Helper->value()) != "")
+          {
+          ((Editor*)widget)->m_Helper->resize(((Editor*)widget)->m_Helper->x(),
+                                             ((Editor*)widget)->m_Helper->y(),
+                                             (int)(m_help->Help().length()*4.9),15);
+          ((Editor*)widget)->m_DrawHelper = true;
+          }
+        else
+          {
+          ((Editor*)widget)->m_DrawHelper = false;
+          }
+        delete m_help;
+        }
+      else
+        {
+        ((Editor*)widget)->m_DrawHelper = false;
+        }
+      }
     }
-
-   if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
-   {
-      MString m_text(MString(browser->get_selected(1)->label()) + "()");
-      m_text = m_text.mid(((Editor*)widget)->m_CurrentWord.length());
-     ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
-     ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length()-1);
-     ((Editor*) widget)->m_DrawBrowser = false;
-     ((Editor*)widget)->m_CurrentWord = "";
-
-     ScriptActionManager m_Manager;
-     ScriptAction* m_help = m_Manager.CreateAction(MString(browser->get_selected(1)->label()).toLower());
-     if (m_help)
-     {
-       ((Editor*)widget)->m_Helper->value(m_help->Help().toChar());
-       if (MString(((Editor*)widget)->m_Helper->value()) != "")
-       {
-         ((Editor*)widget)->m_Helper->resize(((Editor*)widget)->m_Helper->x(),((Editor*)widget)->m_Helper->y(),(int)(m_help->Help().length()*4.9),15);
-         ((Editor*)widget)->m_DrawHelper = true;
-       }
-       else
-         ((Editor*)widget)->m_DrawHelper = false;
-       delete m_help;
-     }
-     else
-      ((Editor*)widget)->m_DrawHelper = false;
-   }
-
-  }
 } 
 
 /** Callback when a tab completion is done for an action */
@@ -730,17 +710,17 @@ void Editor::SelectApplication(Flu_Tree_Browser* browser, void* widget)
     if (browser->callback_reason() == FLU_DOUBLE_CLICK)
       {
       MString m_text(MString(browser->get_selected(1)->label()));
-     ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
-     ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
-     ((Editor*) widget)->m_DrawApplicationBrowser = false;
-     ((Editor*) widget)->m_DrawBrowser = false;
-     ((Editor*)widget)->m_DrawHelper = false;
-     ((Editor*)widget)->m_CurrentWord = "";
+      ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
+      ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
+      ((Editor*) widget)->m_DrawApplicationBrowser = false;
+      ((Editor*) widget)->m_DrawBrowser = false;
+      ((Editor*)widget)->m_DrawHelper = false;
+      ((Editor*)widget)->m_CurrentWord = "";
       }
 
-     if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
+    if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
       {
-       MString m_text(MString(browser->get_selected(1)->label()));
+      MString m_text(MString(browser->get_selected(1)->label()));
       ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
       ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
       ((Editor*) widget)->m_DrawApplicationBrowser = false;
@@ -759,15 +739,15 @@ void Editor::SelectApplicationOption(Flu_Tree_Browser* browser, void* widget)
     if (browser->callback_reason() == FLU_DOUBLE_CLICK)
       {
       MString m_text(MString(browser->get_selected(1)->label()));
-     ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
-     ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
-     ((Editor*)widget)->m_DrawApplicationOptionBrowser = false;
-     ((Editor*)widget)->m_CurrentWord = "";
+      ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
+      ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
+      ((Editor*)widget)->m_DrawApplicationOptionBrowser = false;
+      ((Editor*)widget)->m_CurrentWord = "";
       }
 
-     if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
+    if (browser->callback_reason() == FLU_TAB_KEY || Fl::event_key() == 65293 )
       {
-       MString m_text(MString(browser->get_selected(1)->label()));
+      MString m_text(MString(browser->get_selected(1)->label()));
       ((Editor*)widget)->m_Buffer->insert(((Editor*)widget)->insert_position(),m_text.toChar());
       ((Editor*)widget)->insert_position(((Editor*)widget)->insert_position()+m_text.length());
       ((Editor*)widget)->m_DrawApplicationOptionBrowser = false;
@@ -805,7 +785,7 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
 
   // Get the option from the application wrapper
   std::vector<ApplicationWrapperParam> & params = app->GetParams();
- // std::cout << "App Name = " << app->GetName().toChar() << std::endl;
+  // std::cout << "App Name = " << app->GetName().toChar() << std::endl;
   std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();
   if(params.size() == 0)
     {
@@ -834,22 +814,11 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
           break;
           }
         }
-
-
       }
     text += (*itParams).GetName().toChar();
     m_ApplicationOptionBrowser->add(text.c_str());
     itParams++;
     }
-/*
-  Flu_Tree_Browser::Node* m_node = m_ApplicationOptionBrowser->first();
-  if(params.size() > 1)
-    {
-    m_node = m_node->next();
-    }
-  m_node->select_only();
-  m_ApplicationOptionBrowser->set_hilighted(m_node);
- */
   return true;
 }
 
@@ -951,7 +920,7 @@ int Editor::handle( int event )
         lowercaseLine = lowercaseLine.toLower();
         std::string lowercaseLine2 = lowercaseLine.toChar();
 
-        if(pos = lowercaseLine2.find("setapp(")!=-1)
+        if(pos = lowercaseLine2.find("setapp(") != -1)
           {
           long pos1 = line.find("(",pos);
           if(pos1 != -1)
@@ -969,7 +938,8 @@ int Editor::handle( int event )
                 }
 
               // Search the correct app corresponding to the name
-              ScriptActionManager::ApplicationWrapperListType::const_iterator it = m_Manager->GetApplicationWrapperList()->begin();
+              ScriptActionManager::ApplicationWrapperListType::const_iterator it = 
+                                                m_Manager->GetApplicationWrapperList()->begin();
               while (it != m_Manager->GetApplicationWrapperList()->end())
                 { 
                 if(!strcmp((*it)->GetName().toChar(),app.c_str()))
@@ -977,11 +947,13 @@ int Editor::handle( int event )
                   ApplicationNameType newapp;
                   newapp.first = name;
                   newapp.second = (*it);
-                  std::cout << "Added " << name.c_str() << " = " << (*it)->GetName().toChar() << std::endl;
+                  std::cout << "Added " << name.c_str() << " = " 
+                            << (*it)->GetName().toChar() << std::endl;
                   // Check if the variable is already assigned to a specific application
                   int apppos = -1;
                   bool appexists = false;
-                  std::vector<ApplicationNameType>::const_iterator it2 = m_ApplicationsList.begin();
+                  std::vector<ApplicationNameType>::const_iterator 
+                                               it2 = m_ApplicationsList.begin();
                   while (it2 != m_ApplicationsList.end())
                     {  
                     apppos++;
@@ -1058,7 +1030,8 @@ int Editor::handle( int event )
         {
         m_CurrentWord = "";
         }
-      else if((Fl::event_key()=='.') || (Fl::event_key()==65454)) // if it's a dot and the previous word is in the list of known apps/name
+      else if((Fl::event_key() == '.') || (Fl::event_key() == 65454)) 
+      // if it's a dot and the previous word is in the list of known apps/name
         {
         if (!m_DrawApplicationOptionBrowser)
           {
@@ -1112,35 +1085,34 @@ int Editor::handle( int event )
           {
           if ((Fl::event_key() != FL_Shift_L) &&  (Fl::event_key() != FL_Shift_R))
             {
-            m_CurrentWord +=  Fl::event_key();
+            m_CurrentWord += Fl::event_key();
             }
           }
         }
       
-     ScriptActionManager m_Manager;
-     ScriptAction* m_help = m_Manager.CreateAction(m_CurrentWord.toLower());
-     if (m_help)
-      {
-       m_Helper->value(m_help->Help().toChar());
-       if (MString(m_Helper->value()) != "")
-       {
-         m_Helper->resize(m_Helper->x(),m_Helper->y(),(int)(m_help->Help().length()*4.9),15);
-         m_DrawBrowser = false;
-         m_DrawApplicationBrowser = false;
-         m_DrawApplicationOptionBrowser = false;
-         m_DrawHelper = true;
-       }
-       else
-         {
-         m_DrawHelper = false;
-         }
-       delete m_help;
-      }
-     else
-       {
-       m_DrawHelper = false;
-       }
-
+      ScriptActionManager m_Manager;
+      ScriptAction* m_help = m_Manager.CreateAction(m_CurrentWord.toLower());
+      if (m_help)
+        {
+        m_Helper->value(m_help->Help().toChar());
+        if (MString(m_Helper->value()) != "")
+          {
+          m_Helper->resize(m_Helper->x(),m_Helper->y(),(int)(m_help->Help().length()*4.9),15);
+          m_DrawBrowser = false;
+          m_DrawApplicationBrowser = false;
+          m_DrawApplicationOptionBrowser = false;
+          m_DrawHelper = true;
+          }
+        else
+          {
+          m_DrawHelper = false;
+          }
+        delete m_help;
+        }
+      else
+        {
+        m_DrawHelper = false;
+        }
 
       int m_Offset = -1;
       int currentrating = 0;
@@ -1153,30 +1125,33 @@ int Editor::handle( int event )
         int m_correctword = true;
        
         for (int j=0;j<m_CurrentWord.length();j++)
-        {
+          {
           if ((*it).length() > j)
-          {
+            {
             if ((m_CurrentWord.toLower()[j] != (*it).toLower()[j]))
+              {
               m_correctword = false;
+              }
             else
-             m_rating++;
-          }
+              {
+              m_rating++;
+              }
+            }
           else
-          {
+            {
             m_correctword = false;
+            }
           }
-        }
         
-         
         if ((m_rating != 0) && (m_rating > currentrating) && (m_correctword))
-        {
+          {
           m_Offset = i;
           currentrating = m_rating;
-        }
+          }
 
         i++;
         it++;
-      }
+        }
 
       if (m_Offset != -1)
         {
@@ -1184,7 +1159,6 @@ int Editor::handle( int event )
           {
           m_DrawBrowser = true;
           }
-
         
         Flu_Tree_Browser::Node* m_node = m_Browser->first();
         for (int k=0;k<=m_Offset;k++)
@@ -1212,10 +1186,8 @@ int Editor::handle( int event )
         draw();
         return 1;
         }
+      }
     }
-
-  }
-
   return Fl_Text_Editor::handle( event );
 }
 

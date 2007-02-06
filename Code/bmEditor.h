@@ -5,16 +5,17 @@
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
+
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
-=========================================================================*/
 
-#ifndef __Editor_h_
-#define __Editor_h_
+=========================================================================*/
+#ifndef __bmEditor_h
+#define __bmEditor_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -43,7 +44,7 @@ public:
   ~Editor();
 
   typedef ScriptActionManager::ApplicationWrapperListType ApplicationWrapperListType;
-  typedef std::pair<std::string,ApplicationWrapper*> ApplicationNameType;
+  typedef std::pair<std::string,ApplicationWrapper*>      ApplicationNameType;
 
   static void style_parse(const char *text, char *style, int length);
   static void style_update(int pos,          // I - Position of update
@@ -95,20 +96,20 @@ public:
 
 protected:
 
-  Fl_Text_Buffer* stylebuf;
-  Fl_Text_Buffer* m_Buffer;
+  Fl_Text_Buffer*   m_Stylebuf;
+  Fl_Text_Buffer*   m_Buffer;
   Flu_Tree_Browser* m_Browser;
   Flu_Tree_Browser* m_ApplicationBrowser;
   Flu_Tree_Browser* m_ApplicationOptionBrowser;
-  Fl_Output* m_Helper;
-  bool m_DrawBrowser;
-  bool m_DrawApplicationBrowser;
-  bool m_DrawApplicationOptionBrowser;
-  bool m_DrawHelper;
-  MString m_CurrentWord;
+  Fl_Output*        m_Helper;
+  bool              m_DrawBrowser;
+  bool              m_DrawApplicationBrowser;
+  bool              m_DrawApplicationOptionBrowser;
+  bool              m_DrawHelper;
+  MString           m_CurrentWord;
 
-  void* m_ScriptEditorGUI;
-  ScriptParser* m_Parser;
+  void*                m_ScriptEditorGUI;
+  ScriptParser*        m_Parser;
   ScriptActionManager* m_Manager;
 
   // List of variable use for applications
