@@ -14,11 +14,12 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.6$")
 # BatchMake version number.  An even minor number corresponds to releases.
 SET(BatchMake_VERSION_MAJOR "1")
 SET(BatchMake_VERSION_MINOR "0")
-SET(BatchMake_VERSION_PATCH "0")
+SET(BatchMake_VERSION_PATCH "1")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
 SET(BatchMake_VERSION_STRING "${BatchMake_VERSION_MAJOR}.${BatchMake_VERSION_MINOR}")
+SET(BatchMake_EXTENDED_VERSION_STRING "${BatchMake_VERSION_MAJOR}.${BatchMake_VERSION_MINOR}.${BatchMake_VERSION_PATCH}")
 
 # Disable MSVC 8 warnings
 IF(WIN32)
@@ -191,6 +192,10 @@ CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Documentation/Doxygen/doxygen.config.in
 CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/Documentation/Doxygen/itkdoxygen.pl.in
                ${BatchMake_BINARY_DIR}/itkdoxygen.pl)
 
+CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/bmConfigure.h.in 
+               ${BatchMake_BINARY_DIR}/bmConfigure.h)
+
+INSTALL(FILES ${BatchMake_BINARY_DIR}/bmConfigure.h DESTINATION source)
 INSTALL(FILES CMakeLists.txt DESTINATION source)
 INSTALL(FILES Copyright.txt DESTINATION source)
 INSTALL(FILES ReadMe.txt DESTINATION source)

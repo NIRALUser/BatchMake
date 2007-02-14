@@ -25,7 +25,7 @@
   #include "bmGrid.h"
 #endif
 
-#define BatchMakeVersion "1.0"
+#include "bmConfigure.h"
 
 int main(int argc, char **argv)
 {
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     // Create a UI object
     bm::ScriptEditorGUIControls* ui = new bm::ScriptEditorGUIControls();
     MString m_windowtitle("BatchMake - ");
-    m_windowtitle += BatchMakeVersion;
+    m_windowtitle += BatchMake_EXTENDED_VERSION_STRING;
     ui->g_Scripteditorgui->label(m_windowtitle.toChar());
     ui->SetApplicationPath(m_ApplicationPath);
     // Initialize FLTK
@@ -60,8 +60,8 @@ int main(int argc, char **argv)
     MetaCommand command;
   
     command.SetName("BatchMake");
-    command.SetVersion(BatchMakeVersion);
-    command.SetAuthor("CADDLab @ UNC & Kitware Inc");
+    command.SetVersion(BatchMake_EXTENDED_VERSION_STRING);
+    command.SetAuthor("Kitware Inc");
     command.SetDescription("BatchMake");
 
     // Compile a script
