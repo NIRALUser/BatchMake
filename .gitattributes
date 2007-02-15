@@ -1,5 +1,6 @@
 .git*            export-ignore
 
+*.bmp           -crlf
 *.gif           -crlf
 *.ico           -crlf
 *.png           -crlf
