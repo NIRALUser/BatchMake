@@ -222,7 +222,7 @@ SET(CPACK_PACKAGE_INSTALL_DIRECTORY "BatchMake ${BatchMake_VERSION_MAJOR}.${Batc
 IF(WIN32 AND NOT UNIX)
   # There is a bug in NSI that does not handle full unix paths properly. Make
   # sure there is at least one set of four (4) backlasshes.
-  SET(CPACK_PACKAGE_ICON "${BatchMake_SOURCE_DIR}/Web/images\\\\InstallImage.bmp")
+  SET(CPACK_PACKAGE_ICON "${BatchMake_SOURCE_DIR}/Documentation/images\\\\InstallImage.bmp")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "relwithdebinfo\\\\BatchMake.exe")
   SET(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} The Batch Processing Scripting Tool")
   SET(CPACK_NSIS_HELP_LINK "http:\\\\\\\\public.kitware.com/BatchMake")
