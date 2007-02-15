@@ -509,7 +509,8 @@ void Grid::WriteGAD()
           // Extract the values
           std::vector<std::string> values;
           unsigned int startWord = 0;
-          for(unsigned int i=0;i<value.size();i++)
+          unsigned int i;
+          for(i=0;i<value.size();i++)
             {
             if(value[i]=='\"')
               {
@@ -537,7 +538,7 @@ void Grid::WriteGAD()
 
 
           std::vector<std::string>::const_iterator itV=values.begin();
-          unsigned int i=0;
+          i=0;
           while(itV!=values.end())
             {
             if(itV==values.begin())

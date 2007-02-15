@@ -43,7 +43,8 @@ protected:
   void CreateLoop();
 
   std::vector<ScriptAction*> m_Action;
-  std::vector<std::vector<MString>> m_Folds;
+  typedef std::vector<MString> MStringVectorType;
+  std::vector<MStringVectorType> m_Folds;
 
 };
 

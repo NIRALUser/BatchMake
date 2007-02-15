@@ -484,7 +484,8 @@ std::string HttpRequest::Send(std::string url)
   unsigned long textLenght = 0;
 
   std::string m_text;
-  for (unsigned int i=0;i<m_ParamList.size();i++)
+  unsigned int i=0;
+  for (i=0;i<m_ParamList.size();i++)
     {
     m_text += "--29772313742745\n";
     m_text += "Content-Disposition: form-data; name=\"";
@@ -494,7 +495,7 @@ std::string HttpRequest::Send(std::string url)
     m_text += m_ParamList[i].value;
     m_text += "\r\n";
     }
-  for(unsigned int i=0;i<m_Filenames.size();i++)
+  for(i=0;i<m_Filenames.size();i++)
     {
     FilePairType p = m_Filenames[i];
     std::string m_file = CreateFile(p.first,p.second);

@@ -16,6 +16,7 @@
 #include "bmApplicationListGUIControls.h"
 #include "bmApplicationWrapperGUIControls.h"
 #include <FL/fl_ask.H>
+#include <itksys/SystemTools.hxx>
 
 namespace bm {
 
@@ -121,7 +122,7 @@ void ApplicationListGUIControls::OnRemove()
   app += "/Applications/";
   app += wrapper->GetName().toChar();
   app += ".bmm";
-  std::remove(app.c_str());
+  itksys::SystemTools::RemoveFile(app.c_str());
 
   // Remove from the applications list
   m_applicationlist->erase(it);
