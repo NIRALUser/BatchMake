@@ -68,8 +68,8 @@ void ScriptRunAction::ParseXMLOutput(const char* output)
 
   if(begin == -1 || end == -1)
     {
-    std::cout << "ScriptRunAction::ParseXMLOutput cannot find XML description" 
-              << std::endl;
+    //std::cout << "ScriptRunAction::ParseXMLOutput cannot find XML description" 
+    //          << std::endl;
     return;
     }
 
