@@ -79,8 +79,7 @@ void ApplicationListGUIControls::OnAccept()
 
 void ApplicationListGUIControls::OnSelectDir()
 {
-  char* fDir = fl_dir_chooser("Select a directory where the description of the application should go"
-                               ,"", NULL);
+  char* fDir = fl_dir_chooser("Select a directory where the description of the application should go","");
 
   if(fDir)
     {
