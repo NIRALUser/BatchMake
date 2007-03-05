@@ -52,11 +52,10 @@ ScriptParser::~ScriptParser()
   delete m_Error;
 }
 
-void ScriptParser::SetApplicationPath(MString applicationpath)
+void ScriptParser::SetBatchMakeBinaryPath(MString applicationpath)
 {
  m_ApplicationPath = applicationpath;
  m_ScriptActionManager->SetApplicationPath(m_ApplicationPath);
- LoadWrappedApplication(m_ApplicationPath);
 }
 
 void ScriptParser::SetScriptPath(MString scriptpath)
@@ -65,7 +64,7 @@ void ScriptParser::SetScriptPath(MString scriptpath)
   m_ScriptActionManager->SetScriptFullPath(scriptpath.toChar());
 }
 
-void  ScriptParser::LoadWrappedApplication(MString applicationpath) 
+void ScriptParser::LoadWrappedApplication(MString applicationpath) 
 {
   if(m_ApplicationList)
     {
@@ -75,7 +74,8 @@ void  ScriptParser::LoadWrappedApplication(MString applicationpath)
 
   itksys::Directory directory;
   std::string dirpath = applicationpath.toChar();
-  dirpath += "/Applications/";
+  dirpath += "/";
+
   if(directory.Load(dirpath.c_str()))
     {
     for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
@@ -85,55 +85,17 @@ void  ScriptParser::LoadWrappedApplication(MString applicationpath)
         {
         std::string file = directory.GetFile(i);
         ApplicationWrapper* m_newapplication = new ApplicationWrapper();  
-        m_newapplication->Load(applicationpath + "/Applications/" + file.c_str());
+        m_newapplication->Load(applicationpath + "/" + file.c_str());
         m_ApplicationList->push_back(m_newapplication);
         }
       }
     }
-
-  /*#ifdef WIN32
-   WIN32_FIND_DATA File;
-   HANDLE hSearch;
-   int re;
-   hSearch=FindFirstFile((applicationpath+ "/Applications/*.*").toChar(),&File);
-   if (hSearch != INVALID_HANDLE_VALUE)
-   {
-    re=true;
-    while(re)
+  else
     {
-      re = FindNextFile(hSearch,&File);
-      if (re)
-      {
-        if (MString(File.cFileName) != "..")
-        {
-          ApplicationWrapper* m_newapplication = new ApplicationWrapper();
-          m_newapplication->Load(applicationpath + "/Applications/" + MString(File.cFileName));
-          m_ApplicationList->push_back(m_newapplication);
-        }
-      }
+    std::cout << "Applications directory: " << dirpath.c_str() << " doesn't exist" << std::endl;
     }
-    FindClose(hSearch);
-   }
-  #else
-    DIR *d;
-    struct dirent * dir;
-    d = opendir((applicationpath + "/Applications/").toChar());
-    if (d)
-    {
-      while((dir = readdir(d)) != NULL)
-      {
-       if (MString(dir->d_name).rend(".") == ".bmm")
-       {
-          ApplicationWrapper* m_newapplication = new ApplicationWrapper();  
-          m_newapplication->Load(applicationpath + "/Applications/" + MString(dir->d_name));
-          m_ApplicationList->push_back(m_newapplication);
-       }
-      }
-    }
-  #endif*/
 
  m_ScriptActionManager->SetApplicationWrapperList(m_ApplicationList);
-
 }
 
 std::vector<ApplicationWrapper*>* ScriptParser::GetApplicationList()

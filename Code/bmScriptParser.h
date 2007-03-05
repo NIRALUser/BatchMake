@@ -49,7 +49,7 @@ public:
   bool Parse();
   void SetError(ScriptError* error);
   bool Execute();
-  void SetApplicationPath(MString applicationpath);
+  void SetBatchMakeBinaryPath(MString applicationpath);
   void SetScriptPath(MString scriptpath);
   void SetProgressManager(ProgressManager* progressmanager);
   bool Execute(MString filename,unsigned long pos=0);

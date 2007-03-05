@@ -27,6 +27,8 @@ public:
   virtual void OnEdit() = 0;
   virtual void OnRemove() = 0;
   virtual void OnSelect() = 0;
+  virtual void OnChangePath() = 0;
+  virtual void OnSelectDir() = 0;
 };
 
 } // end namespace bm

@@ -23,8 +23,12 @@
 #include "bmApplicationListGUI.h"
 #include "ApplicationWrapper.h"
 #include <vector>
+#include <vector>
+#include "XMLIniIO.h"
 
 namespace bm {
+
+class ScriptEditorGUIControls;
 
 class ApplicationListGUIControls : public ApplicationListGUI
 {
@@ -33,7 +37,7 @@ public:
   ApplicationListGUIControls();
   ~ApplicationListGUIControls();
 
-  void SetApplicationPath(MString applicationpath);
+  void SetWrappedApplicationPath(MString applicationpath);
   void SetApplicationList(std::vector<ApplicationWrapper*>*);
   void Show();
   void OnAccept();
@@ -41,12 +45,18 @@ public:
   void OnNew();
   void OnRemove();
   void OnSelect();
+  void OnSelectDir();
+  void OnChangePath();
   void Update(MString name);
   void UpdateNew(ApplicationWrapper* wrapper);
 
+  /** Pass a pointer to the ini file so we can modify it */
+  void SetEditorGUI(ScriptEditorGUIControls* editor) {m_EditorGUI = editor;}
+
 private:
   std::vector<ApplicationWrapper*>* m_applicationlist;
-  MString m_applicationpath;
+  MString m_WrappedApplicationsPath;
+  ScriptEditorGUIControls* m_EditorGUI;
 
 };
 

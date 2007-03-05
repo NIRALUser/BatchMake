@@ -19,7 +19,6 @@
 #include "bmProgressManagerGUI.h"
 #include "bmProgressGUIControls.h"
 #include "bmApplicationListGUIControls.h"
-#include "XMLIniIO.h"
 
 #include <iostream>
 #include <FL/Fl_File_Chooser.H>
@@ -28,7 +27,7 @@
 #include <FL/Fl_Timer.H>
 
 #include "bmLaunch.h"
-
+#include "bmConfigure.h"
 
 #ifndef WIN32
  #include <dirent.h>
@@ -59,20 +58,25 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
 #ifdef BM_GRID
   m_CondorWatcher = new CondorWatcher;
 #endif
+
+  m_WrappedApplicationsPath = "/Applications";
+  m_InitFile = new XMLIniIO();
 }
 
 ScriptEditorGUIControls::~ScriptEditorGUIControls()
 {
   delete m_Parser;
+  delete m_InitFile;
+
 #ifdef BM_GRID
   delete m_CondorWatcher;
 #endif
 }
 
-void ScriptEditorGUIControls::SetApplicationPath(MString applicationpath)
+void ScriptEditorGUIControls::SetBatchMakeBinaryPath(MString applicationpath)
 {
   m_ApplicationPath = applicationpath;
-  m_Parser->SetApplicationPath(m_ApplicationPath);
+  m_Parser->SetBatchMakeBinaryPath(m_ApplicationPath);
 }
 
 
@@ -125,21 +129,26 @@ void ScriptEditorGUIControls::Show()
   }
 #endif
 
-  std::cout << "BatchMake 1.0.0 by Kitware Inc." << std::endl;
+  std::cout << "BatchMake " << BatchMake_EXTENDED_VERSION_STRING 
+            << " by Kitware Inc." << std::endl;
 
   //Load .ini
-  XMLIniIO* m_inifile = new XMLIniIO();
-  m_inifile->SetFileName(m_ApplicationPath + "/BatchMake.ini");
-  if (m_inifile->Read() != -1)
-  {
-    MString m_inivalue = m_inifile->Find("Test .ini value");
-    //std::cout << "Ini value: " << m_inivalue.toChar() << std::endl;
-  }
-  else
-  {
-    m_inifile->Update("Test .ini value","Seems to work!");
-    m_inifile->Write();
-  }
+  m_InitFile->SetFileName(m_ApplicationPath + "/BatchMake.ini");
+  if (m_InitFile->Read() != -1)
+    {
+    MString wrappedApplicationPath = m_InitFile->Find("WrappedApplicationsPath");
+    if(wrappedApplicationPath.GetValue().size()>0)
+      {      
+      m_WrappedApplicationsPath = wrappedApplicationPath.toChar();  
+      }  
+    }
+  else // if the init file doesn't exist we write the default value
+    {
+    std::string apppath = m_ApplicationPath.toChar();
+    apppath += "/Applications";
+    m_InitFile->Update("WrappedApplicationsPath",apppath.c_str());
+    m_InitFile->Write();
+    }
 
   g_Scripteditorgui->show();
   m_Title = MString(g_Scripteditorgui->label()) + " [script]";
@@ -290,7 +299,9 @@ void ScriptEditorGUIControls::OnExecute()
 void ScriptEditorGUIControls::OnApplicationWrapper()
 {
   ApplicationListGUIControls* ui = new ApplicationListGUIControls();
-  ui->SetApplicationPath(m_ApplicationPath);
+  m_Parser->LoadWrappedApplication(m_WrappedApplicationsPath);
+  ui->SetEditorGUI(this);
+  ui->SetWrappedApplicationPath(m_WrappedApplicationsPath);
   ui->SetApplicationList(m_Parser->GetApplicationList());
   ui->Show();
 }

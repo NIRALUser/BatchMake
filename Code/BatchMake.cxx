@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     MString m_windowtitle("BatchMake - ");
     m_windowtitle += BatchMake_EXTENDED_VERSION_STRING;
     ui->g_Scripteditorgui->label(m_windowtitle.toChar());
-    ui->SetApplicationPath(m_ApplicationPath);
+    ui->SetBatchMakeBinaryPath(m_ApplicationPath);
     // Initialize FLTK
     Fl::visual(FL_DOUBLE|FL_INDEX); 
     Fl::background(236,233,216);
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
       std::string filename = command.GetValueAsString("compileScript","filename");
       std::cout << "Compiling ..." << std::endl;
       bm::ScriptParser m_Parser;
-      m_Parser.SetApplicationPath(m_ApplicationPath);
+      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
       m_Parser.Compile(filename);
       return 0;
       }
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
       std::string filename = command.GetValueAsString("executeScript","filename");
       std::cout << "Executing ..." << std::endl;
       bm::ScriptParser m_Parser;
-      m_Parser.SetApplicationPath(m_ApplicationPath);
+      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
       m_Parser.Execute(filename);
       return 0;
       }

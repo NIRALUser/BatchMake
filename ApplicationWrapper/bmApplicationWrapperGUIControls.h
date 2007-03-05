@@ -50,16 +50,16 @@ public:
   void DisplayExample();
   void Refresh();
   void SetApplicationWrapper(ApplicationWrapper*);
-  void SetApplicationPath(MString applicationpath);
+  void SetWrappedApplicationsPath(MString applicationpath);
   void SetApplicationListGUIControls(ApplicationListGUIControls* applicationlistguicontrols);
   void AutomaticCommandLineParsing();
 
 private:
-  ApplicationWrapper* m_applicationwrapper;
-  MString m_currentname;
-  MString m_currentfilename;
-  MString m_applicationpath;
-  ApplicationListGUIControls* m_applicationlistguicontrols;
+  ApplicationWrapper* m_Applicationwrapper;
+  MString m_Currentname;
+  MString m_Currentfilename;
+  MString m_WrappedApplicationsPath;
+  ApplicationListGUIControls* m_Applicationlistguicontrols;
 };
 
 } // end namespace bm

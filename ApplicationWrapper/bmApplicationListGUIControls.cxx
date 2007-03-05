@@ -12,11 +12,14 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
-
+#include "bmScriptEditorGUIControls.h" // should be first
 #include "bmApplicationListGUIControls.h"
 #include "bmApplicationWrapperGUIControls.h"
+
 #include <FL/fl_ask.H>
 #include <itksys/SystemTools.hxx>
+#include <FL/Fl_File_Chooser.H>
+
 
 namespace bm {
 
@@ -31,6 +34,8 @@ ApplicationListGUIControls::ApplicationListGUIControls()
   g_list->show_root( false );
   g_list->insertion_mode(FLU_INSERT_BACK);
   g_list->selection_color(97);
+  m_WrappedApplicationsPath = "/Applications";
+  m_EditorGUI = NULL;  
 }
 
 ApplicationListGUIControls::~ApplicationListGUIControls()
@@ -38,9 +43,9 @@ ApplicationListGUIControls::~ApplicationListGUIControls()
 }
 
 
-void ApplicationListGUIControls::SetApplicationPath(MString applicationpath)
+void ApplicationListGUIControls::SetWrappedApplicationPath(MString applicationpath)
 {
-  m_applicationpath = applicationpath;
+  m_WrappedApplicationsPath = applicationpath;
 }
 
 void ApplicationListGUIControls::SetApplicationList(std::vector<ApplicationWrapper*>* applicationlist)
@@ -48,18 +53,22 @@ void ApplicationListGUIControls::SetApplicationList(std::vector<ApplicationWrapp
   m_applicationlist = applicationlist;
   //Update list
   for (unsigned int i=0;i<m_applicationlist->size();i++)
-  {
+    {
     g_list->add((*m_applicationlist)[i]->GetName().toChar());
-    if (i ==0)
+    if (i==0)
+      {
       g_list->select_all();
-  }
-
+      }
+    }
 }
 
 void ApplicationListGUIControls::Show()
 {
+  g_path->value(m_WrappedApplicationsPath.toChar());
   if(!g_Applicationlistgui->shown())
+    {
     g_Applicationlistgui->show();
+    }
 }
 
 void ApplicationListGUIControls::OnAccept()
@@ -67,11 +76,39 @@ void ApplicationListGUIControls::OnAccept()
   g_Applicationlistgui->hide();
 }
 
+
+void ApplicationListGUIControls::OnSelectDir()
+{
+  char* fDir = fl_dir_chooser("Select a directory where the description of the application should go"
+                               ,"", NULL);
+
+  if(fDir)
+    {
+    g_path->value(fDir);
+    this->OnChangePath();
+    }
+}
+
+void ApplicationListGUIControls::OnChangePath()
+{
+  const char* fDir = g_path->value();
+  if(m_EditorGUI)
+    {
+    g_list->clear();
+    m_EditorGUI->GetInitFile()->Update("WrappedApplicationsPath",fDir);
+    m_EditorGUI->GetInitFile()->Write();
+    m_EditorGUI->SetWrappedApplicationsPath(fDir);
+    m_EditorGUI->GetParser()->LoadWrappedApplication(m_WrappedApplicationsPath);
+    this->SetApplicationList(m_EditorGUI->GetParser()->GetApplicationList());
+    }
+  m_WrappedApplicationsPath = fDir;
+}
+
 void ApplicationListGUIControls::OnNew()
 {
   ApplicationWrapperGUIControls* ui = new ApplicationWrapperGUIControls();
   ui->SetApplicationListGUIControls(this);
-  ui->SetApplicationPath(m_applicationpath);
+  ui->SetWrappedApplicationsPath(m_WrappedApplicationsPath);
   ui->Show();
 }
 
@@ -88,7 +125,7 @@ void ApplicationListGUIControls::OnEdit()
   ApplicationWrapperGUIControls* ui = new ApplicationWrapperGUIControls();
 
   ui->SetApplicationListGUIControls(this);
-  ui->SetApplicationPath(m_applicationpath);
+  ui->SetWrappedApplicationsPath(m_WrappedApplicationsPath);
   ui->SetApplicationWrapper((*m_applicationlist)[m_index]);
   ui->Refresh();
   g_Applicationlistgui->hide();
@@ -118,8 +155,8 @@ void ApplicationListGUIControls::OnRemove()
     }
   
   ApplicationWrapper* wrapper = *it;
-  std::string app = m_applicationpath.toChar();
-  app += "/Applications/";
+  std::string app = m_WrappedApplicationsPath.toChar();
+  app += "/";
   app += wrapper->GetName().toChar();
   app += ".bmm";
   itksys::SystemTools::RemoveFile(app.c_str());

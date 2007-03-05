@@ -25,6 +25,7 @@
 #include "bmScriptParser.h"
 #include "ApplicationWrapper.h"
 #include <vector>
+#include "XMLIniIO.h"
 
 #ifdef BM_GRID
   #include "CondorWatcher.h"
@@ -38,7 +39,7 @@ public:
   ScriptEditorGUIControls();
   ~ScriptEditorGUIControls();
 
-  void SetApplicationPath(MString applicationpath);
+  void SetBatchMakeBinaryPath(MString applicationpath);
 
   void Show();
  
@@ -55,9 +56,18 @@ public:
 
   static void Timer(void*);
 
+  XMLIniIO* GetInitFile() {return m_InitFile;}
+  void SetWrappedApplicationsPath(const char* app)
+    {
+    m_WrappedApplicationsPath = app;
+    }
+
+  ScriptParser* GetParser() {return m_Parser;}
+
   Fl_Text_Buffer* m_Errorbuffer;
 
 protected:
+
   MString m_Filename;
   ScriptParser* m_Parser;
   ScriptErrorGUI* m_Errorgui;
@@ -69,6 +79,9 @@ protected:
   CondorWatcher* m_CondorWatcher;
 #endif
   std::string m_SplashBuffer;
+
+  XMLIniIO* m_InitFile;
+  std::string m_WrappedApplicationsPath;
 };
 
 } // end namespace bm
