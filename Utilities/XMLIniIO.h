@@ -19,7 +19,7 @@ public:
   int Read();
   int Write();
   MString Find(MString balise);
-  void Update(MString balise,char* value);
+  void Update(MString balise,const char* value);
   void Update(MString balise,MString value);
   void Update(MString balise,bool value);
   void Remove(MString balise);

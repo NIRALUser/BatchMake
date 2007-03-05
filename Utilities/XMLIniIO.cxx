@@ -62,9 +62,9 @@ MString XMLIniIO::Find(MString balise)
   return "";
 }
 
-void XMLIniIO::Update(MString balise,char* value)
+void XMLIniIO::Update(MString balise,const char* value)
 {
-    Update(balise,MString(value));
+  Update(balise,MString(value));
 }
 
 
