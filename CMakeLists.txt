@@ -14,7 +14,7 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.6$")
 # BatchMake version number.  An even minor number corresponds to releases.
 SET(BatchMake_VERSION_MAJOR "1")
 SET(BatchMake_VERSION_MINOR "0")
-SET(BatchMake_VERSION_PATCH "1")
+SET(BatchMake_VERSION_PATCH "2")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
