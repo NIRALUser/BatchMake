@@ -100,7 +100,7 @@ private:
   std::string m_DataDirectory;
   int         m_DependsOn;
   std::string m_DependencyTag;
-  int        m_SingleNode;
+  int         m_SingleNode;
 };
 
 #endif

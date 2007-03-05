@@ -467,11 +467,13 @@ void ApplicationWrapperGUIControls::OnReject()
  *  supports -vxml option */
 void ApplicationWrapperGUIControls::AutomaticCommandLineParsing()
 {
-
   // Run the application
-  std::string program = g_path->value();
-  m_applicationwrapper->AutomaticCommandLineParsing( program.c_str() );
-  
+  if(g_runapp->value())
+    {
+    std::string program = g_path->value();
+    m_applicationwrapper->AutomaticCommandLineParsing( program.c_str() );
+    }
+
   g_moduleversion->value(m_applicationwrapper->GetVersion().toChar());
   g_modulename->value(m_applicationwrapper->GetName().toChar());
   

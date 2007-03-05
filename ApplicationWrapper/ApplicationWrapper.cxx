@@ -18,6 +18,10 @@
 #include "XMLWriter.h"
 #include "XMLReader.h"
 
+#include <itksys/Directory.hxx>
+#include <itksys/SystemTools.hxx>
+#include <itksys/Process.h>
+
 #include "metaCommand.h"
 
 #ifndef WIN32
@@ -501,188 +505,72 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader)
  *  supports -vxml option */
 void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
 {
-
   // Run the application
   std::string path = _path;
   std::string program = path;
-  std::string arguments = "-vxml";
-  std::cout << "Running = " << program.c_str() << " " << arguments.c_str() << std::endl;
+  std::string vxmlarg = "-vxml";
+  std::cout << "Running = " << program.c_str() << " " << vxmlarg.c_str() << std::endl;
   std::string m_output = "";
   unsigned int i=0;
 
-#ifdef WIN32
-  char buffer[BUFSIZ+1];
+  // Extract the arguments from the command line
+  // Warning: Only works for one space between arguments
+  std::vector<const char*> args;
+  args.push_back(path.c_str());
+  args.push_back(vxmlarg.c_str());
+  args.push_back(0);
 
-  STARTUPINFO si;
-  PROCESS_INFORMATION pi;
- 
-  SECURITY_ATTRIBUTES tmpSec;
-  ZeroMemory( &tmpSec, sizeof(tmpSec) );
-  tmpSec.nLength = sizeof(tmpSec);
-  tmpSec.bInheritHandle = true;
-  HANDLE hReadPipe;
-  HANDLE hWritePipe;
+  // Run the application
+  itksysProcess* gp = itksysProcess_New();
+  //itksysProcess_SetPipeShared(gp, itksysProcess_Pipe_STDOUT, 1);
+  //itksysProcess_SetPipeShared(gp, itksysProcess_Pipe_STDERR, 1);
+  itksysProcess_SetCommand(gp, &*args.begin());
+  itksysProcess_SetOption(gp,itksysProcess_Option_HideWindow,1);
 
-  SECURITY_ATTRIBUTES  sa;
-  ZeroMemory( &sa, sizeof(sa) );
-  sa.nLength = sizeof(sa);
-  sa.bInheritHandle = true;
+  itksysProcess_Execute(gp);
 
+  char* data = NULL;
+  int length;
+  double timeout = 255;
 
-  SECURITY_ATTRIBUTES  sa2;
-  ZeroMemory( &sa2, sizeof(sa2) );
-  sa2.nLength = sizeof(sa);
-  sa2.bInheritHandle = true;
-
-  CreatePipe(&hReadPipe,&hWritePipe,&sa,0);
-
-  ZeroMemory( &si, sizeof(si) );
-  si.cb = sizeof(si);
-  si.dwFlags = STARTF_USESTDHANDLES;
-  si.hStdOutput = hWritePipe; //output;
-  ZeroMemory( &pi, sizeof(pi) );
-
-  memset(buffer,'\0',sizeof(buffer)); 
-  
-  std::string commandline = program;
-  commandline += " ";
-  commandline += arguments;
-
-  // Start the child process. 
-  if( !CreateProcess( NULL,       // No module name (use command line). 
-      (char*)commandline.c_str(),  // Command line. 
-      NULL,                       // Process handle not inheritable. 
-      NULL,                       // Thread handle not inheritable. 
-      TRUE,                       // Set handle inheritance to FALSE. 
-      0,                          //CREATE_NEW_PROCESS_GROUP,  // No creation flags. 
-      NULL,                       // Use parent's environment block. 
-      NULL,                       // Use parent's starting directory. 
-      &si,                        // Pointer to STARTUPINFO structure.
-      &pi )                       // Pointer to PROCESS_INFORMATION structure.
-  ) 
+  while(itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
     {
-    std::cout << "AutomaticCommandLineParsing - CreateProcess failed!" << std::endl;
-    return;
-    }
-
-  CloseHandle(hWritePipe);
-
-  // Wait until child process exits.
-  bool m_run = true;
-
-
-  while(m_run)
-  {
-  unsigned long m_nbread = 0;
-  unsigned long m_nberrorread = 0;
-  unsigned long m_nbtoread = 512;
-  unsigned long m_nbtoreaderror = 512;
-  int m_read = 0;
-  int m_readerror = 0;
-  unsigned long m_nbreaded = 0;
-  unsigned long m_nberrorreaded = 0;
-
-  if (WaitForSingleObject( pi.hProcess, 500 )  == 0)
-    {
-    m_run = false;
-    }
-
-  PeekNamedPipe(hReadPipe,buffer,sizeof(buffer),&m_nbtoread,&m_nbread,NULL); 
-
-  int val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL); 
-  while (m_nbread > 0 && val)
-    {
-    for (unsigned int k=0;k<m_nbreaded;k++)
+    for(int i=0;i<length;i++)
       {
-      if (buffer[k] != '\r')
-        {
-        m_output += buffer[k];
-        }
+      m_output += data[i];
       }
-    memset(buffer,'\0',sizeof(buffer));
-    val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL);
     }
-  } 
+  itksysProcess_WaitForExit(gp, 0);
 
-  //Terminate Process
-  TerminateProcess(pi.hProcess,0);
-
-  CloseHandle(hReadPipe);
-
-  CloseHandle( pi.hProcess );
-  CloseHandle( pi.hThread );
-
-#else  
-  int stdin_pipe[2];
-  int stdout_pipe[2];
-  char buffer[BUFSIZ+1];
-  int fork_result;
-  int data_processed;
-  int nchars = 0;
-  int status = 0;
-
-  memset(buffer,'\0',sizeof(buffer));
-
-  if ( (pipe(stdin_pipe)==0)   
-        && (pipe(stdout_pipe)==0)      )
+  int result = 1;
+  switch(itksysProcess_GetState(gp))
     {
-    fork_result = fork();
-    if (fork_result == -1)
+    case itksysProcess_State_Exited:
       {
-      std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
-      exit(EXIT_FAILURE);
-      }  
-    else if (fork_result == 0)
-      { 
-      // This is the child
-      close(0);
-      dup(stdin_pipe[0]);
-      close(stdin_pipe[0]);
-      close(stdin_pipe[1]);
-      close(1);      
-      dup(stdout_pipe[1]);     
-      close(stdout_pipe[0]); 
-      close(stdout_pipe[1]);      
-      close(2);   
-
-      fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
-
-      //if (execlp(program.c_str(),program.c_str(),"",NULL) == -1)
-      if (execlp(program.c_str(),program.c_str(),arguments.c_str(),NULL) == -1)
-        {         
-        if (errno == 2)
-          {
-          std::cout << "Program not found : " << program  << std::endl;
-          }
-        }
-      exit(EXIT_FAILURE);
-      } 
-    else   
+      result = itksysProcess_GetExitValue(gp);
+      } break;
+    case itksysProcess_State_Error:
       {
-      // This is the parent
-      close(stdin_pipe[0]);
-      close(stdin_pipe[1]);
-      close(stdout_pipe[1]);  
-
-      fcntl(stdout_pipe[0], F_SETFL, O_NONBLOCK);
-
-      while(1)   
-        {      
-        data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
-        if (data_processed != -1)
-          {
-          for (unsigned int k=0;k<strlen(buffer);k++)
-            {
-            m_output += buffer[k];
-            }
-          memset(buffer,'\0',sizeof(buffer));
-          }
-        if ((data_processed == 0) ) break;
-        }
-      close(stdout_pipe[0]);
-      }
-    } 
-#endif
+      std::cerr << "Error: Could not run " << args[0] << ":\n";
+      std::cerr << itksysProcess_GetErrorString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Exception:
+      {
+      std::cerr << "Error: " << args[0]
+                << " terminated with an exception: "
+                << itksysProcess_GetExceptionString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Starting:
+    case itksysProcess_State_Executing:
+    case itksysProcess_State_Expired:
+    case itksysProcess_State_Killed:
+      {
+      // Should not get here.
+      std::cerr << "Unexpected ending state after running " << args[0]
+                << std::endl;
+      } break;
+    }
+  itksysProcess_Delete(gp);
 
   // Analayze the output of the program
   MetaCommand parser;
@@ -690,7 +578,6 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
 
   // Convert the metaCommand to ApplicationWrapper
   this->SetVersion(parser.GetVersion().c_str());
-
 
   // extract the name from the filename
   std::string revname;
