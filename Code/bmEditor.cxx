@@ -544,19 +544,22 @@ void Editor::AddApplicationsToBrowse()
             }
 
           // Search the correct app corresponding to the name
-          ScriptActionManager::ApplicationWrapperListType::const_iterator it = 
-                                                m_Manager->GetApplicationWrapperList()->begin();
-          while (it != m_Manager->GetApplicationWrapperList()->end())
-            { 
-            if(!strcmp((*it)->GetName().toChar(),app.c_str()))
-              {
-              ApplicationNameType newapp;
-              newapp.first = name;
-              newapp.second = (*it);
-              m_ApplicationsList.push_back(newapp);
-              break;
+          if(m_Manager->GetApplicationWrapperList())
+            {
+            ScriptActionManager::ApplicationWrapperListType::const_iterator it = 
+                                                  m_Manager->GetApplicationWrapperList()->begin();
+            while (it != m_Manager->GetApplicationWrapperList()->end())
+              { 
+              if(!strcmp((*it)->GetName().toChar(),app.c_str()))
+                {
+                ApplicationNameType newapp;
+                newapp.first = name;
+                newapp.second = (*it);
+                m_ApplicationsList.push_back(newapp);
+                break;
+                }
+              it++;
               }
-            it++;
             }
           }
         }
