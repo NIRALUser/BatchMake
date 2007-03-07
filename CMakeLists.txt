@@ -73,7 +73,7 @@ SET(BatchMake_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
 SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 # If this is the install version of BathMake we look for the include files
-FIND_PATH(BatchMake_INCLUDE_DIR ApplicationWrapper/ApplicationWrapper.h ${BatchMake_SOURCE_DIR}/../include/BatchMake)
+FIND_PATH(BatchMake_INCLUDE_DIR Code/ApplicationWrapper.h ${BatchMake_SOURCE_DIR}/../include/BatchMake)
 MARK_AS_ADVANCED(FORCE BatchMake_INCLUDE_DIR)
 
 IF(BatchMake_INCLUDE_DIR)
@@ -81,7 +81,6 @@ IF(BatchMake_INCLUDE_DIR)
   ${BatchMake_INCLUDE_DIR}/Code
   ${BatchMake_INCLUDE_DIR}/Grid
   ${BatchMake_INCLUDE_DIR}/Utilities
-  ${BatchMake_INCLUDE_DIR}/ApplicationWrapper
   ${BatchMake_INCLUDE_DIR}/Utilities/Flu
   ${BatchMake_INCLUDE_DIR}/Utilities/Zip
   ${BatchMake_INCLUDE_DIR}/Utilities/CondorWatcher
@@ -94,14 +93,12 @@ ENDIF(BatchMake_INCLUDE_DIR)
 INCLUDE_DIRECTORIES(
   ${BatchMake_SOURCE_DIR}/Code
   ${BatchMake_SOURCE_DIR}/Utilities
-  ${BatchMake_SOURCE_DIR}/ApplicationWrapper
   ${BatchMake_SOURCE_DIR}/Utilities/Flu
   ${BatchMake_SOURCE_DIR}/Utilities/CondorWatcher
   ${BatchMake_BINARY_DIR}/Utilities/CondorWatcher
   ${BatchMake_SOURCE_DIR}/Dashboard
   ${BatchMake_BINARY_DIR}
   ${BatchMake_BINARY_DIR}/Code
-  ${BatchMake_BINARY_DIR}/ApplicationWrapper
 )
 
 # Validation dashboard Support
@@ -134,7 +131,6 @@ ENDIF(BUILD_EXAMPLES)
 #Compile the main libraries
 SUBDIRS(
 Utilities
-ApplicationWrapper
 Code)
 
 
