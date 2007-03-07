@@ -54,6 +54,12 @@ bmSplashScreenControls.h
 bmScriptErrorGUI.h
 bmProgressManagerGUI.h
 bmProgressGUIControls.h
+ApplicationWrapper.h
+ApplicationWrapperParam.h
+bmApplicationListGUIBase.h
+bmApplicationListGUIControls.h
+bmApplicationWrapperGUIBase.h
+bmApplicationWrapperGUIControls.h
 )
 
 #Add Commands
@@ -89,12 +95,24 @@ bmSplashScreenControls.cxx
 bmScriptErrorGUI.cxx
 bmProgressManagerGUI.cxx
 bmProgressGUIControls.cxx
+ApplicationWrapper.cxx
+ApplicationWrapperParam.cxx
+bmApplicationListGUIControls.cxx
+bmApplicationWrapperGUIControls.cxx
 )
 
 SET(BatchMakeLib_GUI_SRCS
 bmProgressGUI.fl
 bmScriptEditorGUI.fl
 bmSplashScreen.fl
+bmApplicationListGUI.fl
+bmApplicationWrapperGUI.fl
+)
+
+
+LINK_LIBRARIES(
+ BatchMakeUtilities
+ ${FLTK_LIBRARIES}
 )
 
 SET(FLTK_WRAP_UI 1)
