@@ -119,8 +119,7 @@ SET(FLTK_WRAP_UI 1)
 FLTK_WRAP_UI( BatchMakeLib ${BatchMakeLib_GUI_SRCS} )
 
 ADD_LIBRARY(BatchMakeLib ${BatchMakeLib_SRCS} ${BatchMakeLib_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES(BatchMakeLib BatchMakeApplicationWrapper)
-ADD_DEPENDENCIES(BatchMakeLib BatchMakeApplicationWrapper)
+ADD_DEPENDENCIES(BatchMakeLib FLU)
 
 IF(GRID_SUPPORT)
   TARGET_LINK_LIBRARIES(BatchMakeLib CondorWatcher BatchMakeGrid)
