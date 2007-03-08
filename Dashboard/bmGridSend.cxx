@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
     {
     if (m_Output.toInt() == 0)
       {
-      std::cout << "Data sent" << std::endl;
+      std::cout << "Command successful." << std::endl;
       }
     else
       {
