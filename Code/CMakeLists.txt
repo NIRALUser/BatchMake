@@ -60,6 +60,8 @@ bmApplicationListGUIBase.h
 bmApplicationListGUIControls.h
 bmApplicationWrapperGUIBase.h
 bmApplicationWrapperGUIControls.h
+bmScriptGetTimeAction.h
+bmScriptGetCurrentDateTimeAction.h
 )
 
 #Add Commands
@@ -99,6 +101,8 @@ ApplicationWrapper.cxx
 ApplicationWrapperParam.cxx
 bmApplicationListGUIControls.cxx
 bmApplicationWrapperGUIControls.cxx
+bmScriptGetTimeAction.cxx
+bmScriptGetCurrentDateTimeAction.cxx
 )
 
 SET(BatchMakeLib_GUI_SRCS

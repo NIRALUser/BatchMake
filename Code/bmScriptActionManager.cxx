@@ -38,6 +38,8 @@
 #include "bmScriptDeleteFileAction.h"
 #include "bmScriptRegExAction.h"
 #include "bmScriptMakeDirectoryAction.h"
+#include "bmScriptGetTimeAction.h"
+#include "bmScriptGetCurrentDateTimeAction.h"
 
 #ifdef BM_GRID
   #include "bmScriptGridSingleNodeAction.h"
@@ -222,6 +224,8 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, SetIdealOutput);
   BM_NEWKEYWORD(_list, RegEx);
   BM_NEWKEYWORD(_list, MakeDirectory);
+  BM_NEWKEYWORD(_list, GetTime);
+  BM_NEWKEYWORD(_list, GetCurrentDateTime);
   BM_NEWKEYWORD(_list, GridSetGrouping);
   BM_NEWKEYWORD(_list, GridMaxNodes);
   BM_NEWKEYWORD(_list, GridTempDirectory);
@@ -256,6 +260,8 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, DeleteFile);
   BM_NEWACTION(option, RegEx);
   BM_NEWACTION(option, MakeDirectory);
+  BM_NEWACTION(option, GetTime);
+  BM_NEWACTION(option, GetCurrentDateTime);
 
 #ifdef BM_GRID
   BM_NEWACTION(option, GridDataHost);
