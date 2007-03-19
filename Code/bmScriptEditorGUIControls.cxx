@@ -150,10 +150,15 @@ void ScriptEditorGUIControls::Show()
     m_InitFile->Write();
     }
 
+  // Load the applications wrapper list
+  m_Parser->LoadWrappedApplication(m_WrappedApplicationsPath);
+
   g_Scripteditorgui->show();
   m_Title = MString(g_Scripteditorgui->label()) + " [script]";
   g_Scripteditorgui->label(m_Title.toChar());
   g_editor->SetParentWindow(g_Scripteditorgui);
+
+
 }
 
 
