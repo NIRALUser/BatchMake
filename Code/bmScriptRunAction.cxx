@@ -153,7 +153,7 @@ void ScriptRunAction::Execute()
   m_launch.Execute(m_Manager->Convert(m_Parameters[1]).removeChar('\''));
   MString m_Output = m_launch.GetOutput();
   MString m_Error = m_launch.GetError();
-  
+
   // Parse the output of the application and set the variables
   this->ParseXMLOutput(m_Output.toChar());
 
@@ -161,9 +161,12 @@ void ScriptRunAction::Execute()
   m_ProgressManager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
   m_ProgressManager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
   
+  // Display only the first 1000 errors in the manager
+  int n=0;
+
   int m_Offset = 0;
   int m_Offset2 = 0;
-  while (m_Offset != -1)
+  while (m_Offset != -1 && n<100)
     {
     m_Offset = m_Output.find("\n");
     m_ProgressManager->AddOutput(m_Output.begin("\n"));
@@ -171,10 +174,12 @@ void ScriptRunAction::Execute()
       {
       m_Output = m_Output.end("\n")+1;
       }
+    n++;
     }
 
   m_Offset = 0;
-  while (m_Offset != -1)
+  n=0;
+  while (m_Offset != -1 && n<100)
     {
     m_Offset = m_Error.find("\n");
     m_ProgressManager->AddError(m_Error.begin("\n"));
@@ -182,6 +187,7 @@ void ScriptRunAction::Execute()
       {
       m_Error = m_Error.end("\n")+1;
       }
+    n++;
     }
 
   m_timer.stop();

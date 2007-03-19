@@ -177,7 +177,7 @@ void Launch::Execute(MString _command)
       do 
         {
         memset(buffer_err,'\0',sizeof(buffer_err)); 
-        ReadFile(hReadErrorPipe, buffer_err,512*2,&m_nberrorreaded,NULL); 
+        ReadFile(hReadErrorPipe, buffer_err,512,&m_nberrorreaded,NULL); 
     
         if (m_nberrorreaded != 0)
           {
@@ -196,7 +196,7 @@ void Launch::Execute(MString _command)
           }
         } while (m_nberrorreaded != 0);
       }
-    } 
+    }
 
   //Terminate Process
   TerminateProcess(pi.hProcess,0);
