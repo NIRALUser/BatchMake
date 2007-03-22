@@ -77,7 +77,6 @@ void Launch::Execute(MString _command)
   sa.nLength = sizeof(sa);
   sa.bInheritHandle = true;
 
-
   SECURITY_ATTRIBUTES  sa2;
   ZeroMemory( &sa2, sizeof(sa2) );
   sa2.nLength = sizeof(sa);
@@ -150,7 +149,6 @@ void Launch::Execute(MString _command)
         {
         memset(buffer,'\0',sizeof(buffer)); 
         ReadFile(hReadPipe, buffer,512,&m_nbreaded,NULL); 
-
         if (m_nbreaded != 0)
           {
           if (m_ProgressManager)
@@ -169,21 +167,23 @@ void Launch::Execute(MString _command)
           }
         }while(m_nbreaded != 0);
       }
-  
+
     memset(buffer_err,'\0',sizeof(buffer_err)); 
     PeekNamedPipe(hReadErrorPipe,buffer_err,sizeof(buffer_err),&m_nbtoreaderror,&m_nberrorread,NULL);
+    
+    unsigned int totalRead = 0;
+
     if (m_nberrorread != 0)
       {
       do 
         {
         memset(buffer_err,'\0',sizeof(buffer_err)); 
         ReadFile(hReadErrorPipe, buffer_err,512,&m_nberrorreaded,NULL); 
-    
         if (m_nberrorreaded != 0)
           {
           if (m_ProgressManager)
             {
-            m_ProgressManager->DisplayError(MString(buffer_err).removeChar('\r'));
+            //m_ProgressManager->DisplayError(MString(buffer_err).removeChar('\r'));
             }
           for (unsigned int k=0;k<strlen(buffer_err);k++)
             {
@@ -194,7 +194,8 @@ void Launch::Execute(MString _command)
             }
           memset(buffer_err,'\0',sizeof(buffer_err)); 
           }
-        } while (m_nberrorreaded != 0);
+        totalRead += m_nberrorreaded;
+        } while (m_nberrorreaded != 0 && totalRead<m_nberrorread);
       }
     }
 
