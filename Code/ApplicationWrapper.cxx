@@ -75,9 +75,29 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
     end = m_SequentialParams.end();
     }
 
+  int currentParam = 1;
+
   while(it != end)
     {
-    if((*it).IsValueDefined())
+    
+    bool valueDefined = (*it).IsValueDefined();
+    if(!valueDefined) // if the value is not defined we check if we have children non-optional
+      {
+      std::vector<ApplicationWrapperParam>::iterator itc = it;
+      while(itc != end)
+        {
+        if((*itc).GetParent() == currentParam
+          && !(*itc).GetOptional()
+          )
+          {
+          valueDefined = true;
+          }
+        itc++;
+        }
+      }
+
+
+    if(valueDefined)
       {
       if(line.size()>0)
         {
@@ -98,6 +118,7 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
         line += (*it).GetValue().toChar();
         }     
       }
+    currentParam++;
     it++;
     }
 
