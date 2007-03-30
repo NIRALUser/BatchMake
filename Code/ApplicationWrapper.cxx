@@ -405,14 +405,26 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)
 MString ApplicationWrapper::GetExampleLine()
 {
   MString m_line = "";
+  std::string applicationPath = m_applicationpath.toChar();
   if (m_applicationpath.length() != 0)
-    m_line = m_applicationpath.rend("/")+1;
+    {
+    if(applicationPath.find("/") != -1)
+      {
+      m_line = m_applicationpath.rend("/")+1;
+      }
+    else
+      {
+      m_line = m_applicationpath;  
+      }  
+    }
   
   for (unsigned int i=0;i<m_params.size();i++)
-  {
+    {
     if (m_params[i].GetParent() == 0)
+      {
       DisplayParam(m_line,i);
-  }
+      }
+    }
 
   return m_line;
 }

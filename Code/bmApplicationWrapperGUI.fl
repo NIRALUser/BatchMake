@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
+version 1.0108 
 header_name {.h} 
 code_name {.cxx}
 class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
@@ -8,7 +8,7 @@ class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
   } {
     Fl_Window g_Applicationwrappergui {
       label {BatchMake - Application Wrapper} open selected
-      xywh {516 127 559 370} type Double
+      xywh {516 127 559 370} type Double resizable
       code0 {\#include "bmApplicationWrapperGUIBase.h"} visible
     } {
       Fl_Button g_selectpath {

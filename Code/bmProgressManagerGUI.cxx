@@ -68,8 +68,8 @@ void ProgressManagerGUI::AddAction(MString name)
   m_group->resizable( NULL );
   m_group->end();
 
-
   std::string title = name.toChar();
+
   long int pos = title.find_last_of("/");
   long int pos2 = title.find_last_of("\\");
   if(pos != -1 || pos2 !=-1)

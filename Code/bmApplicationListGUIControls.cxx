@@ -91,6 +91,7 @@ void ApplicationListGUIControls::OnSelectDir()
 void ApplicationListGUIControls::OnChangePath()
 {
   const char* fDir = g_path->value();
+  m_WrappedApplicationsPath = fDir;
   if(m_EditorGUI)
     {
     g_list->clear();
@@ -100,7 +101,6 @@ void ApplicationListGUIControls::OnChangePath()
     m_EditorGUI->GetParser()->LoadWrappedApplication(m_WrappedApplicationsPath);
     this->SetApplicationList(m_EditorGUI->GetParser()->GetApplicationList());
     }
-  m_WrappedApplicationsPath = fDir;
 }
 
 void ApplicationListGUIControls::OnNew()

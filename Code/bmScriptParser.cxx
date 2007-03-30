@@ -274,11 +274,11 @@ bool ScriptParser::Parse(MString line)
 bool ScriptParser::AddOption(MString option, MString param)
 {
   if (CheckOption(param))
-  {
+    {
     m_ScriptActionManager->SetLineNumber(m_LineNumber);
     m_ScriptActionManager->AddAction(option,GetParams(param));
     return true;
-  }
+    }
   return false;
 }
 
