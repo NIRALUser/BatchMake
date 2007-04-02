@@ -77,20 +77,20 @@ FIND_PATH(BatchMake_INCLUDE_DIR Code/ApplicationWrapper.h ${BatchMake_SOURCE_DIR
 MARK_AS_ADVANCED(FORCE BatchMake_INCLUDE_DIR)
 
 IF(BatchMake_INCLUDE_DIR)
-  INCLUDE_DIRECTORIES(
-  ${BatchMake_INCLUDE_DIR}/Code
-  ${BatchMake_INCLUDE_DIR}/Grid
-  ${BatchMake_INCLUDE_DIR}/Utilities
-  ${BatchMake_INCLUDE_DIR}/Utilities/Flu
-  ${BatchMake_INCLUDE_DIR}/Utilities/Zip
-  ${BatchMake_INCLUDE_DIR}/Utilities/CondorWatcher
-  ${BatchMake_INCLUDE_DIR}/Dashboard
-  ${BatchMake_INCLUDE_DIR}/Code
-)
+  SET(BatchMake_INCLUDE_PATH
+    ${BatchMake_INCLUDE_DIR}/Code
+    ${BatchMake_INCLUDE_DIR}/Grid
+    ${BatchMake_INCLUDE_DIR}/Utilities
+    ${BatchMake_INCLUDE_DIR}/Utilities/Flu
+    ${BatchMake_INCLUDE_DIR}/Utilities/Zip
+    ${BatchMake_INCLUDE_DIR}/Utilities/CondorWatcher
+    ${BatchMake_INCLUDE_DIR}/Dashboard
+    ${BatchMake_INCLUDE_DIR}/Code)
 ENDIF(BatchMake_INCLUDE_DIR)
 
 
-INCLUDE_DIRECTORIES(
+SET(BatchMake_INCLUDE_PATH
+  ${BatchMake_INCLUDE_PATH}
   ${BatchMake_SOURCE_DIR}/Code
   ${BatchMake_SOURCE_DIR}/Utilities
   ${BatchMake_SOURCE_DIR}/Utilities/Flu
@@ -100,6 +100,8 @@ INCLUDE_DIRECTORIES(
   ${BatchMake_BINARY_DIR}
   ${BatchMake_BINARY_DIR}/Code
 )
+
+INCLUDE_DIRECTORIES(${BatchMake_INCLUDE_PATH})
 
 # Validation dashboard Support
 OPTION(DASHBOARD_SUPPORT "Validation Dashboard Support" OFF)
@@ -135,6 +137,10 @@ Code
 Testing/Code
 )
 
+# Export the configuration files
+SUBDIRS(
+Utilities/ExportConfiguration
+)
 
 #-----------------------------------------------------------------------------
 # BatchMake uses KWStyle for checking the coding style
