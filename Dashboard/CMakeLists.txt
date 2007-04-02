@@ -16,6 +16,7 @@ SET(BatchMakeDashboard_HDRS
   bmScriptCreateExperimentAction.h
   bmScriptCreateMethodAction.h   
   bmScriptAddMethodOutputAction.h  
+  bmDashboardSend.h
 )
 
 SET(BatchMakeDashboard_SRCS
@@ -36,7 +37,8 @@ SET(BatchMakeDashboard_SRCS
   bmScriptCreateExperimentAction.cxx
   bmScriptCreateMethodAction.cxx   
   bmScriptAddMethodOutputAction.cxx  
-  bmScriptActionManagerDashboard.cxx  
+  bmScriptActionManagerDashboard.cxx
+  bmDashboardSend.cxx
 )
 
 IF(WIN32)
