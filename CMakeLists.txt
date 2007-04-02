@@ -131,7 +131,9 @@ ENDIF(BUILD_EXAMPLES)
 #Compile the main libraries
 SUBDIRS(
 Utilities
-Code)
+Code
+Testing/Code
+)
 
 
 #-----------------------------------------------------------------------------
