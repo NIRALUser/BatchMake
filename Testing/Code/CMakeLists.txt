@@ -1,5 +1,6 @@
 SET(BATCHMAKE_TESTS ${CXX_TEST_PATH}/BatchMakeTests)
 
+IF(DASHBOARD_SUPPORT)
 SET(BatchMakeTest_SRCS
 bmDashboardSendTest.cxx
 )
@@ -10,4 +11,6 @@ ADD_EXECUTABLE(BatchMakeTests BatchMakeTests.cxx ${BatchMakeTest_SRCS})
 TARGET_LINK_LIBRARIES(BatchMakeTests BatchMakeDashboard)
 
 ADD_DEPENDENCIES(BatchMakeTests BatchMakeDashboard)
+
+ENDIF(DASHBOARD_SUPPORT)
 
