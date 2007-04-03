@@ -47,10 +47,16 @@ SET(BatchMakeDashboard_LIBS
 )
 
 ELSE(WIN32)
-SET(BatchMakeDashboard_LIBS
-  #socket
- nsl
-)
+  CHECK_LIBRARY_EXISTS("c" gethostbyname "" NOT_NEED_LIBNSL)
+  IF(NOT NOT_NEED_LIBNSL)
+    CHECK_LIBRARY_EXISTS_CONCAT("nsl"    gethostbyname  HAVE_LIBNSL)
+  ENDIF(NOT NOT_NEED_LIBNSL)
+  IF(HAVE_LIBNSL)
+    SET(BatchMakeDashboard_LIBS
+      #socket
+     nsl
+    )
+  ENDIF(HAVE_LIBNSL)
 ENDIF(WIN32)
 
 ADD_LIBRARY(BatchMakeDashboard ${BatchMakeDashboard_SRCS})
