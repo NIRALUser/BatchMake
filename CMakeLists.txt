@@ -110,6 +110,10 @@ IF(DASHBOARD_SUPPORT)
   INCLUDE_DIRECTORIES(
   ${BatchMake_SOURCE_DIR}/Dashboard
   )
+  SET(BatchMake_LIBRARIES
+  ${BatchMake_LIBRARIES}
+  BatchMakeDashboard
+  )
   SUBDIRS(Dashboard)
 ENDIF(DASHBOARD_SUPPORT)
 
@@ -120,6 +124,10 @@ IF(GRID_SUPPORT)
   INCLUDE_DIRECTORIES(
   ${BatchMake_SOURCE_DIR}/Grid
   )
+  SET(BatchMake_LIBRARIES
+  ${BatchMake_LIBRARIES}
+  BatchMakeGrid
+  )
   SUBDIRS(Grid)
 ENDIF(GRID_SUPPORT)
 
@@ -129,7 +137,6 @@ IF(BUILD_EXAMPLES)
   SUBDIRS(Examples)
 ENDIF(BUILD_EXAMPLES)
 
-
 #Compile the main libraries
 SUBDIRS(
 Utilities
@@ -137,10 +144,17 @@ Code
 Testing/Code
 )
 
+SET(BatchMake_LIBRARIES
+${BatchMake_LIBRARIES}
+ BatchMakeLib
+ BatchMakeUtilities
+)
+
 # Export the configuration files
 SUBDIRS(
 Utilities/ExportConfiguration
 )
+
 
 #-----------------------------------------------------------------------------
 # BatchMake uses KWStyle for checking the coding style
