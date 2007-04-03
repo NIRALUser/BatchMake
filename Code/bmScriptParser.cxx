@@ -158,7 +158,7 @@ bool  ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
     position++;
     }
 
-  delete data;
+  delete [] data;
   m_file.close();
 
   if(!isInclude)
