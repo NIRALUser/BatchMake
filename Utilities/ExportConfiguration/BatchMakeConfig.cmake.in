@@ -51,6 +51,10 @@ IF(NOT BatchMake_NO_LIBRARY_DEPENDS)
   INCLUDE("@BatchMake_LIBRARY_DEPENDS_FILE@")
 ENDIF(NOT BatchMake_NO_LIBRARY_DEPENDS)
 
+# The Grid and Dashboard options
+SET(BatchMake_DASHBOARD_SUPPORT "@DASHBOARD_SUPPORT@")
+SET(BatchMake_GRID_SUPPORT "@GRID_SUPPORT@")
+
 # The ITK options.
 SET(BatchMake_ITK_DIR "@BatchMake_ITK_DIR_CONFIG@")
 
