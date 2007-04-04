@@ -14,7 +14,7 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.6$")
 # BatchMake version number.  An even minor number corresponds to releases.
 SET(BatchMake_VERSION_MAJOR "1")
 SET(BatchMake_VERSION_MINOR "0")
-SET(BatchMake_VERSION_PATCH "2")
+SET(BatchMake_VERSION_PATCH "3")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
@@ -30,14 +30,6 @@ IF(WIN32)
   ENDIF(DISABLE_MSVC8_DEPRECATED_WARNINGS)
 ENDIF(WIN32)
 
-INCLUDE(${BatchMake_SOURCE_DIR}/FindFLTK.cmake)
-IF(FLTK_FOUND)
-   INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
-   IF(CYGWIN)
-     LINK_LIBRARIES( ole32 uuid comctl32 wsock32 supc++ -lm -lgdi32)
-   ENDIF(CYGWIN)
-ENDIF(FLTK_FOUND)
-
 FIND_PACKAGE(ITK)
 IF(ITK_FOUND)
    INCLUDE( ${USE_ITK_FILE} ) 
@@ -46,10 +38,17 @@ LINK_LIBRARIES(
 ${ITK_LIBRARIES}
 )
 
-FIND_PACKAGE(FLTK)
-IF(FLTK_FOUND)
-   INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
-ENDIF(FLTK_FOUND)
+OPTION(USE_FLTK "Add GUI support to BatchMake" ON) 
+IF(USE_FLTK)
+  FIND_PACKAGE(FLTK)
+  IF(FLTK_FOUND)
+    INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+    IF(CYGWIN)
+      LINK_LIBRARIES( ole32 uuid comctl32 wsock32 supc++ -lm -lgdi32)
+    ENDIF(CYGWIN)
+  ENDIF(FLTK_FOUND)
+  ADD_DEFINITIONS(-DBM_USE_FLTK)
+ENDIF(USE_FLTK)
 
 # Add testing
 MARK_AS_ADVANCED( DART_ROOT )

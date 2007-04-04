@@ -83,6 +83,8 @@ public:
   MString toUpper();
   int count(const char key);
 
+  static std::string ConvertWildcardToRegEx(const char* wildcard);
+
 private:
   std::string m_value;
 

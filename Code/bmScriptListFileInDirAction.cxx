@@ -14,8 +14,11 @@
 =========================================================================*/
 
 #include "bmScriptListFileInDirAction.h"
+#include <itksys/SystemTools.hxx>
+#include <itksys/Directory.hxx>
+#include <itksys/RegularExpression.hxx>
+
 #include <stdio.h>
-#include "FL/filename.H"
 
 namespace bm {
 
@@ -59,12 +62,13 @@ void ScriptListFileInDirAction::Execute()
 
   MString m_filter = "*";
   if (m_Parameters.size() == 3)
-  {
+    {
     m_filter = m_Manager->Convert(m_Parameters[2]);
     if (m_filter.startWith('\''))
+      {
       m_filter = m_filter.rbegin("'") + 1;
-  }
-
+      }
+    }
 
   MString m_value;
 
@@ -76,7 +80,7 @@ void ScriptListFileInDirAction::Execute()
     }
 
   // Check if the given filename is a directory
-  if(!fl_filename_isdir(dir.c_str()))
+  if(!itksys::SystemTools::FileIsDirectory(dir.c_str()))
     {
     m_ProgressManager->AddAction("Action: ListFileInDir()");
     std::string error = dir;
@@ -85,33 +89,35 @@ void ScriptListFileInDirAction::Execute()
     return;
     }
 
-  dirent** dirList;
-  
-  int size = fl_filename_list(dir.c_str(),&dirList);
-  
-  if(size == -1)
+  itksys::Directory directory;
+
+  if(!directory.Load(dir.c_str()))
     {
     m_ProgressManager->AddAction("Action: ListFileInDir()");
     std::string error = dir;
-    error += " : cannot open directory";
+    error += " is not a valid directory";
     m_ProgressManager->AddError(error.c_str());
     return;
     }
 
-  for(int i=0;i<size;i++)
+  std::string regexFromWildcard = MString::ConvertWildcardToRegEx(m_filter.toChar());
+  itksys::RegularExpression regex(regexFromWildcard.c_str());
+
+  for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
     {
-    if(fl_filename_match((*dirList)->d_name,m_filter.toChar())
-      && !fl_filename_match((*dirList)->d_name,"./")
-      && !fl_filename_match((*dirList)->d_name,"../")
-      )
+    std::string dname = directory.GetFile(i);
+    std::string filename = itksys::SystemTools::GetFilenameName(dname);
+
+    if(regex.find(dname.c_str())
+      && filename != "."
+      && filename != "..")
       {
       if (m_value != "")
         {
         m_value += " ";
         }
-      m_value += MString("'") + MString((*dirList)->d_name) + MString("'");
+      m_value += MString("'") + MString(dname) + MString("'");
       }
-    dirList++;
     }
 
   m_Manager->SetVariable(m_Parameters[0],m_value);

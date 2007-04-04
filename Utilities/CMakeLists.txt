@@ -1,8 +1,11 @@
-IF(GRID_SUPPORT)
-  SUBDIRS(CondorWatcher)
-ENDIF(GRID_SUPPORT)
+IF(USE_FLTK)
+  SUBDIRS(Flu)
+  IF(GRID_SUPPORT)
+    SUBDIRS(CondorWatcher)
+  ENDIF(GRID_SUPPORT)
+ENDIF(USE_FLTK)
 
-SUBDIRS(Flu Zip)
+SUBDIRS(Zip)
 
 SET(BatchMakeUtilities_HDRS
   MString.h

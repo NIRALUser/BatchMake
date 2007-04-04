@@ -15,16 +15,21 @@
 
 =========================================================================*/
 
-#include "bmScriptEditorGUIControls.h"
-#include "FL/Fl.H"
+#ifdef BM_USE_FLTK
+  #include "bmScriptEditorGUIControls.h"
+  #include "FL/Fl.H"
+  #include "ApplicationWrapper.h"
+#endif
+
 #include "MString.h"
-#include "ApplicationWrapper.h"
+
 #include <iostream>
 #include "metaCommand.h"
 #ifdef BM_GRID
   #include "bmGrid.h"
 #endif
-
+ 
+#include "bmScriptParser.h"
 #include "bmConfigure.h"
 
 int main(int argc, char **argv)
@@ -35,6 +40,7 @@ int main(int argc, char **argv)
   MString m_ApplicationPath = MString(argv[0]).rbegin("/");
 #endif
 
+#ifdef BM_USE_FLTK
   if (argc < 2)
     {
     // Create a UI object
@@ -56,6 +62,7 @@ int main(int argc, char **argv)
     delete ui;
     }
   else
+#endif
     { 
     MetaCommand command;
   

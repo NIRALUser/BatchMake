@@ -14,9 +14,9 @@
 =========================================================================*/
 
 #include "bmScriptListDirInDirAction.h"
-#include "FL/filename.H"
 #include <itksys/Directory.hxx>
 #include <itksys/SystemTools.hxx>
+#include <itksys/RegularExpression.hxx>
 
 namespace bm {
 
@@ -107,13 +107,17 @@ void ScriptListDirInDirAction::Execute()
     return;
     }
 
+  std::string regexFromWildcard = MString::ConvertWildcardToRegEx(m_filter.toChar());
+  itksys::RegularExpression regex(regexFromWildcard.c_str());
+
   for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
     {
     std::string dname = directory.GetFile(i);
-    if(fl_filename_match(dname.c_str(),m_filter.toChar())
-      && !fl_filename_match(dname.c_str(),".")
-      && !fl_filename_match(dname.c_str(),"..") 
-      )
+    std::string filename = itksys::SystemTools::GetFilenameName(dname);
+
+    if(regex.find(dname.c_str())
+      && filename != "."
+      && filename != "..")
       {
       // Check that the value doesn't exists already
       bool exists = false;

@@ -15,13 +15,6 @@ bmScriptAction.h
 bmScriptActionManager.h
 bmScriptError.h
 bmScriptParser.h
-bmEditor.h
-bmScriptEditorGUIBase.h
-bmScriptEditorGUIControls.h
-bmProgressGUIBase.h
-bmProgressGUIControls.h
-bmProgressManagerGUI.h
-bmScriptErrorGUI.h
 bmSplashScreenControls.h
 bmIcons.h
 bmScriptEchoAction.h
@@ -49,17 +42,9 @@ bmScriptDeleteFileAction.h
 bmScriptRegExAction.h
 bmScriptMakeDirectoryAction.h
 bmEditor.h
-bmScriptEditorGUIControls.h
 bmSplashScreenControls.h
-bmScriptErrorGUI.h
-bmProgressManagerGUI.h
-bmProgressGUIControls.h
 ApplicationWrapper.h
 ApplicationWrapperParam.h
-bmApplicationListGUIBase.h
-bmApplicationListGUIControls.h
-bmApplicationWrapperGUIBase.h
-bmApplicationWrapperGUIControls.h
 bmScriptGetTimeAction.h
 bmScriptGetCurrentDateTimeAction.h
 )
@@ -91,43 +76,76 @@ bmScriptSinAction.cxx
 bmScriptDeleteFileAction.cxx
 bmScriptRegExAction.cxx
 bmScriptMakeDirectoryAction.cxx
-bmEditor.cxx
-bmScriptEditorGUIControls.cxx
-bmSplashScreenControls.cxx
-bmScriptErrorGUI.cxx
-bmProgressManagerGUI.cxx
-bmProgressGUIControls.cxx
 ApplicationWrapper.cxx
 ApplicationWrapperParam.cxx
-bmApplicationListGUIControls.cxx
-bmApplicationWrapperGUIControls.cxx
 bmScriptGetTimeAction.cxx
 bmScriptGetCurrentDateTimeAction.cxx
 )
 
-SET(BatchMakeLib_GUI_SRCS
-bmProgressGUI.fl
-bmScriptEditorGUI.fl
-bmSplashScreen.fl
-bmApplicationListGUI.fl
-bmApplicationWrapperGUI.fl
-)
-
-
 LINK_LIBRARIES(
  BatchMakeUtilities
- ${FLTK_LIBRARIES}
 )
 
-SET(FLTK_WRAP_UI 1)
-FLTK_WRAP_UI( BatchMakeLib ${BatchMakeLib_GUI_SRCS} )
+IF(USE_FLTK)
+
+SET(BatchMakeLib_HDRS
+bmEditor.h
+bmScriptEditorGUIBase.h
+bmScriptEditorGUIControls.h
+bmProgressGUIBase.h
+bmProgressGUIControls.h
+bmProgressManagerGUI.h
+bmScriptErrorGUI.h
+bmSplashScreenControls.h
+bmScriptEditorGUIControls.h
+bmSplashScreenControls.h
+bmScriptErrorGUI.h
+bmProgressManagerGUI.h
+bmProgressGUIControls.h
+bmApplicationListGUIBase.h
+bmApplicationListGUIControls.h
+bmApplicationWrapperGUIBase.h
+bmApplicationWrapperGUIControls.h
+)
+
+  SET(BatchMakeLib_SRCS
+  ${BatchMakeLib_SRCS}
+  bmScriptEditorGUIControls.cxx
+  bmSplashScreenControls.cxx
+  bmScriptErrorGUI.cxx
+  bmProgressManagerGUI.cxx
+  bmProgressGUIControls.cxx
+  bmApplicationListGUIControls.cxx
+  bmApplicationWrapperGUIControls.cxx
+  bmEditor.cxx
+  )
+
+  SET(BatchMakeLib_GUI_SRCS
+    bmProgressGUI.fl
+    bmScriptEditorGUI.fl
+    bmSplashScreen.fl
+    bmApplicationListGUI.fl
+    bmApplicationWrapperGUI.fl
+    )
+
+  LINK_LIBRARIES(${FLTK_LIBRARIES})
+
+  SET(FLTK_WRAP_UI 1)
+  FLTK_WRAP_UI( BatchMakeLib ${BatchMakeLib_GUI_SRCS} )
+ENDIF(USE_FLTK)
+
 
 ADD_LIBRARY(BatchMakeLib ${BatchMakeLib_SRCS} ${BatchMakeLib_FLTK_UI_SRCS})
-ADD_DEPENDENCIES(BatchMakeLib FLU)
+IF(USE_FLTK)
+  ADD_DEPENDENCIES(BatchMakeLib FLU)
+ENDIF(USE_FLTK)
 
 IF(GRID_SUPPORT)
-  TARGET_LINK_LIBRARIES(BatchMakeLib CondorWatcher BatchMakeGrid)
-  ADD_DEPENDENCIES(BatchMakeLib CondorWatcher)
+  TARGET_LINK_LIBRARIES(BatchMakeLib BatchMakeGrid)
+  IF(USE_FLTK)
+    TARGET_LINK_LIBRARIES(BatchMakeLib CondorWatcher)
+    ADD_DEPENDENCIES(BatchMakeLib CondorWatcher)
+  ENDIF(USE_FLTK)
 ENDIF(GRID_SUPPORT)
 
 IF(DASHBOARD_SUPPORT)
@@ -148,15 +166,17 @@ IF(WIN32)
   ENDIF(NOT CYGWIN)
 ENDIF(WIN32)
 
-LINK_LIBRARIES(
- ${FLTK_LIBRARIES}
-)
-
 SET(BATCHMAKE_LIBS
+ ${BATCHMAKE_LIBS}
  BatchMakeLib
  BatchMakeUtilities
- FLU
 )
+
+IF(USE_FLTK)
+  SET(BATCHMAKE_LIBS
+     ${BATCHMAKE_LIBS}
+     FLU)
+ENDIF(USE_FLTK)
 
 # Add an option to hide the console
 OPTION(HIDE_CONSOLE "Hide the console" OFF)

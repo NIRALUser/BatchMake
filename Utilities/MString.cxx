@@ -426,3 +426,34 @@ bool MString::isInt()
   return true;
 }
 
+/** Convert Wildcars to RegEx */
+std::string MString::ConvertWildcardToRegEx(const char* wildcard)
+{
+  std::string s;
+  s += '^';
+  for (unsigned int i = 0; i< strlen(wildcard); i++) 
+    {
+    char c = wildcard[i];
+    switch(c)
+      {
+      case '*':
+         s+= ".*";
+         break;
+      case '?':
+         s += ".";
+         break;
+       // escape special regexp-characters
+      case '(': case ')': case '[': case ']': case '$':
+      case '^': case '.': case '{': case '}': case '|':
+      case '\\':
+        s += "\\";
+        s += c;
+      break;
+      default:
+        s += c;
+      break;
+      }
+    }
+  s += '$';
+  return s;
+}
