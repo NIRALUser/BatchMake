@@ -30,8 +30,8 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
 {  
   if (m_Parameters.size() < 2)
     {
-     error->SetError(MString("SetApp() takes at least two arguments"),linenumber);
-     return false;
+    error->SetError(MString("SetApp() takes at least two arguments"),linenumber);
+    return false;
     }
 
   m_Manager->SetTestVariable(m_Parameters[0]);
@@ -45,6 +45,13 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
   appName = appName.removeChar('@');
 
   bool appFound = false;
+
+  if(!m_Manager->GetApplicationWrapperList())
+    {
+    error->SetError(MString("Calling SetApp() but no applications are defined"),linenumber);
+    return false;
+    }
+
   ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
@@ -80,7 +87,6 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
     error->SetError(MString("SetApp() cannot find the corresponding application"),linenumber);
     }
 
-
   return true;
 }
 
@@ -92,6 +98,7 @@ MString ScriptSetAppAction::Help()
 
 void ScriptSetAppAction::Execute()
 {
+std::cout << "Execute" << std::endl;
   MString appName = m_Parameters[1];
   appName = appName.removeChar('@');
   bool appFound = false;

@@ -36,8 +36,10 @@ int main(int argc, char **argv)
 {
 #ifdef WIN32
   MString m_ApplicationPath = MString(argv[0]).rbegin("\\");
+  m_ApplicationPath += "\\Applications";
 #else
   MString m_ApplicationPath = MString(argv[0]).rbegin("/");
+  m_ApplicationPath += "/Applications";
 #endif
 
 #ifdef BM_USE_FLTK
@@ -118,7 +120,8 @@ int main(int argc, char **argv)
       std::string filename = command.GetValueAsString("compileScript","filename");
       std::cout << "Compiling ..." << std::endl;
       bm::ScriptParser m_Parser;
-      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
+      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
+      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath.toChar());
       m_Parser.Compile(filename);
       return 0;
       }
@@ -127,7 +130,8 @@ int main(int argc, char **argv)
       std::string filename = command.GetValueAsString("executeScript","filename");
       std::cout << "Executing ..." << std::endl;
       bm::ScriptParser m_Parser;
-      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
+      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
+      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath.toChar());
       m_Parser.Execute(filename);
       return 0;
       }
@@ -139,7 +143,7 @@ int main(int argc, char **argv)
       std::string moduleName = m_ApplicationWrapper.GetName().toChar();
        
       std::string output = m_ApplicationPath.toChar();
-      output += "/Applications/";
+      output += "/";
       output += moduleName; 
       output += ".bmm";
       std::cout << "Saving application description as: " 
