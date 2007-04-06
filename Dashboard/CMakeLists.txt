@@ -47,6 +47,7 @@ SET(BatchMakeDashboard_LIBS
 )
 
 ELSE(WIN32)
+  INCLUDE(${CMAKE_ROOT}/Modules/CheckLibraryExists.cmake)
   CHECK_LIBRARY_EXISTS("c" gethostbyname "" NOT_NEED_LIBNSL)
   IF(NOT NOT_NEED_LIBNSL)
     CHECK_LIBRARY_EXISTS_CONCAT("nsl"    gethostbyname  HAVE_LIBNSL)
