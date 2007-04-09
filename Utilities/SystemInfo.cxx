@@ -1211,13 +1211,16 @@ bool SystemInfo::RetrieveExtendedCPUIdentity()
   int ProcessorNameStartPos = 0;
   int CPUExtendedIdentity[12];
 
+  std::cout << "HERE!" << std::endl;
+
   // Check to see if what we are about to do is supported...
-  if (!RetrieveCPUExtendedLevelSupport (0x80000002)) return false;
-  if (!RetrieveCPUExtendedLevelSupport (0x80000003)) return false;
-  if (!RetrieveCPUExtendedLevelSupport (0x80000004)) return false;
+  if (!RetrieveCPUExtendedLevelSupport(0x80000002)) return false;
+  if (!RetrieveCPUExtendedLevelSupport(0x80000003)) return false;
+  if (!RetrieveCPUExtendedLevelSupport(0x80000004)) return false;
 
+  std::cout << "HERE2!" << std::endl;
+   
 #ifdef WIN32
-
   // Use assembly to detect CPUID information...
   __try {
     _asm {
@@ -1285,18 +1288,23 @@ bool SystemInfo::RetrieveExtendedCPUIdentity()
   memcpy (&(m_ChipID.ProcessorName[44]), &(CPUExtendedIdentity[11]), sizeof (int));
   m_ChipID.ProcessorName[48] = '\0';
 
-  // Because some manufacturers (<cough>Intel</cough>) have leading white space - we have to post-process the name.
-  if (m_ChipManufacturer == Intel) {
-    for (int nCounter = 0; nCounter < CHIPNAME_STRING_LENGTH; nCounter ++) {
+   std::cout << "PROC= " << m_ChipID.ProcessorName << std::endl;
+
+
+  // Because some manufacturers have leading white space - we have to post-process the name.
+  if (m_ChipManufacturer == Intel) 
+    {
+    for (int nCounter = 0; nCounter < CHIPNAME_STRING_LENGTH; nCounter ++) 
+      {
       // There will either be NULL (\0) or spaces ( ) as the leading characters.
-      if ((m_ChipID.ProcessorName[nCounter] != '\0') && (m_ChipID.ProcessorName[nCounter] != ' ')) {
+      if ((m_ChipID.ProcessorName[nCounter] != '\0') && (m_ChipID.ProcessorName[nCounter] != ' ')) 
+        {
         // We have found the starting position of the name.
         ProcessorNameStartPos = nCounter;
-        
         // Terminate the loop.
         break;
+        }
       }
-    }
 
     // Check to see if there is any white space at the start.
     if (ProcessorNameStartPos == 0) 
@@ -1305,8 +1313,8 @@ bool SystemInfo::RetrieveExtendedCPUIdentity()
       }
 
     // Now move the name forward so that there is no white space.
-    memmove (m_ChipID.ProcessorName, &(m_ChipID.ProcessorName[ProcessorNameStartPos]), (CHIPNAME_STRING_LENGTH - ProcessorNameStartPos));
-  }
+    memmove(m_ChipID.ProcessorName, &(m_ChipID.ProcessorName[ProcessorNameStartPos]), (CHIPNAME_STRING_LENGTH - ProcessorNameStartPos));
+   }
 #endif
 
   return true;
