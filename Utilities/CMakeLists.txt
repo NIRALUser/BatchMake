@@ -16,6 +16,7 @@ SET(BatchMakeUtilities_HDRS
   TCPSocket.h
   XMLBufferReader.h
   SliceExtractor.h
+  SystemInfo.h
 )
 
 
@@ -28,6 +29,7 @@ SET(BatchMakeUtilities_SRCS
   TCPSocket.cxx
   XMLBufferReader.cxx
   SliceExtractor.cxx
+  SystemInfo.cxx
 )
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
