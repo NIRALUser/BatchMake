@@ -86,7 +86,8 @@ public:
 
   /** Create a parameter for a method.
    *  The actual experiment and method names are used */
-  bool CreateMethodParameter(const char* name,ParameterType paramType=INPUT,const char* type=NULL);
+  bool CreateMethodParameter(const char* name,ParameterType paramType=INPUT,
+                             const char* type=NULL, const char* unit=NULL);
 
   /** Add a value to the list of value or data */
   void AddValue(const char* name,const char* value,bool data=false);

@@ -140,7 +140,8 @@ bool DashboardSend::CreateMethod(const char* description)
 
 /** Create a parameter for a method.
  *  The actual experiment and method names are used */
-bool DashboardSend::CreateMethodParameter(const char* name,ParameterType paramType,const char* type)
+bool DashboardSend::CreateMethodParameter(const char* name,ParameterType paramType,
+                                          const char* type, const char* unit)
 {
   if(!this->CheckValidity())
     {
@@ -188,6 +189,12 @@ bool DashboardSend::CreateMethodParameter(const char* name,ParameterType paramTy
     {
     request.AddParam("paramtype",type);
     }
+
+  if(unit)
+    {
+    request.AddParam("paramunit",unit);
+    }
+
   return this->SendRequest(request);
 }
 
@@ -274,7 +281,7 @@ bool DashboardSend::SendRequest(HttpRequest & request)
     {
     if (atoi(m_ServerOutput.c_str()) == 0)
       {
-      std::cout << "Command successful." << std::endl;
+      std::cout << "Data sent successfully." << std::endl;
       return true;
       }
     else
