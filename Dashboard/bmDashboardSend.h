@@ -52,6 +52,12 @@ public:
     m_User = name;
     }
 
+  /** Set the username */
+  void SetUserKey(const char* key)
+    {
+    m_UserKey = key;
+    }
+
   /** Set the project name */
   void SetProjectName(const char* name)
     {
@@ -112,6 +118,7 @@ protected:
   std::string m_MethodName;
   std::string m_ExperimentName;
   std::string m_Url;
+  std::string m_UserKey;
 
   std::string m_ServerOutput; // string returned by the server
 

@@ -36,6 +36,7 @@ void DashboardSend::Init()
   m_ExperimentName = "";
   m_ServerOutput = "";
   m_Url = "";
+  m_UserKey = "";
   m_ValueList.clear(); 
   m_DataList.clear(); 
 }
@@ -92,6 +93,7 @@ bool DashboardSend::CreateExperiment(const char* description)
 
   HttpRequest request;
   request.AddParam("user",m_User.c_str());
+  request.AddParam("userkey",m_UserKey.c_str());
   request.AddParam("project",m_Project.c_str());
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
@@ -126,6 +128,7 @@ bool DashboardSend::CreateMethod(const char* description)
 
   HttpRequest request;
   request.AddParam("user",m_User.c_str());
+  request.AddParam("userkey",m_UserKey.c_str());
   request.AddParam("project",m_Project.c_str());
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
@@ -162,6 +165,7 @@ bool DashboardSend::CreateMethodParameter(const char* name,ParameterType paramTy
 
   HttpRequest request;
   request.AddParam("user",m_User.c_str());
+  request.AddParam("userkey",m_UserKey.c_str());
   request.AddParam("project",m_Project.c_str());
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
@@ -224,6 +228,7 @@ bool DashboardSend::Send()
 
   HttpRequest request;
   request.AddParam("user",m_User.c_str());
+  request.AddParam("userkey",m_UserKey.c_str());
   request.AddParam("project",m_Project.c_str());
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
