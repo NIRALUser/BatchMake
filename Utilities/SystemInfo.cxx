@@ -1211,14 +1211,10 @@ bool SystemInfo::RetrieveExtendedCPUIdentity()
   int ProcessorNameStartPos = 0;
   int CPUExtendedIdentity[12];
 
-  std::cout << "HERE!" << std::endl;
-
   // Check to see if what we are about to do is supported...
   if (!RetrieveCPUExtendedLevelSupport(0x80000002)) return false;
   if (!RetrieveCPUExtendedLevelSupport(0x80000003)) return false;
   if (!RetrieveCPUExtendedLevelSupport(0x80000004)) return false;
-
-  std::cout << "HERE2!" << std::endl;
    
 #ifdef WIN32
   // Use assembly to detect CPUID information...
@@ -1287,9 +1283,6 @@ bool SystemInfo::RetrieveExtendedCPUIdentity()
   memcpy (&(m_ChipID.ProcessorName[40]), &(CPUExtendedIdentity[10]), sizeof (int));
   memcpy (&(m_ChipID.ProcessorName[44]), &(CPUExtendedIdentity[11]), sizeof (int));
   m_ChipID.ProcessorName[48] = '\0';
-
-   std::cout << "PROC= " << m_ChipID.ProcessorName << std::endl;
-
 
   // Because some manufacturers have leading white space - we have to post-process the name.
   if (m_ChipManufacturer == Intel) 
