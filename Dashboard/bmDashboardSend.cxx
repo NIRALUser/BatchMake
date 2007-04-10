@@ -289,8 +289,8 @@ bool DashboardSend::SendRequest(HttpRequest & request)
       //std::cout << "Dashboard problem when sending data" << std::endl;
       switch(atoi(m_ServerOutput.c_str()))
         {
-        case 1 :  std::cout << "Bad user name" << std::endl; break;
-        case 2 :  std::cout << "Bad project name" << std::endl; break;
+        case 1 :  std::cout << "Wrong user name or password" << std::endl; break;
+        case 2 :  std::cout << "Wrong project name" << std::endl; break;
         case 3 :  std::cout << "User doesn't belong to project" << std::endl; break;
         case 4 :  std::cout << "Over quota: please use DbClear function first" << std::endl; break;
         //case 5 :  std::cout << "Host Database error" << std::endl; break;
