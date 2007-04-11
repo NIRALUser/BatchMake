@@ -1610,6 +1610,8 @@ std::string SystemInfo::ExtractValueFromCpuInfoFile(std::string buffer,const cha
 /** Query for the cpu status */
 int SystemInfo::RetreiveInformationFromCpuInfoFile()
 {
+  m_NumberOfLogicalCPU = 0;
+  m_NumberOfPhysicalCPU = 0;
   std::string buffer;
 
   FILE *fd = fopen("/proc/cpuinfo", "r" );
@@ -1630,8 +1632,6 @@ int SystemInfo::RetreiveInformationFromCpuInfoFile()
   buffer.resize(fileSize-2);
 
   // Number of CPUs
-  m_NumberOfLogicalCPU = 0;
-  m_NumberOfPhysicalCPU = 0;
   long int pos = buffer.find("processor");
   while(pos != -1)
     {
