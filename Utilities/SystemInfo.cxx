@@ -48,13 +48,14 @@ SystemInfo::SystemInfo ()
     RetrieveProcessorSerialNumber();
     }
   this->CPUCount();
+  this->QueryMemory();
 #elif defined(__APPLE__)
   this->ParseSysCtl();
 #else
   this->RetreiveInformationFromCpuInfoFile();
+  this->QueryMemory();
 #endif
 
-  this->QueryMemory();
 }
 
 SystemInfo::~SystemInfo()
@@ -1826,9 +1827,6 @@ int SystemInfo::QueryMemory()
       }
     }
   return 0;
-#elif defined(__APPLE__)
-  m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("test").c_str());
-  std::cout << "m_TotalPhysicalMemory = " << m_TotalPhysicalMemory << std::endl;
 #else
   return 0;
 #endif
@@ -2191,6 +2189,39 @@ bool SystemInfo::ParseSysCtl()
     }
   itksysProcess_Delete(gp);
 
+   
+  // Parse values for Mac
+  m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("hw.memsize:").c_str());
+  m_TotalVirtualMemory = -1;
+  m_AvailablePhysicalMemory = -1;
+  m_AvailableVirtualMemory = -1;
+
+  m_NumberOfPhysicalCPU = atoi(this->ExtractValueFromSysCtl("hw.physicalcpu:").c_str());
+  m_NumberOfLogicalCPU = atoi(this->ExtractValueFromSysCtl("hw.logicalcpu:").c_str());
+  
+  if(m_NumberOfPhysicalCPU!=0)
+    {
+    m_NumberOfLogicalCPU /= m_NumberOfPhysicalCPU;
+    }
+
+  m_CPUSpeedInMHz = atoi(this->ExtractValueFromSysCtl("hw.cpufrequency:").c_str()); 
+  m_CPUSpeedInMHz /= 1000000;
+
+  // Chip family
+  m_ChipID.Family = atoi(this->ExtractValueFromSysCtl("machdep.cpu.family:").c_str()); 
+ 
+  // Chip Vendor
+  strcpy(m_ChipID.Vendor,this->ExtractValueFromSysCtl("machdep.cpu.vendor:").c_str());
+  this->FindManufacturer();
+  
+  // Chip Model
+  m_ChipID.Model = atoi(this->ExtractValueFromSysCtl("machdep.cpu.model:").c_str());
+  this->RetrieveClassicalCPUIdentity();
+
+  // Cache size
+  m_Features.L1CacheSize = atoi(this->ExtractValueFromSysCtl("hw.l1icachesize:").c_str());  
+  m_Features.L2CacheSize = atoi(this->ExtractValueFromSysCtl("hw.l2cachesize:").c_str());  
+
   return true;
 }
 
@@ -2200,11 +2231,11 @@ std::string SystemInfo::ExtractValueFromSysCtl(const char* word)
   long int pos = m_SysCtlBuffer.find(word);
   if(pos != -1)
     {
-    pos = m_SysCtlBuffer.find(" = ",pos);
+    pos = m_SysCtlBuffer.find(": ",pos);
     long int pos2 = m_SysCtlBuffer.find("\n",pos);
     if(pos!=-1 && pos2!=-1)
       {
-      return m_SysCtlBuffer.substr(pos+3,pos2-pos-3);
+      return m_SysCtlBuffer.substr(pos+2,pos2-pos-2);
       }
     }
   return "";
