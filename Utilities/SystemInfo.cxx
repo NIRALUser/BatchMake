@@ -15,10 +15,11 @@
 =========================================================================*/
 
 #include "SystemInfo.h"
+#include <vector>
+#include <itksys/Process.h>
 
 SystemInfo::SystemInfo ()
 {
-
 #ifdef WIN32
   // Check to see if this processor supports CPUID.
   if (DoesCPUSupportCPUID()) 
@@ -47,6 +48,8 @@ SystemInfo::SystemInfo ()
     RetrieveProcessorSerialNumber();
     }
   this->CPUCount();
+#elif defined(__APPLE__)
+  this->ParseSysCtl();
 #else
   this->RetreiveInformationFromCpuInfoFile();
 #endif
@@ -1602,7 +1605,6 @@ std::string SystemInfo::ExtractValueFromCpuInfoFile(std::string buffer,const cha
       return buffer.substr(pos+2,pos2-pos-2);
       }
     }
-
   m_CurrentPositionInFile = -1;
   return "";
 }
@@ -1824,6 +1826,9 @@ int SystemInfo::QueryMemory()
       }
     }
   return 0;
+#elif defined(__APPLE__)
+  m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("test").c_str());
+  std::cout << "m_TotalPhysicalMemory = " << m_TotalPhysicalMemory << std::endl;
 #else
   return 0;
 #endif
@@ -2123,4 +2128,84 @@ unsigned int SystemInfo::GetNumberOfLogicalCPU()
 unsigned int SystemInfo::GetNumberOfPhysicalCPU()
 {
   return m_NumberOfPhysicalCPU;
+}
+
+/** For Mac we Parse the sysctl -a output */
+bool SystemInfo::ParseSysCtl()
+{
+  m_SysCtlBuffer = "";
+
+  // Extract the arguments from the command line
+  std::vector<const char*> args;
+  args.push_back("sysctl");
+  args.push_back("-a");
+  args.push_back(0);
+
+  // Run the application
+  itksysProcess* gp = itksysProcess_New();
+  itksysProcess_SetCommand(gp, &*args.begin());
+  itksysProcess_SetOption(gp,itksysProcess_Option_HideWindow,1);
+
+  itksysProcess_Execute(gp);
+
+  char* data = NULL;
+  int length;
+  double timeout = 255;
+
+  while(itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
+    {
+    for(int i=0;i<length;i++)
+      {
+      m_SysCtlBuffer += data[i];
+      }
+    }
+  itksysProcess_WaitForExit(gp, 0);
+
+  int result = 1;
+  switch(itksysProcess_GetState(gp))
+    {
+    case itksysProcess_State_Exited:
+      {
+      result = itksysProcess_GetExitValue(gp);
+      } break;
+    case itksysProcess_State_Error:
+      {
+      std::cerr << "Error: Could not run " << args[0] << ":\n";
+      std::cerr << itksysProcess_GetErrorString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Exception:
+      {
+      std::cerr << "Error: " << args[0]
+                << " terminated with an exception: "
+                << itksysProcess_GetExceptionString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Starting:
+    case itksysProcess_State_Executing:
+    case itksysProcess_State_Expired:
+    case itksysProcess_State_Killed:
+      {
+      // Should not get here.
+      std::cerr << "Unexpected ending state after running " << args[0]
+                << std::endl;
+      } break;
+    }
+  itksysProcess_Delete(gp);
+
+  return true;
+}
+
+/** Extract a value from sysctl command */
+std::string SystemInfo::ExtractValueFromSysCtl(const char* word)
+{
+  long int pos = m_SysCtlBuffer.find(word);
+  if(pos != -1)
+    {
+    pos = m_SysCtlBuffer.find(" = ",pos);
+    long int pos2 = m_SysCtlBuffer.find("\n",pos);
+    if(pos!=-1 && pos2!=-1)
+      {
+      return m_SysCtlBuffer.substr(pos+3,pos2-pos-3);
+      }
+    }
+  return "";
 }

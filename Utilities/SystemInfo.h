@@ -233,6 +233,11 @@ protected:
 
   void FindManufacturer();
 
+  // For Mac
+  bool ParseSysCtl();
+  std::string ExtractValueFromSysCtl(const char* word);
+  std::string m_SysCtlBuffer;
+
   // Evaluate the memory information.
   int QueryMemory();
   long m_TotalVirtualMemory;
@@ -241,6 +246,8 @@ protected:
   long m_AvailablePhysicalMemory;
 
   long int m_CurrentPositionInFile;
+
+
 };
 
 #endif
