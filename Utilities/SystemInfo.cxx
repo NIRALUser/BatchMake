@@ -2191,7 +2191,7 @@ bool SystemInfo::ParseSysCtl()
 
    
   // Parse values for Mac
-  m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("hw.memsize:").c_str());
+  m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("hw.memsize:").c_str())/1024;
   m_TotalVirtualMemory = -1;
   m_AvailablePhysicalMemory = -1;
   m_AvailableVirtualMemory = -1;
