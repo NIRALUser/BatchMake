@@ -238,6 +238,9 @@ protected:
   std::string ExtractValueFromSysCtl(const char* word);
   std::string m_SysCtlBuffer;
 
+  // For Solaris
+  bool QuerySolarisInfo();
+
   // Evaluate the memory information.
   int QueryMemory();
   long m_TotalVirtualMemory;

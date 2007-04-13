@@ -51,6 +51,8 @@ SystemInfo::SystemInfo ()
   this->QueryMemory();
 #elif defined(__APPLE__)
   this->ParseSysCtl();
+#elif defined (__SVR4) && defined (__sun)
+  this->QuerySolarisInfo();
 #else
   this->RetreiveInformationFromCpuInfoFile();
   this->QueryMemory();
@@ -2239,4 +2241,105 @@ std::string SystemInfo::ExtractValueFromSysCtl(const char* word)
       }
     }
   return "";
+}
+
+/** Querying for system information from Solaris */
+bool SystemInfo::QuerySolarisInfo()
+{
+
+  std::string buffer = "";
+
+  // Extract the arguments from the command line
+  std::vector<const char*> args;
+  args.push_back("kstat");
+  args.push_back("cpu_info");
+  args.push_back(0);
+
+  // Run the application
+  itksysProcess* gp = itksysProcess_New();
+  itksysProcess_SetCommand(gp, &*args.begin());
+  itksysProcess_SetOption(gp,itksysProcess_Option_HideWindow,1);
+
+  itksysProcess_Execute(gp);
+
+  char* data = NULL;
+  int length;
+  double timeout = 255;
+
+  while(itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
+    {
+    for(int i=0;i<length;i++)
+      {
+      buffer += data[i];
+      }
+    }
+  itksysProcess_WaitForExit(gp, 0);
+
+  int result = 1;
+  switch(itksysProcess_GetState(gp))
+    {
+    case itksysProcess_State_Exited:
+      {
+      result = itksysProcess_GetExitValue(gp);
+      } break;
+    case itksysProcess_State_Error:
+      {
+      std::cerr << "Error: Could not run " << args[0] << ":\n";
+      std::cerr << itksysProcess_GetErrorString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Exception:
+      {
+      std::cerr << "Error: " << args[0]
+                << " terminated with an exception: "
+                << itksysProcess_GetExceptionString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Starting:
+    case itksysProcess_State_Executing:
+    case itksysProcess_State_Expired:
+    case itksysProcess_State_Killed:
+      {
+      // Should not get here.
+      std::cerr << "Unexpected ending state after running " << args[0]
+                << std::endl;
+      } break;
+    }
+  itksysProcess_Delete(gp);
+
+  std::cout << buffer.c_str() << std::endl;
+
+  // Parse values
+/* 
+  m_NumberOfPhysicalCPU = atoi(this->ExtractValueFromSysCtl("hw.physicalcpu:").c_str());
+  m_NumberOfLogicalCPU = atoi(this->ExtractValueFromSysCtl("hw.logicalcpu:").c_str());
+  
+  if(m_NumberOfPhysicalCPU!=0)
+    {
+    m_NumberOfLogicalCPU /= m_NumberOfPhysicalCPU;
+    }
+
+  m_CPUSpeedInMHz = atoi(this->ExtractValueFromSysCtl("hw.cpufrequency:").c_str()); 
+  m_CPUSpeedInMHz /= 1000000;
+
+  // Chip family
+  m_ChipID.Family = atoi(this->ExtractValueFromSysCtl("machdep.cpu.family:").c_str()); 
+ 
+  // Chip Vendor
+  strcpy(m_ChipID.Vendor,this->ExtractValueFromSysCtl("machdep.cpu.vendor:").c_str());
+  this->FindManufacturer();
+  
+  // Chip Model
+  m_ChipID.Model = atoi(this->ExtractValueFromSysCtl("machdep.cpu.model:").c_str());
+  this->RetrieveClassicalCPUIdentity();
+
+  // Cache size
+  m_Features.L1CacheSize = atoi(this->ExtractValueFromSysCtl("hw.l1icachesize:").c_str());  
+  m_Features.L2CacheSize = atoi(this->ExtractValueFromSysCtl("hw.l2cachesize:").c_str());  
+
+  m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("hw.memsize:").c_str())/1024;
+  m_TotalVirtualMemory = -1;
+  m_AvailablePhysicalMemory = -1;
+  m_AvailableVirtualMemory = -1;
+*/
+
+  return true;
 }
