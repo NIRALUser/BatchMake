@@ -357,7 +357,7 @@ void ScriptEditorGUIControls::OnGenerateGAD()
   m_Parser->SetGridModule(NULL);
   m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
-  fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
+  fl_alert("To generate grid script turn GRID_SUPPORT=ON when configuring with CMake.");
 #endif
 }
 
@@ -430,7 +430,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
   m_Parser->SetGridModule(NULL);
   m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
-   fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
+  fl_alert("To generate grid script turn GRID_SUPPORT=ON when configuring with CMake.");
 #endif
 }
 
@@ -480,7 +480,7 @@ void ScriptEditorGUIControls::OnGenerateShell()
   m_Parser->SetGridModule(NULL);
   m_Errorgui->SetStatus(MString("Generation done.")); 
 #else
-  fl_alert("You cannot generate grid scripts with this version of BatchMake.\nContact Kitware for more information.");
+  fl_alert("To generate grid script turn GRID_SUPPORT=ON when configuring with CMake.");
 #endif
 }
 
