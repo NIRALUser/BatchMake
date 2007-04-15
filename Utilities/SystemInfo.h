@@ -98,6 +98,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include <vector>
 
 typedef  void (*DELAY_FUNC)(unsigned int uiMS);
 
@@ -240,6 +241,7 @@ protected:
 
   // For Solaris
   bool QuerySolarisInfo();
+  std::string RunProcess(std::vector<const char*> args);
 
   // Evaluate the memory information.
   int QueryMemory();

@@ -2133,64 +2133,13 @@ unsigned int SystemInfo::GetNumberOfPhysicalCPU()
 /** For Mac we Parse the sysctl -a output */
 bool SystemInfo::ParseSysCtl()
 {
-  m_SysCtlBuffer = "";
-
   // Extract the arguments from the command line
   std::vector<const char*> args;
   args.push_back("sysctl");
   args.push_back("-a");
   args.push_back(0);
 
-  // Run the application
-  itksysProcess* gp = itksysProcess_New();
-  itksysProcess_SetCommand(gp, &*args.begin());
-  itksysProcess_SetOption(gp,itksysProcess_Option_HideWindow,1);
-
-  itksysProcess_Execute(gp);
-
-  char* data = NULL;
-  int length;
-  double timeout = 255;
-
-  while(itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
-    {
-    for(int i=0;i<length;i++)
-      {
-      m_SysCtlBuffer += data[i];
-      }
-    }
-  itksysProcess_WaitForExit(gp, 0);
-
-  int result = 1;
-  switch(itksysProcess_GetState(gp))
-    {
-    case itksysProcess_State_Exited:
-      {
-      result = itksysProcess_GetExitValue(gp);
-      } break;
-    case itksysProcess_State_Error:
-      {
-      std::cerr << "Error: Could not run " << args[0] << ":\n";
-      std::cerr << itksysProcess_GetErrorString(gp) << "\n";
-      } break;
-    case itksysProcess_State_Exception:
-      {
-      std::cerr << "Error: " << args[0]
-                << " terminated with an exception: "
-                << itksysProcess_GetExceptionString(gp) << "\n";
-      } break;
-    case itksysProcess_State_Starting:
-    case itksysProcess_State_Executing:
-    case itksysProcess_State_Expired:
-    case itksysProcess_State_Killed:
-      {
-      // Should not get here.
-      std::cerr << "Unexpected ending state after running " << args[0]
-                << std::endl;
-      } break;
-    }
-  itksysProcess_Delete(gp);
-
+  m_SysCtlBuffer = this->RunProcess(args);
    
   // Parse values for Mac
   m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("hw.memsize:").c_str())/1024;
@@ -2243,17 +2192,10 @@ std::string SystemInfo::ExtractValueFromSysCtl(const char* word)
   return "";
 }
 
-/** Querying for system information from Solaris */
-bool SystemInfo::QuerySolarisInfo()
-{
-
+/** Run a given process */
+std::string RunProcess(std::vector<const char*> args)
+{ 
   std::string buffer = "";
-
-  // Extract the arguments from the command line
-  std::vector<const char*> args;
-  args.push_back("kstat");
-  args.push_back("cpu_info");
-  args.push_back(0);
 
   // Run the application
   itksysProcess* gp = itksysProcess_New();
@@ -2305,12 +2247,36 @@ bool SystemInfo::QuerySolarisInfo()
     }
   itksysProcess_Delete(gp);
 
+  return buffer;
+}
+
+
+/** Querying for system information from Solaris */
+bool SystemInfo::QuerySolarisInfo()
+{
+  // Extract the arguments from the command line
+  std::vector<const char*> args;
+  args.push_back("kstat");
+  args.push_back("cpu_info");
+  args.push_back(0);
+
+  std::string buffer = this->RunProcess(args);
+  std::cout << buffer.c_str() << std::endl;
+
+  args.clear();
+  args.push_back("kstat");
+  args.push_back("|");
+  args.push_back("grep");
+  args.push_back("ncpus");
+  args.push_back(0);
+
+  buffer = this->RunProcess(args);
   std::cout << buffer.c_str() << std::endl;
 
   // Parse values
 /* 
   m_NumberOfPhysicalCPU = atoi(this->ExtractValueFromSysCtl("hw.physicalcpu:").c_str());
-  m_NumberOfLogicalCPU = atoi(this->ExtractValueFromSysCtl("hw.logicalcpu:").c_str());
+  m_NumberOfLogicalCPU = 1;
   
   if(m_NumberOfPhysicalCPU!=0)
     {
