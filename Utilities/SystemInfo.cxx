@@ -2193,7 +2193,7 @@ std::string SystemInfo::ExtractValueFromSysCtl(const char* word)
 }
 
 /** Run a given process */
-std::string RunProcess(std::vector<const char*> args)
+std::string SystemInfo::RunProcess(std::vector<const char*> args)
 { 
   std::string buffer = "";
 
