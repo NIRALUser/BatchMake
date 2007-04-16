@@ -44,5 +44,14 @@ int SystemInfoTest(int argc, char* argv[])
   std::cout << "Operating System Release = " << info.GetOSRelease() << std::endl;
   std::cout << "Operating System Version = " << info.GetOSVersion() << std::endl;
 
+  if(info.Is64Bits())
+    {
+    std::cout << "64-bits machine" << std::endl;
+    }
+  else
+    {
+    std::cout << "32-bits machine" << std::endl;
+    }
+
   return EXIT_SUCCESS;
 }
