@@ -1,6 +1,5 @@
 PROJECT(BatchMake)
 
-
 # If CMake is the version we're expecting, don't show the
 # CMAKE_BACKWARDS_COMPATIBILITY option.
 IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.6$")
@@ -9,6 +8,12 @@ ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.6$")
   MARK_AS_ADVANCED(CLEAR CMAKE_BACKWARDS_COMPATIBILITY)
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.6$")
 
+SET (LIBRARY_OUTPUT_PATH ${BatchMake_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+SET (EXECUTABLE_OUTPUT_PATH ${BatchMake_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+SET(BatchMake_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
+SET(BatchMake_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
+SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 #-----------------------------------------------------------------------------
 # BatchMake version number.  An even minor number corresponds to releases.
@@ -62,14 +67,6 @@ OPTION(SPLASHSCREEN "Display the splashscreen" ON)
 IF(SPLASHSCREEN)
  ADD_DEFINITIONS(-DBMSPLASHSCREEN)
 ENDIF(SPLASHSCREEN)
-
-
-SET (LIBRARY_OUTPUT_PATH ${BatchMake_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
-SET (EXECUTABLE_OUTPUT_PATH ${BatchMake_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
-SET(BatchMake_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
-SET(BatchMake_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
-SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 # If this is the install version of BathMake we look for the include files
 FIND_PATH(BatchMake_INCLUDE_DIR Code/ApplicationWrapper.h ${BatchMake_SOURCE_DIR}/../include/BatchMake)
