@@ -129,6 +129,8 @@ public:
   const char * GetOSVersion();
   const char * GetOSPlatform();
 
+  bool Is64Bits();
+
   unsigned int GetNumberOfLogicalCPU(); // per physical cpu
   unsigned int GetNumberOfPhysicalCPU();
 
@@ -264,8 +266,7 @@ protected:
   std::string m_Hostname;
   std::string m_OSRelease ;
   std::string m_OSVersion;
-  std::string m_OSPlatform;
-   
+  std::string m_OSPlatform; 
 };
 
 #endif

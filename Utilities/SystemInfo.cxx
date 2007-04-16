@@ -2410,7 +2410,7 @@ bool SystemInfo::QueryOSInformation()
   OSVERSIONINFOEX osvi;
 	BOOL bIsWindows64Bit;
 	BOOL bOsVersionInfoEx;
-	char * szOperatingSystem = new char [256];
+	char * operatingSystem = new char [256];
 
 	// Try calling GetVersionEx using the OSVERSIONINFOEX structure.
 	ZeroMemory (&osvi, sizeof (OSVERSIONINFOEX));
@@ -2479,8 +2479,8 @@ bool SystemInfo::QueryOSInformation()
             }
 				  }
 
-        sprintf (szOperatingSystem, "%s(Build %d)", osvi.szCSDVersion, osvi.dwBuildNumber & 0xFFFF);
-        m_OSVersion = szOperatingSystem; 
+        sprintf (operatingSystem, "%s(Build %d)", osvi.szCSDVersion, osvi.dwBuildNumber & 0xFFFF);
+        m_OSVersion = operatingSystem; 
 			  } 
       else 
         {
@@ -2527,12 +2527,12 @@ bool SystemInfo::QueryOSInformation()
 			if (osvi.dwMajorVersion <= 4) 
         {
 				// NB: NT 4.0 and earlier.
-				sprintf (szOperatingSystem, "version %d.%d %s (Build %d)",
+				sprintf (operatingSystem, "version %d.%d %s (Build %d)",
 								 osvi.dwMajorVersion,
 								 osvi.dwMinorVersion,
 								 osvi.szCSDVersion,
 								 osvi.dwBuildNumber & 0xFFFF);
-        m_OSVersion = szOperatingSystem;
+        m_OSVersion = operatingSystem;
 			  } 
       else if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 1) 
         {
@@ -2554,22 +2554,12 @@ bool SystemInfo::QueryOSInformation()
 					// Free the DLL module.
 					FreeLibrary (hKernelDLL); 
 				  } 
-
- 				// IsWow64Process ();
-				if (bIsWindows64Bit)
-          {
-          strcat (szOperatingSystem, "64-Bit");
-          }
-				else 
-          {
-          strcat (szOperatingSystem, "32-Bit");
-          }
 			  } 
       else 
         { 
 				// Windows 2000 and everything else.
-				sprintf (szOperatingSystem,"%s(Build %d)", osvi.szCSDVersion, osvi.dwBuildNumber & 0xFFFF);
-        m_OSVersion = szOperatingSystem;
+				sprintf (operatingSystem,"%s(Build %d)", osvi.szCSDVersion, osvi.dwBuildNumber & 0xFFFF);
+        m_OSVersion = operatingSystem;
 			  }
 			break;
 
@@ -2639,8 +2629,16 @@ bool SystemInfo::QueryOSInformation()
 
 #endif
 
-  std::cout << "Sizeof(long long) = " << sizeof(long long) << std::endl;
-
   return true;
 
+}
+
+/** Return true if the machine is 64 bits */
+bool SystemInfo::Is64Bits()
+{
+  if(sizeof(long int) == 4)
+    {
+    return false;
+    }
+  return true;
 }
