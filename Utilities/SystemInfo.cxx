@@ -2391,7 +2391,7 @@ bool SystemInfo::QuerySolarisInfo()
   m_Features.L1CacheSize = 0; 
   m_Features.L2CacheSize = 0;  
 
-  m_TotalPhysicalMemory = atoi(this->ParseValueFromKStat("-s physmem").c_str())*8192;
+  m_TotalPhysicalMemory = atoi(this->ParseValueFromKStat("-s physmem").c_str());
   m_TotalPhysicalMemory *= 8192;
   m_TotalVirtualMemory = -1;
   m_AvailablePhysicalMemory = -1;
