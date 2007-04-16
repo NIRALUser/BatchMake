@@ -94,6 +94,8 @@ const char * SystemInfo::GetVendorID()
       return "Rise";
     case Transmeta:
       return "Transmeta";
+    case Sun:
+      return "Sun Microelectronics";
     default:
       return "Unknown Manufacturer";
     }
@@ -434,6 +436,7 @@ void SystemInfo::FindManufacturer()
   else if (strcmp (m_ChipID.Vendor, "GenuineTMx86") == 0)  m_ChipManufacturer = Transmeta;      // Transmeta
   else if (strcmp (m_ChipID.Vendor, "TransmetaCPU") == 0)  m_ChipManufacturer = Transmeta;      // Transmeta
   else if (strcmp (m_ChipID.Vendor, "Geode By NSC") == 0)  m_ChipManufacturer = NSC;          // National Semiconductor
+  else if (strcmp (m_ChipID.Vendor, "Sun") == 0)  m_ChipManufacturer = Sun;          // Sun Microelectronics
   else                          m_ChipManufacturer = UnknownManufacturer;  // Unknown manufacturer
 }
 
@@ -2323,37 +2326,34 @@ bool SystemInfo::QuerySolarisInfo()
 {
   // Parse values
   m_NumberOfPhysicalCPU = atoi(this->ParseValueFromKStat("-n system_misc -s ncpus").c_str());
-  m_NumberOfLogicalCPU = 1;
+  m_NumberOfLogicalCPU = m_NumberOfPhysicalCPU;
   
   if(m_NumberOfPhysicalCPU!=0)
     {
     m_NumberOfLogicalCPU /= m_NumberOfPhysicalCPU;
     }
 
-/*
-  m_CPUSpeedInMHz = atoi(this->ExtractValueFromSysCtl("hw.cpufrequency:").c_str()); 
-  m_CPUSpeedInMHz /= 1000000;
+  m_CPUSpeedInMHz = atoi(this->ParseValueFromKStat("-s clock_MHz").c_str());
 
   // Chip family
-  m_ChipID.Family = atoi(this->ExtractValueFromSysCtl("machdep.cpu.family:").c_str()); 
+  m_ChipID.Family = 0; 
  
   // Chip Vendor
-  strcpy(m_ChipID.Vendor,this->ExtractValueFromSysCtl("machdep.cpu.vendor:").c_str());
+  strcpy(m_ChipID.Vendor,this->ParseValueFromKStat("-s cpu_type").c_str());
   this->FindManufacturer();
   
   // Chip Model
-  m_ChipID.Model = atoi(this->ExtractValueFromSysCtl("machdep.cpu.model:").c_str());
-  this->RetrieveClassicalCPUIdentity();
+  sprintf(m_ChipID.ProcessorName,"%s",this->ParseValueFromKStat("-s cpu_type").c_str());
+  m_ChipID.Model = 0;
 
   // Cache size
-  m_Features.L1CacheSize = atoi(this->ExtractValueFromSysCtl("hw.l1icachesize:").c_str());  
-  m_Features.L2CacheSize = atoi(this->ExtractValueFromSysCtl("hw.l2cachesize:").c_str());  
+  m_Features.L1CacheSize = 0; 
+  m_Features.L2CacheSize = 0;  
 
-  m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("hw.memsize:").c_str())/1024;
+  m_TotalPhysicalMemory = atof(this->ParseValueFromKStat("-s phsymem").c_str())*8192;
   m_TotalVirtualMemory = -1;
   m_AvailablePhysicalMemory = -1;
   m_AvailableVirtualMemory = -1;
-*/
 
   return true;
 }
