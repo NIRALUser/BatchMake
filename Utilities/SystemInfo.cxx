@@ -2249,33 +2249,80 @@ std::string SystemInfo::RunProcess(std::vector<const char*> args)
 
   return buffer;
 }
+  
 
+std::string SystemInfo::ParseValueFromKStat(const char* arguments)
+{
+  std::vector<const char*> args;
+  args.clear();
+  args.push_back("kstat");
+  args.push_back("-p");
+  
+  std::string command = arguments;
+  long int start = -1;
+  long int pos = command.find(' ',0);
+  while(pos!=-1)
+    {
+    bool inQuotes = false;
+    // Check if we are between quotes
+    long int b0 = command.find('"',0);
+    long int b1 = command.find('"',b0+1);
+    while(b0 != -1 && b1 != -1 && b1>b0)
+      {
+      if(pos>b0 && pos<b1)
+        {
+        inQuotes = true;
+        break;
+        }
+      b0 = command.find('"',b1+1);
+      b1 = command.find('"',b0+1);
+      }
+    
+    if(!inQuotes)
+      {
+      std::string arg = command.substr(start+1,pos-start-1);
+
+      // Remove the quotes if any
+      long int quotes = arg.find('"');
+      while(quotes != -1)
+        {
+        arg.erase(quotes,1);
+        quotes = arg.find('"');
+        }
+      args.push_back(arg.c_str());  
+      start = pos;
+      }
+    pos = command.find(' ',pos+1);
+    }
+  std::string lastArg = command.substr(start+1,command.size()-start-1);
+  args.push_back(lastArg.c_str());
+
+  args.push_back(0);
+
+  std::string buffer = this->RunProcess(args);
+
+  std::string value = "";
+  for(unsigned int i=buffer.size()-1;i>0;i--)
+    {
+    if(buffer[i] == ' ' || buffer[i] == '\t')
+      {
+      break;
+      }   
+    if(buffer[i] != '\n' && buffer[i] != '\r')
+      {
+      std::string val = value;
+      value = buffer[i];
+      value += val;
+      }          
+    }
+  return value;
+}
 
 /** Querying for system information from Solaris */
 bool SystemInfo::QuerySolarisInfo()
 {
-  // Extract the arguments from the command line
-  std::vector<const char*> args;
-  args.push_back("kstat");
-  args.push_back("cpu_info");
-  args.push_back(0);
-
-  std::string buffer = this->RunProcess(args);
-  std::cout << buffer.c_str() << std::endl;
-
-  args.clear();
-  args.push_back("kstat");
-  args.push_back("|");
-  args.push_back("grep");
-  args.push_back("ncpus");
-  args.push_back(0);
-
-  buffer = this->RunProcess(args);
-  std::cout << buffer.c_str() << std::endl;
-
   // Parse values
-/* 
-  m_NumberOfPhysicalCPU = atoi(this->ExtractValueFromSysCtl("hw.physicalcpu:").c_str());
+  m_NumberOfPhysicalCPU = atoi(this->ParseValueFromKStat("-n system_misc -s ncpus").c_str());
   m_NumberOfLogicalCPU = 1;
   
   if(m_NumberOfPhysicalCPU!=0)
@@ -2283,6 +2330,7 @@ bool SystemInfo::QuerySolarisInfo()
     m_NumberOfLogicalCPU /= m_NumberOfPhysicalCPU;
     }
 
+/*
   m_CPUSpeedInMHz = atoi(this->ExtractValueFromSysCtl("hw.cpufrequency:").c_str()); 
   m_CPUSpeedInMHz /= 1000000;
 

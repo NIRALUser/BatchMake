@@ -241,6 +241,7 @@ protected:
 
   // For Solaris
   bool QuerySolarisInfo();
+  std::string ParseValueFromKStat(const char* arguments);
   std::string RunProcess(std::vector<const char*> args);
 
   // Evaluate the memory information.
