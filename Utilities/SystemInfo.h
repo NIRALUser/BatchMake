@@ -253,10 +253,10 @@ protected:
 
   // Evaluate the memory information.
   int QueryMemory();
-  long m_TotalVirtualMemory;
-  long m_AvailableVirtualMemory;
-  long m_TotalPhysicalMemory;
-  long m_AvailablePhysicalMemory;
+  long long m_TotalVirtualMemory;
+  long long m_AvailableVirtualMemory;
+  long long m_TotalPhysicalMemory;
+  long long m_AvailablePhysicalMemory;
 
   long int m_CurrentPositionInFile;
 
