@@ -84,7 +84,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <sys/utsname.h> // int uname(struct utsname *buf);
 #include <ctype.h> // int isdigit(int c);
 #include <errno.h> // extern int errno;
 #include <sys/time.h>
@@ -123,6 +122,12 @@ public:
   int GetProcessorAPICID();
   int GetProcessorCacheXSize(long int);
   bool DoesCPUSupportFeature(long int);
+  
+  const char * GetOSName();
+  const char * GetHostname();
+  const char * GetOSRelease();
+  const char * GetOSVersion();
+  const char * GetOSPlatform();
 
   unsigned int GetNumberOfLogicalCPU(); // per physical cpu
   unsigned int GetNumberOfPhysicalCPU();
@@ -253,7 +258,14 @@ protected:
 
   long int m_CurrentPositionInFile;
 
-
+  // Operating System information
+  bool QueryOSInformation();
+  std::string m_OSName;
+  std::string m_Hostname;
+  std::string m_OSRelease ;
+  std::string m_OSVersion;
+  std::string m_OSPlatform;
+   
 };
 
 #endif
