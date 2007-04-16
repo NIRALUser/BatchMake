@@ -137,10 +137,10 @@ public:
   bool DoesCPUSupportCPUID();
 
   // Retrieve memory information in kilobytes.
-  long GetTotalVirtualMemory();
-  long GetAvailableVirtualMemory();
-  long GetTotalPhysicalMemory();
-  long GetAvailablePhysicalMemory();  
+  long long GetTotalVirtualMemory();
+  long long GetAvailableVirtualMemory();
+  long long GetTotalPhysicalMemory();
+  long long GetAvailablePhysicalMemory();  
 
 protected:
 

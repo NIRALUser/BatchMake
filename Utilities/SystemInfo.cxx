@@ -1879,30 +1879,30 @@ int SystemInfo::QueryMemory()
 }
 
 /** */
-long SystemInfo::GetTotalVirtualMemory() 
+long long SystemInfo::GetTotalVirtualMemory() 
 { 
   return m_TotalVirtualMemory; 
 }
 
 /** */
-long SystemInfo::GetAvailableVirtualMemory() 
+long long SystemInfo::GetAvailableVirtualMemory() 
 { 
   return m_AvailableVirtualMemory; 
 }
 
-long SystemInfo::GetTotalPhysicalMemory() 
+long long SystemInfo::GetTotalPhysicalMemory() 
 { 
   return m_TotalPhysicalMemory; 
 }
 
 /** */
-long SystemInfo::GetAvailablePhysicalMemory() 
+long long SystemInfo::GetAvailablePhysicalMemory() 
 { 
   return m_AvailablePhysicalMemory; 
 }
 
 /** Get Cycle differences */
-long long  SystemInfo::GetCyclesDifference (DELAY_FUNC DelayFunction, unsigned int uiParameter)
+long long SystemInfo::GetCyclesDifference (DELAY_FUNC DelayFunction, unsigned int uiParameter)
 {
 #ifdef WIN32
 
