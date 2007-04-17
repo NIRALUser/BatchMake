@@ -18,7 +18,7 @@ SET (TRIGGER_SITE
 # Project Home Page
 SET (PROJECT_URL "http://public.kitware.com/BatchMake")
 
-SET(ROLLUP_URL "http://${DROP_SITE}/cgi-bin/KWWidgets-rollup-dashboard.sh")
+SET(ROLLUP_URL "http://${DROP_SITE}/cgi-bin/BatchMake-rollup-dashboard.sh")
 
 #
 # Dart server configuration 
