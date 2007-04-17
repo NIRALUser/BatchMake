@@ -18,17 +18,16 @@ SET (TRIGGER_SITE
 # Project Home Page
 SET (PROJECT_URL "http://public.kitware.com/BatchMake")
 
+SET(ROLLUP_URL "http://${DROP_SITE}/cgi-bin/KWWidgets-rollup-dashboard.sh")
+
 #
 # Dart server configuration 
 #
-SET (CVS_WEB_URL "http://caddlab.rad.unc.edu/cgi-bin/cvsweb.cgi/?cvsroot=BatchMake")
+SET(CVS_WEB_URL "http://public.kitware.com/cgi-bin/viewcvs.cgi/")
+SET(CVS_WEB_CVSROOT "BatchMake")
 
-OPTION(BUILD_DOXYGEN "Build source documentation using doxygen" "On")
-SET (DOXYGEN_CONFIG "${PROJECT_BINARY_DIR}/doxygen.config" )
 SET (USE_DOXYGEN "Off")
-SET (DOXYGEN_URL "http://caddlab.rad.unc.edu/Public/Dashboard/BatchMake-Dashboard/Documentation/Doxygen/html/" )
-SET (USE_GNATS "On")
-SET (GNATS_WEB_URL "http://www.itk.org/Bug")
+SET (USE_GNATS "Off")
 
 #
 # Copy over the testing logo
