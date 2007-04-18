@@ -7,6 +7,7 @@ bmSystemInfoTest.cxx
 )
 
 ADD_TEST(DashboardSendTest ${BATCHMAKE_TESTS} DashboardSendTest)
+ADD_TEST(SystemInfoTest ${BATCHMAKE_TESTS} SystemInfoTest)
 
 ADD_EXECUTABLE(BatchMakeTests BatchMakeTests.cxx ${BatchMakeTest_SRCS})
 TARGET_LINK_LIBRARIES(BatchMakeTests BatchMakeDashboard BatchMakeUtilities)
