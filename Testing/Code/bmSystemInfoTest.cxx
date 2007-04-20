@@ -28,15 +28,15 @@ int SystemInfoTest(int argc, char* argv[])
   std::cout << "Vendor = " << info.GetVendorID() << std::endl;
   std::cout << "Model = " <<info.GetModelID() << std::endl;
   std::cout << "Extended ProcessorName = " << info.GetExtendedProcessorName() << std::endl;
-  std::cout << "Processor Speed = " << info.GetProcessorClockFrequency() << " Mhz" << std::endl;
+  std::cout << "Processor Speed = " << info.GetProcessorClockFrequency() << "Mhz" << std::endl;
   std::cout << "Number of physical CPUs = " << info.GetNumberOfPhysicalCPU() << std::endl;
   std::cout << "Number of logical CPUs = " << info.GetNumberOfLogicalCPU() << std::endl;
   std::cout << "Cache Size = " << info.GetProcessorCacheSize() << std::endl;
 
-  std::cout << "Total Virtual Memory = "  << info.GetTotalVirtualMemory() << " b" << std::endl;
-  std::cout << "Available Virtual Memory = "  << info.GetAvailableVirtualMemory() << " b" << std::endl;
-  std::cout << "Total Physical Memory = "  << info.GetTotalPhysicalMemory() << " b" << std::endl;
-  std::cout << "AvailablePhysicalMemory = "  << info.GetAvailablePhysicalMemory() << " b" << std::endl;
+  std::cout << "Total Virtual Memory = "  << info.GetTotalVirtualMemory() << "Mb" << std::endl;
+  std::cout << "Available Virtual Memory = "  << info.GetAvailableVirtualMemory() << "Mb" << std::endl;
+  std::cout << "Total Physical Memory = "  << info.GetTotalPhysicalMemory() << "Mb" << std::endl;
+  std::cout << "AvailablePhysicalMemory = "  << info.GetAvailablePhysicalMemory() << "Mb" << std::endl;
     
   std::cout << "Hostname = " << info.GetHostname() << std::endl;
   std::cout << "Operating System Platform = " << info.GetOSPlatform() << std::endl;

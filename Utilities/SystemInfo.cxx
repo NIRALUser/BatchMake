@@ -1740,10 +1740,10 @@ int SystemInfo::RetreiveInformationFromCpuInfoFile()
 /** Query for the memory status */
 int SystemInfo::QueryMemory()
 {
-  m_TotalVirtualMemory = -1;
-  m_TotalPhysicalMemory = -1;
-  m_AvailableVirtualMemory = -1;
-  m_AvailablePhysicalMemory = -1;
+  m_TotalVirtualMemory = 0;
+  m_TotalPhysicalMemory = 0;
+  m_AvailableVirtualMemory = 0;
+  m_AvailablePhysicalMemory = 0;
 #ifdef __CYGWIN__
   return 0;
 #elif _WIN32
@@ -1754,10 +1754,10 @@ int SystemInfo::QueryMemory()
   unsigned long tp = ms.dwTotalPhys;
   unsigned long av = ms.dwAvailVirtual;
   unsigned long ap = ms.dwAvailPhys;
-  m_TotalVirtualMemory = tv>>10;
-  m_TotalPhysicalMemory = tp>>10;
-  m_AvailableVirtualMemory = av>>10;
-  m_AvailablePhysicalMemory = ap>>10;
+  m_TotalVirtualMemory = tv>>10>>10;
+  m_TotalPhysicalMemory = tp>>10>>10;
+  m_AvailableVirtualMemory = av>>10>>10;
+  m_AvailablePhysicalMemory = ap>>10>>10;
   return 1;
 #elif __linux
   unsigned long tv=0;
@@ -1845,10 +1845,10 @@ int SystemInfo::QueryMemory()
          &tp, &temp, &ap, &temp, &buffersMem, &cachedMem);
     fscanf(fd, "Swap: %lu %lu %lu\n", &tv, &temp, &av);
     
-    m_TotalVirtualMemory = tv>>10;
-    m_TotalPhysicalMemory = tp>>10;
-    m_AvailableVirtualMemory = av>>10;
-    m_AvailablePhysicalMemory = (ap+buffersMem+cachedMem)>>10;
+    m_TotalVirtualMemory = tv>>10>>10;
+    m_TotalPhysicalMemory = tp>>10>>10;
+    m_AvailableVirtualMemory = av>>10>>10;
+    m_AvailablePhysicalMemory = (ap+buffersMem+cachedMem)>>10>>10;
     }
   fclose( fd );
   return 1;
@@ -1870,10 +1870,10 @@ int SystemInfo::QueryMemory()
       {
       ap = tp - pdy.psd_rm * ps;
       av = tv - pdy.psd_vm;
-      m_TotalVirtualMemory = tv>>10;
-      m_TotalPhysicalMemory = tp>>10;
-      m_AvailableVirtualMemory = av>>10;
-      m_AvailablePhysicalMemory = ap>>10;
+      m_TotalVirtualMemory = tv>>10>>10;
+      m_TotalPhysicalMemory = tp>>10>>10;
+      m_AvailableVirtualMemory = av>>10>>10;
+      m_AvailablePhysicalMemory = ap>>10>>10;
       return 1;
       }
     }
@@ -1881,27 +1881,29 @@ int SystemInfo::QueryMemory()
 #else
   return 0;
 #endif
+
+
 }
 
 /** */
-long long SystemInfo::GetTotalVirtualMemory() 
+unsigned long SystemInfo::GetTotalVirtualMemory() 
 { 
   return m_TotalVirtualMemory; 
 }
 
 /** */
-long long SystemInfo::GetAvailableVirtualMemory() 
+unsigned long SystemInfo::GetAvailableVirtualMemory() 
 { 
   return m_AvailableVirtualMemory; 
 }
 
-long long SystemInfo::GetTotalPhysicalMemory() 
+unsigned long SystemInfo::GetTotalPhysicalMemory() 
 { 
   return m_TotalPhysicalMemory; 
 }
 
 /** */
-long long SystemInfo::GetAvailablePhysicalMemory() 
+unsigned long SystemInfo::GetAvailablePhysicalMemory() 
 { 
   return m_AvailablePhysicalMemory; 
 }
@@ -2396,11 +2398,15 @@ bool SystemInfo::QuerySolarisInfo()
   m_Features.L1CacheSize = 0; 
   m_Features.L2CacheSize = 0;  
 
-  m_TotalPhysicalMemory = atoi(this->ParseValueFromKStat("-s physmem").c_str());
-  m_TotalPhysicalMemory *= 8192;
-  m_TotalVirtualMemory = -1;
-  m_AvailablePhysicalMemory = -1;
-  m_AvailableVirtualMemory = -1;
+  char* tail;
+  unsigned long TotalMemory =
+       strtoul(this->ParseValueFromKStat("-s physmem").c_str(),&tail,10);
+  m_TotalPhysicalMemory*= TotalMemory*8192/1024;
+
+  // Undefined values (for now at least)
+  m_TotalVirtualMemory = 0;
+  m_AvailablePhysicalMemory = 0;
+  m_AvailableVirtualMemory = 0;
 
   return true;
 }

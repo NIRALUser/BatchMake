@@ -136,11 +136,11 @@ public:
 
   bool DoesCPUSupportCPUID();
 
-  // Retrieve memory information in kilobytes.
-  long long GetTotalVirtualMemory();
-  long long GetAvailableVirtualMemory();
-  long long GetTotalPhysicalMemory();
-  long long GetAvailablePhysicalMemory();  
+  // Retrieve memory information in megabyte.
+  unsigned long GetTotalVirtualMemory();
+  unsigned long GetAvailableVirtualMemory();
+  unsigned long GetTotalPhysicalMemory();
+  unsigned long GetAvailablePhysicalMemory();  
 
 protected:
 
@@ -253,10 +253,10 @@ protected:
 
   // Evaluate the memory information.
   int QueryMemory();
-  long long m_TotalVirtualMemory;
-  long long m_AvailableVirtualMemory;
-  long long m_TotalPhysicalMemory;
-  long long m_AvailablePhysicalMemory;
+  unsigned long m_TotalVirtualMemory;
+  unsigned long m_AvailableVirtualMemory;
+  unsigned long m_TotalPhysicalMemory;
+  unsigned long m_AvailablePhysicalMemory;
 
   long int m_CurrentPositionInFile;
 
