@@ -2194,9 +2194,9 @@ bool SystemInfo::ParseSysCtl()
    
   // Parse values for Mac
   m_TotalPhysicalMemory = atoi(this->ExtractValueFromSysCtl("hw.memsize:").c_str())/1024;
-  m_TotalVirtualMemory = -1;
-  m_AvailablePhysicalMemory = -1;
-  m_AvailableVirtualMemory = -1;
+  m_TotalVirtualMemory = 0;
+  m_AvailablePhysicalMemory = 0;
+  m_AvailableVirtualMemory = 0;
 
   m_NumberOfPhysicalCPU = atoi(this->ExtractValueFromSysCtl("hw.physicalcpu:").c_str());
   m_NumberOfLogicalCPU = atoi(this->ExtractValueFromSysCtl("hw.logicalcpu:").c_str());
@@ -2399,9 +2399,11 @@ bool SystemInfo::QuerySolarisInfo()
   m_Features.L2CacheSize = 0;  
 
   char* tail;
-  unsigned long TotalMemory =
-       strtoul(this->ParseValueFromKStat("-s physmem").c_str(),&tail,10);
-  m_TotalPhysicalMemory*= TotalMemory*8192/1024;
+  unsigned long totalMemory =
+       strtoul(this->ParseValueFromKStat("-s physmem").c_str(),&tail,0);
+  m_TotalPhysicalMemory = totalMemory/1024;
+  m_TotalPhysicalMemory *= 8192;
+  m_TotalPhysicalMemory /= 1024;
 
   // Undefined values (for now at least)
   m_TotalVirtualMemory = 0;
