@@ -1398,7 +1398,7 @@ bool SystemInfo::RetrieveClassicalCPUIdentity()
             case 3: sprintf (m_ChipID.ProcessorName,"P24T OverDrive"); break;
             case 4: sprintf (m_ChipID.ProcessorName,"P55C"); break;
             case 7: sprintf (m_ChipID.ProcessorName,"P54C"); break;
-            case 8: sprintf (m_ChipID.ProcessorName,"P55C (0.25µm)"); break;
+            case 8: sprintf (m_ChipID.ProcessorName,"P55C (0.25micron)"); break;
             default: sprintf (m_ChipID.ProcessorName,"Unknown Pentium family"); return false;
             }
           break;
@@ -1407,13 +1407,13 @@ bool SystemInfo::RetrieveClassicalCPUIdentity()
             {
             case 0: sprintf (m_ChipID.ProcessorName,"P6 A-Step"); break;
             case 1: sprintf (m_ChipID.ProcessorName,"P6"); break;
-            case 3: sprintf (m_ChipID.ProcessorName,"Pentium II (0.28 µm)"); break;
-            case 5: sprintf (m_ChipID.ProcessorName,"Pentium II (0.25 µm)"); break;
+            case 3: sprintf (m_ChipID.ProcessorName,"Pentium II (0.28 micron)"); break;
+            case 5: sprintf (m_ChipID.ProcessorName,"Pentium II (0.25 micron)"); break;
             case 6: sprintf (m_ChipID.ProcessorName,"Pentium II With On-Die L2 Cache"); break;
-            case 7: sprintf (m_ChipID.ProcessorName,"Pentium III (0.25 µm)"); break;
-            case 8: sprintf (m_ChipID.ProcessorName,"Pentium III (0.18 µm) With 256 KB On-Die L2 Cache "); break;
-            case 0xa: sprintf (m_ChipID.ProcessorName,"Pentium III (0.18 µm) With 1 Or 2 MB On-Die L2 Cache "); break;
-            case 0xb: sprintf (m_ChipID.ProcessorName,"Pentium III (0.13 µm) With 256 Or 512 KB On-Die L2 Cache "); break;
+            case 7: sprintf (m_ChipID.ProcessorName,"Pentium III (0.25 micron)"); break;
+            case 8: sprintf (m_ChipID.ProcessorName,"Pentium III (0.18 micron) With 256 KB On-Die L2 Cache "); break;
+            case 0xa: sprintf (m_ChipID.ProcessorName,"Pentium III (0.18 micron) With 1 Or 2 MB On-Die L2 Cache "); break;
+            case 0xb: sprintf (m_ChipID.ProcessorName,"Pentium III (0.13 micron) With 256 Or 512 KB On-Die L2 Cache "); break;
             default: sprintf (m_ChipID.ProcessorName,"Unknown P6 family"); return false;
             }
           break;
@@ -1427,9 +1427,9 @@ bool SystemInfo::RetrieveClassicalCPUIdentity()
             case 0:
               switch (m_ChipID.Model) 
                 {
-                case 0: sprintf (m_ChipID.ProcessorName,"Pentium IV (0.18 µm)"); break;
-                case 1: sprintf (m_ChipID.ProcessorName,"Pentium IV (0.18 µm)"); break;
-                case 2: sprintf (m_ChipID.ProcessorName,"Pentium IV (0.13 µm)"); break;
+                case 0: sprintf (m_ChipID.ProcessorName,"Pentium IV (0.18 micron)"); break;
+                case 1: sprintf (m_ChipID.ProcessorName,"Pentium IV (0.18 micron)"); break;
+                case 2: sprintf (m_ChipID.ProcessorName,"Pentium IV (0.13 micron)"); break;
                 default: sprintf (m_ChipID.ProcessorName,"Unknown Pentium 4 family"); return false;
                 }
               break;
@@ -1469,19 +1469,19 @@ bool SystemInfo::RetrieveClassicalCPUIdentity()
             case 1: sprintf (m_ChipID.ProcessorName,"5k86 (PR120, PR133)"); break;
             case 2: sprintf (m_ChipID.ProcessorName,"5k86 (PR166)"); break;
             case 3: sprintf (m_ChipID.ProcessorName,"5k86 (PR200)"); break;
-            case 6: sprintf (m_ChipID.ProcessorName,"K6 (0.30 µm)"); break;
-            case 7: sprintf (m_ChipID.ProcessorName,"K6 (0.25 µm)"); break;
+            case 6: sprintf (m_ChipID.ProcessorName,"K6 (0.30 micron)"); break;
+            case 7: sprintf (m_ChipID.ProcessorName,"K6 (0.25 micron)"); break;
             case 8: sprintf (m_ChipID.ProcessorName,"K6-2"); break;
             case 9: sprintf (m_ChipID.ProcessorName,"K6-III"); break;
-            case 0xd: sprintf (m_ChipID.ProcessorName,"K6-2+ or K6-III+ (0.18 µm)"); break;
+            case 0xd: sprintf (m_ChipID.ProcessorName,"K6-2+ or K6-III+ (0.18 micron)"); break;
             default: sprintf (m_ChipID.ProcessorName,"Unknown 80586 family"); return false;
             }
           break;
         case 6:
           switch (m_ChipID.Model) 
             {
-            case 1: sprintf (m_ChipID.ProcessorName,"Athlon™ (0.25 µm)"); break;
-            case 2: sprintf (m_ChipID.ProcessorName,"Athlon™ (0.18 µm)"); break;
+            case 1: sprintf (m_ChipID.ProcessorName,"Athlon™ (0.25 micron)"); break;
+            case 2: sprintf (m_ChipID.ProcessorName,"Athlon™ (0.18 micron)"); break;
             case 3: sprintf (m_ChipID.ProcessorName,"Duron™ (SF core)"); break;
             case 4: sprintf (m_ChipID.ProcessorName,"Athlon™ (Thunderbird core)"); break;
             case 6: sprintf (m_ChipID.ProcessorName,"Athlon™ (Palomino core)"); break;
@@ -1522,8 +1522,8 @@ bool SystemInfo::RetrieveClassicalCPUIdentity()
         case 5:
           switch (m_ChipID.Model) 
             {
-            case 0: sprintf (m_ChipID.ProcessorName,"mP6 (0.25 µm)"); break;
-            case 2: sprintf (m_ChipID.ProcessorName,"mP6 (0.18 µm)"); break;
+            case 0: sprintf (m_ChipID.ProcessorName,"mP6 (0.25 micron)"); break;
+            case 2: sprintf (m_ChipID.ProcessorName,"mP6 (0.18 micron)"); break;
             default: sprintf (m_ChipID.ProcessorName,"Unknown Rise family"); return false;
             }
           break;
