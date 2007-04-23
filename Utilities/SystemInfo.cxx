@@ -1833,6 +1833,9 @@ int SystemInfo::QueryMemory()
     
     fscanf(fd,"SwapTotal:%ld kB\n", &m_TotalVirtualMemory);
     fscanf(fd,"SwapFree:%ld kB\n", &m_AvailableVirtualMemory);
+
+    m_TotalVirtualMemory /= 1024;
+    m_AvailableVirtualMemory /= 1024;
     }
   else
     {
