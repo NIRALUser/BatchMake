@@ -1818,7 +1818,9 @@ int SystemInfo::QueryMemory()
     fscanf(fd,"Buffers:%ld kB\n", &buffersMem);
     fscanf(fd,"Cached:%ld kB\n", &cachedMem);
     
-    m_AvailablePhysicalMemory=freeMem+cachedMem+buffersMem;
+    m_TotalPhysicalMemory /= 1024;
+    m_AvailablePhysicalMemory = freeMem+cachedMem+buffersMem;
+    m_AvailablePhysicalMemory /= 1024;
     
     // Skip SwapCached, Active, Inactive, HighTotal, HighFree, LowTotal
     // and LowFree.
