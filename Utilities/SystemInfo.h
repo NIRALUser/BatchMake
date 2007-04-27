@@ -142,6 +142,9 @@ public:
   unsigned long GetTotalPhysicalMemory();
   unsigned long GetAvailablePhysicalMemory();  
 
+  double GetMIPS();
+  double GetMFLOPS();
+
 protected:
 
   typedef struct tagID 
@@ -217,6 +220,7 @@ protected:
   bool RetrieveCPUPowerManagement();
   bool RetrieveClassicalCPUIdentity();
   bool RetrieveExtendedCPUIdentity();
+  bool RetrieveMIPSAndMFLOPS();
   
   Manufacturer  m_ChipManufacturer;
   CPUFeatures   m_Features;
@@ -224,6 +228,8 @@ protected:
   float         m_CPUSpeedInMHz;
   unsigned int  m_NumberOfLogicalCPU;
   unsigned int  m_NumberOfPhysicalCPU;
+  double        m_MIPS;
+  double        m_MFLOPS;
 
   int CPUCount();
   unsigned char LogicalCPUPerPhysicalCPU();

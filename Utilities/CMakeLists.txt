@@ -17,6 +17,7 @@ SET(BatchMakeUtilities_HDRS
   XMLBufferReader.h
   SliceExtractor.h
   SystemInfo.h
+  Whetstone.h
 )
 
 
@@ -30,6 +31,7 @@ SET(BatchMakeUtilities_SRCS
   XMLBufferReader.cxx
   SliceExtractor.cxx
   SystemInfo.cxx
+  Whetstone.cxx
 )
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})

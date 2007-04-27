@@ -14,6 +14,7 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "SystemInfo.h"
+#include "Whetstone.h"
 #include <vector>
 #include <itksys/Process.h>
 
@@ -66,6 +67,8 @@ SystemInfo::SystemInfo ()
   m_OSRelease = "";
   m_OSVersion = "";
   m_OSPlatform = "";
+
+  this->RetrieveMIPSAndMFLOPS();
 
   this->QueryOSInformation();
 
@@ -209,6 +212,18 @@ int SystemInfo::GetProcessorAPICID()
 int SystemInfo::GetProcessorCacheSize()
 {
   return m_Features.L1CacheSize;
+}
+
+/** Return MIPS. */
+double SystemInfo::GetMIPS()
+{
+  return m_MIPS;
+}
+
+/** Return MFLOPS. */
+double SystemInfo::GetMFLOPS()
+{
+  return m_MFLOPS;
 }
 
 /** Return the chosen cache size. */
@@ -1637,6 +1652,18 @@ bool SystemInfo::RetrieveClassicalCPUIdentity()
 
   return true;
 }
+
+bool SystemInfo::RetrieveMIPSAndMFLOPS()
+  {
+  Whetstone whet;
+  whet.SetDesiredDurations(5, 20);
+  whet.ComputeBenchmark();
+
+  m_MIPS = whet.GetMIPS();
+  m_MFLOPS = whet.GetMFLOPS();
+
+  return true;
+  }
 
 /** Extract a value from the CPUInfo file */
 std::string SystemInfo::ExtractValueFromCpuInfoFile(std::string buffer,const char* word,int init)
