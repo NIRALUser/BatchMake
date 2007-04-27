@@ -7,6 +7,8 @@ ENDIF(USE_FLTK)
 
 SUBDIRS(Zip)
 
+SET_SOURCE_FILES_PROPERTIES(Whetstone.cxx PROPERTIES COMPILE_FLAGS -Od)
+
 SET(BatchMakeUtilities_HDRS
   MString.h
   Timer.h
