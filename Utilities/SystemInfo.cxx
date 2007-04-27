@@ -1437,7 +1437,7 @@ bool SystemInfo::RetrieveClassicalCPUIdentity()
               sprintf (m_ChipID.ProcessorName,"Intel McKinley (IA-64)");
               break;
             default:
-              sprintf (m_ChipID.ProcessorName,"Pentium D");
+              sprintf (m_ChipID.ProcessorName,"Pentium");
             }
           break;
         default:
