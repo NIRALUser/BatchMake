@@ -41,6 +41,7 @@ SET(BatchMakeUtilities_SRCS
 )
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
+TARGET_LINK_LIBRARIES(BatchMakeUtilities ITKCommon)
 
 # Installation file
 INSTALL(TARGETS BatchMakeUtilities
