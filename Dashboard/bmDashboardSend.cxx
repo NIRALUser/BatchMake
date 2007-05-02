@@ -37,6 +37,7 @@ void DashboardSend::Init()
   m_ServerOutput = "";
   m_Url = "";
   m_UserKey = "";
+  m_HostKey = "";
   m_ValueList.clear(); 
   m_DataList.clear(); 
 }
@@ -97,6 +98,7 @@ bool DashboardSend::CreateExperiment(const char* description)
   request.AddParam("project",m_Project.c_str());
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
+  request.AddParam("hostkey",m_HostKey.c_str());
     
   request.AddParam("method","CreateExperiment");
   request.AddParam("name",m_ExperimentName.c_str());
@@ -132,7 +134,8 @@ bool DashboardSend::CreateMethod(const char* description)
   request.AddParam("project",m_Project.c_str());
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
-    
+  request.AddParam("hostkey",m_HostKey.c_str());
+
   request.AddParam("method","CreateMethod");
   request.AddParam("name",m_MethodName.c_str());
   request.AddParam("experiment",m_ExperimentName.c_str());
@@ -169,7 +172,8 @@ bool DashboardSend::CreateMethodParameter(const char* name,ParameterType paramTy
   request.AddParam("project",m_Project.c_str());
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
-    
+  request.AddParam("hostkey",m_HostKey.c_str());
+
   request.AddParam("method","CreateParameter");
   request.AddParam("name",name);
   request.AddParam("experiment",m_ExperimentName.c_str());
@@ -232,6 +236,7 @@ bool DashboardSend::Send()
   request.AddParam("project",m_Project.c_str());
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
+  request.AddParam("hostkey",m_HostKey.c_str());
 
   if(m_MethodName.size()==0)
     {
@@ -277,6 +282,7 @@ bool DashboardSend::SendRequest(HttpRequest & request)
   url += "/dashboard.php";
   m_ServerOutput = request.Send(url.c_str());
 
+  std::cout << m_ServerOutput.c_str() << std::endl;
   if (m_ServerOutput.length()>3)
     {
     std::cout << "Bad Host or connexion problem" << std::endl;

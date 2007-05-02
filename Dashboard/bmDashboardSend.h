@@ -82,6 +82,12 @@ public:
     m_Url = url;
     }
 
+  /** Set the hostkey */
+  void SetHostKey(const char* hostKey)
+    {
+    m_HostKey = hostKey;
+    }
+
   /** Create an experiment.
    *  The actual experiment name is used */
   bool CreateExperiment(const char* description);
@@ -119,6 +125,7 @@ protected:
   std::string m_ExperimentName;
   std::string m_Url;
   std::string m_UserKey;
+  std::string m_HostKey;
 
   std::string m_ServerOutput; // string returned by the server
 
