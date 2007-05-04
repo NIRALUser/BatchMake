@@ -17,6 +17,7 @@ SET(BatchMakeUtilities_HDRS
   XMLBufferReader.h
   SliceExtractor.h
   SystemInfo.h
+  Whetstone.h
   )
 
 
@@ -34,6 +35,12 @@ SET(BatchMakeUtilities_SRCS
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
 TARGET_LINK_LIBRARIES(BatchMakeUtilities ITKCommon)
+
+ADD_EXECUTABLE(GetCPUInfo GetCPUInfo.cxx)
+TARGET_LINK_LIBRARIES(GetCPUInfo BatchMakeUtilities)
+ADD_EXECUTABLE(GetCPUSpeed GetCPUSpeed.cxx Whetstone.cxx)
+ADD_EXECUTABLE(GetMemoryInfo GetMemoryInfo.cxx)
+TARGET_LINK_LIBRARIES(GetMemoryInfo BatchMakeUtilities)
 
 # Installation file
 INSTALL(TARGETS BatchMakeUtilities 
