@@ -32,7 +32,7 @@ TARGET_LINK_LIBRARIES(CondorWatcherTool CondorWatcher)
 # Installation file
 INSTALL(TARGETS CondorWatcherTool CondorWatcher  
         RUNTIME DESTINATION bin
-        ARCHIVE DESTINATION lib)
+        ARCHIVE DESTINATION lib/BatchMake)
 INSTALL(FILES ${CondorWatcher_HDRS} DESTINATION include/BatchMake/Utilities/CondorWatcher)
 INSTALL(FILES ${CondorWatcher_SRCS} ${CondorWatcherGUI_SRCS} main.cxx DESTINATION source/Utilities/CondorWatcher)
 INSTALL(FILES CMakeLists.txt DESTINATION source/Utilities/CondorWatcher)

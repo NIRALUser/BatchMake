@@ -36,15 +36,35 @@ SET(BatchMakeUtilities_SRCS
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
 TARGET_LINK_LIBRARIES(BatchMakeUtilities ITKCommon)
 
-ADD_EXECUTABLE(GetCPUInfo GetCPUInfo.cxx)
-TARGET_LINK_LIBRARIES(GetCPUInfo BatchMakeUtilities)
-ADD_EXECUTABLE(GetCPUSpeed GetCPUSpeed.cxx Whetstone.cxx)
-ADD_EXECUTABLE(GetMemoryInfo GetMemoryInfo.cxx)
-TARGET_LINK_LIBRARIES(GetMemoryInfo BatchMakeUtilities)
+ADD_EXECUTABLE(bmGetCPUInfo GetCPUInfo.cxx)
+TARGET_LINK_LIBRARIES(bmGetCPUInfo BatchMakeUtilities)
+UTILITY_SOURCE(BatchMake_GET_CPU_INFO_EXE bmGetCPUInfo 
+  "" GetCPUInfo.cxx)
+MARK_AS_ADVANCED(BatchMake_GET_CPU_INFO_EXE)
+
+ADD_EXECUTABLE(bmGetMemoryInfo GetMemoryInfo.cxx)
+TARGET_LINK_LIBRARIES(bmGetMemoryInfo BatchMakeUtilities)
+UTILITY_SOURCE(BatchMake_GET_MEMORY_INFO_EXE bmGetMemoryInfo 
+  "" GetMemoryInfo.cxx)
+MARK_AS_ADVANCED(BatchMake_GET_MEMORY_INFO_EXE)
+
+ADD_EXECUTABLE(bmGetCPUSpeed GetCPUSpeed.cxx Whetstone.cxx)
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(Whetstone.cxx PROPERTIES COMPILE_FLAGS -O0)
+ELSE(CMAKE_COMPILER_IS_GNUCXX)
+  IF(WIN32)
+    SET_SOURCE_FILES_PROPERTIES(Whetstone.cxx PROPERTIES COMPILE_FLAGS -Od)
+  ENDIF(WIN32)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+UTILITY_SOURCE(BatchMake_GET_CPU_SPEED_EXE bmGetCPUSpeed 
+  "" GetCPUSpeed.cxx)
+MARK_AS_ADVANCED(BatchMake_GET_CPU_SPEED_EXE)
 
 # Installation file
-INSTALL(TARGETS BatchMakeUtilities 
-        ARCHIVE DESTINATION lib)
+INSTALL(TARGETS BatchMakeUtilities bmGetCPUInfo bmGetMemoryInfo bmGetCPUSpeed
+        ARCHIVE DESTINATION lib/BatchMake
+        RUNTIME DESTINATION bin)
 INSTALL(FILES ${BatchMakeUtilities_HDRS} 
         DESTINATION include/BatchMake/Utilities)
 INSTALL(FILES ${BatchMakeUtilities_SRCS} 

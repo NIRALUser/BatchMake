@@ -18,6 +18,9 @@ CMAKE_EXPORT_BUILD_SETTINGS(
 #-----------------------------------------------------------------------------
 # Settings specific to the build tree.
 
+# The install-only section is empty for the build tree.
+SET(BatchMake_CONFIG_INSTALL_ONLY)
+
 # The "use" file.
 SET(BatchMake_USE_FILE_CONFIG 
   ${CMAKE_CURRENT_SOURCE_DIR}/UseBatchMake.cmake)
@@ -27,10 +30,10 @@ SET(BatchMake_BUILD_SETTINGS_FILE_CONFIG
   ${BatchMake_BINARY_DIR}/BatchMakeBuildSettings.cmake)
 
 # The library directories.
-SET(BatchMake_LIBRARY_DIRS_CONFIG ${LIBRARY_OUTPUT_PATH})
+SET(BatchMake_LIBRARY_DIRS_CONFIG ${BatchMake_LIBRARY_DIR})
 
 # The runtime directories.
-SET(BatchMake_RUNTIME_DIRS_CONFIG ${LIBRARY_OUTPUT_PATH})
+SET(BatchMake_RUNTIME_DIRS_CONFIG ${BatchMake_RUNTIME_DIR})
 
 # The include directories.
 SET(BatchMake_INCLUDE_DIRS_CONFIG ${BatchMake_INCLUDE_PATH})
@@ -39,11 +42,19 @@ SET(BatchMake_INCLUDE_DIRS_CONFIG ${BatchMake_INCLUDE_PATH})
 SET(BatchMake_LIBRARY_DEPENDS_FILE 
   ${BatchMake_BINARY_DIR}/BatchMakeLibraryDepends.cmake)
 
+# The CMake macros dir.
+SET(BatchMake_CMAKE_DIR_CONFIG ${BatchMake_CMAKE_DIR})
+
 # The ITK options.
 SET(BatchMake_ITK_DIR_CONFIG ${ITK_DIR})
 
 # The FLTK options.
 SET(BatchMake_FLTK_DIR_CONFIG ${FLTK_DIR})
+
+# Utilities
+SET(BatchMake_GET_CPU_INFO_EXE_CONFIG ${BatchMake_GET_CPU_INFO_EXE})
+SET(BatchMake_GET_MEMORY_INFO_EXE_CONFIG ${BatchMake_GET_MEMORY_INFO_EXE})
+SET(BatchMake_GET_CPU_SPEED_EXE_CONFIG ${BatchMake_GET_CPU_SPEED_EXE})
 
 # The build configuration information.
 SET(BatchMake_CONFIGURATION_TYPES_CONFIG ${CMAKE_CONFIGURATION_TYPES})

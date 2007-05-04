@@ -44,8 +44,8 @@ ADD_LIBRARY(BatchMakeGrid ${BatchMakeGrid_SRCS})
 
 # Installation file
 INSTALL(TARGETS BatchMakeGrid 
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
+        LIBRARY DESTINATION lib/BatchMake
+        ARCHIVE DESTINATION lib/BatchMake)
 INSTALL(FILES ${BatchMakeGrid_HDRS} DESTINATION include/BatchMake/Grid)
 INSTALL(FILES CMakeLists.txt DESTINATION source/Grid)
 INSTALL(FILES ${BatchMakeGrid_SRCS} DESTINATION source/Grid)

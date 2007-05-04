@@ -13,8 +13,13 @@ SET(BatchMake_VERSION_PATCH "@BatchMake_VERSION_PATCH@")
 # The libraries.
 SET(BatchMake_LIBRARIES "@BatchMake_LIBRARIES@")
 
+# The CMake macros dir.
+SET(BatchMake_CMAKE_DIR "@BatchMake_CMAKE_DIR_CONFIG@")
+
 # The configuration options.
 SET(BatchMake_BUILD_SHARED_LIBS "@BUILD_SHARED_LIBS@")
+SET(BatchMake_DASHBOARD_SUPPORT "@DASHBOARD_SUPPORT@")
+SET(BatchMake_GRID_SUPPORT "@GRID_SUPPORT@")
 
 # The C and C++ flags added to the cmake-configured flags.
 SET(BatchMake_REQUIRED_C_FLAGS 
@@ -47,13 +52,11 @@ SET(BatchMake_RUNTIME_DIRS "@BatchMake_RUNTIME_DIRS_CONFIG@")
 SET(BatchMake_INCLUDE_DIRS "@BatchMake_INCLUDE_DIRS_CONFIG@")
 
 # The library dependencies file.
-IF(NOT BatchMake_NO_LIBRARY_DEPENDS)
+IF(NOT BatchMake_NO_LIBRARY_DEPENDS AND
+    EXISTS "@BatchMake_LIBRARY_DEPENDS_FILE@")
   INCLUDE("@BatchMake_LIBRARY_DEPENDS_FILE@")
-ENDIF(NOT BatchMake_NO_LIBRARY_DEPENDS)
-
-# The Grid and Dashboard options
-SET(BatchMake_DASHBOARD_SUPPORT "@DASHBOARD_SUPPORT@")
-SET(BatchMake_GRID_SUPPORT "@GRID_SUPPORT@")
+ENDIF(NOT BatchMake_NO_LIBRARY_DEPENDS AND
+  EXISTS "@BatchMake_LIBRARY_DEPENDS_FILE@")
 
 # The ITK options.
 SET(BatchMake_ITK_DIR "@BatchMake_ITK_DIR_CONFIG@")
@@ -61,6 +64,11 @@ SET(BatchMake_ITK_DIR "@BatchMake_ITK_DIR_CONFIG@")
 # The FLTK options.
 SET(BatchMake_USE_FLTK "@USE_FLTK@")
 SET(BatchMake_FLTK_DIR "@BatchMake_FLTK_DIR_CONFIG@")
+
+# Utilities
+SET(BatchMake_GET_CPU_INFO_EXE "@BatchMake_GET_CPU_INFO_EXE_CONFIG@")
+SET(BatchMake_GET_CPU_SPEED_EXE "@BatchMake_GET_CPU_SPEED_EXE_CONFIG@")
+SET(BatchMake_GET_MEMORY_INFO_EXE "@BatchMake_GET_MEMORY_INFO_EXE_CONFIG@")
 
 # An install tree always provides one build configuration.
 # A build tree may provide either one or multiple build

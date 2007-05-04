@@ -53,23 +53,18 @@ SET(Unzip_SRCS
 CONFIGURE_FILE(${Zip_SOURCE_DIR}/zlibDllConfig.h.in
                ${Zip_BINARY_DIR}/zlibDllConfig.h)
 
-ADD_LIBRARY(ZLib ${ZLib_SRCS})
+ADD_LIBRARY(BatchMakeZLib ${ZLib_SRCS})
 
 ADD_EXECUTABLE(Zip ${Zip_SRCS})
-TARGET_LINK_LIBRARIES(Zip
-  ZLib
-)
+TARGET_LINK_LIBRARIES(Zip BatchMakeZLib)
 
 ADD_EXECUTABLE(Unzip ${Unzip_SRCS})
-TARGET_LINK_LIBRARIES(Unzip
-  ZLib
-)
-
+TARGET_LINK_LIBRARIES(Unzip BatchMakeZLib)
 
 # Installation file
-INSTALL(TARGETS ZLib Zip Unzip 
+INSTALL(TARGETS BatchMakeZLib
         RUNTIME DESTINATION bin
-        ARCHIVE DESTINATION lib)
+        ARCHIVE DESTINATION lib/BatchMake)
 INSTALL(FILES ${ZLib_HDRS} DESTINATION include/BatchMake/Utilities/Zip)
 INSTALL(FILES ${ZLib_SRCS} ${Zip_SRCS} ${Unzip_SRCS} DESTINATION source/Utilities/Zip)
 INSTALL(FILES CMakeLists.txt zlibDllConfig.h.in DESTINATION source/Utilities/Zip)

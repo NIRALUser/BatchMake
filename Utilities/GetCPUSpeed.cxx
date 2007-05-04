@@ -4,6 +4,7 @@
 int main(int argc, char * argv[]) 
 { 
   Whetstone info;
+  info.SetDesiredDurations(5, 20);
   info.ComputeBenchmark();
 
   std::cout << "CPU_MIPS=" << (int) info.GetMIPS() 

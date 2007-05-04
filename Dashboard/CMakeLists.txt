@@ -80,7 +80,9 @@ TARGET_LINK_LIBRARIES(bmSliceExtractor BatchMakeDashboard BatchMakeUtilities)
 # Installation file
 INSTALL(TARGETS BatchMakeDashboard bmSliceExtractor bmGridStore bmGridSend
         RUNTIME DESTINATION bin
-        ARCHIVE DESTINATION lib)
-INSTALL(FILES ${BatchMakeDashboard_HDRS} DESTINATION include/BatchMake/Dashboard)
-INSTALL(FILES ${BatchMakeDashboard_SRCS} bmGridSend.cxx bmGridStore.cxx bmSliceExtractor.cxx DESTINATION source/Dashboard)
+        ARCHIVE DESTINATION lib/BatchMake)
+INSTALL(FILES ${BatchMakeDashboard_HDRS} 
+  DESTINATION include/BatchMake/Dashboard)
+INSTALL(FILES ${BatchMakeDashboard_SRCS} bmGridSend.cxx bmGridStore.cxx bmSliceExtractor.cxx 
+  DESTINATION source/Dashboard)
 INSTALL(FILES CMakeLists.txt DESTINATION source/Dashboard)

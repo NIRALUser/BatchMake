@@ -33,6 +33,9 @@ IF(NOT BatchMake_USE_FILE_INCLUDED)
   # Add link directories needed to use BatchMake.
   LINK_DIRECTORIES(${BatchMake_LIBRARY_DIRS})
 
+  # Add cmake module path.
+  SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${BatchMake_CMAKE_DIR}")
+
   # Use ITK.
   IF(NOT ITK_DIR)
     SET(ITK_DIR ${BatchMake_ITK_DIR})
@@ -57,7 +60,8 @@ IF(NOT BatchMake_USE_FILE_INCLUDED)
           MESSAGE("FLTK11_USE_FILE not found.")
         ENDIF(FLTK11_USE_FILE)
       ELSE(FLTK_FOUND)
-        MESSAGE("FLTK not found in BatchMake_FLTK_DIR=\"${BatchMake_FLTK_DIR}\".")
+        MESSAGE(
+          "FLTK not found in BatchMake_FLTK_DIR=\"${BatchMake_FLTK_DIR}\".")
       ENDIF(FLTK_FOUND)
     ENDIF(NOT FLTK_DIR)
   ENDIF(BatchMake_USE_FLTK AND NOT BatchMake_NO_USE_FLTK)

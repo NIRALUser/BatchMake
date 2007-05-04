@@ -97,7 +97,7 @@ void ScriptEditorGUIControls::Timer(void* ui)
 void ScriptEditorGUIControls::Show()
 {
   // disable the splash screen for the moment
-#ifdef BMSPLASHSCREEN
+#ifdef BM_SPLASHSCREEN
   if(!g_Scripteditorgui->shown())
   {
     SplashScreenControls* ui = new SplashScreenControls();

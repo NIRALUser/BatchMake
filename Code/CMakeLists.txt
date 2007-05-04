@@ -189,8 +189,8 @@ TARGET_LINK_LIBRARIES(BatchMake ${BATCHMAKE_LIBS})
 # Installation file
 INSTALL(TARGETS BatchMake BatchMakeLib
         RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib/BatchMake
+        ARCHIVE DESTINATION lib/BatchMake
         )
 INSTALL(FILES ${BatchMake_HDRS}  ${BatchMakeLib_HDRS}  DESTINATION include/BatchMake/Code)
 INSTALL(FILES CMakeLists.txt DESTINATION source/Code)
