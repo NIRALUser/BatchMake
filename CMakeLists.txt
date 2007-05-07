@@ -154,7 +154,6 @@ SUBDIRS(
   Utilities
   Code
   Testing/Code
-  Documentation
   )
 
 SET(BatchMake_LIBRARIES
@@ -171,6 +170,10 @@ MARK_AS_ADVANCED(BatchMake_USE_KWSTYLE)
 IF(BatchMake_USE_KWSTYLE)
   SUBDIRS(Utilities/KWStyle)
 ENDIF(BatchMake_USE_KWSTYLE)
+
+#-----------------------------------------------------------------------------
+# Doc
+SUBDIRS(Documentation/Doxygen)
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
