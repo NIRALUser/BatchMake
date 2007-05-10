@@ -4,6 +4,7 @@
 int main(int argc, char * argv[]) 
 { 
   SystemInfo info;
+  info.RunCPUCheck();
   std::cout << "CPU_SPEED_MHZ=" << (int) info.GetProcessorClockFrequency() 
             << std::endl;
   std::cout << "CPU_PHYSICAL_CPUS=" << (int) info.GetNumberOfPhysicalCPU() 

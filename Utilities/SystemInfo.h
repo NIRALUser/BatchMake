@@ -142,6 +142,12 @@ public:
   unsigned long GetTotalPhysicalMemory();
   unsigned long GetAvailablePhysicalMemory();  
 
+  /** Run the different checks */
+  void RunCPUCheck();
+  void RunOSCheck();
+  void RunMemoryCheck();
+
+
 protected:
 
   typedef struct tagID 

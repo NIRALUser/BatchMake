@@ -4,6 +4,7 @@
 int main(int argc, char * argv[]) 
 { 
   SystemInfo info;
+  info.RunMemoryCheck();
   unsigned long memoryinMB = info.GetTotalPhysicalMemory();
   std::cout << "PHYSICAL_MEMORY_MB=" << memoryinMB << std::endl;
   return 1; 

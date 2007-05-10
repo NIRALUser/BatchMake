@@ -21,7 +21,20 @@
   #include <sys/utsname.h> // int uname(struct utsname *buf);
 #endif
 
-SystemInfo::SystemInfo ()
+SystemInfo::SystemInfo()
+{
+  m_OSName = "";
+  m_Hostname = "";
+  m_OSRelease = "";
+  m_OSVersion = "";
+  m_OSPlatform = "";
+}
+
+SystemInfo::~SystemInfo()
+{
+}
+
+void SystemInfo::RunCPUCheck()
 {
 #ifdef WIN32
   // Check to see if this processor supports CPUID.
@@ -51,28 +64,29 @@ SystemInfo::SystemInfo ()
     RetrieveProcessorSerialNumber();
     }
   this->CPUCount();
-  this->QueryMemory();
 #elif defined(__APPLE__)
   this->ParseSysCtl();
 #elif defined (__SVR4) && defined (__sun)
   this->QuerySolarisInfo();
 #else
   this->RetreiveInformationFromCpuInfoFile();
-  this->QueryMemory();
 #endif
-
-  m_OSName = "";
-  m_Hostname = "";
-  m_OSRelease = "";
-  m_OSVersion = "";
-  m_OSPlatform = "";
-
-  this->QueryOSInformation();
-
 }
 
-SystemInfo::~SystemInfo()
+void SystemInfo::RunOSCheck()
 {
+  this->QueryOSInformation();
+}
+ 
+void SystemInfo::RunMemoryCheck()
+{
+#if defined(__APPLE__)
+  this->ParseSysCtl();
+#elif defined (__SVR4) && defined (__sun)
+  this->QuerySolarisInfo();
+#else
+  this->QueryMemory();
+#endif
 }
 
 /** Get the vendor string */

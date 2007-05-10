@@ -36,6 +36,10 @@ SET(BatchMakeUtilities_SRCS
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
 TARGET_LINK_LIBRARIES(BatchMakeUtilities ITKCommon)
 
+ADD_EXECUTABLE(bmCheckMemory CheckMemory.cxx)
+TARGET_LINK_LIBRARIES(bmCheckMemory BatchMakeUtilities)
+
+
 ADD_EXECUTABLE(bmGetCPUInfo GetCPUInfo.cxx)
 TARGET_LINK_LIBRARIES(bmGetCPUInfo BatchMakeUtilities)
 UTILITY_SOURCE(BatchMake_GET_CPU_INFO_EXE bmGetCPUInfo 
