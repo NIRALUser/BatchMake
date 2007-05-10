@@ -179,7 +179,11 @@ int main(int argc, char * argv[])
   //std::cout << "Mean Physical Memory Used = " << str.physicalMemUsed-physicalMemUsedBeg << "MB" << std::endl;
   std::cout << "Max Virtual Memory Used = " << str.maxVirtualMemUsed-maxVirtualMemUsedBeg  << "MB" << std::endl;
   std::cout << "Max Physical Memory Used = " << str.maxPhysicalMemUsed-maxPhysicalMemUsedBeg << "MB" << std::endl;
-  std::cout << "Computed over " << str.iterations << " iterations" << std::endl;
+  
+  if(str.iterations < 10)
+    {
+    std::cout << "Computed only over " << str.iterations << " iterations" << std::endl;
+    }
 
   return 1; 
 }
