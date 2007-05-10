@@ -1,5 +1,7 @@
 SET(BATCHMAKE_TESTS ${CXX_TEST_PATH}/BatchMakeTests)
 
+ADD_EXECUTABLE(BatchMakeMemoryTest BatchMakeMemoryTest.cxx)
+
 IF(DASHBOARD_SUPPORT)
 SET(BatchMakeTest_SRCS
 bmDashboardSendTest.cxx
