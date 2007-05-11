@@ -31,17 +31,18 @@ ScriptListDirInDirAction::~ScriptListDirInDirAction()
 
 bool ScriptListDirInDirAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_Parameters.size() <2)
-   {
-     error->SetError(MString("No enough parameter for ListDirInDir function !"),linenumber);
-     return false;
-   }
+  if (m_Parameters.size() <2)
+    {
+    error->SetError(MString("No enough parameter for ListDirInDir function !"),linenumber);
+    return false;
+    }
 
-   m_Manager->SetTestVariable(m_Parameters[0]);
+  m_Manager->SetTestVariable(m_Parameters[0]);
 
   for (unsigned int i=1;i<m_Parameters.size();i++)
-      m_Manager->TestConvert(m_Parameters[i],linenumber);
-
+    {
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
+    }
   return true;
 }
 
@@ -111,8 +112,16 @@ void ScriptListDirInDirAction::Execute()
   itksys::RegularExpression regex(regexFromWildcard.c_str());
 
   for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
-    {
+    {    
     std::string dname = directory.GetFile(i);
+
+    // Check if this is actually a directory
+    std::string completePath = dir+"/"+dname;
+    if(!itksys::SystemTools::FileIsDirectory(completePath.c_str()))
+      {
+      continue;
+      }
+
     std::string filename = itksys::SystemTools::GetFilenameName(dname);
 
     if(regex.find(dname.c_str())
