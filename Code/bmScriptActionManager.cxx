@@ -40,6 +40,7 @@
 #include "bmScriptMakeDirectoryAction.h"
 #include "bmScriptGetTimeAction.h"
 #include "bmScriptGetCurrentDateTimeAction.h"
+#include "bmScriptGlobAction.h"
 
 #ifdef BM_GRID
   #include "bmScriptGridSingleNodeAction.h"
@@ -100,6 +101,7 @@ ScriptActionManager::ScriptActionManager()
 
 ScriptActionManager::~ScriptActionManager()
 {
+/*
   std::vector<variablestruct*>::iterator it = m_VariableList.begin();
   while(it != m_VariableList.end())
    {
@@ -108,17 +110,16 @@ ScriptActionManager::~ScriptActionManager()
    delete var;
    }
 
-
   std::vector<ScriptAction*>::iterator itA = m_InternalActionList.begin();
   while(itA != m_InternalActionList.end())
    {
    ScriptAction* var = *itA;
    itA = m_InternalActionList.erase(itA);
    delete var;
-   }
+   }*/
 
-  delete m_Error;
-  delete m_ProgressManager;
+  //delete m_Error;
+  //delete m_ProgressManager;
 }
 
 void ScriptActionManager::SetApplicationPath(MString applicationpath)
@@ -230,6 +231,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, GridMaxNodes);
   BM_NEWKEYWORD(_list, GridTempDirectory);
   BM_NEWKEYWORD(_list, GridExecutableDirectory);
+  BM_NEWKEYWORD(_list, Glob);
   return _list;
 }
 
@@ -262,6 +264,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, MakeDirectory);
   BM_NEWACTION(option, GetTime);
   BM_NEWACTION(option, GetCurrentDateTime);
+  BM_NEWACTION(option, Glob);
 
 #ifdef BM_GRID
   BM_NEWACTION(option, GridDataHost);
@@ -343,7 +346,6 @@ void ScriptActionManager::Reset()
 
 void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
 {
-
   if ((option == "endforeach") || (option == "endif") ||
        option == "endfornfold")
     {
@@ -431,10 +433,11 @@ void ScriptActionManager::Execute()
 {
   Timer m_timer;
   m_timer.start();
+
   for (unsigned int i=0;i<m_ActionList.size();i++)
-  {
+    {
     m_ActionList[i]->Execute();
-  }
+    }
   m_ProgressManager->SetFinished(MString("Total Execution time: %1ms").arg(m_timer.getMilliseconds()));
 }
 
@@ -609,8 +612,6 @@ void ScriptActionManager::DisplayVariableList()
               << "\t" << m_VariableList[i]->value.toChar() << std::endl;
     }
 }
-
-
 
 MString ScriptActionManager::Convert(MString param)
 {
@@ -793,12 +794,12 @@ bool ScriptActionManager::TestParam()
 {
   bool flag = true;
   for (unsigned int i=0;i<m_ActionList.size();i++)
-  {
+    {
     if (!m_ActionList[i]->TestParam(m_Error))
+      {
       flag = false;
-
-  }
-
+      }
+    }
   return flag;
 }
 

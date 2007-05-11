@@ -222,37 +222,42 @@ void ScriptParser::Load(MString filename)
   MString m_line;
   bool inComment = false;
   while(!m_file.eof())
-  {
+    {
     m_file.getline(data,1000);
     m_LineNumber++;
 
     m_currentline = data;
+    int pos = m_currentline.find("/*");
+    if(!m_currentline.isInBetweenChar('\'',pos))
+      {
+      inComment = true;
+      }
+    pos = m_currentline.find("*/");
+    if(!m_currentline.isInBetweenChar('\'',pos))
+      {
+      inComment = false;
+      }
+
     if (m_currentline.startWith('#'))
       {
       //Comment
       }
-    else if (m_currentline.find("/*") != -1)
+    else if(!inComment)
       {
-      inComment = true;
-      }
-    else if (m_currentline.find("*/") != -1)
-      {
-      inComment = false;
-      }
-    else
-    {
-      if(!inComment)
+      if (m_currentline.find("(") != -1)
         {
-        if (m_currentline.find("(") != -1) 
-          m_line = m_currentline;
-        else
-          m_line += m_currentline;
-      
-         if (m_currentline.find(")") != -1)
-           Parse(m_line);
+        m_line = m_currentline;
         }
+      else
+        {
+        m_line += m_currentline;
+        }
+     if(m_currentline.find(")") != -1)
+        {
+        Parse(m_line);
+        }
+      }
     }
-  }
   m_file.close();
 
   m_ScriptActionManager->Execute();
@@ -266,7 +271,6 @@ bool ScriptParser::Parse(MString line)
     {
     return true;
     }
-
   return AddOption(m_option,line.end("("));
 }
 
@@ -359,23 +363,26 @@ bool ScriptParser::Parse()
   bool inComment = false;
 
   for (unsigned int i=0;i<m_Code.size();i++)
-  {
+    {
     m_LineNumber++;
     m_currentline = m_Code[i];
       
     MString optionName = m_currentline.begin("(").removeChar(' ').removeChar('\t').toLower();
 
-    if (m_currentline.startWith('#'))
-      {
-      //Comments
-      }
-    else if (m_currentline.find("/*") != -1 )
+    int pos = m_currentline.find("/*");
+    if(!m_currentline.isInBetweenChar('\'',pos))
       {
       inComment = true;
       }
-    else if (m_currentline.find("*/")!= -1 )
+    pos = m_currentline.find("*/");
+    if(!m_currentline.isInBetweenChar('\'',pos))
       {
       inComment = false;
+      }
+
+    if (m_currentline.startWith('#'))
+      {
+      //Comments
       }
     else if (optionName == "include")
       {
@@ -383,9 +390,7 @@ bool ScriptParser::Parse()
       this->Parse();
       return true;
       }
-    else
-    {
-    if(!inComment)
+    else if(!inComment)
       {
       m_line += " ";
       m_line += m_currentline;
@@ -400,7 +405,6 @@ bool ScriptParser::Parse()
         }
       }
     }
-  }
 
   if (m_ScriptActionManager->GetError()->GetError() != 0)
     return false;
