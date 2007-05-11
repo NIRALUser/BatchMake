@@ -312,6 +312,15 @@ bool MString::startWith(const char key)
   return false;
 }
 
+bool MString::endWith(const char key)
+{
+  if(m_value[m_value.length()-1] == key)
+    {
+    return true;
+    }
+  return false;
+}
+
 MString MString::removeChar(const char key,bool onlyfirst)
 {
   std::string m_newvalue = "";
@@ -424,6 +433,28 @@ bool MString::isInt()
     }
 
   return true;
+}
+
+/** Return if the current pos is between chars
+ *  And we assume pairing */
+bool MString::isInBetweenChar(char val,long int pos)
+{
+  long int pos1 = m_value.find(val);
+  while(pos1 != -1)
+    {
+    long int pos2 = m_value.find(val,pos1+1);
+    if(pos2 == -1)
+      {
+      return false;
+      }
+
+    if(pos>=pos1 && pos<=pos2)
+      {
+      return true;
+      }
+    pos1 = m_value.find(val,pos2+1);
+    }
+  return false;
 }
 
 /** Convert Wildcars to RegEx */

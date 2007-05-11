@@ -75,6 +75,7 @@ public:
   bool isInt();
 
   bool startWith(const char key);
+  bool endWith(const char key);
   MString removeChar(const char key,bool onlyfirst=false);
   MString duplicateChar(const char key);
   MString replaceChar(const char key,const char key2);
@@ -82,6 +83,8 @@ public:
   MString toLower();
   MString toUpper();
   int count(const char key);
+
+  bool isInBetweenChar(char val,long int pos);
 
   static std::string ConvertWildcardToRegEx(const char* wildcard);
 
