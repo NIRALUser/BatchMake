@@ -282,7 +282,7 @@ bool DashboardSend::SendRequest(HttpRequest & request)
   url += "/dashboard.php";
   m_ServerOutput = request.Send(url.c_str());
 
-  std::cout << m_ServerOutput.c_str() << std::endl;
+  //std::cout << m_ServerOutput.c_str() << std::endl;
   if (m_ServerOutput.length()>3)
     {
     std::cout << "Bad Host or connexion problem" << std::endl;
