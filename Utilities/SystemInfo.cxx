@@ -1695,12 +1695,12 @@ int SystemInfo::RetreiveInformationFromCpuInfoFile()
   buffer.resize(fileSize-2);
 
   // Number of CPUs
-  long int pos = buffer.find("processor     ");
+  long int pos = buffer.find("processor   ");
   while(pos != -1)
     {
     m_NumberOfLogicalCPU++;
     m_NumberOfPhysicalCPU++;
-    pos = buffer.find("processor     ",pos+1);
+    pos = buffer.find("processor   ",pos+1);
     }
 
   // Count the number of physical ids that are the same
