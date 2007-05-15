@@ -24,6 +24,9 @@ PURPOSE.  See the above copyright notices for more information.
 int SystemInfoTest(int argc, char* argv[])
 {
   SystemInfo info;
+  info.RunCPUCheck();
+  info.RunOSCheck();
+  info.RunMemoryCheck();
 
   std::cout << "Vendor = " << info.GetVendorID() << std::endl;
   std::cout << "Model = " <<info.GetModelID() << std::endl;
