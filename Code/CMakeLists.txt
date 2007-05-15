@@ -48,6 +48,7 @@ ApplicationWrapperParam.h
 bmScriptGetTimeAction.h
 bmScriptGetCurrentDateTimeAction.h
 bmScriptGlobAction.h
+bmScriptGetFilenameAction.h
 )
 
 #Add Commands
@@ -82,6 +83,7 @@ ApplicationWrapperParam.cxx
 bmScriptGetTimeAction.cxx
 bmScriptGetCurrentDateTimeAction.cxx
 bmScriptGlobAction.cxx
+bmScriptGetFilenameAction.cxx
 )
 
 LINK_LIBRARIES(

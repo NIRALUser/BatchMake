@@ -41,6 +41,7 @@
 #include "bmScriptGetTimeAction.h"
 #include "bmScriptGetCurrentDateTimeAction.h"
 #include "bmScriptGlobAction.h"
+#include "bmScriptGetFilenameAction.h"
 
 #ifdef BM_GRID
   #include "bmScriptGridSingleNodeAction.h"
@@ -232,6 +233,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, GridTempDirectory);
   BM_NEWKEYWORD(_list, GridExecutableDirectory);
   BM_NEWKEYWORD(_list, Glob);
+  BM_NEWKEYWORD(_list, GetFilename);
   return _list;
 }
 
@@ -265,6 +267,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, GetTime);
   BM_NEWACTION(option, GetCurrentDateTime);
   BM_NEWACTION(option, Glob);
+  BM_NEWACTION(option, GetFilename);
 
 #ifdef BM_GRID
   BM_NEWACTION(option, GridDataHost);
