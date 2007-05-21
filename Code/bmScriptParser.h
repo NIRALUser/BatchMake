@@ -42,6 +42,7 @@ public:
   
   void Load(MString filename);
   bool Parse(MString Line);
+  void ParseBuffer(std::string buffer);
   bool CheckOption(MString param);
   bool AddOption(MString option, MString param);
   ScriptAction::ParametersType GetParams(MString param);

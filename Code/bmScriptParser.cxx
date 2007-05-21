@@ -170,7 +170,7 @@ bool  ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
   return true;
 }
 
-bool  ScriptParser::Execute(MString filename,unsigned long pos)
+bool ScriptParser::Execute(MString filename,unsigned long pos)
 { 
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);
@@ -210,6 +210,33 @@ bool  ScriptParser::Execute(MString filename,unsigned long pos)
     }
 }
 
+/** Parse and Execute a buffer */
+void ScriptParser::ParseBuffer(std::string buffer)
+{
+  bool inComment = false;
+
+  long int startingLine = 0;
+  long int posLine = buffer.find("\n");
+  while(posLine != -1)
+    {
+    MString currentline = buffer.substr(startingLine,posLine+1-startingLine).c_str();
+    startingLine = posLine+1;
+    this->AddCodeLine(currentline,0);
+    posLine = buffer.find("\n",startingLine);
+    }
+
+  if(this->Parse())
+    {
+    m_ScriptActionManager->Execute();
+    }
+  else
+    {
+    std::cout << "Cannot parse script!" << std::endl;
+    }
+}
+
+
+/** Load and execute a file */
 void ScriptParser::Load(MString filename)
 {
   this->SetScriptPath(filename);
@@ -262,6 +289,7 @@ void ScriptParser::Load(MString filename)
 
   m_ScriptActionManager->Execute();
 }
+
 
 
 bool ScriptParser::Parse(MString line)
@@ -407,8 +435,9 @@ bool ScriptParser::Parse()
     }
 
   if (m_ScriptActionManager->GetError()->GetError() != 0)
+    {
     return false;
-
+    }
   return true;
 }
 
