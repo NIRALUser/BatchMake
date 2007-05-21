@@ -11,6 +11,7 @@ SET(BatchMakeDashboard_HDRS
   bmScriptSetIdealOutputAction.h
   bmScriptDashboardHostAction.h
   bmScriptDashboardUserAction.h
+  bmScriptDashboardKeyAction.h
   bmScriptDashboardSendAction.h
   bmScriptDashboardNotifyAction.h
   bmScriptCreateExperimentAction.h
@@ -32,6 +33,7 @@ SET(BatchMakeDashboard_SRCS
   bmScriptSetIdealOutputAction.cxx
   bmScriptDashboardHostAction.cxx
   bmScriptDashboardUserAction.cxx
+  bmScriptDashboardKeyAction.cxx
   bmScriptDashboardSendAction.cxx
   bmScriptDashboardNotifyAction.cxx
   bmScriptCreateExperimentAction.cxx

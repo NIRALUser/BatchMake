@@ -76,6 +76,7 @@ void ScriptCreateExperimentAction::Execute()
 
   HttpRequest m_request;
   m_request.AddParam("user",m_Manager->GetDashboardUser());
+  m_request.AddParam("userkey",m_Manager->GetDashboardKey());
   m_request.AddParam("project",m_Parameters[1].toChar());
   m_request.AddParam("method","CreateExperiment");
   m_request.AddParam("name",m_Parameters[2].toChar());
@@ -89,6 +90,7 @@ void ScriptCreateExperimentAction::Execute()
 
   url += "/dashboard.php";
   std::string m_Output = m_request.Send(url.c_str());
+
 /* 
   if (m_Output.length()>3)
     {
