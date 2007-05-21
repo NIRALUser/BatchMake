@@ -125,6 +125,23 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
   return line;
 }
 
+/** Return true if the parameter exists */
+bool ApplicationWrapper::ParameterExists(std::string first)
+{
+  std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
+
+  unsigned int parent = 0;
+  while(it != m_params.end())
+    {
+    if(!strcmp((*it).GetName().toChar(),first.c_str()))
+      {
+      return true;
+      }
+    it++;
+    }
+  return false;
+}
+
 /** Set the parameter value */
 void ApplicationWrapper::SetParameterValue(std::string first, std::string second, std::string value)
 {

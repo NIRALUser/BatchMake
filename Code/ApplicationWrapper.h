@@ -59,6 +59,9 @@ public:
   /** Set the parameter value */
   void SetParameterValue(std::string first, std::string second, std::string value);
 
+  /** Return true if a parameter exists */
+  bool ParameterExists(std::string first);
+
   /** Set/Get if the application uses sequential arguments */
   void SetSequentialParsing(bool val)
     {

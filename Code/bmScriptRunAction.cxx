@@ -145,12 +145,7 @@ void ScriptRunAction::Execute()
   m_actioname = m_actioname.removeChar(' ',true);
   m_actioname = m_actioname.removeChar('\'',true);
   m_actioname = m_actioname.begin("'").rend("\\");
-  
-  //if (m_actioname.length() != 0)
-  //  {
-  //  m_actioname = m_actioname + 1;
-  //  }
-
+ 
   m_ProgressManager->AddAction(m_actioname);
 
   m_launch.Execute(m_Manager->Convert(m_Parameters[1]).removeChar('\''));

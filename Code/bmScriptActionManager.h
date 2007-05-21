@@ -90,6 +90,7 @@ public:
     {
     std::string url;
     std::string user;
+    std::string key;
     std::string password;
     std::vector<DashboardExperiment> experiments;
     };
@@ -169,8 +170,13 @@ public:
   
   void SetDashboardUser(const char* user) 
          { m_Dashboard.user = user; }
+  void SetDashboardKey(const char* key) 
+         { m_Dashboard.key = key; }
+
   const char* GetDashboardUser() 
          { return m_Dashboard.user.c_str(); }
+  const char* GetDashboardKey() 
+         { return m_Dashboard.key.c_str(); }
 
   bool AddDashboardExperiment(const char* var,
                               const char* projectName,

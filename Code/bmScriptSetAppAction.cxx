@@ -98,7 +98,6 @@ MString ScriptSetAppAction::Help()
 
 void ScriptSetAppAction::Execute()
 {
-std::cout << "Execute" << std::endl;
   MString appName = m_Parameters[1];
   appName = appName.removeChar('@');
   bool appFound = false;

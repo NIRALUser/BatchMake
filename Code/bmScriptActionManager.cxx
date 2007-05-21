@@ -61,6 +61,7 @@
   #include "bmScriptDbClearAction.h"
   #include "bmScriptDashboardHostAction.h"
   #include "bmScriptDashboardUserAction.h"
+  #include "bmScriptDashboardKeyAction.h"
   #include "bmScriptCreateExperimentAction.h"
   #include "bmScriptCreateMethodAction.h"
   #include "bmScriptDashboardSendAction.h"
@@ -206,6 +207,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, Include);
   BM_NEWKEYWORD(_list, DashboardHost);
   BM_NEWKEYWORD(_list, DashboardUser);
+  BM_NEWKEYWORD(_list, DashboardKey);
   BM_NEWKEYWORD(_list, DashboardSend);
   BM_NEWKEYWORD(_list, DashboardNotify);
   BM_NEWKEYWORD(_list, CreateExperiment);
@@ -287,6 +289,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, DbClear);
   BM_NEWACTION(option, DashboardHost);
   BM_NEWACTION(option, DashboardUser);
+  BM_NEWACTION(option, DashboardKey);
   BM_NEWACTION(option, DashboardSend);
   BM_NEWACTION(option, DashboardNotify);
   BM_NEWACTION(option, CreateExperiment);
