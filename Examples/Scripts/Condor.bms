@@ -1,7 +1,7 @@
 SetApp(test @bmCondorTest)
 
-SetAppOption(test.firstFile E:\Workspace\BatchMake-VC++\bin\RelWithDebInfo\file1.txt)
-SetAppOption(test.secondFile E:\Workspace\BatchMake-VC++\bin\RelWithDebInfo\file2.txt)
-SetAppOption(test.writeOutput myoutput.txt)
+SetAppOption(test.firstFile C:\file1.txt)
+SetAppOption(test.secondFile C:\file2.txt)
+SetAppOption(test.writeOutput.writeOutput myoutput.txt)
 
 Run(output ${test})
