@@ -15,6 +15,7 @@
 
 #include "bmScriptGlobAction.h"
 #include <itksys/Glob.hxx>
+#include <itksys/SystemTools.hxx>
 
 #include <stdio.h>
 
@@ -55,7 +56,6 @@ void ScriptGlobAction::Execute()
   itksys::Glob glob;
 
   // Are we recursive
-  bool recursive = false;
   if (m_Parameters.size() == 3)
     {
     MString recurse = m_Manager->Convert(m_Parameters[2]);
@@ -71,11 +71,14 @@ void ScriptGlobAction::Execute()
     }
 
   MString value="";
-  if(glob.FindFiles(globexpression.toChar()))
+ 
+  std::string convertedGlobExpression = globexpression.toChar();
+  itksys::SystemTools::ConvertToUnixSlashes(convertedGlobExpression);
+
+  if(glob.FindFiles(convertedGlobExpression))
     {
     std::vector<std::string> filenames = glob.GetFiles();
 
-    
     for(unsigned int i=0;i<filenames.size();i++)
       {
       if (value != "")
@@ -85,6 +88,7 @@ void ScriptGlobAction::Execute()
       value += MString("'") + MString(filenames[i]) + MString("'");
       }
     }
+
   m_Manager->SetVariable(m_Parameters[0],value);
 }
 
