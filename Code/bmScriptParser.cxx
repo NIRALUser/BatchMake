@@ -17,6 +17,7 @@
 #include <fstream>
 #include <itksys/Directory.hxx>
 #include <itksys/SystemTools.hxx>
+#include <itksys/Process.h>
 
 #ifdef WIN32
   #include <windows.h>
@@ -209,6 +210,99 @@ bool ScriptParser::Execute(MString filename,unsigned long pos)
     return false;
     }
 }
+
+
+/** Run the given batchmake script (as a buffer) on Condor */
+void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
+{
+  bool inComment = false;
+  long int startingLine = 0;
+  long int posLine = buffer.find("\n");
+  while(posLine != -1)
+    {
+    MString currentline = buffer.substr(startingLine,posLine+1-startingLine).c_str();
+    startingLine = posLine+1;
+    this->AddCodeLine(currentline,0);
+    posLine = buffer.find("\n",startingLine);
+    }
+
+  bm::Grid grid;
+  if(outputDirectory)
+    {
+    grid.SetOutputDirectory(outputDirectory);
+    }
+
+  grid.SetFileName("bmcondor.bmc.tmp");
+  this->SetGridModule(&grid);
+  if(this->Parse())
+    {
+    m_ScriptActionManager->Execute();
+    grid.WriteCondor();
+    // Submit the script to condor
+    std::vector<const char*> args;
+    args.push_back("condor_submit");
+    args.push_back("bmcondor.bmc.tmp");
+    args.push_back(0);
+
+    // Run the application
+    itksysProcess* gp = itksysProcess_New();
+    itksysProcess_SetCommand(gp, &*args.begin());
+    itksysProcess_Execute(gp); 
+
+    std::string output = "";
+
+    char* data = NULL;
+    int length;
+    double timeout = 255;
+
+    while(itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
+      {
+      for(int i=0;i<length;i++)
+        {
+        output += data[i];
+        }
+      }
+    itksysProcess_WaitForExit(gp, 0);
+
+    std::cout << "Condor submit output: " << output << std::endl;
+
+    int result = 1;
+    switch(itksysProcess_GetState(gp))
+      {
+      case itksysProcess_State_Exited:
+        {
+        result = itksysProcess_GetExitValue(gp);
+        } break;
+      case itksysProcess_State_Error:
+        {
+        std::cerr << "Error: Could not run " << args[0] << ":\n";
+        std::cerr << itksysProcess_GetErrorString(gp) << "\n";
+        } break;
+      case itksysProcess_State_Exception:
+        {
+        std::cerr << "Error: " << args[0]
+                  << " terminated with an exception: "
+                  << itksysProcess_GetExceptionString(gp) << "\n";
+        } break;
+      case itksysProcess_State_Starting:
+      case itksysProcess_State_Executing:
+      case itksysProcess_State_Expired:
+      case itksysProcess_State_Killed:
+        {
+        // Should not get here.
+        std::cerr << "Unexpected ending state after running " << args[0]
+                  << std::endl;
+        } break;
+      }
+    itksysProcess_Delete(gp);
+    itksys::SystemTools::RemoveFile("bmcondor.bmc.tmp");
+    }
+  else
+    {
+    std::cout << "Cannot parse script!" << std::endl;
+    }
+}
+
 
 /** Parse and Execute a buffer */
 void ScriptParser::ParseBuffer(std::string buffer)
