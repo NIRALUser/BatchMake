@@ -118,7 +118,6 @@ void ScriptForEachAction::Execute()
   this->CreateLoop();
   for (unsigned int loop=0;loop<m_ForLoop.size();loop++)
     {
-    std::cout << "OutterLoop: " << loop << std::endl;
 #ifdef BM_GRID
     if(m_GridModule)
       {
@@ -130,7 +129,6 @@ void ScriptForEachAction::Execute()
       {
       if (!m_ProgressManager->IsStop())
         {
-        std::cout << "InnerLoop: " << i << std::endl;
         m_Action[i]->Execute();
         }
       }
