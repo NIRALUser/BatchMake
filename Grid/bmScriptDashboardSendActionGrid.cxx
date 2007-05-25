@@ -43,6 +43,8 @@ void ScriptDashboardSendAction::GenerateGrid()
     return;
     }
 
+  app.ClearParameterValues();
+
   typedef ScriptActionManager::Dashboard DashboardType;
   typedef ScriptActionManager::DashboardExperiment DashboardExperimentType;
   typedef ScriptActionManager::DashboardMethod DashboardMethodType;
@@ -86,6 +88,12 @@ void ScriptDashboardSendAction::GenerateGrid()
   withslash += "\"";
   app.SetParameterValue("hostname","",m_Manager->GetDashboardURL());
   app.SetParameterValue("user","",withslash);
+  app.SetParameterValue("key","","1");
+  withslash = "\"";
+  withslash += m_Manager->GetDashboardKey();
+  withslash += "\"";
+  app.SetParameterValue("key.key","",withslash);
+
   withslash = "\"";
   withslash += exp->project;
   withslash += "\"";

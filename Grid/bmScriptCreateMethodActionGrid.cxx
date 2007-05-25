@@ -42,7 +42,9 @@ void ScriptCreateMethodAction::GenerateGrid()
     std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend " 
               << appName.toChar() << std::endl;
     return;
-    }  
+    }
+
+  app.ClearParameterValues();
 
   // Get the project name
   const ScriptActionManager::Dashboard * dashboard = m_Manager->GetDashboard();
@@ -73,6 +75,13 @@ void ScriptCreateMethodAction::GenerateGrid()
   withslash += exp->project;
   withslash += "\"";
   app.SetParameterValue("project","",withslash);
+
+  app.SetParameterValue("key","","1");
+  withslash = "\"";
+  withslash += m_Manager->GetDashboardKey();
+  withslash += "\"";
+  app.SetParameterValue("key.key","",withslash);
+
   app.SetParameterValue("createMethod","","1");
   withslash = "\"";
   withslash += exp->name;

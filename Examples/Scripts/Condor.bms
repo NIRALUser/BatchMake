@@ -2,6 +2,14 @@ SetApp(test @bmCondorTest)
 
 SetAppOption(test.firstFile C:\file1.txt)
 SetAppOption(test.secondFile C:\file2.txt)
-SetAppOption(test.writeOutput.writeOutput myoutput.txt)
+SetAppOption(test.operator '*')
+SetAppOption(test.writeOutput.writeOutput multiply.txt)
+
+Run(output ${test})
+
+SetAppOption(test.firstFile multiply.txt)
+SetAppOption(test.secondFile C:\file3.txt)
+SetAppOption(test.operator '+')
+SetAppOption(test.writeOutput.writeOutput output.txt)
 
 Run(output ${test})

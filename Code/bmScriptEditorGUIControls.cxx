@@ -413,7 +413,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
   if(fl_ask("Run current script?"))
     {
     Launch starter;
-    std::string run = "condor_submit ";
+    std::string run = "condor_submit_dag ";
     run += filename;
     std::cout << "Running Condor script " << run.c_str() << std::endl;
     starter.Execute(run.c_str());

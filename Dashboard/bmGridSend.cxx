@@ -18,6 +18,11 @@
 
 int main(int argc, char* argv[])
 {
+  for(unsigned int i=0;i<argc;i++)
+    {
+    std::cout << i << " : " << argv[i] << std::endl;
+    }
+  
   MetaCommand command;
   
   command.SetName("bmGridSend");
@@ -29,6 +34,10 @@ int main(int argc, char* argv[])
   command.AddField("hostname","Hostname of the dashboard",MetaCommand::STRING);
   command.AddField("user","Username to connect to the dashboard",MetaCommand::STRING);
   command.AddField("project","Name of the project",MetaCommand::STRING);
+  
+  // User key if any
+  command.SetOption("key","key",false,"User key");
+  command.AddOptionField("key","key",MetaCommand::STRING,true);
 
   // Create an experiment
   command.SetOption("createExperiment","ce",false,"Create an Experiment");
@@ -71,6 +80,7 @@ int main(int argc, char* argv[])
   std::string hostname = command.GetValueAsString("hostname");
   std::string user = command.GetValueAsString("user");
   std::string project = command.GetValueAsString("project");
+  std::string key = command.GetValueAsString("key","key");
 
   std::string createExperimentName = command.GetValueAsString("createExperiment","name");
   std::string createExperimentDescription = command.GetValueAsString("createExperiment","description");
@@ -92,6 +102,7 @@ int main(int argc, char* argv[])
 
   HttpRequest m_request;
   m_request.AddParam("user",user.c_str());
+  m_request.AddParam("userkey",key.c_str());
   m_request.AddParam("project",project.c_str());
   m_request.AddParam("hostname",m_request.GetHostName().c_str());
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());

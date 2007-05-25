@@ -1,18 +1,17 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0105 
+version 1.0108 
 header_name {.h} 
 code_name {.cxx}
 class CondorWatcherGUI {open
 } {
-  Function {CondorWatcherGUI()} {open
-  } {
+  Function {CondorWatcherGUI()} {} {
     Fl_Window Window {
-      label {CondorWatcher 1.0 beta} open
-      xywh {323 139 655 660} type Double color 39 resizable visible
+      label {CondorWatcher 1.0 beta}
+      xywh {809 137 655 660} type Double color 39 resizable visible
     } {
       Fl_Box Clients {
-        label Clients selected
-        xywh {5 5 335 650} box FLAT_BOX color 7 labelsize 11
+        label Clients
+        xywh {5 5 335 625} box FLAT_BOX color 7 labelsize 11
         code0 {\#include<FLU/Flu_Tree_Browser.h>}
         class Flu_Tree_Browser
       }
@@ -22,8 +21,15 @@ class CondorWatcherGUI {open
         code0 {\#include<FLU/Flu_Tree_Browser.h>}
         class Flu_Tree_Browser
       }
+      Fl_Button {} {
+        label Refresh
+        callback {Update();}
+        xywh {135 635 64 20}
+      }
     }
   }
-  Function {~CondorWatcherGUI()} {return_type virtual
+  Function {~CondorWatcherGUI()} {open return_type virtual
+  } {}
+  Function {Update()} {selected return_type {virtual void}
   } {}
 } 

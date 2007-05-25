@@ -41,12 +41,13 @@
 void timer_callback(void* watcher)
 {
   static_cast<CondorWatcher*>(watcher)->Update();
-  Fl::repeat_timeout(30,timer_callback, watcher);
+  Fl::repeat_timeout(10,timer_callback, watcher);
 }
 
 /** Constructor */
 CondorWatcher::CondorWatcher()
 {
+  Jobs->insertion_mode(FLU_INSERT_BACK);
 }
 
 /** Destructor */
@@ -540,7 +541,7 @@ void CondorWatcher::Watch()
 /** Launch an application and get the result in a buffer */
 std::string CondorWatcher::Run(const char* program)
 {
-  std::cout << "Running = " << program << std::endl;
+  //std::cout << "Running = " << program << std::endl;
   std::string m_output = "";
 //  std::string m_error = "";
 

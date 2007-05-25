@@ -60,17 +60,10 @@ public:
   const char* GetGridTempDirectory() {return m_GridTempDirectory.c_str();}
   const char* GetGridExecutableDirectory() {return m_GridExecutableDirectory.c_str();}
  
-  void SetDistributed(bool val) 
-    {
-    //if(val != m_Distributed)
-    // / {
-      m_DistributedTransition = true;
-    //  }
-    m_Distributed = val;
-    }
+  void SetDistributed(bool val);
 
   void SetGridBarrier();
-  void RemoveGridBarrier(){m_DistributedSyncBarrier.pop_back();}
+  void RemoveGridBarrier();
 
   void SetSingleNode(bool single) 
     {
@@ -114,6 +107,26 @@ protected:
   bool             m_SingleNodeTransition;
   int              m_MaxNodes;
   bool             m_Grouping;
+  bool             m_NextAppIsAfterEndBarrier;
+  unsigned long    m_CurrentScope;
+
+  struct DAGnode
+    {
+    int id;
+    std::vector<int> parents;
+    bool isAfterbarrier;
+    bool isBarrier;
+    unsigned long scope;
+    bool isVirtual;
+    };
+
+  void AddDAGParent(FILE* fic,std::vector<DAGnode>* dag,int parentid);
+  void ConsolidateDAG(std::vector<DAGnode>* dag);
+  void AddLeavesAsParent(std::vector<DAGnode>* dag,int node,DAGnode* nodeToAdd);
+
+  typedef std::pair<int,int> ParentChildType;
+  std::vector<ParentChildType> m_ParentChildList;
+
 };
 
 } // end namespace bm

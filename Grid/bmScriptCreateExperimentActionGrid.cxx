@@ -44,11 +44,20 @@ void ScriptCreateExperimentAction::GenerateGrid()
     return;
     }
 
+  app.ClearParameterValues();
+
   std::string withslash = "\"";
   withslash += m_Manager->GetDashboardUser();
   withslash += "\"";
   app.SetParameterValue("hostname","",m_Manager->GetDashboardURL());
   app.SetParameterValue("user","",withslash);
+
+  app.SetParameterValue("key","","1");
+  withslash = "\"";
+  withslash += m_Manager->GetDashboardKey();
+  withslash += "\"";
+  app.SetParameterValue("key.key","",withslash);
+
   withslash = "\"";
   withslash += m_Parameters[1].toChar();
   withslash += "\"";

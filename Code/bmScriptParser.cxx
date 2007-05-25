@@ -247,7 +247,7 @@ void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
 
     // Submit the script to condor
     std::vector<const char*> args;
-    args.push_back("condor_submit");
+    args.push_back("condor_submit_dag");
     args.push_back("bmcondor.bmc.tmp");
     args.push_back(0);
 

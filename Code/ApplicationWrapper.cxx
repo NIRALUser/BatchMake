@@ -49,6 +49,8 @@ ApplicationWrapper::ApplicationWrapper()
   m_SequentialParams.clear();
   m_DependsOn = -1; // previous one, i.e sequential
   m_SingleNode = 0;
+  m_AfterEndBarrier = false;
+  m_ExecutionBlockNumber = 0;
 }
 
 ApplicationWrapper::~ApplicationWrapper()
@@ -75,19 +77,22 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
     end = m_SequentialParams.end();
     }
 
-  int currentParam = 1;
+  int currentParam = 0;
 
   while(it != end)
     {
-    
+    if((*it).GetType() == ApplicationWrapperParam::Flag)
+      {
+      currentParam++;
+      }
     bool valueDefined = (*it).IsValueDefined();
-    if(!valueDefined) // if the value is not defined we check if we have children non-optional
+    if(!valueDefined) // if the value is not defined we check if we have children defined
       {
       std::vector<ApplicationWrapperParam>::iterator itc = it;
       while(itc != end)
         {
-        if((*itc).GetParent() == currentParam
-          && !(*itc).GetOptional()
+        if(currentParam>0 && (*itc).GetParent() == currentParam
+          && (*itc).IsValueDefined()
           )
           {
           valueDefined = true;
@@ -95,7 +100,6 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
         itc++;
         }
       }
-
 
     if(valueDefined)
       {
@@ -111,14 +115,26 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
         appname = appname.rend("\\");
         appname = appname.removeChar('\\');
         appname = appname.removeChar('/');
-        line += appname.toChar();
+
+        appname = appname.removeChar('\"');
+        std::string sappname = "\"";
+        sappname += appname.toChar();
+
+        while(sappname[sappname.size()-1]==' ')
+          {
+          sappname = sappname.substr(0,sappname.size()-1);
+          }
+
+        sappname += "\"";
+
+        line += sappname;
+        
         }
       else
         {
         line += (*it).GetValue().toChar();
         }     
       }
-    currentParam++;
     it++;
     }
 
@@ -140,6 +156,25 @@ bool ApplicationWrapper::ParameterExists(std::string first)
     it++;
     }
   return false;
+}
+
+/** Clear all the parameter values */
+void ApplicationWrapper::ClearParameterValues()
+{
+  std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
+  while(it != m_params.end())
+    {
+    (*it).SetValueDefined(false);
+    /*if((*it).GetType() != ApplicationWrapperParam::Flag)
+      {
+      (*it).SetValue("");
+      }
+    else
+      {
+      (*it).SetValue("0");
+      }*/
+    it++;
+    }
 }
 
 /** Set the parameter value */
@@ -229,16 +264,13 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
         // Look for the child
         if(second.size() > 0)
           {        
-          //m_SequentialParams.push_back(*it);
           std::vector<ApplicationWrapperParam>::iterator itChild = m_params.begin();
           while(itChild != m_params.end())
             {
             std::string childname = first;
             childname += ".";
             childname += second;
-             if(!strcmp((*itChild).GetName().toChar(),childname.c_str())
-              //&& ((*itChild).GetParent() == parent)
-              )
+             if(!strcmp((*itChild).GetName().toChar(),childname.c_str()))
               {
               (*itChild).SetValueDefined(true);
               (*itChild).SetValue(value.c_str());

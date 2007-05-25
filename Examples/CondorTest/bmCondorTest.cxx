@@ -30,6 +30,7 @@ int main(int argc, char **argv)
 
   command.AddField("firstFile","firstFile",MetaCommand::STRING,true);
   command.AddField("secondFile","secondFile",MetaCommand::STRING,true);
+  command.AddField("operator","operator",MetaCommand::STRING,false);
   command.SetOption("writeOutput","W",false,"Write the paper out",MetaCommand::STRING);
 
   if(!command.Parse(argc,argv))
@@ -67,12 +68,19 @@ int main(int argc, char **argv)
       std::cout << "Cannot open file " << command.GetValueAsString("writeOutput").c_str() << std::endl;
       return 0;
       }
-    fprintf(outFic,"%d",n1+n2);
+    if(command.GetValueAsString("operator") == "*")
+      {
+      fprintf(outFic,"%d",n1*n2);
+      }
+    else if(command.GetValueAsString("operator") == "+")
+      {
+      fprintf(outFic,"%d",n1+n2);
+      }
+    
     fclose(outFic);
     }
 
   int sum = n1+n2;
-
   std::cout << "SUM = " << sum << std::endl;
 
 #ifdef WIN32

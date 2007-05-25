@@ -84,11 +84,19 @@ public:
   void SetDependsOn(int val) {m_DependsOn = val;}
   int  GetDependsOn() {return m_DependsOn;}
 
+  void SetAfterEndBarrier(bool val) {m_AfterEndBarrier = val;}
+  bool  GetAfterEndBarrier() {return m_AfterEndBarrier;}
+
+  void SetExecutionBlockNumber(int val) {m_ExecutionBlockNumber = val;}
+  unsigned long GetExecutionBlockNumber() {return m_ExecutionBlockNumber;}
+
   void SetDependencyTag(const char* tag) {m_DependencyTag = tag;}
   const char* GetDependencyTag() {return m_DependencyTag.c_str();}
 
   void SetSingleNode(int single) {m_SingleNode = single;}
   int GetSingleNode() {return m_SingleNode;}
+
+  void ClearParameterValues();
 
 private:
   MString m_name;
@@ -104,6 +112,8 @@ private:
   int         m_DependsOn;
   std::string m_DependencyTag;
   int         m_SingleNode;
+  bool        m_AfterEndBarrier;
+  unsigned long m_ExecutionBlockNumber;
 };
 
 #endif

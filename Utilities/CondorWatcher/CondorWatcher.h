@@ -40,7 +40,6 @@ public:
   /** Add a client */
   void AddClient();
 
-
 protected:
 
   /** Update the list of clients in the condor pool */

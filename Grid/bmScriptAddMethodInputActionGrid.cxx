@@ -45,6 +45,8 @@ void ScriptAddMethodInputAction::GenerateGrid()
     return;
     }  
 
+  app.ClearParameterValues();
+
   // Get the project name
   const ScriptActionManager::Dashboard * dashboard = m_Manager->GetDashboard();
   const ScriptActionManager::DashboardExperiment* exp = NULL;
@@ -83,6 +85,12 @@ void ScriptAddMethodInputAction::GenerateGrid()
   withslash += "\"";
   app.SetParameterValue("hostname","",m_Manager->GetDashboardURL());
   app.SetParameterValue("user","",withslash);
+  app.SetParameterValue("key","","1");
+  withslash = "\"";
+  withslash += m_Manager->GetDashboardKey();
+  withslash += "\"";
+  app.SetParameterValue("key.key","",withslash);
+
   withslash = "\"";
   withslash += exp->project;
   withslash += "\"";
