@@ -14,6 +14,7 @@
 =========================================================================*/
 
 #include "bmScriptDashboardSendAction.h"
+#include "itksys/SystemTools.hxx"
 
 namespace bm {
 
@@ -141,9 +142,11 @@ void ScriptDashboardSendAction::GenerateGrid()
             imagedata += " ";
             imagedata += "\"";
             MString value = m_Manager->Convert(param).toChar();
-            value = value.removeChar('\'');
-            imagedata += value.toChar();
+            value = value.removeChar('\'');          
+            std::string imagefile = itksys::SystemTools::GetFilenameName(value.toChar());     
+            imagedata += imagefile.c_str();
             imagedata += "\" ";
+            app.AddInputDataToTransfer(imagefile.c_str());
             imagenum++;
             }
           else

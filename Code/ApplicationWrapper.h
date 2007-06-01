@@ -96,6 +96,16 @@ public:
   void SetSingleNode(int single) {m_SingleNode = single;}
   int GetSingleNode() {return m_SingleNode;}
 
+  std::vector<std::string> & GetInputDataToTransfer()
+    {
+    return m_InputDataToTransfer;
+    }
+
+  void AddInputDataToTransfer(const char* filename)
+    {
+    m_InputDataToTransfer.push_back(filename);
+    }
+
   void ClearParameterValues();
 
 private:
@@ -114,6 +124,7 @@ private:
   int         m_SingleNode;
   bool        m_AfterEndBarrier;
   unsigned long m_ExecutionBlockNumber;
+  std::vector<std::string> m_InputDataToTransfer;
 };
 
 #endif

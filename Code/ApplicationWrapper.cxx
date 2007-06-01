@@ -51,6 +51,7 @@ ApplicationWrapper::ApplicationWrapper()
   m_SingleNode = 0;
   m_AfterEndBarrier = false;
   m_ExecutionBlockNumber = 0;
+  m_InputDataToTransfer.clear();
 }
 
 ApplicationWrapper::~ApplicationWrapper()

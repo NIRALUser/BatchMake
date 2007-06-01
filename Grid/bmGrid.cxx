@@ -742,6 +742,8 @@ void Grid::WriteCondor()
     return;
     }
 
+  std::cout << "FILENAME = " << m_FileName.c_str() << std::endl;
+
   // Create a DAG
   std::vector<DAGnode> dag;
   m_ParentChildList.clear();
@@ -869,8 +871,20 @@ void Grid::WriteCondor()
       itParams++;
       }
 
-    if(externalData.size() > 0)
+    
+    std::vector<std::string> otherinputdata = (*it).GetInputDataToTransfer();
+    if(externalData.size() > 0 || otherinputdata.size()>0)
       {
+      std::vector<std::string>::const_iterator itExternalData = otherinputdata.begin();
+      while(itExternalData != otherinputdata.end())
+        {
+        if(externalData.size()>0)
+          {
+          externalData += ", ";
+          }
+        externalData += *itExternalData;
+        itExternalData++;
+        }
       fprintf(fic,"should_transfer_files = yes\n");
       fprintf(fic,"transfer_input_files = %s\n",externalData.c_str());
       }

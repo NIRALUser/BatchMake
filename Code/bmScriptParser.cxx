@@ -232,8 +232,10 @@ void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
     {
     grid.SetOutputDirectory(outputDirectory);
     }
+  std::string scriptfile = outputDirectory;
+  scriptfile += "/bmcondor.bmc.tmp";
 
-  grid.SetFileName("bmcondor.bmc.tmp");
+  grid.SetFileName(scriptfile.c_str());
   this->SetGridModule(&grid);
 #endif
 
@@ -248,7 +250,8 @@ void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
     // Submit the script to condor
     std::vector<const char*> args;
     args.push_back("condor_submit_dag");
-    args.push_back("bmcondor.bmc.tmp");
+    args.push_back("-f");
+    args.push_back(scriptfile.c_str());
     args.push_back(0);
 
     // Run the application
