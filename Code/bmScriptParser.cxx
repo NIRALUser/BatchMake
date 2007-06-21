@@ -226,15 +226,15 @@ void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
     posLine = buffer.find("\n",startingLine);
     }
 
+  std::string scriptfile = outputDirectory;
+  scriptfile += "/bmcondor.bmc.tmp";
+  
 #ifdef BM_GRID
   bm::Grid grid;
   if(outputDirectory)
     {
     grid.SetOutputDirectory(outputDirectory);
     }
-  std::string scriptfile = outputDirectory;
-  scriptfile += "/bmcondor.bmc.tmp";
-
   grid.SetFileName(scriptfile.c_str());
   this->SetGridModule(&grid);
 #endif
