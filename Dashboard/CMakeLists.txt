@@ -63,7 +63,7 @@ ELSE(WIN32)
 ENDIF(WIN32)
 
 ADD_LIBRARY(BatchMakeDashboard ${BatchMakeDashboard_SRCS})
-TARGET_LINK_LIBRARIES(BatchMakeDashboard ${BatchMakeDashboard_LIBS})
+TARGET_LINK_LIBRARIES(BatchMakeDashboard ${BatchMakeDashboard_LIBS} BatchMakeLib)
 
 IF(GRID_SUPPORT)
   TARGET_LINK_LIBRARIES(BatchMakeDashboard BatchMakeGrid)
@@ -82,7 +82,9 @@ TARGET_LINK_LIBRARIES(bmSliceExtractor BatchMakeDashboard BatchMakeUtilities)
 # Installation file
 INSTALL(TARGETS BatchMakeDashboard bmSliceExtractor bmGridStore bmGridSend
         RUNTIME DESTINATION bin
-        ARCHIVE DESTINATION lib/BatchMake)
+	LIBRARY DESTINATION lib/BatchMake
+	ARCHIVE DESTINATION lib/BatchMake
+        )
 INSTALL(FILES ${BatchMakeDashboard_HDRS} 
   DESTINATION include/BatchMake/Dashboard)
 INSTALL(FILES ${BatchMakeDashboard_SRCS} bmGridSend.cxx bmGridStore.cxx bmSliceExtractor.cxx 

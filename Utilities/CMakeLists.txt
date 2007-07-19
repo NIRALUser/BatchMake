@@ -87,6 +87,7 @@ MOVE_EXECUTABLE_TOP_BINARY(bmGetCPUInfo BatchMake_GET_CPU_INFO_EXE)
 # Installation file
 INSTALL(TARGETS BatchMakeUtilities bmGetCPUInfo bmGetMemoryInfo bmGetCPUSpeed
         ARCHIVE DESTINATION lib/BatchMake
+	LIBRARY DESTINATION lib/BatchMake
         RUNTIME DESTINATION bin)
 INSTALL(FILES ${BatchMakeUtilities_HDRS} 
         DESTINATION include/BatchMake/Utilities)
