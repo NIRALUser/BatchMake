@@ -124,4 +124,52 @@ bool ScriptActionManager::AddDashboardMethodParameter(const char* var,
   return false;
 }
 
+/** Add a BatchBoard */
+ScriptActionManager::BatchBoard* 
+ScriptActionManager::AddBatchBoard(const char* var,
+                                   const char* experimentVar,
+                                   const char* title,
+                                   const char* isPublic)
+{
+  bool found = false;
+
+  // Get the project name
+  DashboardExperiment* exp = NULL;
+  std::vector<DashboardExperiment>::iterator it = m_Dashboard.experiments.begin();
+  while(it != m_Dashboard.experiments.end())
+    {
+    if(!strcmp((*it).variable.c_str(),experimentVar))
+      {
+      exp = &(*it);
+      break;
+      }
+    it++;
+    }
+
+  if(!exp)
+    {
+    std::cout << "Cannot find experiment!" << std::endl;
+    return NULL;
+    }
+  else
+    {
+    BatchBoard dash;
+    dash.variable = var;
+    dash.title = title;
+    if(!strcmp(isPublic,"1"))
+      {
+      dash.isPublic = true;
+      }
+    else
+      {
+      dash.isPublic = false;
+      }
+    (*exp).batchboards.push_back(dash);
+    return &((*exp).batchboards[(*exp).batchboards.size()-1]);
+    }
+
+  return NULL;
+}
+
+
 } // end namespace bm

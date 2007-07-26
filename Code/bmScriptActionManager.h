@@ -78,12 +78,21 @@ public:
     std::vector<DashboardMethodParameter> parameters;
     };
 
+  struct BatchBoard
+    {
+    std::string variable;
+    std::string title;
+    bool isPublic;
+    std::string SQLid;
+    };
+
   struct DashboardExperiment
     {
     std::string variable;
     std::string project;
     std::string name;
     std::vector<DashboardMethod> methods;
+    std::vector<BatchBoard> batchboards;
     };
 
   struct Dashboard
@@ -184,12 +193,18 @@ public:
   bool AddDashboardMethod(const char* var,
                           const char* expvar,
                           const char* methodName);
+
   bool AddDashboardMethodParameter(const char* var,
                                    const char* methVar, 
                                    const char* name,
                                    bool output=false,
                                    bool ideal=false,
                                    const char* type=NULL);
+
+  BatchBoard*  AddBatchBoard(const char* var,
+                             const char* experimentVar,
+                             const char* title,
+                             const char* isPublic);
 
   /** Get the dashboard as a const method, onlt to retrieve data from it */
   const Dashboard * GetDashboard() const 

@@ -15,8 +15,11 @@ SET(BatchMakeDashboard_HDRS
   bmScriptDashboardSendAction.h
   bmScriptDashboardNotifyAction.h
   bmScriptCreateExperimentAction.h
-  bmScriptCreateMethodAction.h   
+  bmScriptCreateMethodAction.h  
+  bmScriptCreateDashboardAction.h  
+  bmScriptCreateGraphAction.h  
   bmScriptAddMethodOutputAction.h  
+  bmScriptAddDashboardLabelAction.h
   bmDashboardSend.h
 )
 
@@ -37,9 +40,12 @@ SET(BatchMakeDashboard_SRCS
   bmScriptDashboardSendAction.cxx
   bmScriptDashboardNotifyAction.cxx
   bmScriptCreateExperimentAction.cxx
-  bmScriptCreateMethodAction.cxx   
+  bmScriptCreateMethodAction.cxx
+  bmScriptCreateDashboardAction.cxx 
+  bmScriptCreateGraphAction.cxx
   bmScriptAddMethodOutputAction.cxx  
   bmScriptActionManagerDashboard.cxx
+  bmScriptAddDashboardLabelAction.cxx
   bmDashboardSend.cxx
 )
 

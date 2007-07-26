@@ -64,6 +64,10 @@
   #include "bmScriptDashboardKeyAction.h"
   #include "bmScriptCreateExperimentAction.h"
   #include "bmScriptCreateMethodAction.h"
+  #include "bmScriptCreateGraphAction.h"
+  #include "bmScriptCreateDashboardAction.h"
+  #include "bmScriptAddDashboardLabelAction.h"
+
   #include "bmScriptDashboardSendAction.h"
   #include "bmScriptDashboardNotifyAction.h"
   #include "bmScriptOpenTCPSocketAction.h"
@@ -212,6 +216,9 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, DashboardNotify);
   BM_NEWKEYWORD(_list, CreateExperiment);
   BM_NEWKEYWORD(_list, CreateMethod);
+  BM_NEWKEYWORD(_list, CreateDashboard);
+  BM_NEWKEYWORD(_list, AddDashboardLabel);
+  BM_NEWKEYWORD(_list, CreateGraph);
   BM_NEWKEYWORD(_list, Sin);
   BM_NEWKEYWORD(_list, DeleteFile);
   BM_NEWKEYWORD(_list, OpenTCPSocket);
@@ -294,6 +301,8 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, DashboardNotify);
   BM_NEWACTION(option, CreateExperiment);
   BM_NEWACTION(option, CreateMethod);
+  BM_NEWACTION(option, CreateGraph);
+  BM_NEWACTION(option, CreateDashboard);
   BM_NEWACTION(option, OpenTCPSocket);
   BM_NEWACTION(option, SendTCP);
   BM_NEWACTION(option, CloseTCPSocket);
@@ -301,6 +310,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, AddMethodOutput);
   BM_NEWACTION(option, AddMethodIdealOutput);
   BM_NEWACTION(option, SetIdealOutput);
+  BM_NEWACTION(option, AddDashboardLabel);
 #endif
   
   return 0;
