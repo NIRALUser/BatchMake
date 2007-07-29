@@ -43,13 +43,13 @@ TARGET_LINK_LIBRARIES(bmCheckMemory BatchMakeUtilities)
 ADD_EXECUTABLE(bmGetCPUInfo GetCPUInfo.cxx)
 TARGET_LINK_LIBRARIES(bmGetCPUInfo BatchMakeUtilities)
 UTILITY_SOURCE(BatchMake_GET_CPU_INFO_EXE bmGetCPUInfo 
-  "" GetCPUInfo.cxx)
+               "" GetCPUInfo.cxx)
 MARK_AS_ADVANCED(BatchMake_GET_CPU_INFO_EXE)
 
 ADD_EXECUTABLE(bmGetMemoryInfo GetMemoryInfo.cxx)
 TARGET_LINK_LIBRARIES(bmGetMemoryInfo BatchMakeUtilities)
 UTILITY_SOURCE(BatchMake_GET_MEMORY_INFO_EXE bmGetMemoryInfo 
-  "" GetMemoryInfo.cxx)
+               "" GetMemoryInfo.cxx)
 MARK_AS_ADVANCED(BatchMake_GET_MEMORY_INFO_EXE)
 
 ADD_EXECUTABLE(bmGetCPUSpeed GetCPUSpeed.cxx Whetstone.cxx)
@@ -60,9 +60,8 @@ ELSE(CMAKE_COMPILER_IS_GNUCXX)
     SET_SOURCE_FILES_PROPERTIES(Whetstone.cxx PROPERTIES COMPILE_FLAGS -Od)
   ENDIF(WIN32)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
 UTILITY_SOURCE(BatchMake_GET_CPU_SPEED_EXE bmGetCPUSpeed 
-  "" GetCPUSpeed.cxx)
+               "" GetCPUSpeed.cxx)
 MARK_AS_ADVANCED(BatchMake_GET_CPU_SPEED_EXE)
 
 # Move the executable to the top binary tree
@@ -71,13 +70,13 @@ MACRO(MOVE_EXECUTABLE_TOP_BINARY NAME CACHE_VAR)
   GET_FILENAME_COMPONENT(EXECUTABLE_NAME ${EXECUTABLE_PATH} NAME)
 
   ADD_CUSTOM_COMMAND(
-   TARGET ${NAME}
-   POST_BUILD
-   COMMAND ${CMAKE_COMMAND} -E copy ${EXECUTABLE_PATH} ${BatchMake_BINARY_DIR}/bin/${EXECUTABLE_NAME}
-   )
-
-SET(${CACHE_VAR} ${BatchMake_BINARY_DIR}/bin/${EXECUTABLE_NAME} CACHE FILEPATH "" FORCE)
-
+    TARGET ${NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} 
+       -E copy ${EXECUTABLE_PATH} ${BatchMake_BINARY_DIR}/bin/${EXECUTABLE_NAME}
+    )
+  SET(${CACHE_VAR} ${BatchMake_BINARY_DIR}/bin/${EXECUTABLE_NAME} 
+      CACHE FILEPATH "" FORCE)
 ENDMACRO(MOVE_EXECUTABLE_TOP_BINARY NAME)
 
 MOVE_EXECUTABLE_TOP_BINARY(bmGetMemoryInfo BatchMake_GET_MEMORY_INFO_EXE )
@@ -87,7 +86,7 @@ MOVE_EXECUTABLE_TOP_BINARY(bmGetCPUInfo BatchMake_GET_CPU_INFO_EXE)
 # Installation file
 INSTALL(TARGETS BatchMakeUtilities bmGetCPUInfo bmGetMemoryInfo bmGetCPUSpeed
         ARCHIVE DESTINATION lib/BatchMake
-	LIBRARY DESTINATION lib/BatchMake
+        LIBRARY DESTINATION lib/BatchMake
         RUNTIME DESTINATION bin)
 INSTALL(FILES ${BatchMakeUtilities_HDRS} 
         DESTINATION include/BatchMake/Utilities)

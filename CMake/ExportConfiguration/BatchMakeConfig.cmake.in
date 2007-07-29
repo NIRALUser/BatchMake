@@ -69,6 +69,11 @@ SET(BatchMake_FLTK_DIR "@BatchMake_FLTK_DIR_CONFIG@")
 SET(BatchMake_GET_CPU_INFO_EXE "@BatchMake_GET_CPU_INFO_EXE_CONFIG@")
 SET(BatchMake_GET_CPU_SPEED_EXE "@BatchMake_GET_CPU_SPEED_EXE_CONFIG@")
 SET(BatchMake_GET_MEMORY_INFO_EXE "@BatchMake_GET_MEMORY_INFO_EXE_CONFIG@")
+SET(BatchMake_CONDOR_WATCHER_TOOL_EXE 
+    "@BatchMake_CONDOR_WATCHER_TOOL_EXE_CONFIG@")
+SET(BatchMake_GRID_SEND_EXE "@BatchMake_GRID_SEND_EXE_CONFIG@")
+SET(BatchMake_GRID_STORE_EXE "@BatchMake_GRID_STORE_EXE_CONFIG@")
+SET(BatchMake_SLICE_EXTRACTOR_EXE "@BatchMake_SLICE_EXTRACTOR_EXE_CONFIG@")
 
 # An install tree always provides one build configuration.
 # A build tree may provide either one or multiple build
