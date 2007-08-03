@@ -202,7 +202,7 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
         {
         (*it).SetValueDefined(true);
 
-        if(!strcmp(value.c_str(),"0")
+        if(!strncmp(value.c_str(),"0",1)
           || !strcmp(value.c_str(),"false")
           || !strcmp(value.c_str(),"false ")
           || !strcmp(value.c_str(),"False ")
