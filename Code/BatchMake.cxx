@@ -158,6 +158,7 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateShell","scriptname");
       std::string outputname = command.GetValueAsString("generateShell","outputname");
       bm::ScriptParser m_Parser;
+      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
       m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
      
       std::cout << "Generating shell script ...";
@@ -178,6 +179,7 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateCondor","scriptname");
       std::string outputname = command.GetValueAsString("generateCondor","outputname");
       bm::ScriptParser m_Parser;
+      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
       m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
      
       std::cout << "Generating condor script ...";
@@ -198,6 +200,7 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateGAD","scriptname");
       std::string outputname = command.GetValueAsString("generateGAD","outputname");
       bm::ScriptParser m_Parser;
+      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
       m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
      
       std::cout << "Generating kwgrid script ...";
