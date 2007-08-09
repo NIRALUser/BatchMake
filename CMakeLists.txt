@@ -61,7 +61,7 @@ SET(BatchMake_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
 #-----------------------------------------------------------------------------
 # We support FLTK
-OPTION(USE_FLTK "Add FLTK GUI support to BatchMake" ON) 
+OPTION(USE_FLTK "Add FLTK GUI support to BatchMake" OFF) 
 IF(USE_FLTK)
   FIND_PACKAGE(FLTK)
   IF(FLTK_FOUND)
