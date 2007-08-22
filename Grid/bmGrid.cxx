@@ -768,8 +768,6 @@ void Grid::WriteCondor()
     filename += tmp;
     filename += itksys::SystemTools::GetFilenameExtension(m_FileName);;
 
-    FILE* fic = fopen(filename.c_str(),"wb");
-   
     DAGnode dagNode;
     dagNode.id = id;
     
@@ -808,10 +806,11 @@ void Grid::WriteCondor()
       }
 
     delete [] tmp;
-
+ 
+    FILE* fic = fopen(filename.c_str(),"wb"); 
     if(!fic)
       {
-      std::cout << "Grid::WriteCondor() : Cannot create Condor script" << std::endl;
+      std::cout << "Grid::WriteCondor() : Cannot create Condor script: " << filename.c_str() << std::endl;
       return;
       }
     
