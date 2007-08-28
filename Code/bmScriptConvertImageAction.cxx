@@ -59,11 +59,11 @@ template<class T> int ScriptConvertImageActionConvertImage(const char* inputImag
 
   typedef itk::ImageFileReader< InputImageType >  ReaderType;
   typedef itk::ImageFileWriter< OutputImageType > WriterType;
-  ReaderType::Pointer reader = ReaderType::New();
+  typename ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName( inputImage );
 
-  WriterType::Pointer writer = WriterType::New();
+  typename WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( outputImage );
   writer->SetInput( reader->GetOutput() );
   writer->UseCompressionOn();
