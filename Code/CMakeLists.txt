@@ -49,6 +49,8 @@ bmScriptGetTimeAction.h
 bmScriptGetCurrentDateTimeAction.h
 bmScriptGlobAction.h
 bmScriptGetFilenameAction.h
+bmScriptConvertImageAction.h
+bmScriptFileExistsAction.h
 )
 
 #Add Commands
@@ -84,6 +86,8 @@ bmScriptGetTimeAction.cxx
 bmScriptGetCurrentDateTimeAction.cxx
 bmScriptGlobAction.cxx
 bmScriptGetFilenameAction.cxx
+bmScriptConvertImageAction.cxx
+bmScriptFileExistsAction.cxx
 )
 
 LINK_LIBRARIES(
