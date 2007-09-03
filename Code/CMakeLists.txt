@@ -133,21 +133,29 @@ IF(USE_FLTK)
     bmApplicationWrapperGUI.fl
     )
 
-
   SET(FLTK_WRAP_UI 1)
   FLTK_WRAP_UI( BatchMakeLib ${BatchMakeLib_GUI_SRCS} )
 
   ADD_LIBRARY(BatchMakeLib ${BatchMakeLib_SRCS} ${BatchMakeLib_FLTK_UI_SRCS})
 
+  TARGET_LINK_LIBRARIES(BatchMakeLib ${FLTK_LIBRARIES} FLU)
+
   ADD_DEPENDENCIES(BatchMakeLib FLU)
 
-  TARGET_LINK_LIBRARIES(BatchMakeLib ${FLTK_LIBRARIES})
+  IF(FLTK_FOUND)
+    IF(CYGWIN)
+      TARGET_LINK_LIBRARIES(BatchMakeLib 
+        ole32 uuid comctl32 wsock32 supc++ -lm -lgdi32
+	)
+    ENDIF(CYGWIN)
+  ENDIF(FLTK_FOUND)
 
 ELSE(USE_FLTK)
 
   ADD_LIBRARY(BatchMakeLib ${BatchMakeLib_SRCS})
 
 ENDIF(USE_FLTK)
+
 
 # Installation file
 INSTALL(TARGETS BatchMakeLib
@@ -159,10 +167,7 @@ INSTALL(FILES ${BatchMake_HDRS}  ${BatchMakeLib_HDRS}
         DESTINATION include/BatchMake/Code)
 INSTALL(FILES CMakeLists.txt DESTINATION source/Code)
 INSTALL(FILES ${BatchMakeLib_SRCS} DESTINATION source/Code)
-
 IF(USE_FLTK)
-
   INSTALL(FILES ${BatchMakeLib_GUI_SRCS} DESTINATION source/Code)
-
 ENDIF(USE_FLTK)
 
