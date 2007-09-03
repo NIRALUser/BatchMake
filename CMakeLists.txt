@@ -169,15 +169,15 @@ IF(GRID_SUPPORT)
         ${BatchMake_INCLUDE_PATH}
         ${BatchMake_INCLUDE_DIR}/Utilities/CondorWatcher
         )
-      INCLUDE_DIRECTORIES(${BatchMake_INCLUDE_DIR}/Utilties/CondorWatcher)
+      INCLUDE_DIRECTORIES(${BatchMake_INCLUDE_DIR}/Utilities/CondorWatcher)
     ENDIF(BatchMake_INCLUDE_DIR)
     SET(BatchMake_INCLUDE_PATH
       ${BatchMake_INCLUDE_PATH}
       ${BatchMake_SOURCE_DIR}/Utilities/CondorWatcher
       ${BatchMake_BINARY_DIR}/Utilities/CondorWatcher
       )
-    INCLUDE_DIRECTORIES(${BatchMake_SOURCE_DIR}/Utilties/CondorWatcher)
-    INCLUDE_DIRECTORIES(${BatchMake_BINARY_DIR}/Utilties/CondorWatcher)
+    INCLUDE_DIRECTORIES(${BatchMake_SOURCE_DIR}/Utilities/CondorWatcher)
+    INCLUDE_DIRECTORIES(${BatchMake_BINARY_DIR}/Utilities/CondorWatcher)
   ENDIF(USE_FLTK)
 
   SUBDIRS(Grid)
