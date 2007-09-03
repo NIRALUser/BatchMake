@@ -2,4 +2,5 @@
 
 *.bmp           -crlf
 *.gif           -crlf
+*.ico           -crlf
 *.png           -crlf
