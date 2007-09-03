@@ -48,11 +48,14 @@ SET(BatchMakeUtilities_SRCS
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
 
+
 TARGET_LINK_LIBRARIES(BatchMakeUtilities ITKCommon)
 IF(USE_FLTK)
-  TARGET_LINK_LIBRARIES(BatchMakeUtilities FLU)
+  TARGET_LINK_LIBRARIES(BatchMakeUtilities ${FLTK_LIBRARIES} FLU)
+  ADD_DEPENDENCIES(BatchMakeUtilities FLU)
   IF(GRID_SUPPORT)
     TARGET_LINK_LIBRARIES(BatchMakeUtilities CondorWatcher)
+    ADD_DEPENDENCIES(BatchMakeUtilities CondorWatcher)
   ENDIF(GRID_SUPPORT)
 ENDIF(USE_FLTK)
 
