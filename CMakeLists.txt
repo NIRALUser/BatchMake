@@ -159,13 +159,9 @@ IF(DASHBOARD_SUPPORT)
   ENDIF(BatchMake_INCLUDE_DIR)
   SET(BatchMake_INCLUDE_PATH
     ${BatchMake_INCLUDE_PATH}
-    ${BatchMake_SOURCE_DIR}/Dashboard
+    ${BatchMake_SOURCE_DIR}/Code/Dashboard
     )
-  INCLUDE_DIRECTORIES(${BatchMake_SOURCE_DIR}/Dashboard)
-
-  SUBDIRS(Dashboard)
-
-  SET(BatchMake_LIBRARIES ${BatchMake_LIBRARIES} BatchMakeDashboard)
+  INCLUDE_DIRECTORIES(${BatchMake_SOURCE_DIR}/Code/Dashboard)
 
 ENDIF(DASHBOARD_SUPPORT)
 
@@ -186,9 +182,9 @@ IF(GRID_SUPPORT)
   ENDIF(BatchMake_INCLUDE_DIR)
   SET(BatchMake_INCLUDE_PATH
     ${BatchMake_INCLUDE_PATH}
-    ${BatchMake_SOURCE_DIR}/Grid
+    ${BatchMake_SOURCE_DIR}/Code/Grid
     )
-  INCLUDE_DIRECTORIES(${BatchMake_SOURCE_DIR}/Grid)
+  INCLUDE_DIRECTORIES(${BatchMake_SOURCE_DIR}/Code/Grid)
 
   IF(USE_FLTK)
     IF(BatchMake_INCLUDE_DIR)
@@ -206,10 +202,6 @@ IF(GRID_SUPPORT)
     INCLUDE_DIRECTORIES(${BatchMake_SOURCE_DIR}/Utilities/CondorWatcher)
     INCLUDE_DIRECTORIES(${BatchMake_BINARY_DIR}/Utilities/CondorWatcher)
   ENDIF(USE_FLTK)
-
-  SUBDIRS(Grid)
-
-  SET(BatchMake_LIBRARIES ${BatchMake_LIBRARIES} BatchMakeGrid)
 
 ENDIF(GRID_SUPPORT)
 
