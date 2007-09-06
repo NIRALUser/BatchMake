@@ -3,7 +3,6 @@
 # Sources
 
 SET(BatchMakeDashboard_HDRS
-  HttpRequest.h
   bmScriptDbSendValueAction.h
   bmScriptDbSendFileAction.h
   bmScriptDbClearAction.h
@@ -28,7 +27,6 @@ SET(BatchMakeDashboard_HDRS
   )
 
 SET(BatchMakeDashboard_SRCS
-  HttpRequest.cxx
   bmScriptDbSendValueAction.cxx
   bmScriptDbSendFileAction.cxx
   bmScriptDbClearAction.cxx
@@ -81,7 +79,7 @@ ENDIF(WIN32)
 
 ADD_LIBRARY(BatchMakeDashboard ${BatchMakeDashboard_SRCS})
 
-TARGET_LINK_LIBRARIES(BatchMakeDashboard ${BatchMakeDashboard_LIBS})
+TARGET_LINK_LIBRARIES(BatchMakeDashboard ${BatchMakeDashboard_LIBS} BatchMakeUtilities)
 
 #------------------------------------------------------------------------
 # Installation file
