@@ -155,7 +155,8 @@ ELSE(USE_FLTK)
   ADD_LIBRARY(BatchMakeLib ${BatchMakeLib_SRCS})
 
 ENDIF(USE_FLTK)
-
+ 
+TARGET_LINK_LIBRARIES(BatchMakeLib BatchMakeUtilities)
 
 # Installation file
 INSTALL(TARGETS BatchMakeLib
