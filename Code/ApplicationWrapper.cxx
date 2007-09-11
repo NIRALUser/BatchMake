@@ -703,11 +703,19 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
     ApplicationWrapperParam parentParam;
     parentParam.SetName((*it).name);
     parentParam.SetOptional(!(*it).required);
-    if((*it).tag != "") // we have one value
+    if((*it).tag != "" || (*it).longtag != "") // we have one value
       {
       parentParam.SetType(ApplicationWrapperParam::Flag);
       std::string tag = "-";
-      tag += (*it).tag;
+      if((*it).longtag.size()>0) // use the long tag if there is one
+        {
+        tag += (*it).tag;
+        tag += (*it).longtag;
+        }
+      else
+        {
+        tag += (*it).tag;
+        }
       parentParam.SetValue(tag);
       parentParam.SetName((*it).name);
 
