@@ -709,7 +709,7 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
       std::string tag = "-";
       if((*it).longtag.size()>0) // use the long tag if there is one
         {
-        tag += (*it).tag;
+        tag += "-";
         tag += (*it).longtag;
         }
       else
