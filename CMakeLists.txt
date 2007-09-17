@@ -13,6 +13,7 @@ IF(NOT EXECUTABLE_OUTPUT_PATH)
     "Single output directory for building all executables.")
 ENDIF(NOT EXECUTABLE_OUTPUT_PATH)
 MARK_AS_ADVANCED(EXECUTABLE_OUTPUT_PATH)
+SET(BatchMake_APPLICATIONS_DIR "${EXECUTABLE_OUTPUT_PATH}/Applications")
 
 SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
@@ -254,10 +255,10 @@ INSTALL(FILES ${BatchMake_BINARY_DIR}/bmConfigure.h
   DESTINATION include/BatchMake)
 
 INSTALL(FILES CMakeLists.txt Copyright.txt ReadMe.txt DartConfig.cmake
-  DESTINATION source)
+  DESTINATION source/BatchMake)
 
 FILE(GLOB IMAGES Images/?*.*)
-INSTALL(FILES ${IMAGES} DESTINATION source/Images)
+INSTALL(FILES ${IMAGES} DESTINATION source/BatchMake/Images)
 
 #-----------------------------------------------------------------------------
 # CPack options
