@@ -30,6 +30,7 @@ namespace bm {
 class ScriptIncludeAction : public ScriptAction
 {
 public:
+
   ScriptIncludeAction();
   ~ScriptIncludeAction();
   void Execute();

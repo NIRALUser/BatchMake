@@ -81,7 +81,7 @@ protected:
   std::string m_SplashBuffer;
 
   XMLIniIO* m_InitFile;
-  std::string m_WrappedApplicationsPath;
+  std::string  m_WrappedApplicationsPath;
 };
 
 } // end namespace bm
