@@ -140,9 +140,9 @@ int main(int argc, char* argv[])
   command.SetAuthor("Kitware Inc");
   command.SetDescription("Perform number calculation");
 
-  command.AddField("firstNumber","first number",MetaCommand::FLOAT);
-  command.AddField("operand","operand",MetaCommand::STRING);
-  command.AddField("secondNumber","second number",MetaCommand::FLOAT);
+  command.AddField("firstNumber", "first number", MetaCommand::FLOAT);
+  command.AddField("operand", "operand", MetaCommand::STRING);
+  command.AddField("secondNumber", "second number", MetaCommand::FLOAT);
 
   // This should be put before the parsing
   MetaOutput output;
