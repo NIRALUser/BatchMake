@@ -49,7 +49,7 @@ MString ScriptWriteFileAction::Help()
 void ScriptWriteFileAction::Execute()
 {
   std::ofstream m_file;
-   m_file.open((m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1(),std::ofstream::binary | ios_base::trunc);
+   m_file.open((m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1(),ios_base::binary | ios_base::out | ios_base::trunc);
 
   MString m_value;
   for (unsigned int i=1;i<m_Parameters.size();i++)
@@ -65,7 +65,13 @@ void ScriptWriteFileAction::Execute()
            m_file << std::endl;
            l++;
            m_insert = false;
-        }        
+        }
+        else if(m_text[l+1] == 't')
+        {
+           m_file << '\t';
+           l++;
+           m_insert = false;
+        }    
      
        if (m_insert)
          m_file << m_text[l];

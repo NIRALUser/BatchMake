@@ -66,7 +66,14 @@ void ScriptAppendFileAction::Execute()
            m_file << std::endl;
            l++;
            m_insert = false;
-        }        
+        }
+        else if(m_text[l+1] == 't')
+        {
+           m_file << '\t';
+           l++;
+           m_insert = false;
+        }    
+             
      
        if (m_insert)
          m_file << m_text[l];
