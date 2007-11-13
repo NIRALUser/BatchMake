@@ -81,7 +81,7 @@ void ScriptRunAction::ParseXMLOutput(const char* output)
     }
   catch(...)
     {
-    //std::cout << "Cannot parse output" << std::endl;
+    std::cout << "Cannot parse output" << std::endl;
     return;
     }
   XMLParserType::TagVectorType tags = xmlReader->GetTags();
@@ -101,9 +101,13 @@ void ScriptRunAction::ParseXMLOutput(const char* output)
           {
           name = (*itValues).second;
           }
-        else if((*itValues).first == "value")
+        else if(!strncmp((*itValues).first.c_str(),"value",5))
           {
-          value = "'"+(*itValues).second+"'";
+          if(value.size()>0)
+            {
+            value += " ";
+            }
+          value += "'"+(*itValues).second+"'";
           }
         itValues++;
         }
