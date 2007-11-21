@@ -14,7 +14,7 @@
 =========================================================================*/
 
 #include "bmLaunch.h"
-  
+/*
 #ifdef WIN32
   #include <Windows.h>
   #include <fcntl.h>
@@ -29,6 +29,9 @@
   #include <errno.h>
   #include <vector>
 #endif
+*/
+#include <itksys/SystemTools.hxx>
+#include <itksys/Process.h>
 
 #include <fstream>
 
@@ -55,6 +58,126 @@ void Launch::Execute(MString _command)
   m_Output = "";
   m_Error = "";
 
+  // Extract the arguments from the command line
+  // Warning: Only works for one space between arguments
+ // Extract the arguments from the command line
+  // Warning: Only works for one space between arguments
+  std::vector<std::string> arglist; // keep the pointers in the list
+  std::vector<const char*> args;
+  std::string command = _command.toChar();
+  long int start = -1;
+  long int pos = command.find(' ',0);
+  while(pos!=-1)
+    {
+    bool inQuotes = false;
+    // Check if we are between quotes
+    long int b0 = command.find('"',0);
+    long int b1 = command.find('"',b0+1);
+    while(b0 != -1 && b1 != -1 && b1>b0)
+      {
+      if(pos>b0 && pos<b1)
+        {
+        inQuotes = true;
+        break;
+        }
+      b0 = command.find('"',b1+1);
+      b1 = command.find('"',b0+1);
+      }
+    
+    if(!inQuotes)
+      {
+      std::string arg = command.substr(start+1,pos-start-1);
+
+      // Remove the quotes if any
+      long int quotes = arg.find('"');
+      while(quotes != -1)
+        {
+        arg.erase(quotes,1);
+        quotes = arg.find('"');
+        }
+      arglist.push_back(arg);  
+      start = pos;
+      }
+    pos = command.find(' ',pos+1);
+    }
+  std::string lastArg = command.substr(start+1,command.size()-start-1);
+  arglist.push_back(lastArg.c_str());
+
+  unsigned int i=0;
+  for(i=0;i<arglist.size();i++)
+    {
+    if(arglist[i].size() >0 && arglist[i] != " ")
+      {
+      args.push_back(arglist[i].c_str());
+      }
+    }
+  args.push_back(0);
+
+  // Run the application
+  itksysProcess* gp = itksysProcess_New();
+  //itksysProcess_SetPipeShared(gp, itksysProcess_Pipe_STDOUT, 1);
+  //itksysProcess_SetPipeShared(gp, itksysProcess_Pipe_STDERR, 1);
+  itksysProcess_SetCommand(gp, &*args.begin());
+  itksysProcess_SetOption(gp,itksysProcess_Option_HideWindow,1);
+
+  itksysProcess_Execute(gp);
+
+  char* data = NULL;
+  int length;
+  double timeout = 255;
+
+  while(int pipeid = itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
+    {
+    if(pipeid == itksysProcess_Pipe_STDERR)
+      {
+      for(int i=0;i<length;i++)
+        {
+        m_Error += data[i];
+        }
+      }
+    else
+      {
+      for(int i=0;i<length;i++)
+        {
+        m_Output += data[i];
+        }
+      }
+    }
+  itksysProcess_WaitForExit(gp, 0);
+
+  int result = 1;
+  switch(itksysProcess_GetState(gp))
+    {
+    case itksysProcess_State_Exited:
+      {
+      result = itksysProcess_GetExitValue(gp);
+      } break;
+    case itksysProcess_State_Error:
+      {
+      std::cerr << "Error: Could not run " << args[0] << ":\n";
+      std::cerr << itksysProcess_GetErrorString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Exception:
+      {
+      std::cerr << "Error: " << args[0]
+                << " terminated with an exception: "
+                << itksysProcess_GetExceptionString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Starting:
+    case itksysProcess_State_Executing:
+    case itksysProcess_State_Expired:
+    case itksysProcess_State_Killed:
+      {
+      // Should not get here.
+      std::cerr << "Unexpected ending state after running " << args[0]
+                << std::endl;
+      } break;
+    }
+  itksysProcess_Delete(gp);
+
+
+
+/*
 #ifdef WIN32
 
   char buffer[BUFSIZ+1];
@@ -375,7 +498,7 @@ void Launch::Execute(MString _command)
       close(stdout_pipe[0]);
       }
     }
-#endif
+#endif*/
 }
 
 
