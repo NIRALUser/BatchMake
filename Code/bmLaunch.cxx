@@ -14,26 +14,9 @@
 =========================================================================*/
 
 #include "bmLaunch.h"
-/*
-#ifdef WIN32
-  #include <Windows.h>
-  #include <fcntl.h>
-  #include <errno.h>
-  #include <io.h>
-  #include <stdio.h>
-  #include <process.h>
-#else
-  #include <unistd.h>
-  #include <sys/wait.h>
-  #include <fcntl.h>
-  #include <errno.h>
-  #include <vector>
-#endif
-*/
-#include <itksys/SystemTools.hxx>
-#include <itksys/Process.h>
 
 #include <fstream>
+#include "FL/Fl.h"
 
 namespace bm {
 
@@ -42,29 +25,67 @@ Launch::Launch()
   m_ProgressManager = 0;
   m_Output = "";
   m_Error = "";
+  m_ExecutionState = 0;
+  m_Command = "";
+  m_Process = 0;
 }
 
 Launch::~Launch()
 {
 }
-  
-void Launch::SetProgressManager(ProgressManager* progressmanager)
+
+/** Set the execution state */
+void Launch::SetExecutionState(int state)
 {
- m_ProgressManager = progressmanager;
+  m_ExecutionState = state;
 }
 
-void Launch::Execute(MString _command)
+/** Get the execution state */
+int Launch::GetExecutionState()
 {
-  m_Output = "";
-  m_Error = "";
+  return m_ExecutionState;
+}
 
+/** Set the progress manager */
+void Launch::SetProgressManager(ProgressManager* progressmanager)
+{
+  m_ProgressManager = progressmanager;
+}
+
+/** Get the progress manager */
+ProgressManager* Launch::GetProgressManager()
+{
+  return m_ProgressManager;
+}
+
+/** Thread callback */
+ITK_THREAD_RETURN_TYPE Launch::ThreaderCallback( void * arg )
+{
+  ThreadStruct *threadStruct;
+  int threadId;
+
+  threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;  
+  threadStruct = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+
+  Launch* launcher = threadStruct->launcher;
+
+  // Launch the process in the first thread
+  launcher->SetExecutionState(1); // running
+  launcher->RunCommand();
+  launcher->SetExecutionState(2); // done
+  return ITK_THREAD_RETURN_VALUE;
+}
+
+
+void Launch::RunCommand()
+{
   // Extract the arguments from the command line
   // Warning: Only works for one space between arguments
- // Extract the arguments from the command line
+  // Extract the arguments from the command line
   // Warning: Only works for one space between arguments
   std::vector<std::string> arglist; // keep the pointers in the list
   std::vector<const char*> args;
-  std::string command = _command.toChar();
+  std::string command = m_Command;
   long int start = -1;
   long int pos = command.find(' ',0);
   while(pos!=-1)
@@ -114,19 +135,19 @@ void Launch::Execute(MString _command)
   args.push_back(0);
 
   // Run the application
-  itksysProcess* gp = itksysProcess_New();
+  m_Process = itksysProcess_New();
   //itksysProcess_SetPipeShared(gp, itksysProcess_Pipe_STDOUT, 1);
   //itksysProcess_SetPipeShared(gp, itksysProcess_Pipe_STDERR, 1);
-  itksysProcess_SetCommand(gp, &*args.begin());
-  itksysProcess_SetOption(gp,itksysProcess_Option_HideWindow,1);
+  itksysProcess_SetCommand(m_Process, &*args.begin());
+  itksysProcess_SetOption(m_Process,itksysProcess_Option_HideWindow,1);
 
-  itksysProcess_Execute(gp);
+  itksysProcess_Execute(m_Process);
 
   char* data = NULL;
   int length;
-  double timeout = 255;
+  double timeout = NULL;
 
-  while(int pipeid = itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
+  while(int pipeid = itksysProcess_WaitForData(m_Process,&data,&length,&timeout))
     {
     if(pipeid == itksysProcess_Pipe_STDERR)
       {
@@ -139,29 +160,32 @@ void Launch::Execute(MString _command)
       {
       for(int i=0;i<length;i++)
         {
-        m_Output += data[i];
+        if(data)
+          {
+          m_Output += data[i];
+          }
         }
       }
     }
-  itksysProcess_WaitForExit(gp, 0);
+  itksysProcess_WaitForExit(m_Process, 0);
 
   int result = 1;
-  switch(itksysProcess_GetState(gp))
+  switch(itksysProcess_GetState(m_Process))
     {
     case itksysProcess_State_Exited:
       {
-      result = itksysProcess_GetExitValue(gp);
+      result = itksysProcess_GetExitValue(m_Process);
       } break;
     case itksysProcess_State_Error:
       {
       std::cerr << "Error: Could not run " << args[0] << ":\n";
-      std::cerr << itksysProcess_GetErrorString(gp) << "\n";
+      std::cerr << itksysProcess_GetErrorString(m_Process) << "\n";
       } break;
     case itksysProcess_State_Exception:
       {
       std::cerr << "Error: " << args[0]
                 << " terminated with an exception: "
-                << itksysProcess_GetExceptionString(gp) << "\n";
+                << itksysProcess_GetExceptionString(m_Process) << "\n";
       } break;
     case itksysProcess_State_Starting:
     case itksysProcess_State_Executing:
@@ -173,332 +197,39 @@ void Launch::Execute(MString _command)
                 << std::endl;
       } break;
     }
-  itksysProcess_Delete(gp);
+  itksysProcess_Delete(m_Process); 
+}
 
+void Launch::Execute(MString command)
+{
+  m_Output = "";
+  m_Error = "";
+  m_Command = command.toChar();
 
+  itk::MultiThreader::Pointer threader = itk::MultiThreader::New();
+  threader->SetNumberOfThreads(1);
 
-/*
-#ifdef WIN32
-
-  char buffer[BUFSIZ+1];
-  char buffer_err[BUFSIZ+1];
-
-  STARTUPINFO si;
-  PROCESS_INFORMATION pi;
- 
-  SECURITY_ATTRIBUTES tmpSec;
-  ZeroMemory( &tmpSec, sizeof(tmpSec) );
-  tmpSec.nLength = sizeof(tmpSec);
-  tmpSec.bInheritHandle = true;
-  HANDLE hReadPipe;
-  HANDLE hWritePipe;
-  HANDLE hReadErrorPipe;
-  HANDLE hWriteErrorPipe;
-
-  SECURITY_ATTRIBUTES  sa;
-  ZeroMemory( &sa, sizeof(sa) );
-  sa.nLength = sizeof(sa);
-  sa.bInheritHandle = true;
-
-  SECURITY_ATTRIBUTES  sa2;
-  ZeroMemory( &sa2, sizeof(sa2) );
-  sa2.nLength = sizeof(sa);
-  sa2.bInheritHandle = true;
-
-  CreatePipe(&hReadPipe,&hWritePipe,&sa,0);
-  CreatePipe(&hReadErrorPipe,&hWriteErrorPipe,&sa2,0);
-
-  ZeroMemory( &si, sizeof(si) );
-  si.cb = sizeof(si);
-  si.dwFlags = STARTF_USESTDHANDLES;
-  si.hStdOutput = hWritePipe; //output;
-  si.hStdError = hWriteErrorPipe; //error;
-  ZeroMemory( &pi, sizeof(pi) );  
-  // Start the child process. 
-  if( !CreateProcess( NULL,       // No module name (use command line). 
-      (char*)_command.latin1(),  // Command line. 
-      NULL,                       // Process handle not inheritable. 
-      NULL,                       // Thread handle not inheritable. 
-      TRUE,                       // Set handle inheritance to FALSE. 
-      0,                          //CREATE_NEW_PROCESS_GROUP,  // No creation flags. 
-      NULL,                       // Use parent's environment block. 
-      NULL,                       // Use parent's starting directory. 
-      &si,                        // Pointer to STARTUPINFO structure.
-      &pi )                       // Pointer to PROCESS_INFORMATION structure.
-  ) 
+  ThreadStruct str;
+  str.launcher = this;
+  int threadid = threader->SpawnThread(this->ThreaderCallback, &str);
+  
+  while(this->GetExecutionState() != 2)
     {
-    std::cout << "BatchMake - CreateProcess failed!" << std::endl;
-    m_Error = "BatchMake - CreateProcess failed!";
-    return;
-    }
-
-  CloseHandle(hWritePipe);
-  CloseHandle(hWriteErrorPipe);
-
-   // Wait until child process exits.
-  bool m_run = true;
-
-  while(m_run)
-    {
-    if (m_ProgressManager)
-      {
-      m_ProgressManager->IsRunning();
-      if (m_ProgressManager->IsStop())
-        {
-        m_run = false;
-        }
-      }
-    
-    unsigned long m_nbread = 0;
-    unsigned long m_nberrorread = 0;
-    unsigned long m_nbtoread = 512;
-    unsigned long m_nbtoreaderror = 512;
-    int m_read = 0;
-    int m_readerror = 0;
-    unsigned long m_nbreaded = 0;
-    unsigned long m_nberrorreaded = 0;
-
-    if (WaitForSingleObject( pi.hProcess, 500 )  == 0)
-      {
-      m_run = false;
-      }
-
-    memset(buffer,'\0',sizeof(buffer)); 
-    PeekNamedPipe(hReadPipe,buffer,sizeof(buffer),&m_nbtoread,&m_nbread,NULL); 
-    
-    if (m_nbread != 0)
-      {
-      do
-        {
-        memset(buffer,'\0',sizeof(buffer)); 
-        ReadFile(hReadPipe, buffer,512,&m_nbreaded,NULL); 
-        if (m_nbreaded != 0)
-          {
-          if (m_ProgressManager)
-            {
-            //m_ProgressManager->DisplayOutput(MString(buffer).removeChar('\r'));
-            }
-
-          for (unsigned int k=0;k<m_nbreaded;k++)
-            {
-            if (buffer[k] != '\r')
-              {
-              m_Output += buffer[k];
-              }
-            }
-          memset(buffer,'\0',sizeof(buffer));
-          }
-        }while(m_nbreaded != 0);
-      }
-
-    memset(buffer_err,'\0',sizeof(buffer_err)); 
-    PeekNamedPipe(hReadErrorPipe,buffer_err,sizeof(buffer_err),&m_nbtoreaderror,&m_nberrorread,NULL);
-    
-    unsigned int totalRead = 0;
-
-    if (m_nberrorread != 0)
-      {
-      do 
-        {
-        memset(buffer_err,'\0',sizeof(buffer_err)); 
-        ReadFile(hReadErrorPipe, buffer_err,512,&m_nberrorreaded,NULL); 
-        if (m_nberrorreaded != 0)
-          {
-          if (m_ProgressManager)
-            {
-            //m_ProgressManager->DisplayError(MString(buffer_err).removeChar('\r'));
-            }
-          for (unsigned int k=0;k<strlen(buffer_err);k++)
-            {
-            if (buffer[k] != '\r') 
-              {
-              m_Error += buffer_err[k];
-              }
-            }
-          memset(buffer_err,'\0',sizeof(buffer_err)); 
-          }
-        totalRead += m_nberrorreaded;
-        } while (m_nberrorreaded != 0 && totalRead<m_nberrorread);
-      }
-    }
-
-  //Terminate Process
-  TerminateProcess(pi.hProcess,0);
-
-  CloseHandle(hReadPipe);
-  CloseHandle(hReadErrorPipe);
-
-  CloseHandle( pi.hProcess );
-  CloseHandle( pi.hThread );
-
-#else  
-  int stdin_pipe[2];
-  int stdout_pipe[2];
-  int stderr_pipe[2];
-  char buffer[BUFSIZ+1];
-  char buffer_err[BUFSIZ+1];
-  int fork_result;
-  int data_processed;
-  int data_processed_err;
-  int nchars = 0;
-  int status = 0;
-
-  memset(buffer,'\0',sizeof(buffer));
-  memset(buffer_err,'\0',sizeof(buffer)); 
-
-  if ( (pipe(stdin_pipe)==0)   
-      && (pipe(stdout_pipe)==0)
-      && (pipe(stderr_pipe)==0))
-    {
-    fork_result = fork();
-    if (fork_result == -1)
-      {
-      std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
-      m_Error = "Create Process failed (Pipe error) ! "; 
-      exit(EXIT_FAILURE);
-      }  
-    else if (fork_result == 0)
-      { 
-      // This is the child
-      close(0);
-      dup(stdin_pipe[0]);
-      close(stdin_pipe[0]);
-      close(stdin_pipe[1]);
-      close(1);      
-      dup(stdout_pipe[1]);     
-      close(stdout_pipe[0]); 
-      close(stdout_pipe[1]);      
-      close(2);
-      dup(stderr_pipe[1]);     
-      close(stderr_pipe[0]);      
-      close(stderr_pipe[1]);   
-      MString m_prog = _command.begin(" ");
-      MString m_param = _command.end(" ");   
-   
-      fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
-      fcntl(stderr_pipe[1], F_SETFL, O_NONBLOCK);
-
-      std::string com = _command.toChar();
-      std::vector<std::string> args;
-      
-      bool inword = false;
-      unsigned long start = 0;
-      for(unsigned int i=0;i<com.size();i++)
-        {
-        if(com[i] == ' ' && inword)
-          {
-          std::string arg = com.substr(start,i-start);
-          args.push_back(arg);
-          inword = false;
-          }
-        if(com[i]!=' ' && !inword)
-          {
-          start = i;
-          inword = true;
-          }
-        }
-     
-      
-      if(com[com.size()-1]!= ' ')
+    if(m_ProgressManager)
        {
-       std::string arg = com.substr(start,com.size()-start);
-       args.push_back(arg);
-       }
-
-      if(args.size()==0)
-        {
-        args.push_back(com);
-        }
-
-      char* arguments[args.size()+1];
-      
-      std::vector<std::string>::const_iterator it = args.begin();
-      unsigned int j=0;
-     
-      while(it != args.end())
-        {
-        arguments[j] = new char[255];
-        strcpy(arguments[j],(*it).c_str());
-        it++;
-        j++;
-        }
-
-      arguments[j] = (char *)0;
-
-      if (execvp(arguments[0],arguments) == -1)
+       m_ProgressManager->IsRunning(); // does the Fl::check();
+       if (m_ProgressManager->IsStop())
          {
-        if (errno == 2)
-          {
-          std::cerr << (MString("Program (") + m_prog + ") not found!").toChar() << std::endl;      
-          }
-        }
-      
-      for(int i=0;i<args.size()+1;i++)
-        {
-        delete [] arguments[i];
-        }
+         itksysProcess_Kill(m_Process); // Kill the process
+         break;
+         }
+       }
+     itksys::SystemTools::Delay(200); //refresh rate
+     }
 
-      exit(EXIT_FAILURE);
-      } 
-    else   
-      { 
-      // This is the parent
-      close(stdin_pipe[0]);
-      close(stdin_pipe[1]);
-      close(stderr_pipe[1]);
-      close(stdout_pipe[1]);  
-
-      fcntl(stdout_pipe[0], F_SETFL, O_NONBLOCK);
-      fcntl(stderr_pipe[0], F_SETFL, O_NONBLOCK);
-
-      while(1)   
-        {       
-        data_processed_err = read(stderr_pipe[0],buffer_err,BUFSIZ);
-        if (data_processed_err != -1)
-          {
-          for (unsigned int k=0;k<strlen(buffer_err);k++)
-            {
-            m_Error += buffer_err[k];
-            }
-
-          if (m_ProgressManager)
-            {
-            m_ProgressManager->DisplayError(MString(buffer_err));
-            }       
-          memset(buffer_err,'\0',sizeof(buffer));
-          }
-        data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
-        if (data_processed != -1)
-          {
-          for (unsigned int k=0;k<strlen(buffer);k++)
-            {
-            m_Output += buffer[k];
-            }       
-          if (m_ProgressManager)
-            {
-            m_ProgressManager->DisplayOutput(MString(buffer));
-            }
-          memset(buffer,'\0',sizeof(buffer));
-          }
-        if (m_ProgressManager)
-          {
-          m_ProgressManager->IsRunning();
-          if (m_ProgressManager->IsStop())
-            {
-            break;
-            }
-          }
-
-        if ((data_processed == 0) && (data_processed_err == 0))
-          {
-          break;
-          }
-        }
-      close(stderr_pipe[0]);
-      close(stdout_pipe[0]);
-      }
-    }
-#endif*/
+  threader->TerminateThread(threadid);
+  // Restore the states
+  m_ExecutionState = 0;
 }
 
 

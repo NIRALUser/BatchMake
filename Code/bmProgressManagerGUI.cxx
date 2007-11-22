@@ -49,15 +49,18 @@ void ProgressManagerGUI::SetStatus(MString status)
 void ProgressManagerGUI::IsRunning()
 {
   if (m_Progress)
-  {
+    {
     m_Progress->value(m_Progress->value()+1);
     if (m_Progress->value() == m_Progress->maximum()+1)
-     m_Progress->value(0);
-  }
+      { 
+      m_Progress->value(0);
+      }
+    }
 
   if (m_CurrentNode)
+    {
     m_CurrentNode->branch_icon( &image_running );
-
+    }
   m_ProgressGUI->g_Progressgui->redraw();
   Fl::check();
 }

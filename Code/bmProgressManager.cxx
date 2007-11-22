@@ -34,9 +34,8 @@ void ProgressManager::SetStatus(MString status)
 
 
 void ProgressManager::IsRunning()
-  {
-  //std::cout << ".";
-  }
+{
+}
 
 void ProgressManager::AddAction(MString name)
 {
