@@ -26,6 +26,7 @@ Launch::Launch()
   m_ExecutionState = 0;
   m_Command = "";
   m_Process = 0;
+  m_KillProcess = false;
 }
 
 Launch::~Launch()
@@ -73,7 +74,6 @@ ITK_THREAD_RETURN_TYPE Launch::ThreaderCallback( void * arg )
   launcher->SetExecutionState(2); // done
   return ITK_THREAD_RETURN_VALUE;
 }
-
 
 void Launch::RunCommand()
 {
@@ -140,11 +140,12 @@ void Launch::RunCommand()
   itksysProcess_SetOption(m_Process,itksysProcess_Option_HideWindow,1);
 
   itksysProcess_Execute(m_Process);
-
+  
+  double timeout = 0.5;
   char* data = NULL;
   int length;
 
-  while(int pipeid = itksysProcess_WaitForData(m_Process,&data,&length,NULL))
+  while(int pipeid = itksysProcess_WaitForData(m_Process,&data,&length,&timeout))
     {
     if(pipeid == itksysProcess_Pipe_STDERR)
       {
@@ -163,9 +164,15 @@ void Launch::RunCommand()
           }
         }
       }
+    if(m_KillProcess)
+      {
+      itksysProcess_Kill(m_Process);
+      break;
+      }
+    timeout = 0.5;
     }
-  itksysProcess_WaitForExit(m_Process, 0);
 
+  itksysProcess_WaitForExit(m_Process,0);
   int result = 1;
   switch(itksysProcess_GetState(m_Process))
     {
@@ -202,6 +209,7 @@ void Launch::Execute(MString command)
   m_Output = "";
   m_Error = "";
   m_Command = command.toChar();
+  m_KillProcess = false;
 
   itk::MultiThreader::Pointer threader = itk::MultiThreader::New();
   threader->SetNumberOfThreads(1);
@@ -217,13 +225,13 @@ void Launch::Execute(MString command)
        m_ProgressManager->IsRunning(); // does the Fl::check();
        if (m_ProgressManager->IsStop())
          {
-         itksysProcess_Kill(m_Process); // Kill the process
+         m_KillProcess = true;
          break;
          }
        }
-     itksys::SystemTools::Delay(200); //refresh rate
+     itksys::SystemTools::Delay(300); //refresh rate
      }
-
+  
   threader->TerminateThread(threadid);
   // Restore the states
   m_ExecutionState = 0;

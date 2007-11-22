@@ -58,12 +58,6 @@ public:
   void SetExecutionState(int state);
   int GetExecutionState();
 
-  /*
-  const char* GetCommand()
-    {
-    return m_Command.c_str();
-    }*/
-
 protected:
 
   void RunCommand();
@@ -75,6 +69,7 @@ protected:
   itksysProcess* m_Process;
 
   int m_ExecutionState;
+  bool m_KillProcess;
 
 };
 
