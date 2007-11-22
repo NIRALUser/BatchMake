@@ -106,8 +106,8 @@ void ScriptEditorGUIControls::Show()
     int y = g_Scripteditorgui->y() + (g_Scripteditorgui->w() - ui->g_Splashscreen->w())/2;
     ui->g_Splashscreen->position(x,y);
 
-    m_SplashBuffer = "BatchMake 1.0\n";
-    m_SplashBuffer += "Copyright (c) 2006 Kitware Inc.\n\n";
+    m_SplashBuffer = "BatchMake 1.0.4\n";
+    m_SplashBuffer += "Copyright (c) 2007 Kitware Inc.\n\n";
 #ifdef BM_DASHBOARD     
     m_SplashBuffer += "Dashboard Module: [enabled]\n";
 #else
@@ -120,7 +120,7 @@ void ScriptEditorGUIControls::Show()
     m_SplashBuffer += "Grid Module: [disabled]\n";
 #endif
      
-    m_SplashBuffer += "\nWebsite: http://public.kitware.com/BatchMake\n";
+    m_SplashBuffer += "\nWebsite: http://www.batchmake.org\n";
     ui->copyright->label(m_SplashBuffer.c_str());
     g_Scripteditorgui->show();
     ui->Show();
