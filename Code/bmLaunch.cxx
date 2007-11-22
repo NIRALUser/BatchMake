@@ -143,9 +143,8 @@ void Launch::RunCommand()
 
   char* data = NULL;
   int length;
-  double timeout = NULL;
 
-  while(int pipeid = itksysProcess_WaitForData(m_Process,&data,&length,&timeout))
+  while(int pipeid = itksysProcess_WaitForData(m_Process,&data,&length,NULL))
     {
     if(pipeid == itksysProcess_Pipe_STDERR)
       {
