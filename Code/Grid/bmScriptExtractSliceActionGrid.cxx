@@ -55,7 +55,6 @@ void ScriptExtractSliceAction::GenerateGrid()
   MString m_slice = "-1";
   if(m_Parameters.size()>3)
     {
-    std::cout << m_Parameters[2].toChar() << std::endl;
     m_slice = m_Manager->Convert(m_Parameters[2]).removeChar('\'').latin1();
     }
   // m_Manager->Convert(m_Parameters[3]).removeChar('\'').latin1();
