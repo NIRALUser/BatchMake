@@ -84,7 +84,9 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
 
   if(!appFound)
     {
-    error->SetError(MString("SetApp() cannot find the corresponding application"),linenumber);
+    std::string errorstr = "SetApp() cannot find the application: ";
+    errorstr += appName.toChar();
+    error->SetError(MString(errorstr.c_str()),linenumber);
     }
 
   return true;
