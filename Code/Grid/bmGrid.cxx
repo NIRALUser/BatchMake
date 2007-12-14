@@ -762,7 +762,10 @@ void Grid::WriteCondor()
     char* tmp = new char[10];
     sprintf(tmp,"%d",id);
     std::string filename = itksys::SystemTools::GetFilenamePath(m_FileName);
-    filename += "/";
+    if(filename.size()>0)
+      {
+      filename += "/";
+      }
     filename += itksys::SystemTools::GetFilenameWithoutExtension(m_FileName);
     filename += ".";
     filename += tmp;
