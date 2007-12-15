@@ -86,7 +86,7 @@ public:
 
 protected:
 
-  std::string Grid::Strip(std::string value);
+  std::string Strip(std::string value);
   std::string AddQuotes(std::string value);
 
   /** Return a filename for a full path */
