@@ -873,11 +873,12 @@ void Grid::WriteCondor()
         }
       if((*itParams).GetExternalData() == 1)
         {
-        if(externalData.size()>0)
+        std::string datavalue = (*itParams).GetValue().toChar();
+        if(externalData.size()>0 && datavalue.size()>0)
           {
           externalData += ",";
           }
-        externalData += (*itParams).GetValue().toChar();
+        externalData += datavalue;
         }
       itParams++;
       }
@@ -889,7 +890,7 @@ void Grid::WriteCondor()
       std::vector<std::string>::const_iterator itExternalData = otherinputdata.begin();
       while(itExternalData != otherinputdata.end())
         {
-        if(externalData.size()>0)
+        if(externalData.size()>0 && (*itExternalData).size()>0)
           {
           externalData += ", ";
           }
