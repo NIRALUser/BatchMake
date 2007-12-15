@@ -46,6 +46,7 @@ public:
   void WriteCondor();
   void WriteGAD();
   void WriteShell();
+  bool HasCurrentScopeFile();
   const char* GetCurrentScopeFile();
 
   void SetDataHost(const char* hostname) {m_DataHost = hostname;}

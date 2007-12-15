@@ -40,8 +40,12 @@ void ScriptSetAction::GenerateGrid(std::string name,std::string value)
     std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend " 
               << appName.toChar() << std::endl;
     return;
-    }   
+    }
 
+  if(m_GridModule->HasCurrentScopeFile())
+    {
+    app.SetParameterValue("inputfilename","",m_GridModule->GetCurrentScopeFile());
+    }
   app.SetParameterValue("filename","",m_GridModule->GetCurrentScopeFile());
   app.SetParameterValue("name","",name);
   app.SetParameterValue("value","",value);

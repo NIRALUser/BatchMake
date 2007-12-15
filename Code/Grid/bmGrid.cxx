@@ -46,6 +46,15 @@ Grid::~Grid()
 {
 }
 
+/** Return true if the current scope file exists */
+bool Grid::HasCurrentScopeFile()
+{
+  if(m_CurrentScopeFile.size() == 0)
+    {
+    return false;
+    }
+  return true;
+}
 
 /** Return the current scope file */
 const char* Grid::GetCurrentScopeFile()

@@ -140,6 +140,13 @@ int main(int argc, char* argv[])
   command.AddField("filename","Name of the file to store the variables",MetaCommand::STRING,MetaCommand::DATA_OUT);
   command.AddField("name","Name of the variable",MetaCommand::STRING);
   command.AddField("value","Value to store",MetaCommand::STRING);
+ 
+  // Add the input file option
+  // This is necessary for Condor to send the file to the input node
+  // The inputfilename variable is actually never used
+  command.SetOption("inputfilename","i",false,
+                    "Input Filename",
+                    MetaCommand::STRING,"",MetaCommand::DATA_IN);
 
   // Add option to parse the output of an executable
   command.SetOption("parse","p",false,
@@ -158,6 +165,7 @@ int main(int argc, char* argv[])
     }
 
   std::string filename = command.GetValueAsString("filename");
+
   std::string name = command.GetValueAsString("name");
   std::string value = command.GetValueAsString("value");
 
