@@ -380,6 +380,8 @@ void ScriptEditorGUIControls::OnGenerateCondor()
   m_Errorbuffer->text("");
   m_Errorgui->SetTextDisplay(g_output);
   m_Parser->SetError(m_Errorgui);
+  m_Parser->SetCurrentFilename(m_Filename.toChar());
+
   int m_Offset = 0;
   for (int i=0;i<g_editor->buffer()->count_lines(0,g_editor->buffer()->length())+1;i++)
     {
