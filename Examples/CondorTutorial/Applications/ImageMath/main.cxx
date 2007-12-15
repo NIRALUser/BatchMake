@@ -1402,5 +1402,5 @@ int main(int argc, char **argv)
     it++;
     }
 
-  return 1;
+  return 0;
   }
