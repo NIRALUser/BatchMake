@@ -130,7 +130,8 @@ void ParseXMLOutput(const char* filename,
 int main(int argc, char* argv[])
 {
   MetaCommand command;
-  
+  command.DisableDeprecatedWarnings();
+
   command.SetName("bmGridStore");
   command.SetVersion("1.0");
   command.SetAuthor("Kitware Inc");

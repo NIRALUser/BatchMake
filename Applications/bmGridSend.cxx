@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
     }
   
   MetaCommand command;
+  command.DisableDeprecatedWarnings();
   
   command.SetName("bmGridSend");
   command.SetVersion("1.0");
