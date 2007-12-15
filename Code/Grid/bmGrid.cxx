@@ -746,13 +746,14 @@ void Grid::WriteShell()
 std::string Grid::Strip(std::string value)
 {
   std::string stripped = "";
-  for(unsigned int i=value.size()-1;i>0;i++)
+  for(unsigned int i=0;i<value.size();i++)
     {
     if(value[i] != ' ')
       {
       stripped += value[i];
       }
     }
+  return stripped;
 }
 
 /** Write a condor script */
