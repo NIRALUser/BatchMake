@@ -742,6 +742,19 @@ void Grid::WriteShell()
   fclose(fic);
 }
 
+/** Strip a string */
+std::string Grid::Strip(std::string value)
+{
+  std::string stripped = "";
+  for(unsigned int i=value.size()-1;i>0;i++)
+    {
+    if(value[i] != ' ')
+      {
+      stripped += value[i];
+      }
+    }
+}
+
 /** Write a condor script */
 void Grid::WriteCondor()
 {
@@ -873,7 +886,7 @@ void Grid::WriteCondor()
         }
       if((*itParams).GetExternalData() == 1)
         {
-        std::string datavalue = (*itParams).GetValue().toChar();
+        std::string datavalue = this->Strip((*itParams).GetValue().toChar());
         if(externalData.size()>0 && datavalue.size()>0)
           {
           externalData += ",";
@@ -890,11 +903,12 @@ void Grid::WriteCondor()
       std::vector<std::string>::const_iterator itExternalData = otherinputdata.begin();
       while(itExternalData != otherinputdata.end())
         {
-        if(externalData.size()>0 && (*itExternalData).size()>0)
+        std::string datavalue = this->Strip(*itExternalData);
+        if(externalData.size()>0 && datavalue.size()>0)
           {
-          externalData += ", ";
+          externalData += ",";
           }
-        externalData += *itExternalData;
+        externalData += datavalue;
         itExternalData++;
         }
       fprintf(fic,"should_transfer_files = yes\n");
