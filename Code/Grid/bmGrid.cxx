@@ -748,7 +748,7 @@ std::string Grid::Strip(std::string value)
   std::string stripped = "";
   for(unsigned int i=0;i<value.size();i++)
     {
-    if(value[i] != ' ')
+    if(value[i] != ' ' && value[i] != '\"')
       {
       stripped += value[i];
       }
