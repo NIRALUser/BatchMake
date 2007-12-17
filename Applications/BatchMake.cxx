@@ -67,7 +67,8 @@ int main(int argc, char **argv)
 #endif
     { 
     MetaCommand command;
-  
+    command.DisableDeprecatedWarnings();
+ 
     command.SetName("BatchMake");
     command.SetVersion(BatchMake_EXTENDED_VERSION_STRING);
     command.SetAuthor("Kitware Inc");
