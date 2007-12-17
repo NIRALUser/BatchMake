@@ -94,12 +94,12 @@ int main(int argc, char **argv)
     command.SetOption("SaveTransform", "SaveTransform", false,
                       "Save registration transform [Filename]");
     command.AddOptionField("SaveTransform", "Filename",
-                            MetaCommand::STRING, true);
+                            MetaCommand::STRING, true,"","",MetaCommand::DATA_OUT);
 
     command.SetOption("SaveMovingImage", "SaveMovingImage", false,
                       "Save registered moving image");
     command.AddOptionField("SaveMovingImage", "Filename",
-                           MetaCommand::STRING, true);
+                           MetaCommand::STRING, true,"","",MetaCommand::DATA_OUT);
 
     // Fields are added in order
     command.AddField("FixedImage", "FixedImage Filename",
