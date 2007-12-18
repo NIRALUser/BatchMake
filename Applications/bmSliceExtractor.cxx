@@ -30,6 +30,7 @@ int main(int argc, char* argv[])
   command.AddField("slice","2D Image Filename",MetaCommand::STRING,MetaCommand::DATA_OUT);
   command.AddField("orientation","Orientation to extract",MetaCommand::INT);
   command.AddField("sliceNumber","Slice number",MetaCommand::INT);
+  command.SetOption("middle","middle",false,"Extract from middle");
 
   // Parsing
   if(!command.Parse(argc,argv))
@@ -45,6 +46,13 @@ int main(int argc, char* argv[])
   SliceExtractor sliceExtractor;
   sliceExtractor.SetOrientation(orientation);
   sliceExtractor.SetSlice(sliceNumber);
+
+  if(command.GetOptionWasSet("middle"))
+    {
+    sliceExtractor.SetFromMiddleSlice(true);
+    }
+
+
   sliceExtractor.Extract(volume.c_str(),slice.c_str());
 
   return 0;

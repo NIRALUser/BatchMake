@@ -70,6 +70,11 @@ void ScriptExtractSliceAction::GenerateGrid()
   app.SetParameterValue("orientation","",m_orientation.toChar());
   app.SetParameterValue("sliceNumber","",m_slice.toChar());
 
+  if(m_Parameters.size()>4 && !strcmp(m_Parameters[4].toChar(),"FROM_MIDDLE"))
+    {
+    app.SetParameterValue("middle","","1");
+    }
+
   m_GridModule->AddApplication(&app);
 }
 
