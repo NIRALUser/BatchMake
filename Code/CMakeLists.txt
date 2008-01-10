@@ -175,7 +175,6 @@ IF(USE_FLTK)
     bmSplashScreenControls.h
     bmScriptErrorGUI.h
     bmProgressManagerGUI.h
-    bmProgressGUIControls.h
     bmApplicationListGUIBase.h
     bmApplicationListGUIControls.h
     bmApplicationWrapperGUIBase.h
