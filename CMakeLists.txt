@@ -225,7 +225,7 @@ SUBDIRS(Applications)
 #-----------------------------------------------------------------------------
 # Build the Examples
 
-OPTION(BUILD_EXAMPLES "BatchMake Examples" ON)
+OPTION(BUILD_EXAMPLES "BatchMake Examples" OFF)
 IF(BUILD_EXAMPLES)
   SUBDIRS(Examples)
 ENDIF(BUILD_EXAMPLES)
