@@ -82,6 +82,15 @@
   #include "bmScriptSetIdealOutputAction.h"
 #endif
 
+#ifdef BM_XCEDE
+  #include "bmScriptGetXnatDataSetsAction.h"
+  #include "bmScriptDownloadXnatDataSetAction.h"
+  #include "bmScriptGetXnatFilenameAction.h"
+  #include "bmScriptGetXcedeDataSetsAction.h"
+  #include "bmScriptDownloadXcedeDataSetAction.h"
+  #include "bmScriptGetXcedeFilenameAction.h"
+#endif
+
 #include "Timer.h"
 
 #define BM_NEWACTION(option, iname)\
@@ -250,6 +259,15 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, ConvertImage);
   BM_NEWKEYWORD(_list, FileExists);
 
+#ifdef BM_XCEDE
+  BM_NEWKEYWORD(_list, GetXnatDataSets);
+  BM_NEWKEYWORD(_list, DownloadXnatDataSet);
+  BM_NEWKEYWORD(_list, GetXnatFilename);
+  BM_NEWKEYWORD(_list, GetXcedeDataSets);
+  BM_NEWKEYWORD(_list, DownloadXcedeDataSet);
+  BM_NEWKEYWORD(_list, GetXcedeFilename);
+#endif
+
   return _list;
 }
 
@@ -322,7 +340,16 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, SetIdealOutput);
   BM_NEWACTION(option, AddDashboardLabel);
 #endif
-  
+
+#ifdef BM_XCEDE
+  BM_NEWACTION(option, GetXnatDataSets);
+  BM_NEWACTION(option, DownloadXnatDataSet);
+  BM_NEWACTION(option, GetXnatFilename);
+  BM_NEWACTION(option, GetXcedeDataSets);
+  BM_NEWACTION(option, DownloadXcedeDataSet);
+  BM_NEWACTION(option, GetXcedeFilename);
+#endif
+
   return 0;
 }
 

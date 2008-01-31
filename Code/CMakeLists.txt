@@ -54,6 +54,22 @@ SET(BatchMakeLib_HDRS
   bmScriptGetListSizeAction.h
   )
 
+IF(BATCHMAKE_USE_XCEDE)
+  SET(BatchMakeLib_HDRS ${BatchMakeLib_HDRS}
+  bmScriptGetXnatDataSetsAction.h
+  bmScriptGetXnatFilenameAction.h
+  bmScriptGetXcedeDataSetsAction.h
+  bmScriptDownloadXcedeDataSetAction.h
+  bmScriptGetXcedeFilenameAction.h
+  )
+
+  INCLUDE_DIRECTORIES(
+    ${BatchMake_SOURCE_DIR}/Utilities/bmcurl/curl
+    ${ITK_DIR}/Utilities/itklibxml2/include
+    ${ITK_DIR}/Utilities/itklibxml2/libxml
+  )
+ENDIF(BATCHMAKE_USE_XCEDE)
+
 #Add Commands
 SET(BatchMakeLib_SRCS
   ${BatchMakeLib_SRCS}
@@ -91,6 +107,18 @@ SET(BatchMakeLib_SRCS
   bmScriptFileExistsAction.cxx
   bmScriptGetListSizeAction.cxx
   )
+
+
+IF(BATCHMAKE_USE_XCEDE)
+  SET(BatchMakeLib_SRCS ${BatchMakeLib_SRCS}
+  bmScriptDownloadXnatDataSetAction.cxx
+  bmScriptGetXnatDataSetsAction.cxx
+  bmScriptGetXnatFilenameAction.cxx
+  bmScriptGetXcedeDataSetsAction.cxx
+  bmScriptDownloadXcedeDataSetAction.cxx
+  bmScriptGetXcedeFilenameAction.cxx
+  )
+ENDIF(BATCHMAKE_USE_XCEDE)
 
 #
 # Grid support
@@ -250,6 +278,11 @@ IF(DASHBOARD_SUPPORT)
   TARGET_LINK_LIBRARIES(BatchMakeLib ${BatchMakeDashboard_LIBS})
 
 ENDIF(DASHBOARD_SUPPORT)
+
+# If we use XCEDE
+IF(BATCHMAKE_USE_XCEDE)
+  TARGET_LINK_LIBRARIES(BatchMakeLib XcedeLib bmcurl)
+ENDIF(BATCHMAKE_USE_XCEDE)
 
 # Installation file
 INSTALL(TARGETS BatchMakeLib
