@@ -78,11 +78,21 @@ ENDIF(USE_FLTK)
 
 #-----------------------------------------------------------------------------
 # Display the splashscreen or not
-
 OPTION(USE_SPLASHSCREEN "Display the splashscreen" ON)
 IF(USE_SPLASHSCREEN)
  ADD_DEFINITIONS(-DBM_SPLASHSCREEN)
 ENDIF(USE_SPLASHSCREEN)
+
+#-----------------------------------------------------------------------------
+# Use XCEDE Functionalities
+OPTION(BATCHMAKE_USE_XCEDE "Use the XCEDE Commands" ON)
+IF(BATCHMAKE_USE_XCEDE)
+  IF(NOT EXISTS ${ITK_DIR}/Utilities/itklibxml2/config.h)
+    MESSAGE("ITK_USE_LIBXML2 Should be set to ON in ITK in order to use XCEDE Functionality") 
+  ENDIF(NOT EXISTS ${ITK_DIR}/Utilities/itklibxml2/config.h)
+  
+  ADD_DEFINITIONS(-DBM_XCEDE)
+ENDIF(BATCHMAKE_USE_XCEDE)
 
 #-----------------------------------------------------------------------------
 # Setup Paths
