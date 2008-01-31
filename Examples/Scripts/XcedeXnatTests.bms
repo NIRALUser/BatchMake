@@ -1,0 +1,27 @@
+Set(xnatCatalog 'C:/Catalog.xml')
+Set(xcedeCatalog 'C:/Catalog.xcede')
+Set(xcedecatalogID '11')
+
+Set(xnatLogin 'mylogin')
+Set(xcedeLogin 'me@email.com')
+Set(psw '12345')
+
+
+echo ('Xnat Tests')
+GetXnatDataSets(xnatDatas ${xnatCatalog} ${xnatLogin} ${psw})
+ForEach(xnatData ${xnatDatas})
+echo(${xnatData})
+GetXnatFilename(xnatFilename ${xnatData})
+echo(${xnatFilename})
+DownloadXnatDataSet(${xnatData} 'C:/test')
+EndForEach(${xnatData})
+
+
+echo ('Xcede Tests')
+GetXcedeDataSets(xcedeDatas ${xcedeCatalog} ${xcedecatalogID} ${xcedeLogin} ${psw})
+ForEach(xcedeData ${xcedeDatas})
+echo(${xcedeData})
+GetXnatFilename(xcedeFilename ${xcedeData})
+echo(${xcedeFilename})
+DownloadXcedeDataSet(${xcedeData} 'C:/test' ${xcedeLogin} ${psw})
+EndForEach(${xcedeData})
