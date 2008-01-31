@@ -175,7 +175,7 @@ void ProgressManagerGUI::AddError(MString error)
 void ProgressManagerGUI::Stop()
 {
   m_Stop = true;
-   m_ProgressGUI->g_Progressgui->redraw();
+  m_ProgressGUI->g_Progressgui->redraw();
   m_ProgressGUI->g_cancel->label("Ok");
   Fl::check();
 }
@@ -196,7 +196,6 @@ void ProgressManagerGUI::DisplayOutput(MString message)
   m_ProgressGUI->m_Buffer->append(message.toChar());
   m_ProgressGUI->g_output->scroll(m_ProgressGUI->m_Buffer->line_start(m_ProgressGUI->m_Buffer->length()),0); // m_ProgressGUI->m_Buffer->line_start(m_ProgressGUI->m_Buffer->length()),0);
   Fl::check();
-
 }
 
 void ProgressManagerGUI::DisplayError(MString message)
