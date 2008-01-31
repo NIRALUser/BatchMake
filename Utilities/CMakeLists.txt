@@ -12,7 +12,13 @@ ENDIF(USE_FLTK)
 #---------------------------------------------------------------------
 #  ZIP
 
-SUBDIRS(Zip)
+SUBDIRS(Zip bmcurl)
+
+IF(BATCHMAKE_USE_XCEDE)
+  SUBDIRS(XcedeLib)
+ENDIF(BATCHMAKE_USE_XCEDE)
+
+
 
 #---------------------------------------------------------------------
 #  Source
