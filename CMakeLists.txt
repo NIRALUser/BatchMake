@@ -85,7 +85,7 @@ ENDIF(USE_SPLASHSCREEN)
 
 #-----------------------------------------------------------------------------
 # Use XCEDE Functionalities
-OPTION(BATCHMAKE_USE_XCEDE "Use the XCEDE Commands" ON)
+OPTION(BATCHMAKE_USE_XCEDE "Use the XCEDE Commands" OFF)
 IF(BATCHMAKE_USE_XCEDE)
   IF(NOT EXISTS ${ITK_DIR}/Utilities/itklibxml2/config.h)
     MESSAGE("ITK_USE_LIBXML2 Should be set to ON in ITK in order to use XCEDE Functionality") 
