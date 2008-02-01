@@ -31,27 +31,31 @@ ScriptRunAction::~ScriptRunAction()
 
 bool ScriptRunAction::TestParam(ScriptError* error,int linenumber)
 {
-   if (m_Parameters.size() <2)
-   {
+   if (m_Parameters.size() < 2)
+     {
      error->SetError(MString("No enough parameter for Run"),linenumber);
      return false;
-   }
+     }
 
-   if (m_Parameters.size() >2)
-   {
+   if (m_Parameters.size() > 3)
+     {
      error->SetWarning(MString("Too much parameter for Run"),linenumber);
      return false;
-   }
+     }
   
   m_Manager->SetTestVariable(m_Parameters[0]);
 
+  if (m_Parameters.size() > 2)
+    {
+    m_Manager->SetTestVariable(m_Parameters[2]);
+    }
 
   return (m_Manager->TestConvert(m_Parameters[1],linenumber));
 }
 
 MString ScriptRunAction::Help()
 {
-  return "Run(<outputvariable> 'program.exe param1 param2 ...')";
+  return "Run(<outputvariable> 'program.exe param1 param2 ...' [errorstring])";
 }
 
 /** Parse the XML output and set some variables */
@@ -160,6 +164,12 @@ void ScriptRunAction::Execute()
   this->ParseXMLOutput(m_Output.toChar());
 
   m_Manager->SetVariable(m_Parameters[0],MString("'") + m_Output + "'");
+  
+  if (m_Parameters.size() > 2)
+    {
+    m_Manager->SetVariable(m_Parameters[2],MString("'") + m_Error + "'");
+    }
+
   m_ProgressManager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
   m_ProgressManager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
   
