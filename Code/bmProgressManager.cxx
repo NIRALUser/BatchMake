@@ -58,9 +58,13 @@ bool ProgressManager::IsStop()
   return m_Stop;
 }
 
+void ProgressManager::Stop()
+{
+  m_Stop = true;
+}
+
 void ProgressManager::SetFinished(MString message)
 {
-
 }
 
 void ProgressManager::DisplayOutput(MString message)

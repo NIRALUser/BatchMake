@@ -31,6 +31,7 @@ public:
   ProgressManager();
   ~ProgressManager();
   virtual void SetStatus(MString status);
+  virtual void Stop();
   virtual void IsRunning();
   virtual void AddAction(MString name);
   virtual void FinishAction(MString output);
@@ -42,6 +43,7 @@ public:
   virtual void DisplayError(MString message);
 
 protected:
+
   bool m_Stop;
 
 

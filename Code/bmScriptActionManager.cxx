@@ -45,6 +45,7 @@
 #include "bmScriptConvertImageAction.h"
 #include "bmScriptFileExistsAction.h"
 #include "bmScriptGetListSizeAction.h"
+#include "bmScriptExitAction.h"
 
 #ifdef BM_GRID
   #include "bmScriptGridSingleNodeAction.h"
@@ -258,6 +259,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, GetFilename);
   BM_NEWKEYWORD(_list, ConvertImage);
   BM_NEWKEYWORD(_list, FileExists);
+  BM_NEWKEYWORD(_list, Exit);
 
 #ifdef BM_XCEDE
   BM_NEWKEYWORD(_list, GetXnatDataSets);
@@ -305,6 +307,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, GetFilename);
   BM_NEWACTION(option, ConvertImage);
   BM_NEWACTION(option, FileExists);
+  BM_NEWACTION(option, Exit);
 
 #ifdef BM_GRID
   BM_NEWACTION(option, GridDataHost);
@@ -490,6 +493,10 @@ void ScriptActionManager::Execute()
   for (unsigned int i=0;i<m_ActionList.size();i++)
     {
     m_ActionList[i]->Execute();
+    if (m_ProgressManager->IsStop())
+      {
+      break;
+      } 
     }
   m_ProgressManager->SetFinished(MString("Total Execution time: %1ms").arg(m_timer.getMilliseconds()));
 }

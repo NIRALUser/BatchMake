@@ -52,6 +52,7 @@ SET(BatchMakeLib_HDRS
   bmScriptConvertImageAction.h
   bmScriptFileExistsAction.h
   bmScriptGetListSizeAction.h
+  bmScriptExitAction.h
   )
 
 IF(BATCHMAKE_USE_XCEDE)
@@ -106,6 +107,7 @@ SET(BatchMakeLib_SRCS
   bmScriptConvertImageAction.cxx
   bmScriptFileExistsAction.cxx
   bmScriptGetListSizeAction.cxx
+  bmScriptExitAction.cxx
   )
 
 
