@@ -92,16 +92,19 @@ int main(int argc, char **argv)
 
     // Generate Shell
     command.SetOption("generateShell","sh",false,"Generate shell script");
+    command.SetOptionLongTag("generateShell","sh");
     command.AddOptionField("generateShell","scriptname",MetaCommand::STRING,true);
     command.AddOptionField("generateShell","outputname",MetaCommand::STRING,true);
 
     // Generate Condor
     command.SetOption("generateCondor","condor",false,"Generate condor script");
+    command.SetOptionLongTag("generateCondor","condor");
     command.AddOptionField("generateCondor","scriptname",MetaCommand::STRING,true);
     command.AddOptionField("generateCondor","outputname",MetaCommand::STRING,true);
 
     // Generate GAD
     command.SetOption("generateGAD","kwgrid",false,"Generate gad script");
+    command.SetOptionLongTag("generateGAD","kwgrid");
     command.AddOptionField("generateGAD","scriptname",MetaCommand::STRING,true);
     command.AddOptionField("generateGAD","outputname",MetaCommand::STRING,true);
 
