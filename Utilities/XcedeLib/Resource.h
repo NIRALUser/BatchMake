@@ -3,8 +3,6 @@
 
 #include "itksys/SystemTools.hxx"
 
-#include <conio.h> 
-#include <winsock2.h> 
 #include <string>
 #include <iostream>
 #include <stdlib.h>

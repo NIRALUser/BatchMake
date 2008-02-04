@@ -28,10 +28,6 @@ void Resource::SetProcessStep(std::string program, std::string programArguments)
 
 void Resource::GenerateProcessStepInfo()
 {
-  int nRet; 
-  WSADATA wsaData; 
-  WORD version = MAKEWORD(1,1); 
-
   m_ProcessStep.timeStamp = itksys::SystemTools::GetCurrentDateTime("%Y-%m-%dT%X").c_str();
 
   if(itksys::SystemTools::GetEnv("USER") != NULL)
@@ -47,10 +43,10 @@ void Resource::GenerateProcessStepInfo()
     {
     if (itksys::SystemTools::GetEnv("HOST") == NULL)
       {
-      nRet = WSAStartup(version, &wsaData); 
-      char hostname[256]; 
-      nRet = gethostname(hostname, 256);
-      m_ProcessStep.hostname =hostname;
+      //nRet = WSAStartup(version, &wsaData); 
+      //char hostname[256]; 
+      //nRet = gethostname(hostname, 256);
+      //m_ProcessStep.hostname =hostname;
       }
     else
       {
@@ -100,3 +96,4 @@ void Resource::GenerateProcessStepInfo()
     m_ProcessStep.platformName = itksys::SystemTools::GetEnv("MACHTYPE");
     }
 }
+

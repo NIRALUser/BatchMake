@@ -132,7 +132,6 @@ bool Xcede::SchemaValidation(xmlDocPtr doc, const char *xml_schema, bool printEr
 
 Project Xcede::LoadXcede(xmlDocPtr doc, std::string pathImages)
 {
-  int tag = 0;
   std::string nameSpace = "xcede";
   std::string nameSpaceUrl = "http://www.xcede.org/xcede-2";
 
