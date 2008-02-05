@@ -481,13 +481,13 @@ void Xcede::WriteNewFile(std::string filename, xmlDocPtr doc, Project project,
       {
       for(int k=0 ; k<project.GetPatient(i)->GetResource(j)->GetNbTagsResource() ; k++)
         {
-        if(_strcmpi(project.GetPatient(i)->GetResource(j)->GetTagNameValue(k).c_str(), "T2") == 0)
+        if(strcasecmp(project.GetPatient(i)->GetResource(j)->GetTagNameValue(k).c_str(), "T2") == 0)
           {
           std::string xcedeResource = directoryResources;
           xcedeResource += "/";
           for(int l=0 ; l<project.GetPatient(i)->GetResource(j)->GetNbTagsResource() ; l++)
             {
-            if(_strcmpi(project.GetPatient(i)->GetResource(j)->GetTagName(l).c_str(), "uri") == 0)
+            if(strcasecmp(project.GetPatient(i)->GetResource(j)->GetTagName(l).c_str(), "uri") == 0)
               {
               std::string buffer = project.GetPatient(i)->GetResource(j)->GetTagNameValue(l);
               std::string::size_type loc = buffer.find_last_of ("/", buffer.length());

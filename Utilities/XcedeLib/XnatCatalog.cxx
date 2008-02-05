@@ -54,7 +54,8 @@ void XnatCatalog::Login(std::string login, std::string password)
   curl_easy_setopt(xnatCurl, CURLOPT_URL,loginUrl.c_str());
 
   xnatHttpReply = "";
-  CURLcode res = curl_easy_perform(xnatCurl);
+  curl_easy_perform(xnatCurl);
+  
 
   //Get The SessionID
   std::string::size_type loc1 = xnatHttpReply.find("jsessionid=", 0);
@@ -255,7 +256,7 @@ xmlDocPtr XnatCatalog::GetNewCatalog(xmlDocPtr mainDoc, std::string login, std::
     }
   curl_easy_setopt(xnatCurl, CURLOPT_URL, mainUrl.c_str());
   xnatHttpReply = "";
-  CURLcode res = curl_easy_perform(xnatCurl);
+  curl_easy_perform(xnatCurl);
   curl_easy_cleanup(xnatCurl);
 
   xmlDocPtr doc = this->ParseDocMemory(xnatHttpReply);
