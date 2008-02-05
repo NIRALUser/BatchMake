@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptGetXnatDatasetsAction.cxx
+  Module:    bmScriptGetXnatDataSetsAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
