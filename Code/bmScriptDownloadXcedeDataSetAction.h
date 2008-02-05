@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmscriptDownloadXcedeDataSetAction.h
+  Module:    bmScriptDownloadXcedeDataSetAction.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
