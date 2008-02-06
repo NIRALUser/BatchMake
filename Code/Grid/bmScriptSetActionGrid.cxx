@@ -45,6 +45,7 @@ void ScriptSetAction::GenerateGrid(std::string name,std::string value)
   if(m_GridModule->HasCurrentScopeFile())
     {
     app.SetParameterValue("inputfilename","",m_GridModule->GetCurrentScopeFile());
+    app.SetParameterValue("inputfilename","inputfilename",m_GridModule->GetCurrentScopeFile()); // This is a bug in MetaIO
     }
   app.SetParameterValue("filename","",m_GridModule->GetCurrentScopeFile());
   app.SetParameterValue("name","",name);
