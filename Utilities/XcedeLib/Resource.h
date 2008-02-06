@@ -2,6 +2,8 @@
 #define __Resource_h_
 
 #include "itksys/SystemTools.hxx"
+//#include "itksys/SystemInformation.hxx"
+
 
 #include <string>
 #include <iostream>
