@@ -11,9 +11,12 @@ SET (NIGHTLY_START_TIME "21:00:00 EDT")
 
 SET(DROP_METHOD http)
 SET (DROP_SITE "public.kitware.com")
-SET (DROP_LOCATION "/cgi-bin/HTTPUploadDartFile.cgi")
+#SET (DROP_LOCATION "/cgi-bin/HTTPUploadDartFile.cgi")
+SET (DROP_LOCATION "/CDash/submit.php?project=BatchMake")
 SET (TRIGGER_SITE 
   "http://${DROP_SITE}/cgi-bin/Submit-BatchMake-TestingResults.cgi")
+
+
 
 # Project Home Page
 SET (PROJECT_URL "http://public.kitware.com/BatchMake")
