@@ -150,7 +150,6 @@ SUBDIRS( Code )
 SET(BatchMake_LIBRARIES
   BatchMakeLib
   BatchMakeUtilities
-  itksys
   )
 
 #-----------------------------------------------------------------------------
