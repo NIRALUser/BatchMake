@@ -4,6 +4,7 @@
 SET(BATCHMAKE_TESTS ${CXX_TEST_PATH}/BatchMakeTests)
 
 ADD_EXECUTABLE(BatchMakeMemoryTest BatchMakeMemoryTest.cxx)
+TARGET_LINK_LIBRARIES(BatchMakeMemoryTest itksys)
 
 IF(DASHBOARD_SUPPORT)
 
@@ -14,6 +15,7 @@ IF(DASHBOARD_SUPPORT)
 
   ADD_TEST(DashboardSendTest ${BATCHMAKE_TESTS} DashboardSendTest)
   ADD_TEST(SystemInfoTest ${BATCHMAKE_TESTS} SystemInfoTest)
+
 
   ADD_EXECUTABLE(BatchMakeTests BatchMakeTests.cxx ${BatchMakeTest_SRCS})
   TARGET_LINK_LIBRARIES(BatchMakeTests ${BatchMake_LIBRARIES})

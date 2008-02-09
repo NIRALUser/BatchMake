@@ -58,7 +58,6 @@ FIND_PACKAGE(ITK REQUIRED)
 IF(ITK_FOUND)
   INCLUDE(${USE_ITK_FILE}) 
 ENDIF(ITK_FOUND)
-LINK_LIBRARIES(${ITK_LIBRARIES})
 
 SET(BUILD_SHARED_LIBS ${ITK_BUILD_SHARED})
 
@@ -151,6 +150,7 @@ SUBDIRS( Code )
 SET(BatchMake_LIBRARIES
   BatchMakeLib
   BatchMakeUtilities
+  itksys
   )
 
 #-----------------------------------------------------------------------------

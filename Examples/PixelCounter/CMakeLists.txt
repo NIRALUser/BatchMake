@@ -1,7 +1,7 @@
 PROJECT(PixelCounter)
 
 ADD_EXECUTABLE(PixelCounter main.cxx)
-TARGET_LINK_LIBRARIES(PixelCounter BatchMakeUtilities)
+TARGET_LINK_LIBRARIES(PixelCounter BatchMakeUtilities ${ITK_LIBRARIES})
 
 CONFIGURE_FILE(${PixelCounter_SOURCE_DIR}/PixelCounter.bmm
                ${BatchMake_APPLICATIONS_DIR}/PixelCounter.bmm

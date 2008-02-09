@@ -5,6 +5,7 @@ SET(bmCondorTest_SRCS
   )
 
 ADD_EXECUTABLE(bmCondorTest ${bmCondorTest_SRCS})
+TARGET_LINK_LIBRARIES(bmCondorTest ${ITK_LIBRARIES})
 
 IF(WIN32)
   TARGET_LINK_LIBRARIES(bmCondorTest
