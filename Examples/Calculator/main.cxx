@@ -25,8 +25,9 @@ public:
     {
     // Define the command line arguments
     m_MetaCommand = metaCommand;
-    m_MetaCommand->SetOption("SendDashboard","sendDashboard",
+    m_MetaCommand->SetOption("SendDashboard","",
                              false,"Send output to Batchmake Validation Dashboard");
+    m_MetaCommand->SetOptionLongTag("SendDashboard","sendDashboard");                       
     m_MetaCommand->AddOptionField("SendDashboard","hostname",MetaCommand::STRING,true);
     m_MetaCommand->AddOptionField("SendDashboard","experimentid",MetaCommand::STRING,true);
     m_MetaCommand->AddOptionField("SendDashboard","methodid",MetaCommand::STRING,true);
