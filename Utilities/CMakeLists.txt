@@ -54,7 +54,7 @@ SET(BatchMakeUtilities_SRCS
 #  Build BatchMakeUtilities Library
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS})
-TARGET_LINK_LIBRARIES(BatchMakeUtilities ITKCommon itksys)
+TARGET_LINK_LIBRARIES(BatchMakeUtilities ITKCommon ITKIO itksys)
 
 IF(USE_FLTK)
   TARGET_LINK_LIBRARIES(BatchMakeUtilities ${FLTK_LIBRARIES} FLU)
@@ -78,3 +78,4 @@ INSTALL(FILES ${BatchMakeUtilities_SRCS}
         DESTINATION source/BatchMake/Utilities)
 INSTALL(FILES CMakeLists.txt 
         DESTINATION source/BatchMake/Utilities)
+
