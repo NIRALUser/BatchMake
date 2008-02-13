@@ -37,7 +37,7 @@ bool ScriptRunAction::TestParam(ScriptError* error,int linenumber)
      return false;
      }
 
-   if (m_Parameters.size() > 3)
+   if (m_Parameters.size() > 4)
      {
      error->SetWarning(MString("Too much parameter for Run"),linenumber);
      return false;
@@ -49,13 +49,16 @@ bool ScriptRunAction::TestParam(ScriptError* error,int linenumber)
     {
     m_Manager->SetTestVariable(m_Parameters[2]);
     }
-
+  if (m_Parameters.size() > 3)
+    {
+    m_Manager->SetTestVariable(m_Parameters[3]);
+    }
   return (m_Manager->TestConvert(m_Parameters[1],linenumber));
 }
 
 MString ScriptRunAction::Help()
 {
-  return "Run(<outputvariable> 'program.exe param1 param2 ...' [errorstring])";
+  return "Run(<outputvariable> 'program.exe param1 param2 ...' [errorstring] [exitstatus])";
 }
 
 /** Parse the XML output and set some variables */
@@ -169,7 +172,10 @@ void ScriptRunAction::Execute()
     {
     m_Manager->SetVariable(m_Parameters[2],MString("'") + m_Error + "'");
     }
-
+  if (m_Parameters.size() > 3)
+    {
+    m_Manager->SetVariable(m_Parameters[2],MString("'") + m_launch.GetExitStatus() + "'");
+    }
   m_ProgressManager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
   m_ProgressManager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
   

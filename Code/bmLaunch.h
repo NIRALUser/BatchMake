@@ -42,7 +42,8 @@ public:
 
   MString GetOutput();
   MString GetError();
-
+  int     GetExitStatus();
+  
    /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the
    * control to ThreadedGetValue(). */
@@ -65,12 +66,12 @@ protected:
   ProgressManager* m_ProgressManager;
   MString m_Output;
   MString m_Error;
+  int m_ExitStatus;
   std::string m_Command;
   itksysProcess* m_Process;
 
   int m_ExecutionState;
   bool m_KillProcess;
-
 };
 
 } // end namespace bm

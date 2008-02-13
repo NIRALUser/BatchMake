@@ -26,6 +26,7 @@ Launch::Launch()
   m_ExecutionState = 0;
   m_Command = "";
   m_Process = 0;
+  m_ExitStatus = 1;
   m_KillProcess = false;
 }
 
@@ -173,12 +174,12 @@ void Launch::RunCommand()
     }
 
   itksysProcess_WaitForExit(m_Process,0);
-  int result = 1;
+  m_ExitStatus = 1;
   switch(itksysProcess_GetState(m_Process))
     {
     case itksysProcess_State_Exited:
       {
-      result = itksysProcess_GetExitValue(m_Process);
+      m_ExitStatus = itksysProcess_GetExitValue(m_Process);
       } break;
     case itksysProcess_State_Error:
       {
@@ -237,6 +238,10 @@ void Launch::Execute(MString command)
   m_ExecutionState = 0;
 }
 
+int Launch::GetExitStatus()
+{
+  return m_ExitStatus;
+}
 
 MString Launch::GetOutput()
 {
