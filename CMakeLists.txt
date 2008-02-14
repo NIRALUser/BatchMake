@@ -25,6 +25,13 @@ SET(BatchMake_CONFIGURATION_TYPES ${CMAKE_CONFIGURATION_TYPES})
 
 MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
 
+# On Mac we need the flag -fno-common
+IF(APPLE)
+ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common")
+ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-common")
+ENDIF(APPLE)
+
+
 #-----------------------------------------------------------------------------
 # BatchMake version number.  An even minor number corresponds to releases.
 
