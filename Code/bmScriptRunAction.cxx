@@ -174,7 +174,11 @@ void ScriptRunAction::Execute()
     }
   if (m_Parameters.size() > 3)
     {
-    m_Manager->SetVariable(m_Parameters[2],MString("'") + m_launch.GetExitStatus() + "'");
+    int exitStatus = m_launch.GetExitStatus();
+    char* statusstring = new char[10];
+    sprintf(statusstring,"%d",exitStatus);
+    m_Manager->SetVariable(m_Parameters[3],MString("'") + statusstring + "'");
+    delete [] statusstring;
     }
   m_ProgressManager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
   m_ProgressManager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
