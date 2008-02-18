@@ -55,6 +55,12 @@ SET(BatchMakeLib_HDRS
   bmScriptExitAction.h
   )
 
+INCLUDE_DIRECTORIES(
+    ${BatchMake_SOURCE_DIR}/Utilities/ModuleDescriptionParser
+    ${BatchMake_BINARY_DIR}/Utilities/ModuleDescriptionParser
+  )
+
+
 IF(BATCHMAKE_USE_XCEDE)
   SET(BatchMakeLib_HDRS ${BatchMakeLib_HDRS}
   bmScriptGetXnatDataSetsAction.h
@@ -253,7 +259,7 @@ ELSE(USE_FLTK)
 
 ENDIF(USE_FLTK)
  
-TARGET_LINK_LIBRARIES(BatchMakeLib BatchMakeUtilities)
+TARGET_LINK_LIBRARIES(BatchMakeLib BatchMakeUtilities ModuleDescriptionParser)
 
 IF(DASHBOARD_SUPPORT)
 
