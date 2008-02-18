@@ -432,7 +432,10 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)
       case 3: m_line += "float";
               break;
 
-      case 4: m_line += "string";
+      case 4: if(m_params[offset].GetName().length()>0)
+                {m_line += m_params[offset].GetName();}
+              else
+                {m_line += "string";}
               break;
 
       case 5: for (unsigned j=0;j<m_params[offset].GetEnum().size();j++)
@@ -585,8 +588,378 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader)
 }
 
 /** Automatic command line parsing. If the current pointed program 
+ *  supports --xml option */
+bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const char * _path)
+{
+  // Run the application
+  std::string path = _path;
+  std::string program = path;
+  std::string vxmlarg = "--xml";
+  std::cout << "Running = " << program.c_str() << " " << vxmlarg.c_str() << std::endl;
+  std::string output = "";
+  unsigned int i=0;
+
+  // Extract the arguments from the command line
+  // Warning: Only works for one space between arguments
+  std::vector<const char*> args;
+  args.push_back(path.c_str());
+  args.push_back(vxmlarg.c_str());
+  args.push_back(0);
+
+  // Run the application
+  itksysProcess* gp = itksysProcess_New();
+  itksysProcess_SetCommand(gp, &*args.begin());
+  itksysProcess_SetOption(gp,itksysProcess_Option_HideWindow,1);
+
+  itksysProcess_Execute(gp);
+
+  char* data = NULL;
+  int length;
+  double timeout = 255;
+
+  while(itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
+    {
+    for(int i=0;i<length;i++)
+      {
+      output += data[i];
+      }
+    }
+  itksysProcess_WaitForExit(gp, 0);
+
+  int result = 1;
+  switch(itksysProcess_GetState(gp))
+    {
+    case itksysProcess_State_Exited:
+      {
+      result = itksysProcess_GetExitValue(gp);
+      } break;
+    case itksysProcess_State_Error:
+      {
+      std::cerr << "Error: Could not run " << args[0] << ":\n";
+      std::cerr << itksysProcess_GetErrorString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Exception:
+      {
+      std::cerr << "Error: " << args[0]
+                << " terminated with an exception: "
+                << itksysProcess_GetExceptionString(gp) << "\n";
+      } break;
+    case itksysProcess_State_Starting:
+    case itksysProcess_State_Executing:
+    case itksysProcess_State_Expired:
+    case itksysProcess_State_Killed:
+      {
+      // Should not get here.
+      std::cerr << "Unexpected ending state after running " << args[0]
+                << std::endl;
+      } break;
+    }
+  itksysProcess_Delete(gp);
+  ModuleDescription moduleDescription;
+  ModuleDescriptionParser parser;
+
+  parser.Parse(output.c_str(),moduleDescription);
+
+  // Converting the ModuleDescriptionParser to BatchMake
+  this->AddSlicerModuleDescription(&moduleDescription);
+
+  return true;
+}
+
+/** Convert a Module description to an internal representation */
+bool ApplicationWrapper::
+AddSlicerModuleDescription(ModuleDescription* module)
+{
+  // BatchMake only understands parameter types:
+  //     file=0, bool=1, int=2, float=3, string=4, enum=5
+  //
+  // Map what we can into these.
+  //
+  typedef std::map<std::string, int> ModuleParameterToBatchMakeTypeMap;
+  ModuleParameterToBatchMakeTypeMap mp2bm;
+  mp2bm["integer"] = 2;  // int
+  mp2bm["float"] = 3;  // float
+  mp2bm["double"] = 3;  // float
+  mp2bm["boolean"] = 1; // bool
+  mp2bm["string"] = 4;  // string
+  mp2bm["integer-vector"] = 4;  // string
+  mp2bm["float-vector"] = 4;  // string
+  mp2bm["double-vector"] = 4;  // string
+  mp2bm["string-vector"] = 4;  // string
+  mp2bm["integer-enumeration"] = 5; // enum
+  mp2bm["float-enumeration"] = 3;  // float ???
+  mp2bm["double-enumeration"] = 3;  // float ???
+  mp2bm["string-enumeration"] = 4;  // string ???
+  mp2bm["file"] = 0;  // file
+  mp2bm["directory"] = 0;  // file ???
+  mp2bm["image"] = 0;  // file
+  mp2bm["geometry"] = 0;  // file
+  mp2bm["point"] = 4;  // string ???
+
+  // Convert the metaCommand to ApplicationWrapper
+  this->SetVersion(module->GetVersion().c_str());
+
+  // extract the name from the filename
+  std::string revname;
+ 
+  std::string path=module->GetLocation();
+  unsigned int i=0;
+  for(i=0;i<path.size();i++)
+    {
+    if(path[path.size()-1-i] == '/'
+      || path[path.size()-1-i] == '\\')
+      {
+      break;
+      }
+    revname += path[path.size()-1-i];
+    }
+
+  std::string name;
+  
+  int end=0;
+  if(revname.find("exe.") != -1)
+    {
+    end=4;
+    }
+
+  for(i=0;i<revname.size()-end;i++)
+    {
+    name += revname[revname.size()-i-1];
+    }
+
+  this->SetName(module->GetTitle().c_str());
+  this->SetApplicationPath(path);
+
+  
+  std::vector<ModuleParameterGroup>::const_iterator pgbeginit
+    = module->GetParameterGroups().begin();
+  std::vector<ModuleParameterGroup>::const_iterator pgendit
+    = module->GetParameterGroups().end();
+  std::vector<ModuleParameterGroup>::const_iterator pgit;
+
+  ModuleParameterToBatchMakeTypeMap::iterator mp2bmIt;
+
+
+  // Loop over all parameters that have a flag then loop over the
+  // parameters that are index parameters
+  //
+  
+  // Loop over executables with flags
+  int pcount = 0;
+  for (pgit = pgbeginit; pgit != pgendit; ++pgit)
+    {
+    // iterate over each parameter in this group
+    std::vector<ModuleParameter>::const_iterator pbeginit
+      = (*pgit).GetParameters().begin();
+    std::vector<ModuleParameter>::const_iterator pendit
+      = (*pgit).GetParameters().end();
+    std::vector<ModuleParameter>::const_iterator pit;
+
+    for (pit = pbeginit; pit != pendit; ++pit)
+      {
+      std::string prefix;
+      std::string flag;
+      bool hasFlag = false;
+      
+      if ((*pit).GetLongFlag() != "")
+        {
+        prefix = "--";
+        flag = (*pit).GetLongFlag();
+        hasFlag = true;
+        }
+      else if ((*pit).GetFlag() != "")
+        {
+        prefix = "-";
+        flag = (*pit).GetFlag();
+        hasFlag = true;
+        }
+
+      if (hasFlag)
+        {
+        pcount++;
+       
+        // Batchmake uses two parameters to represent non-boolean
+        // options.  The first of the parameters is the "flag", the
+        // second is the value.  THe Parent tag is used to ling flags
+        // to values.
+        ApplicationWrapperParam param;
+    
+        // Batchmake uses two parameters to represent non-boolean
+        // options.  THe first of the parameters is the "flag", the
+        // second is the value.  THe Parent tag is used to ling flags
+        // to values.
+        // first parameter in the pair is ALWAYS a bool. If there is
+        // not a pair, then the parameter is bool anyway.
+        param.SetType(1);
+        
+        // if we are going to be creating a paired set of parameters,
+        // then name the first one the <parameter name>.flag and the
+        // second one just <parameter name> for the value.
+        if ((*pit).GetTag() != "boolean")
+          {
+          param.SetName((*pit).GetName());
+          }
+        else
+          {
+          // just use the name
+          param.SetName((*pit).GetName());
+          }
+
+        // Value is the flag
+        std::string value = prefix + flag;
+        param.SetValue(value.c_str());
+
+        // The flag itself never has a parent
+        param.SetParent(0);
+
+        // BatchMake external flag is:
+        //   0=nothing, 1=input, 2=output
+        //
+        // The flag itself is always external = 0
+        param.SetExternalData(0);
+        
+        // Any module parameter that has a flag is optional.
+        param.SetOptional(1);
+        
+        this->AddParam(param);
+                
+        // Is a child BatchMake parameter needed for the parameter?
+        if ((*pit).GetTag() != "boolean")
+          {
+          //pcount++;
+          
+          // find the module parameter type in the map to BatchMake types
+          mp2bmIt = mp2bm.find((*pit).GetTag());
+          if (mp2bmIt != mp2bm.end())
+            {
+            param.SetType((*mp2bmIt).second);
+            }
+          else
+            {
+            // unsupported type. map to string
+            param.SetType(4);
+            }
+
+          // The name of the BatchMake paired parameter is just the
+          // original parameter name
+          param.SetName((*pit).GetName());         
+          param.SetValue((*pit).GetDefault());
+
+          // The parent is the previous parameter (the parameter for
+          // the flag)
+          param.SetParent(pcount);
+
+          // BatchMake external flag is:
+          //   0=nothing, 1=input, 2=output
+          if ((*pit).GetTag() == "image" || (*pit).GetTag() == "geometry"
+              || (*pit).GetTag() == "file")
+            {
+            if ((*pit).GetChannel() == "input")
+              {
+              param.SetExternalData(1);
+              }
+            else if ((*pit).GetChannel() == "output")
+              {
+              param.SetExternalData(2);
+              }
+            else
+              {
+              param.SetExternalData(0);
+              }
+            }
+          else
+            {
+            param.SetExternalData(0);
+            }
+          
+          // If the flag was specified, then the parameter for the
+          // value cannot be option
+          param.SetOptional(0);
+          }
+        this->AddParam(param);
+        }
+      }
+    }  
+
+  // now tack on any parameters that are based on indices
+  //
+  // build a list of indices to traverse in order
+  std::map<int, ModuleParameter> indexmap;
+  for (pgit = pgbeginit; pgit != pgendit; ++pgit)
+    {
+    // iterate over each parameter in this group
+    std::vector<ModuleParameter>::const_iterator pbeginit
+      = (*pgit).GetParameters().begin();
+    std::vector<ModuleParameter>::const_iterator pendit
+      = (*pgit).GetParameters().end();
+    std::vector<ModuleParameter>::const_iterator pit;
+  
+    for (pit = pbeginit; pit != pendit; ++pit)
+      {
+      if ((*pit).GetIndex() != "")
+        {
+        indexmap[atoi((*pit).GetIndex().c_str())] = (*pit);
+        }
+      }
+    }
+
+  // walk the index parameters in order
+  std::map<int, ModuleParameter>::const_iterator iit;
+  for (iit = indexmap.begin(); iit != indexmap.end(); ++iit)
+    {
+    ApplicationWrapperParam param;
+    
+    // find the module parameter type in the map to BatchMake types
+    mp2bmIt = mp2bm.find((*iit).second.GetTag());
+    if (mp2bmIt != mp2bm.end())
+      {
+      param.SetType((*mp2bmIt).second);
+      }
+    else
+      {
+      // unsupported type. map to string
+       param.SetType(4);
+      }
+   
+    param.SetName((*iit).second.GetName());
+    param.SetValue((*iit).second.GetDefault());
+
+    // BatchMake external flag is:
+    //   0=nothing, 1=input, 2=output
+    if ((*iit).second.GetTag() == "image"
+        || (*iit).second.GetTag() == "geometry"
+        || (*iit).second.GetTag() == "file")
+      {
+      if ((*iit).second.GetChannel() == "input")
+        {
+        param.SetExternalData(1);
+        }
+      else if ((*iit).second.GetChannel() == "output")
+        {
+        param.SetExternalData(2);
+        }
+      else
+        {
+        param.SetExternalData(0);
+        }
+      }
+    else
+      {
+      param.SetExternalData(0);
+      }
+   
+    param.SetOptional(0);
+    param.SetParent(0);
+    this->AddParam(param);
+    }
+
+  return true;
+}
+
+
+/** Automatic command line parsing. If the current pointed program 
  *  supports -vxml option */
-void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
+bool ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
 {
   // Run the application
   std::string path = _path;
@@ -655,9 +1028,15 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
     }
   itksysProcess_Delete(gp);
 
-  // Analayze the output of the program
+  // Analyze the output of the program
   MetaCommand parser;
   parser.ParseXML(m_output.c_str());
+
+  // Check that the parsing has been done correctly
+  if(parser.GetOptions().size()==0)
+    {
+    return false;
+    }
 
   // Convert the metaCommand to ApplicationWrapper
   this->SetVersion(parser.GetVersion().c_str());
@@ -719,24 +1098,12 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
       parentParam.SetValue(tag);
       parentParam.SetName((*it).name);
 
-      // Check the field and see if the data is external
-/*      std::vector<MetaCommand::Field>::const_iterator itField = (*it).fields.begin();
-      if((*itField).externaldata == MetaCommand::DATA_IN)
-        {
-        parentParam.SetExternalData(1);
-        }      
-      else if((*itField).externaldata == MetaCommand::DATA_OUT)
-        {
-        parentParam.SetExternalData(2);
-        }
-*/
       this->AddParam(parentParam);
       gotParent = true;
       parentId++;
       }
     else
       {
-      //parentId++;
       gotParent = false;
       }
     
@@ -745,7 +1112,6 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
       {
       ApplicationWrapperParam param;
       std::string fullname = "";
-      //if(strcmp((*it).name.c_str(),(*itField).name.c_str()))
       if(gotParent)      
         {
         fullname += (*it).name;
@@ -797,4 +1163,6 @@ void ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
     
     it++;
     }
+
+  return true;
 }

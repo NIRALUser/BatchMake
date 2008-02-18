@@ -97,12 +97,13 @@ void ApplicationWrapperGUIControls::OnSelectPath()
   if(fName)
     {
     g_path->value(fName);
+    // Try to parse the commande line arguments automatically
+    // this requires the current program to support the option
+    // -vxml
+    this->AutomaticCommandLineParsing();
     }
 
-  // Try to parse the commande line arguments automatically
-  // this requires the current program to support the option
-  // -vxml
-  this->AutomaticCommandLineParsing();
+ 
 }
 
 void ApplicationWrapperGUIControls::OnSelectType()
@@ -512,14 +513,22 @@ void ApplicationWrapperGUIControls::OnReject()
 }
 
 /** Automatic command line parsing. If the current pointed program 
- *  supports -vxml option */
+ *  supports -vxml option or --xml */
 void ApplicationWrapperGUIControls::AutomaticCommandLineParsing()
 {
+  std::string program = g_path->value();
+  bool appplicationWrapped = false;
+
   // Run the application
   if(g_runapp->value())
     {
-    std::string program = g_path->value();
-    m_Applicationwrapper->AutomaticCommandLineParsing( program.c_str() );
+    appplicationWrapped = m_Applicationwrapper->AutomaticCommandLineParsing( program.c_str() );
+    }
+
+  // If not previously wrapped
+  if(!appplicationWrapped && g_runappxml->value())
+    {
+    m_Applicationwrapper->AutomaticCommandLineParsingSlicer( program.c_str() );
     }
 
   g_moduleversion->value(m_Applicationwrapper->GetVersion().toChar());

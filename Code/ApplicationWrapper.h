@@ -25,7 +25,8 @@
 #include "ApplicationWrapperParam.h"
 #include "MString.h"
 #include "XMLReader.h"
-
+#include "ModuleDescription.h"
+#include "ModuleDescriptionParser.h"
 
 class ApplicationWrapper
 {
@@ -51,7 +52,8 @@ public:
   void DeleteParam(MString name);
   void UpParam(MString name);
   void DownParam(MString name);
-  void AutomaticCommandLineParsing(const char * _path);
+  bool AutomaticCommandLineParsing(const char * _path);
+  bool AutomaticCommandLineParsingSlicer(const char * _path);
 
   /** Return the current command line arguments */
   std::string GetCurrentCommandLineArguments(bool relativePath=true);
@@ -125,6 +127,9 @@ private:
   bool        m_AfterEndBarrier;
   unsigned long m_ExecutionBlockNumber;
   std::vector<std::string> m_InputDataToTransfer;
+
+  bool AddSlicerModuleDescription(ModuleDescription* moduleDescription);
+
 };
 
 #endif
