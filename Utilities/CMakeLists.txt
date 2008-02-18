@@ -10,9 +10,9 @@ IF(USE_FLTK)
 ENDIF(USE_FLTK)
 
 #---------------------------------------------------------------------
-#  ZIP
+#  External Libraries
 
-SUBDIRS(Zip bmcurl)
+SUBDIRS(Zip bmcurl ModuleDescriptionParser)
 
 IF(BATCHMAKE_USE_XCEDE)
   SUBDIRS(XcedeLib)
