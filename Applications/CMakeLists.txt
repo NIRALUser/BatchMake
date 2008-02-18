@@ -1,6 +1,10 @@
 
 #------------------------------------------------------------------------
 # Create BatchMake application
+INCLUDE_DIRECTORIES(
+    ${BatchMake_SOURCE_DIR}/Utilities/ModuleDescriptionParser
+    ${BatchMake_BINARY_DIR}/Utilities/ModuleDescriptionParser
+  )
 
 SET(BatchMake_SRCS BatchMake.cxx)
 IF(WIN32)
