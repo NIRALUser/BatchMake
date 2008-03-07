@@ -45,8 +45,8 @@ public:
   void Save(MString filename);
   void Load(MString filename);
   MString GetExampleLine();
-  void ReadModule(XMLReader& m_reader);
-  void ReadParam(XMLReader& m_reader);
+  void ReadModule(XMLReader& m_reader, bool newVersion);
+  void ReadParam(XMLReader& m_reader, bool newVersion);
   std::vector<ApplicationWrapperParam> & GetParams();
   void DisplayParam(MString& m_line,int offset);
   void DeleteParam(MString name);
