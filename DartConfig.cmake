@@ -10,7 +10,7 @@ SET (NIGHTLY_START_TIME "21:00:00 EDT")
 #SET (TRIGGER_SITE "http://caddlab.rad.unc.edu/cgi-bin/Dart-BatchMake.pl")
 
 SET(DROP_METHOD http)
-SET (DROP_SITE "public.kitware.com")
+SET (DROP_SITE "www.cdash.org")
 #SET (DROP_LOCATION "/cgi-bin/HTTPUploadDartFile.cgi")
 SET (DROP_LOCATION "/CDash/submit.php?project=BatchMake")
 SET (TRIGGER_SITE 
