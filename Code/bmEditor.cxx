@@ -799,27 +799,26 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
   while(itParams!= params.end())
     {
     std::string text = "";
-    int parent = (*itParams).GetParent();
-
-    if(parent > 0)
-      {
-      unsigned int pos = 0;
-      for(unsigned int j=0;j<params.size();j++)
-        {
-        if(params[j].GetParent() == 0)
-          {
-          pos++;
-          }
-        if(pos == parent)
-          {
-          text = params[j].GetName().toChar();
-          text += ".";
-          break;
-          }
-        }
-      }
-    text += (*itParams).GetName().toChar();
+	text += (*itParams).GetName().toChar();
     m_ApplicationOptionBrowser->add(text.c_str());
+
+	std::vector<std::string> parameters = (*itParams).ShowApplicationOptionsSubParams(text);
+	for(unsigned int i=0 ; i<parameters.size() ; i++)
+	  {
+	  /*std::string param = parameters[i].c_str();
+	  std::string parameter = "";
+	  string::size_type loc = param.find( ".", 0 );
+	  if( loc != string::npos )
+	    {
+		parameter += param.substr(loc+1);
+	    }
+	  else
+	    {
+		parameter += param;
+	    }*/
+
+	  m_ApplicationOptionBrowser->add(parameters[i].c_str());
+	  }
     itParams++;
     }
   return true;

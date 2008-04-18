@@ -45,6 +45,7 @@ SET(BatchMakeLib_HDRS
   bmSplashScreenControls.h
   ApplicationWrapper.h
   ApplicationWrapperParam.h
+  ApplicationWrapperParamSub.h
   bmScriptGetTimeAction.h
   bmScriptGetCurrentDateTimeAction.h
   bmScriptGlobAction.h
@@ -106,6 +107,7 @@ SET(BatchMakeLib_SRCS
   bmScriptMakeDirectoryAction.cxx
   ApplicationWrapper.cxx
   ApplicationWrapperParam.cxx
+  ApplicationWrapperParamSub.cxx
   bmScriptGetTimeAction.cxx
   bmScriptGetCurrentDateTimeAction.cxx
   bmScriptGlobAction.cxx

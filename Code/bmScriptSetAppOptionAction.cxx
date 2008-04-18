@@ -65,7 +65,6 @@ void ScriptSetAppOptionAction::Execute()
     m_value+=m_Manager->Convert(m_Parameters[i]);
     }
 
-
   // First we search the name of the variable
   long pos = m_Parameters[0].find(".",0);
   std::string first = m_Parameters[0].mid(0,pos).toChar();
@@ -144,6 +143,7 @@ void ScriptSetAppOptionAction::Execute()
   m_value += "'";
 
   m_Manager->SetVariable(first.c_str(),m_value);
+
 }
 
 } // end namespace bm

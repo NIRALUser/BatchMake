@@ -356,8 +356,9 @@ void Grid::WriteGAD()
   unsigned int nParams = 0;
   while(itParams != params.end())
     {
-    if((*itParams).IsValueDefined() && (!(*itParams).GetParent() || !m_Grouping))
-      {
+    //if((*itParams).IsValueDefined() && (!(*itParams).GetParent() || !m_Grouping))
+    if((*itParams).IsValueDefined() && (!m_Grouping))
+	  {
       if(nParams>0)
         {
         commandline += " ";
@@ -382,7 +383,7 @@ void Grid::WriteGAD()
           }
         }
       
-      if(hasChildren && !(*itParams).GetParent())
+      if(hasChildren && !(*itParams).GetParamsSubSize())
         {
         commandline += " ";
         commandline += (*itParams).GetValue().toChar(); 
@@ -477,7 +478,8 @@ void Grid::WriteGAD()
   nParams = 1;
   while(itParams != params.end())
     {
-    if((*itParams).IsValueDefined() && !(*itParams).GetParent())
+    //if((*itParams).IsValueDefined() && !(*itParams).GetParent())
+	if((*itParams).IsValueDefined() && !(*itParams).GetParamsSubSize())
       {
       if((*itParams).GetType() == ApplicationWrapperParam::Flag)
         {
@@ -489,55 +491,62 @@ void Grid::WriteGAD()
 
         std::string syntax = (*itParams).GetValue().toChar();
 
-        std::vector<ApplicationWrapperParam>::const_iterator itChildren = itParams;
-        itChildren++;
-        while(itChildren!=params.end() && (*itChildren).GetParent())
-          {
-          syntax += " {";
-          syntax += (*itChildren).GetName().toChar();
-          syntax += "}";
+        std::vector<ApplicationWrapperParam>::const_iterator itParent = itParams;
+        itParent++;
 
-          // Check if we have only one value
-          std::string value = (*itChildren).GetValue().toChar();
-          unsigned int nValues = 0;
-          for(unsigned int i=0;i<value.size();i++)
-            {
-            if(value[i]=='\"')
+        while(itParent!=params.end())
+		  {
+		  const std::vector<ApplicationWrapperParamSub> children = itParent->GetParamsSub();
+		  std::vector<ApplicationWrapperParamSub>::const_iterator itChildren = children.begin();
+		  while(itChildren!=children.end())
+		    {
+            syntax += " {";
+            syntax += (*itChildren).GetName().toChar();
+            syntax += "}";
+
+            // Check if we have only one value
+            std::string value = (*itChildren).GetValue().toChar();
+            unsigned int nValues = 0;
+            for(unsigned int i=0;i<value.size();i++)
               {
-              // Go to the next '\"' and increase the nValues
-              long int pos = value.find("\"",i+1);
-              if(pos != -1)
+              if(value[i]=='\"')
                 {
-                i=pos+1;
+                // Go to the next '\"' and increase the nValues
+                long int pos = value.find("\"",i+1);
+                if(pos != -1)
+                  {
+                  i=pos+1;
+                  nValues++;
+                  }
+                }
+              else if(value[i] == ' ')
+                {
                 nValues++;
                 }
               }
-            else if(value[i] == ' ')
-              {
-              nValues++;
-              }
-            }
 
-           for(unsigned int j=1;j<nValues;j++)
-             {
-             syntax += " {";
-             syntax += (*itChildren).GetName().toChar();
-             char* num = new char[10];
-             sprintf(num,"%d",j);
-             syntax += "_";
-             syntax += num;
-             syntax += "}";
-             delete [] num;
-             }
-          itChildren++;
+             for(unsigned int j=1;j<nValues;j++)
+               {
+               syntax += " {";
+               syntax += (*itChildren).GetName().toChar();
+               char* num = new char[10];
+               sprintf(num,"%d",j);
+               syntax += "_";
+               syntax += num;
+               syntax += "}";
+               delete [] num;
+               }
+			 itChildren++;
+		    }
+          itParent++;
           }
 
-        itChildren = itParams;
-        itChildren++;
+        itParent = itParams;
+        itParent++;
 
        
         // If the group has no child we plan accordingly
-        if(itChildren == params.end() || !(*itChildren).GetParent())
+        if(itParent == params.end())
           {
           fprintf(fic,"  <argument name=\"%s\" value=\"%s\"/>\n"
                          ,(*itParams).GetName().replaceChar('.','_').toChar()
@@ -552,61 +561,67 @@ void Grid::WriteGAD()
                                 ,syntax.c_str()
                                 ,optional.c_str());
             }
-        while(itChildren!=params.end() && (*itChildren).GetParent())
-          {
-          std::string value = (*itChildren).GetValue().toChar();          
-          // Extract the values
-          std::vector<std::string> values;
-          unsigned int startWord = 0;
-          unsigned int i;
-          for(i=0;i<value.size();i++)
-            {
-            if(value[i]=='\"')
+        while(itParent!=params.end())
+		  {
+		  const std::vector<ApplicationWrapperParamSub> children = itParent->GetParamsSub();
+		  std::vector<ApplicationWrapperParamSub>::const_iterator itChildren = children.begin();
+		  while(itChildren!=children.end())
+		    {
+            std::string value = (*itParent).GetValue().toChar();          
+            // Extract the values
+            std::vector<std::string> values;
+            unsigned int startWord = 0;
+            unsigned int i;
+            for(i=0;i<value.size();i++)
               {
-              startWord=i+1;
-              // Go to the next '\"' and increase the nValues
-              long int pos = value.find("\"",i+1);
-              if(pos != -1)
+              if(value[i]=='\"')
                 {
-                values.push_back(value.substr(startWord,pos-i-1));
-                i=pos+1;
+                startWord=i+1;
+                // Go to the next '\"' and increase the nValues
+                long int pos = value.find("\"",i+1);
+                if(pos != -1)
+                  {
+                  values.push_back(value.substr(startWord,pos-i-1));
+                  i=pos+1;
+                  }
+                }
+              else if(value[i] == ' ')
+                {
+                values.push_back(value.substr(startWord,i-startWord));
+                startWord =i+1; // WARNING this is not always true!
                 }
               }
-            else if(value[i] == ' ')
+
+            // If the size of the list is null, something is wrong, well we have only one value
+            if(values.size() == 0)
               {
-              values.push_back(value.substr(startWord,i-startWord));
-              startWord =i+1; // WARNING this is not always true!
+              values.push_back(value);
               }
-            }
-
-          // If the size of the list is null, something is wrong, well we have only one value
-          if(values.size() == 0)
-            {
-            values.push_back(value);
-            }
 
 
-          std::vector<std::string>::const_iterator itV=values.begin();
-          i=0;
-          while(itV!=values.end())
-            {
-            if(itV==values.begin())
+            std::vector<std::string>::const_iterator itV=values.begin();
+            i=0;
+            while(itV!=values.end())
               {
-              fprintf(fic,"   <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itChildren).GetName().replaceChar('.','_').toChar(),this->AddQuotes((*itV)).c_str(),
-                           (*itChildren).GetTypeAsChar());
-              }
-            else
-              {
-              fprintf(fic,"   <argument name=\"%s_%d\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itChildren).GetName().replaceChar('.','_').toChar(),i,this->AddQuotes((*itV)).c_str(),
-                           (*itChildren).GetTypeAsChar());
+              if(itV==values.begin())
+                {
+                fprintf(fic,"   <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
+                           (*itParent).GetName().replaceChar('.','_').toChar(),this->AddQuotes((*itV)).c_str(),
+                           (*itParent).GetTypeAsChar());
+                }
+              else
+                {
+                fprintf(fic,"   <argument name=\"%s_%d\" value=\"%s\" type=\"%s\"/>\n",
+                             (*itParent).GetName().replaceChar('.','_').toChar(),i,this->AddQuotes((*itV)).c_str(),
+                             (*itParent).GetTypeAsChar());
            
+                }
+              i++;
+              itV++;
               }
-            i++;
-            itV++;
-            }
-          itChildren++;
+			itChildren++;
+		    }
+          itParent++;
           }
         if(m_Grouping)
           {    
@@ -859,7 +874,7 @@ void Grid::WriteCondor()
     fprintf(fic,"executable    = %s\n",(*it).GetApplicationPath().toChar());
 
     // We need to escape double-quotes if any and add the 
-    std::string arguments = (*it).GetCurrentCommandLineArguments(true);
+    std::string arguments = (*it).GetCurrentCommandLineArguments(false);
     long int posDQ = arguments.find("\"");
     while(posDQ != -1)
       {

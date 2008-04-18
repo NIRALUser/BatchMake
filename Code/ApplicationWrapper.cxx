@@ -42,8 +42,6 @@
   #include <errno.h>
 #endif
 
-static int parent = 0;
-
 ApplicationWrapper::ApplicationWrapper()
 {
   m_name = "";
@@ -69,8 +67,8 @@ void ApplicationWrapper::SetApplicationPath(MString applicationpath)
 /** Return the current command line arguments */
 std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath)
 {
-  std::cout<<"GetCurrentCommandLineArguments"<<std::endl;
   std::string line = "";
+  std::string* pline = new std::string;
 
   std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
   std::vector<ApplicationWrapperParam>::iterator end = m_params.end();
@@ -81,35 +79,18 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
     end = m_SequentialParams.end();
     }
 
+  int i=0;
   int currentParam = 0;
-
   while(it != end)
     {
-    if((*it).GetType() == ApplicationWrapperParam::Flag)
-      {
-      currentParam++;
-      }
     bool valueDefined = (*it).IsValueDefined();
-    if(!valueDefined) // if the value is not defined we check if we have children defined
-      {
-      std::vector<ApplicationWrapperParam>::iterator itc = it;
-      while(itc != end)
-        {
-        if(currentParam>0 && (*itc).GetParent() == currentParam
-          && (*itc).IsValueDefined()
-          )
-          {
-          valueDefined = true;
-          }
-        itc++;
-        }
-      }
+	bool childrenValueDefined = false;
 
     if(valueDefined)
-      {
-      if(line.size()>0)
+	  {
+      if(pline->size()>0)
         {
-        line += " ";
+		*pline += " ";
         }
       
       // remove the absolute path if the relativePath is on
@@ -131,33 +112,38 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
 
         sappname += "\"";
 
-        line += sappname;
-        
+        *pline += sappname;
         }
       else
         {
-        line += (*it).GetValue().toChar();
-        }     
+        *pline += (*it).GetValue().toChar();
+        }   
+	  
+	  (*it).CheckSubValueDefined(relativePath, pline);	
+
       }
     it++;
     }
-
+	
+  line = *pline;
+  delete pline;
   return line;
 }
 
 /** Return true if the parameter exists */
 bool ApplicationWrapper::ParameterExists(std::string first)
 {
-  std::cout<<"ParameterExists"<<std::endl;
   std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
-
-  unsigned int parent = 0;
   while(it != m_params.end())
     {
     if(!strcmp((*it).GetName().toChar(),first.c_str()))
       {
       return true;
       }
+	if((*it).ParamSubExists(first))
+	  {
+	  return true;
+	  }
     it++;
     }
   return false;
@@ -166,19 +152,11 @@ bool ApplicationWrapper::ParameterExists(std::string first)
 /** Clear all the parameter values */
 void ApplicationWrapper::ClearParameterValues()
 {
-  std::cout<<"ClearParameterValues"<<std::endl;
   std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
   while(it != m_params.end())
     {
     (*it).SetValueDefined(false);
-    /*if((*it).GetType() != ApplicationWrapperParam::Flag)
-      {
-      (*it).SetValue("");
-      }
-    else
-      {
-      (*it).SetValue("0");
-      }*/
+	(*it).ClearParamSubValues();
     it++;
     }
 }
@@ -186,19 +164,11 @@ void ApplicationWrapper::ClearParameterValues()
 /** Set the parameter value */
 void ApplicationWrapper::SetParameterValue(std::string first, std::string second, std::string value)
 {
-  std::cout<<"SetParameterValue"<<std::endl;
   std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
-
-  unsigned int parent = 0;
   while(it != m_params.end())
     {
-    if((*it).GetParent() == 0)
-      {
-      parent++;
-      }
-
     if(!strcmp((*it).GetName().toChar(),first.c_str()))
-      {
+	 {
       if((*it).GetType() != ApplicationWrapperParam::Flag)
         {
         (*it).SetValueDefined(true);
@@ -219,43 +189,25 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
           {
           (*it).SetValueDefined(false);
           }
-        }
+	    }
 
       
       // We manage the sequential params here
       if(m_Sequential)
-        {
-        if((m_SequentialParams.size() == 0)
-          || (m_SequentialParams[m_SequentialParams.size()-1].GetParent()!=parent)
-          )
+	    {
+		if((m_SequentialParams.size() == 0) || m_SequentialParams[m_SequentialParams.size()-1].GetName()!= (*it).GetName())
           {
-          m_SequentialParams.push_back(*it);
           // We add all the things
-          std::vector<ApplicationWrapperParam>::iterator itChild = m_params.begin();
-          while(itChild != m_params.end())
-            {
-            if((*itChild).GetParent() == parent)
-              {
-              if(!strcmp((*itChild).GetName().toChar(),second.c_str()))
-                {
-                (*itChild).SetValueDefined(true);
-                (*itChild).SetValue(value.c_str());
-                }
-              (*itChild).SetParent(parent);
-              m_SequentialParams.push_back(*itChild);
-                //std::cout << (*itChild).GetParent() << std::endl;
-              //  std::cout << "Addding " << (*itChild).GetName().toChar() << std::endl;
-              }
-            itChild++;
-            }
+		  (*it).SetParamSubValue(first, second, value, true);
+		  m_SequentialParams.push_back(*it);
           }
         else // we look in the list where is the parameter
           {
           std::vector<ApplicationWrapperParam>::iterator it = m_SequentialParams.end();
-
           do
-            {
+		    {
             it--;
+			(*it).SetParamSubValue(first, second, value, false);
             if(!strcmp((*it).GetName().toChar(),second.c_str()))
               {
               (*it).SetValueDefined(true);
@@ -264,26 +216,19 @@ void ApplicationWrapper::SetParameterValue(std::string first, std::string second
               }
             }
             while(it != m_SequentialParams.begin());
-          }
-        }
+		  }
+	    }
       else
         {
         // Look for the child
         if(second.size() > 0)
           {        
-          std::vector<ApplicationWrapperParam>::iterator itChild = m_params.begin();
-          while(itChild != m_params.end())
+          std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
+          while(it != m_params.end())
             {
-            std::string childname = first;
-            childname += ".";
-            childname += second;
-             if(!strcmp((*itChild).GetName().toChar(),childname.c_str()))
-              {
-              (*itChild).SetValueDefined(true);
-              (*itChild).SetValue(value.c_str());
-              }
-            itChild++;
-            }
+			(*it).SetParamSubValue(first, second, value, true);
+            it++;
+		    }
           }
         }
       }
@@ -323,46 +268,27 @@ void ApplicationWrapper::AddParam(ApplicationWrapperParam param)
 
 void ApplicationWrapper::DeleteParam(MString name)
 {
-  std::cout<<"DeleteParam"<<std::endl;
-  int m_offset=0;
-  for (unsigned int l=0;l<m_params.size();l++)
-  {
-    if (m_params[l].GetName() == name)
-      m_offset = l;
-  };
-
-  int m_currentflag = 0;
-  for (int k=0;k<m_offset+1;k++)
-  {
-    if (m_params[k].GetType() == 1)
-      m_currentflag++;
-  }
-
-  if (m_params[m_offset].GetType() == 1)
-  {
-    if (m_currentflag != 0)
+  bool is_parent = false;
+  std::vector<ApplicationWrapperParam>::iterator m_it = m_params.begin();
+  for (unsigned int i=0 ; i<m_params.size() ; i++)
     {
-      for (unsigned int l=0;l<m_params.size();l++)
+    if (m_params[i].GetName() == name)
+	  {
+	  is_parent = true;
+      m_params.erase(m_it);
+      return;
+	  }
+	m_it++;
+    }
+
+  // if it's not a parent, we just remove the children
+  if(!is_parent)
+    {
+	for (unsigned int i=0 ; i<m_params.size() ; i++)
       {
-        if (m_params[l].GetParent() == m_currentflag)
-        {
-           m_params[l].SetParent(0);
-        }
+	  m_params[i].RemoveParamSub(name);
       }
     }
-  }
-  
-  std::vector<ApplicationWrapperParam>::iterator m_it = m_params.begin();
-
-  for (unsigned int i=0;i<m_params.size();i++)
-  {
-    if (m_params[i].GetName() == name)
-    {
-        m_params.erase(m_it);
-        return;
-    }
-    m_it++;
-  }
 }
 
 
@@ -371,13 +297,16 @@ std::vector<ApplicationWrapperParam> & ApplicationWrapper::GetParams()
   return m_params;
 }
 
+
 ApplicationWrapperParam* ApplicationWrapper::GetParam(MString name)
 {
   for (unsigned int i=0;i<m_params.size();i++)
-  {
+    {
     if (m_params[i].GetName() == name)
+	  {
       return &m_params[i];
-  }
+	  }
+    }
 
   return 0;
 }
@@ -385,112 +314,167 @@ ApplicationWrapperParam* ApplicationWrapper::GetParam(MString name)
 
 void ApplicationWrapper::UpParam(MString name)
 {
-  std::cout<<"UpParam"<<std::endl;
   int m_offset=0;
   for (unsigned int l=0;l<m_params.size();l++)
-  {
+    {
     if (m_params[l].GetName() == name)
       m_offset = l;
-  };
+    }
 
   if (m_offset != 0)
-  {
+    {
     ApplicationWrapperParam m_paramtemp = m_params[m_offset-1];
     m_params[m_offset-1] = m_params[m_offset];
     m_params[m_offset] = m_paramtemp;
-  }
+    }
 }
 
 
 void ApplicationWrapper::DownParam(MString name)
 {
-  std::cout<<"DownParam"<<std::endl;
   int m_offset=0;
   for (unsigned int l=0;l<m_params.size();l++)
-  {
+    {
     if (m_params[l].GetName() == name)
       m_offset = l;
-  };
+    }
 
   if (m_offset != m_params.size()-2)
-  {
+    {
     ApplicationWrapperParam m_paramtemp = m_params[m_offset+1];
     m_params[m_offset+1] = m_params[m_offset];
     m_params[m_offset] = m_paramtemp;
-  }
+    }
 }
 
 void ApplicationWrapper::DisplayParam(MString& m_line,int offset)
 {
-  std::cout<<"DisplayParam"<<std::endl;
   if (m_params[offset].GetOptional())
-      m_line += " [";
-    else
-      m_line += " <";
+	{
+    m_line += " [";
+	}
+  else
+	{
+    m_line += " <";
+	}
 
-    switch(m_params[offset].GetType())
-    {
-      case 0: m_line += m_params[offset].GetName();
-              break;
+  switch(m_params[offset].GetType())
+	{
+    case 0: 
+		m_line += m_params[offset].GetName();
+        break;
 
-      case 1: m_line += m_params[offset].GetValue();
-              break;
+    case 1:
+		m_line += m_params[offset].GetValue();
+        break;
       
-      case 2: m_line += "int";
-              break;
+    case 2:
+		m_line += "int";
+        break;
 
-      case 3: m_line += "float";
-              break;
+      case 3:
+		  m_line += "float";
+          break;
 
-      case 4: if(m_params[offset].GetName().length()>0)
-                {m_line += m_params[offset].GetName();}
-              else
-                {m_line += "string";}
-              break;
+      case 4:
+		  if(m_params[offset].GetName().length()>0)
+			{
+			m_line += m_params[offset].GetName();
+		    }
+          else
+            {
+			m_line += "string";
+		    }
+          break;
 
-      case 5: for (unsigned j=0;j<m_params[offset].GetEnum().size();j++)
+      case 5:
+		  for (unsigned j=0;j<m_params[offset].GetEnum().size();j++)
+            {
+            m_line += m_params[offset].GetEnum()[j];
+            if (j != m_params[offset].GetEnum().size()-1)
+			  {
+			  m_line += "|";
+			  }
+            }  
+          break;
+	  }
+
+	//Displays children
+	for(unsigned int k=0 ; k<m_params[offset].GetParamsSub().size() ; k++)
+	  {
+	  if (m_params[offset].GetParamsSub()[k].GetOptional())
+	    {
+        m_line += " [";
+	    }
+      else
+	    {
+        m_line += " <";
+	    }
+
+	  switch(m_params[offset].GetParamsSub()[k].GetType())
+		{
+		case 0: 
+			m_line += m_params[offset].GetParamsSub()[k].GetName();
+	        break;
+
+		case 1: 
+			m_line += m_params[offset].GetParamsSub()[k].GetValue();
+            break;
+      
+		case 2: 
+			m_line += "int";
+            break;
+
+		case 3: 
+			m_line += "float";
+            break;
+
+		case 4: 
+			if(m_params[offset].GetParamsSub()[k].GetName().length()>0)
               {
-                m_line += m_params[offset].GetEnum()[j];
-                if (j != m_params[offset].GetEnum().size()-1)
-                  m_line += "|";
+			  m_line += m_params[offset].GetParamsSub()[k].GetName();
+			  }
+            else
+              {
+		      m_line += "string";
+	          }
+            break;
+
+        case 5: 
+			for (unsigned j=0 ; j<m_params[offset].GetParamsSub()[k].GetEnum().size() ; j++)
+              {
+              m_line += m_params[offset].GetParamsSub()[k].GetEnum()[j];
+              if (j != m_params[offset].GetParamsSub()[k].GetEnum().size()-1)
+			    {
+                 m_line += "|";
+			    }
               }  
               break;
+	    }
 
-    }
+	  if (m_params[offset].GetParamsSub()[k].GetOptional())
+	    {
+        m_line += "]";
+	    }
+      else
+	    {
+        m_line += ">";
+	    }
+	  }
 
-    int m_currentflag = 0;
-      for (int k=0;k<offset+1;k++)
-      {
-        if (m_params[k].GetType() == 1)
-            m_currentflag++;
-      }
-    
-	  std::cout<<m_currentflag<<" "<<std::endl;
-      if (m_params[offset].GetType() == 1)
-      {
-        if (m_currentflag != 0)
-        {
-          for (unsigned int i=0;i<m_params.size();i++)
-          {
-            if (m_params[i].GetParent() == m_currentflag)
-            {
-				std::cout<<m_line.toChar()<<std::endl;
-               DisplayParam(m_line,i);
-            }
-          }
-        }
-      }
-
-   if (m_params[offset].GetOptional())
+	if (m_params[offset].GetOptional())
+	  {
       m_line += "]";
+	  }
     else
+	  {
       m_line += ">";
+	  }
 }
 
 
 MString ApplicationWrapper::GetExampleLine()
 {
-  std::cout<<"GetExampleLine"<<std::endl;
   MString m_line = "";
   std::string applicationPath = m_applicationpath.toChar();
   if (m_applicationpath.length() != 0)
@@ -505,12 +489,9 @@ MString ApplicationWrapper::GetExampleLine()
       }  
     }
   
-  for (unsigned int i=0;i<m_params.size();i++)
+  for (unsigned int i=0 ; i<m_params.size() ; i++)
     {
-    if (m_params[i].GetParent() == 0)
-      {
-      DisplayParam(m_line,i);
-      }
+    DisplayParam(m_line,i);
     }
 
   return m_line;
@@ -519,7 +500,6 @@ MString ApplicationWrapper::GetExampleLine()
 
 void ApplicationWrapper::Save(MString filename)
 {
-  std::cout<<"Save"<<std::endl;
   std::vector<std::string> parentParameters, parameters;
   std::string parentParameter, parameter;
 
@@ -534,37 +514,23 @@ void ApplicationWrapper::Save(MString filename)
       m_writer.Start("Parameters");
       for (unsigned int i=0 ; i<m_params.size() ; i++)
         {
-        if(m_params[i].GetParent() == 0)
-          {
-          parentParameter = m_params[i].GetName().toChar();
-          parentParameters.push_back(m_params[i].GetName().toChar());
-          m_writer.Start("Parameter");
-          m_writer.Write(MString("Type"),m_params[i].GetType());
-          m_writer.Write(MString("Name"),m_params[i].GetName());
-          m_writer.Write(MString("Value"),m_params[i].GetValue());
-          m_writer.Write(MString("External"),(int)m_params[i].GetExternalData());
-          m_writer.Write(MString("Optional"),(int)m_params[i].GetOptional());
-          for(unsigned int j=0 ; j<m_params.size() ; j++)
-            {
-            if(m_params[j].GetParent()!= 0)
-              {
-              parameter =  m_params[j].GetName().toChar();
-              std::string::size_type loc =parameter.find(parentParameter, 0); 
-              if(loc != string::npos)
-                {
-                parameters.push_back(m_params[j].GetName().toChar());
-                m_writer.Start("SubParameter");
-                m_writer.Write(MString("Type"),m_params[j].GetType());
-                m_writer.Write(MString("Name"),m_params[j].GetName());
-                m_writer.Write(MString("Value"),m_params[j].GetValue());
-                m_writer.Write(MString("External"),(int)m_params[j].GetExternalData());
-                m_writer.Write(MString("Optional"),(int)m_params[j].GetOptional());
-                m_writer.End("SubParameter");
-                }
-              }
+        m_writer.Start("Parameter");
+        m_writer.Write(MString("Type"),m_params[i].GetType());
+        m_writer.Write(MString("Name"),m_params[i].GetName());
+        m_writer.Write(MString("Value"),m_params[i].GetValue());
+        m_writer.Write(MString("External"),(int)m_params[i].GetExternalData());
+        m_writer.Write(MString("Optional"),(int)m_params[i].GetOptional());
+		  for(unsigned j=0 ; j<m_params[i].GetParamsSub().size() ; j++)
+		    {
+            m_writer.Start("SubParameter");
+            m_writer.Write(MString("Type"),m_params[i].GetParamsSub()[j].GetType());
+            m_writer.Write(MString("Name"),m_params[i].GetParamsSub()[j].GetName());
+            m_writer.Write(MString("Value"),m_params[i].GetParamsSub()[j].GetValue());
+            m_writer.Write(MString("External"),(int)m_params[i].GetParamsSub()[j].GetExternalData());
+            m_writer.Write(MString("Optional"),(int)m_params[i].GetParamsSub()[j].GetOptional());
+            m_writer.End("SubParameter");
             }
-            m_writer.End("Parameter");
-          }
+        m_writer.End("Parameter");
         }
       m_writer.End("Parameters");
   m_writer.End("executable");
@@ -574,7 +540,6 @@ void ApplicationWrapper::Save(MString filename)
 
 void ApplicationWrapper::Load(MString filename)
 {
-  std::cout<<"Load"<<std::endl;
   XMLReader m_reader;
   m_reader.Open(filename.toChar());
   MString m_balise = m_reader.GetBalise();
@@ -609,7 +574,6 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
       if (m_balise == "Path")      m_applicationpath = m_reader.GetValue();
       if (m_balise == "Parameter")
         {
-        parent++;
         ReadParam(m_reader, true);
         }
       m_balise = m_reader.GetBalise(); 
@@ -642,7 +606,6 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
     {
     while (m_balise != "/Parameter")
       {
-      m_param.SetParent(0);
       if (m_balise == "Name")     m_param.SetName(m_reader.GetValue());
       if (m_balise == "Type")     m_param.SetType(m_reader.GetValue().toInt());
       if (m_balise == "Value")    m_param.SetValue(m_reader.GetValue());
@@ -653,21 +616,20 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
       if (m_balise == "SubParameter")
         {
         MString m_balise1 = m_reader.GetBalise();
-        ApplicationWrapperParam m_param;
-        //std::vector<MString> m_list;
+        ApplicationWrapperParamSub m_subParam;
+		std::vector<MString> m_list1;
         while (m_balise1 != "/SubParameter")
           {
-          m_param.SetParent(parent);
-          if (m_balise1 == "Name")     m_param.SetName(m_reader.GetValue());
-          if (m_balise1 == "Type")     m_param.SetType(m_reader.GetValue().toInt());
-          if (m_balise1 == "Value")    m_param.SetValue(m_reader.GetValue());
-          if (m_balise1 == "External") m_param.SetExternalData(m_reader.GetValue().toInt());
-          if (m_balise1 == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
-          if (m_balise1 == "Enum")     m_list.push_back(m_reader.GetValue());
+          if (m_balise1 == "Name")     m_subParam.SetName(m_reader.GetValue());
+          if (m_balise1 == "Type")     m_subParam.SetType(m_reader.GetValue().toInt());
+          if (m_balise1 == "Value")    m_subParam.SetValue(m_reader.GetValue());
+          if (m_balise1 == "External") m_subParam.SetExternalData(m_reader.GetValue().toInt());
+          if (m_balise1 == "Optional") m_subParam.SetOptional(m_reader.GetValue().toBool());   
+          if (m_balise1 == "Enum")     m_list1.push_back(m_reader.GetValue());
           m_balise1 = m_reader.GetBalise();
           }
-        m_param.SetEnum(m_list);
-        AddParam(m_param);
+        m_subParam.SetEnum(m_list1);
+		m_param.AddParamSub(m_subParam);
         }
       m_balise = m_reader.GetBalise();
       }
@@ -676,20 +638,57 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
     }
   else
     {
+	ApplicationWrapperParamSub m_paramSub;
+	int parent = 0;
     while (m_balise != "/Param")
       {
-      if (m_balise == "Name")     m_param.SetName(m_reader.GetValue());
+      if (m_balise == "Name") 
+	    {
+	    std::string name = m_reader.GetValue().toChar();
+		std::string newName = "";
+	    string::size_type loc = name.find( ".", 0 );
+	    if( loc != string::npos )
+	      {
+		  newName += name.substr(loc+1);
+	      }
+	    else
+	      {
+		  newName += name;
+	      }
+		m_param.SetName(newName.c_str());
+	    }
       if (m_balise == "Type")     m_param.SetType(m_reader.GetValue().toInt());
       if (m_balise == "Value")    m_param.SetValue(m_reader.GetValue());
-      if (m_balise == "Parent")   m_param.SetParent(m_reader.GetValue().toBool());
+	  if (m_balise == "Parent")  
+	    {
+		parent = m_reader.GetValue().toBool();
+	    }
       if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toInt());
       if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
       if (m_balise == "Enum")     m_list.push_back(m_reader.GetValue());
       m_balise = m_reader.GetBalise();
       }
     m_param.SetEnum(m_list);
-    AddParam(m_param);
-    }
+	if(parent !=0 )
+	  {
+	  GetParams()[GetParams().size()-1].AddParamSub(m_param);
+	  }
+	else
+	  {
+	  bool already_exists = false;
+	  for(unsigned int i=0 ; i<GetParams().size() ; i++)
+	    {
+		if(m_param.GetName() == GetParams()[i].GetName())
+		  {
+		  already_exists = true;
+		  }
+	    } 
+	  if(!already_exists)
+	    {
+	    AddParam(m_param);
+	    }
+	  }
+    } 
 }
 
 
@@ -697,7 +696,6 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
  *  supports --xml option */
 bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const char * _path)
 {
-  std::cout<<"AutomaticCommandLineParsingSlicer"<<std::endl;
   // Run the application
   std::string path = _path;
   std::string program = path;
@@ -777,7 +775,6 @@ bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const char * _path)
 bool ApplicationWrapper::
 AddSlicerModuleDescription(ModuleDescription* module)
 {
-  std::cout<<"AddSlicerModuleDescription"<<std::endl;
   // BatchMake only understands parameter types:
   //     file=0, bool=1, int=2, float=3, string=4, enum=5
   //
@@ -853,7 +850,6 @@ AddSlicerModuleDescription(ModuleDescription* module)
   //
   
   // Loop over executables with flags
-  int pcount = 0;
   for (pgit = pgbeginit; pgit != pgendit; ++pgit)
     {
     // iterate over each parameter in this group
@@ -884,8 +880,6 @@ AddSlicerModuleDescription(ModuleDescription* module)
 
       if (hasFlag)
         {
-        pcount++;
-       
         // Batchmake uses two parameters to represent non-boolean
         // options.  The first of the parameters is the "flag", the
         // second is the value.  THe Parent tag is used to ling flags
@@ -917,9 +911,6 @@ AddSlicerModuleDescription(ModuleDescription* module)
         std::string value = prefix + flag;
         param.SetValue(value.c_str());
 
-        // The flag itself never has a parent
-        param.SetParent(0);
-
         // BatchMake external flag is:
         //   0=nothing, 1=input, 2=output
         //
@@ -928,34 +919,28 @@ AddSlicerModuleDescription(ModuleDescription* module)
         
         // Any module parameter that has a flag is optional.
         param.SetOptional(1);
-        
-        this->AddParam(param);
                 
         // Is a child BatchMake parameter needed for the parameter?
+		ApplicationWrapperParamSub paramSub;
         if ((*pit).GetTag() != "boolean")
           {
-          //pcount++;
-          
           // find the module parameter type in the map to BatchMake types
           mp2bmIt = mp2bm.find((*pit).GetTag());
           if (mp2bmIt != mp2bm.end())
             {
-            param.SetType((*mp2bmIt).second);
+            paramSub.SetType((*mp2bmIt).second);
             }
           else
             {
             // unsupported type. map to string
-            param.SetType(4);
+            paramSub.SetType(4);
             }
 
           // The name of the BatchMake paired parameter is just the
           // original parameter name
-          param.SetName((*pit).GetName());         
-          param.SetValue((*pit).GetDefault());
+          paramSub.SetName((*pit).GetName());         
+          paramSub.SetValue((*pit).GetDefault());
 
-          // The parent is the previous parameter (the parameter for
-          // the flag)
-          param.SetParent(pcount);
 
           // BatchMake external flag is:
           //   0=nothing, 1=input, 2=output
@@ -964,28 +949,29 @@ AddSlicerModuleDescription(ModuleDescription* module)
             {
             if ((*pit).GetChannel() == "input")
               {
-              param.SetExternalData(1);
+              paramSub.SetExternalData(1);
               }
             else if ((*pit).GetChannel() == "output")
               {
-              param.SetExternalData(2);
+              paramSub.SetExternalData(2);
               }
             else
               {
-              param.SetExternalData(0);
+              paramSub.SetExternalData(0);
               }
             }
           else
             {
-            param.SetExternalData(0);
+            paramSub.SetExternalData(0);
             }
           
           // If the flag was specified, then the parameter for the
           // value cannot be option
-          param.SetOptional(0);
-          }
-        this->AddParam(param);
-        }
+          paramSub.SetOptional(0);
+		  }
+		param.AddParamSub(paramSub);
+		this->AddParam(param);
+	    }
       }
     }  
 
@@ -1057,7 +1043,6 @@ AddSlicerModuleDescription(ModuleDescription* module)
       }
    
     param.SetOptional(0);
-    param.SetParent(0);
     this->AddParam(param);
     }
 
@@ -1185,13 +1170,13 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
 
   unsigned int parentId=0;
   while(it != options.end())
-    {
+  {
     bool gotParent = false;
     ApplicationWrapperParam parentParam;
     parentParam.SetName((*it).name);
     parentParam.SetOptional(!(*it).required);
     if((*it).tag != "" || (*it).longtag != "") // we have one value
-      {
+	  {
       parentParam.SetType(ApplicationWrapperParam::Flag);
       std::string tag = "-";
       if((*it).longtag.size()>0) // use the long tag if there is one
@@ -1206,7 +1191,6 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
       parentParam.SetValue(tag);
       parentParam.SetName((*it).name);
 
-      this->AddParam(parentParam);
       gotParent = true;
       parentId++;
       }
@@ -1214,20 +1198,12 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
       {
       gotParent = false;
       }
-    
+
     std::vector<MetaCommand::Field>::const_iterator itField = (*it).fields.begin();
     while(itField != (*it).fields.end())
-      {
-
+	  {
       ApplicationWrapperParam param;
-      std::string fullname = "";
-      if(gotParent)      
-        {
-        fullname += (*it).name;
-        fullname += ".";
-        }
-      fullname += (*itField).name;
-      param.SetName(fullname);
+      param.SetName((*itField).name);
       param.SetValue((*itField).value);
 
       if((*itField).externaldata == MetaCommand::DATA_IN)
@@ -1241,37 +1217,65 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const char * _path)
 
       if((*itField).type == MetaCommand::FLOAT)
         {
-        param.SetType(ApplicationWrapperParam::Float);
+        param.SetType(ApplicationWrapperParamSub::Float);
         }
       else if((*itField).type == MetaCommand::INT)
         {
-        param.SetType(ApplicationWrapperParam::Int);
+        param.SetType(ApplicationWrapperParamSub::Int);
         }
       else if((*itField).type == MetaCommand::STRING)
         {
-        param.SetType(ApplicationWrapperParam::String);
+        param.SetType(ApplicationWrapperParamSub::String);
+        }
+	  else if((*itField).type == MetaCommand::LIST)
+        {
+		param.SetType(ApplicationWrapperParamSub::String);
         }
       else if((*itField).type == MetaCommand::FLAG)
         {
         itField++;
         continue;
         }
-      
+
       param.SetOptional(!(*itField).required);
-      if(gotParent)
-        {
-        param.SetParent(parentId);
-        }
-      else
-        {
-        param.SetParent(0);
-        }
-      this->AddParam(param);
+	  if(!gotParent)
+	    {
+		parentParam = param;
+	    }
+	  else
+	    {
+		bool already_exists=false;
+		for(int i=0 ; i<parentParam.GetParamsSubSize() ; i++)
+		  {
+		  if(param.GetName() == parentParam.GetParamsSub()[i].GetName())
+	        {
+	        already_exists = true;
+	        }
+	      }
+		if(!already_exists)
+		  {
+	      parentParam.AddParamSub(param);
+		  }
+	    }
       itField++; 
-      }
-    
+	  }
+
+	bool already_exists=false;
+	for(unsigned int i=0 ; i<this->GetParams().size() ; i++)
+	  {
+	  if(parentParam.GetName() == this->GetParams()[i].GetName())
+	    {
+	    already_exists = true;
+	    }
+	  }
+
+	if(!already_exists)
+	  {
+      this->AddParam(parentParam);
+	  }
     it++;
     }
+
 
   return true;
 }

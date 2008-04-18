@@ -31,6 +31,9 @@
 #include <list>
 
 #include <errno.h>
+#include <string>
+#include <stdio.h>
+#include <iostream>
 #include "bmScriptParser.h"
 #include <vector>
 

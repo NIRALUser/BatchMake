@@ -8,8 +8,8 @@ class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
   } {
     Fl_Window g_Applicationwrappergui {
       label {BatchMake - Application Wrapper} open
-      xywh {259 168 559 370} type Double resizable
-      code0 {\#include "bmApplicationWrapperGUIBase.h"} modal visible
+      xywh {381 177 559 437} type Double hide resizable
+      code0 {\#include "bmApplicationWrapperGUIBase.h"} modal
     } {
       Fl_Button g_selectpath {
         label {Browse && run...}
@@ -92,15 +92,15 @@ class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
       Fl_Button g_ok {
         label Ok
         callback {OnSaveModule()}
-        xywh {290 340 80 20} box PLASTIC_UP_BOX color 180 labelsize 10
+        xywh {290 355 80 20} box PLASTIC_UP_BOX color 180 labelsize 10
       }
       Fl_Button g_cancel {
         label Cancel
         callback {OnReject()}
-        xywh {195 340 80 20} box PLASTIC_UP_BOX color 180 labelsize 10
+        xywh {195 355 80 20} box PLASTIC_UP_BOX color 180 labelsize 10
       }
       Fl_Text_Display g_commandline {
-        label {Command line:}
+        label {Command line:} selected
         xywh {25 315 520 20} box NO_BOX color 49 labelsize 12 align 5 textsize 12
       }
       Fl_Input g_modulename {
@@ -126,7 +126,7 @@ class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
         tooltip {Run the application with -vxml command to try to find the command line arguments} xywh {115 57 165 20} down_box DOWN_BOX value 1 labelsize 12
       }
       Fl_Check_Button g_runappxml {
-        label {Run application with --xml} selected
+        label {Run application with --xml}
         tooltip {Run the application with -vxml command to try to find the command line arguments} xywh {281 57 166 20} down_box DOWN_BOX value 1 labelsize 12
       }
     }

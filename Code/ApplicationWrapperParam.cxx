@@ -18,96 +18,159 @@
 
 ApplicationWrapperParam::ApplicationWrapperParam()
 {
-  m_name = "NA";
-  m_parent = 0;
-  m_ValueDefined = false;
-  m_ExternalData = 0;
 }
 
 ApplicationWrapperParam::~ApplicationWrapperParam()
 {
 }
 
-void ApplicationWrapperParam::SetType(ApplicationWrapperParam::Type type)
+ApplicationWrapperParamSub* ApplicationWrapperParam::GetParamSub(MString name)
 {
-  m_type = type;
-}
-
-void ApplicationWrapperParam::SetType(int type)
-{
-  m_type = (Type)type;
-}
-
-ApplicationWrapperParam::Type ApplicationWrapperParam::GetType() const
-{
-  return m_type;
-}
-
-void ApplicationWrapperParam::SetParent(int parent)
-{
-  m_parent = parent;
-}
-
-int ApplicationWrapperParam::GetParent() const
-{
-  return m_parent;
-}
-
-
-void ApplicationWrapperParam::SetName(MString name)
-{
-  m_name = name;
-}
-
-MString ApplicationWrapperParam::GetName() const
-{
-  return m_name;
-}
-
-void ApplicationWrapperParam::SetValue(MString value)
-{
-  m_value = value;
-}
-
-MString ApplicationWrapperParam::GetValue() const
-{
-  return m_value;
-}
-
-void ApplicationWrapperParam::SetEnum(std::vector<MString> enumlist)
-{ 
-  m_enum.clear();
-  for (unsigned int i=0;i<enumlist.size();i++)
-    m_enum.push_back(enumlist[i]);
-}
-  
-std::vector<MString> ApplicationWrapperParam::GetEnum()
-{
-  return m_enum;
-}
-
-
-void ApplicationWrapperParam::SetOptional(bool flag)
-{
-  m_optional = flag;
-}
-
-bool ApplicationWrapperParam::GetOptional() const
-{
-  return m_optional;
-}
-  
-const char* ApplicationWrapperParam::GetTypeAsChar() const
-{
-  switch(m_type)
+  for (unsigned int i=0 ; i<m_Params.size() ; i++)
     {
-    case Filepath: return "string"; break;
-    case Flag: return "string"; break;
-    case Int: return "int"; break;
-    case Float: return "float"; break;
-    case String: return "string"; break;
-    case Enum: return "enum"; break;
-    default:
-      return "NA";
+    if (m_Params[i].GetName() == name)
+	  {
+      return &m_Params[i];
+      }
     }
+
+  return 0;
+}
+
+
+void ApplicationWrapperParam::RemoveParamSub(MString name)
+{
+  std::vector<ApplicationWrapperParamSub>::iterator m_it = m_Params.begin();
+  for(unsigned int i=0 ; i<m_Params.size() ; i++)
+    {
+    if (m_Params[i].GetName() == name)
+	  {
+	  m_Params.erase(m_it);
+      return;
+	  }
+	m_it++;
+	}
+}
+
+
+void ApplicationWrapperParam::ClearParamSubValues()
+{
+  std::vector<ApplicationWrapperParamSub>::iterator it = m_Params.begin();
+  while(it != m_Params.end())
+    {
+    (*it).SetValueDefined(false);
+	it++;
+    }
+}
+
+
+bool ApplicationWrapperParam::ParamSubExists(std::string first)
+{
+  std::vector<ApplicationWrapperParamSub>::iterator it = m_Params.begin();
+  while(it != m_Params.end())
+    {
+    if(!strcmp((*it).GetName().toChar(),first.c_str()))
+      {
+      return true;
+      }
+    it++;
+    }
+  return false;
+}
+
+
+bool ApplicationWrapperParam::CheckSubValueDefined(bool relativePath, std::string* line)
+{
+  std::vector<ApplicationWrapperParamSub>::iterator it = m_Params.begin();
+  while(it != m_Params.end())
+    {
+	if((*it).IsValueDefined())
+	  {
+	  if(line->size()>0)
+        {
+		*line += " ";
+        }
+
+	  // remove the absolute path if the relativePath is on
+      if(relativePath && (*it).GetExternalData()>0)
+        {
+        MString appname = (*it).GetValue().rend("/");
+        appname = appname.rend("\\");
+        appname = appname.removeChar('\\');
+        appname = appname.removeChar('/');
+
+        appname = appname.removeChar('\"');
+        std::string sappname = "\"";
+        sappname += appname.toChar();
+
+        while(sappname[sappname.size()-1]==' ')
+          {
+          sappname = sappname.substr(0,sappname.size()-1);
+          }
+
+        sappname += "\"";
+
+        *line += sappname;
+        }
+      else
+        {
+        *line += (*it).GetValue().toChar();
+        } 
+	  }
+	else
+	  {
+	  return false;
+	  }
+	it++;
+    }
+  return false;
+}
+
+
+void ApplicationWrapperParam::SetParamSubValue(std::string first, std::string second, std::string value, bool boolean)
+{
+  if(boolean)
+	{
+    std::vector<ApplicationWrapperParamSub>::iterator itChild = m_Params.begin();
+    while(itChild != m_Params.end())
+	  {
+      if(!strcmp((*itChild).GetName().toChar(),second.c_str()))
+        {
+        (*itChild).SetValueDefined(true);
+        (*itChild).SetValue(value.c_str());
+        }
+	  itChild++;
+	  }
+	}
+
+  else
+    {
+	std::vector<ApplicationWrapperParamSub>::iterator it = m_Params.end();
+	do
+      {
+      it--;
+      if(!strcmp((*it).GetName().toChar(),second.c_str()))
+        {
+        (*it).SetValueDefined(true);
+        (*it).SetValue(value.c_str());
+	    break;
+        }
+      }
+    while(it != m_Params.begin());
+	}
+}
+
+
+std::vector<std::string> ApplicationWrapperParam::ShowApplicationOptionsSubParams(std::string parent) const
+{
+  std::vector<std::string> parameters;
+  for(unsigned int i=0 ; i<m_Params.size() ; i++)
+    {
+    std::string text = parent;
+	text += ".";
+	text +=  m_Params[i].GetName().toChar();
+	parameters.push_back(text);
+    }
+
+  return parameters;
 }
