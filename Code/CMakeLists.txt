@@ -54,6 +54,7 @@ SET(BatchMakeLib_HDRS
   bmScriptFileExistsAction.h
   bmScriptGetListSizeAction.h
   bmScriptExitAction.h
+  bmScriptMathAction.h
   )
 
 INCLUDE_DIRECTORIES(
@@ -116,6 +117,7 @@ SET(BatchMakeLib_SRCS
   bmScriptFileExistsAction.cxx
   bmScriptGetListSizeAction.cxx
   bmScriptExitAction.cxx
+  bmScriptMathAction.cxx
   )
 
 

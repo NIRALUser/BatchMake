@@ -46,6 +46,7 @@
 #include "bmScriptFileExistsAction.h"
 #include "bmScriptGetListSizeAction.h"
 #include "bmScriptExitAction.h"
+#include "bmScriptMathAction.h"
 
 #ifdef BM_GRID
   #include "bmScriptGridSingleNodeAction.h"
@@ -260,7 +261,8 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, ConvertImage);
   BM_NEWKEYWORD(_list, FileExists);
   BM_NEWKEYWORD(_list, Exit);
-
+  BM_NEWKEYWORD(_list, Math);
+  
 #ifdef BM_XCEDE
   BM_NEWKEYWORD(_list, GetXnatDataSets);
   BM_NEWKEYWORD(_list, DownloadXnatDataSet);
@@ -308,7 +310,8 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, ConvertImage);
   BM_NEWACTION(option, FileExists);
   BM_NEWACTION(option, Exit);
-
+  BM_NEWACTION(option, Math);
+  
 #ifdef BM_GRID
   BM_NEWACTION(option, GridDataHost);
   BM_NEWACTION(option, GridOutputHost);
