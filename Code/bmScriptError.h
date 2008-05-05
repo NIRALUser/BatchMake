@@ -31,7 +31,7 @@ class ScriptError
 public:
   
   ScriptError();
-  ~ScriptError();
+  virtual ~ScriptError();
   virtual void SetError(MString error,int line=-1);
   virtual void SetWarning(MString warning,int line=-1);
   virtual void SetStatus(MString status);

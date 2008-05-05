@@ -71,10 +71,10 @@ MString MString::arg(unsigned int value)
   return m_value;
 }
 
-MString MString::arg(unsigned long value)
+MString MString::arg(unsigned long int value)
 {
   char text[200];
-  sprintf(text,"%i",value);
+  sprintf(text,"%zu",value);
   m_value.replace(m_value.find("%"),2,text);
   return m_value;
 }

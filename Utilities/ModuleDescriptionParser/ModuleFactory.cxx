@@ -415,7 +415,6 @@ ModuleFactory
 
     for ( unsigned int ii=0; ii < directory.GetNumberOfFiles(); ++ii)
       {
-      bool isAPlugin = true;
       const char *filename = directory.GetFile(ii);
       
       // skip any directories
@@ -506,7 +505,6 @@ ModuleFactory
 
     for ( unsigned int ii=0; ii < directory.GetNumberOfFiles(); ++ii)
       {
-      bool isAPlugin = true;
       const char *filename = directory.GetFile(ii);
       
       // skip any directories
@@ -746,7 +744,6 @@ ModuleFactory
                 // not a plugin, no xml description, close the library
                 itksys::DynamicLoader::CloseLibrary(lib);
 
-                isAPlugin = false;
                 information << filename
                             << " is not a plugin (no XML description)."
                             << std::endl;
@@ -762,7 +759,6 @@ ModuleFactory
               // not a plugin, doesn't have the symbols, close the library
               itksys::DynamicLoader::CloseLibrary(lib);
 
-              isAPlugin = false;
               information << filename
                           << " is not a plugin (no entry points)."
                           << std::endl;
@@ -828,7 +824,6 @@ ModuleFactory
 
     for ( unsigned int ii=0; ii < directory.GetNumberOfFiles(); ++ii)
       {
-      bool isAPlugin = true;
       const char *filename = directory.GetFile(ii);
       
       // skip any directories
@@ -1025,24 +1020,20 @@ ModuleFactory
                 }
               else
                 {
-                isAPlugin = false;
                 information << filename << " is not a plugin (did not generate an XML description)." << std::endl;
                 }
               }
             else
               {
-              isAPlugin = false;
               information << filename << " is not a plugin (exited with errors)." << std::endl;
               }
             }
           else if (result == itksysProcess_State_Expired)
             {
-            isAPlugin = false;
             information << filename << " is not a plugin (timeout exceeded)." << std::endl;
             }
           else
             {
-            isAPlugin = false;
             information << filename << " is not a plugin (did not exit cleanly)." << std::endl;
             }
 

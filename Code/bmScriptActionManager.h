@@ -46,7 +46,7 @@ public:
   typedef std::vector<ApplicationNameType> ApplicationsListType;
 
   ScriptActionManager();
-  ~ScriptActionManager();
+  virtual ~ScriptActionManager();
   
   struct variablestruct
     {

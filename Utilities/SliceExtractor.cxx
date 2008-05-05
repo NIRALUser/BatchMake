@@ -148,14 +148,14 @@ void SliceExtractor::Update()
 
   Iterator2DType itS2(m_outputimage,m_outputimage->GetLargestPossibleRegion());
 
-  if (slice > m_size[m_orientation])
-    slice = m_size[m_orientation]-1;
+  if (slice > (int)m_size[m_orientation])
+    slice = (int)m_size[m_orientation]-1;
 
   if (m_orientation == 2)
   {
-    for (int z=0;z<m_size[2];z++)
-      for (int y=0;y<m_size[1];y++)
-         for (int x=0;x<m_size[0];x++)
+    for (int z=0;z<(int)m_size[2];z++)
+      for (int y=0;y<(int)m_size[1];y++)
+         for (int x=0;x<(int)m_size[0];x++)
          {
             if(z == slice)
             {
@@ -170,9 +170,9 @@ void SliceExtractor::Update()
 
   if (m_orientation == 1)
   {
-    for (int z=0;z<m_size[2];z++)
-      for (int y=0;y<m_size[1];y++)
-         for (int x=0;x<m_size[0];x++)
+    for (int z=0;z<(int)m_size[2];z++)
+      for (int y=0;y<(int)m_size[1];y++)
+         for (int x=0;x<(int)m_size[0];x++)
          {
             if(y == slice)
             {
@@ -186,9 +186,9 @@ void SliceExtractor::Update()
 
   if (m_orientation == 0)
   {
-    for (int z=0;z<m_size[2];z++)
-      for (int y=0;y<m_size[1];y++)
-         for (int x=0;x<m_size[0];x++)
+    for (int z=0;z<(int)m_size[2];z++)
+      for (int y=0;y<(int)m_size[1];y++)
+         for (int x=0;x<(int)m_size[0];x++)
          {
             if(x == slice)
             {
@@ -200,3 +200,4 @@ void SliceExtractor::Update()
           }
   }
 }
+

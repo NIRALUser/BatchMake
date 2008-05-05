@@ -219,7 +219,6 @@ bool ScriptParser::Execute(MString filename,unsigned long pos)
 /** Run the given batchmake script (as a buffer) on Condor */
 void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
 {
-  bool inComment = false;
   long int startingLine = 0;
   long int posLine = buffer.find("\n");
   while(posLine != -1)
@@ -321,8 +320,6 @@ void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
 /** Parse and Execute a buffer */
 void ScriptParser::ParseBuffer(std::string buffer)
 {
-  bool inComment = false;
-
   long int startingLine = 0;
   long int posLine = buffer.find("\n");
   while(posLine != -1)

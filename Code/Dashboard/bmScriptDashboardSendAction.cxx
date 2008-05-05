@@ -134,7 +134,6 @@ void ScriptDashboardSendAction::Execute()
         {
         std::vector<DashboardMethodParameterType>::const_iterator itParam 
                                                     = (*itMeth).parameters.begin();
-        bool found = false;
         while(itParam != (*itMeth).parameters.end())
           {
           MString param = "${";

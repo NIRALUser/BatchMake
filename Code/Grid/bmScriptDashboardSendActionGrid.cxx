@@ -127,7 +127,6 @@ void ScriptDashboardSendAction::GenerateGrid()
         {
         std::vector<DashboardMethodParameterType>::const_iterator itParam 
                                                     = (*itMeth).parameters.begin();
-        bool found = false;
         while(itParam != (*itMeth).parameters.end())
           {
           if( !strcmp((*itParam).type.c_str(),"png")

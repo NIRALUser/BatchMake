@@ -113,7 +113,13 @@ public:
   int ErrorLine;                               /* Error line number */
   int Depth;                                   /* The depth of the tag */
 
-  ParserState():Debug(false),Error(false),Depth(-1),LastData(10){};
+  ParserState()
+    {
+    Debug = false;
+    Error = false;
+    Depth = -1;
+    LastData.reserve(10); 
+    };
 };
 
 /***************************

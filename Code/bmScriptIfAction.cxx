@@ -175,12 +175,12 @@ void ScriptIfAction::Execute()
     bool currentCondition = this->TestCurrentCondition(currentPosition,endPosition-currentPosition);
 
     // If we have already the condition we stop
-    if((nextCondition.find("&&") != -1) && !currentCondition)
+    if(((int)nextCondition.find("&&") != -1) && !currentCondition)
       {
       thenAction = false;
       break;
       }
-    else if((nextCondition.find("||") != -1) && currentCondition)
+    else if(((int)nextCondition.find("||") != -1) && currentCondition)
       {
       thenAction = true;
       break;

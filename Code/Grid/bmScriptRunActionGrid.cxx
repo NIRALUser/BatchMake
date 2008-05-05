@@ -68,7 +68,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     std::string xmloutputname = application->GetName().toChar();
     xmloutputname += ".";
     char* num = new char[10];
-    sprintf(num,"%d",m_GridModule->GetNumberOfApplications());
+    sprintf(num,"%zu",m_GridModule->GetNumberOfApplications());
     xmloutputname += num;
     xmloutputname += ".out.xml";
     application->SetParameterValue("GenerateXMLFile","","1");

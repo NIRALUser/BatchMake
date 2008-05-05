@@ -18,7 +18,7 @@ struct ThreadStruct
 
 ITK_THREAD_RETURN_TYPE RunProgramCallback(void * arg)
 {
-  unsigned int ThreadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
+  //unsigned int ThreadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
   ThreadStruct* str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);  
   //std::cout << "Running program" << str->program.c_str() << std::endl;
 
@@ -88,7 +88,7 @@ ITK_THREAD_RETURN_TYPE RunProgramCallback(void * arg)
 
 ITK_THREAD_RETURN_TYPE CheckMemoryCallback(void * arg)
 {
-  unsigned int ThreadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
+  //unsigned int ThreadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
   ThreadStruct* str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
   SystemInfo info;
 

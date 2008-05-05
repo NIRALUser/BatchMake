@@ -62,7 +62,7 @@ const char* Grid::GetCurrentScopeFile()
   if(m_CurrentScopeFile.size() == 0)
     {
     char* tempchar = new char[25];
-    sprintf(tempchar,"%d.bms.tmp",time(NULL));
+    sprintf(tempchar,"%zu.bms.tmp",time(NULL));
     m_CurrentScopeFile = tempchar;
     delete [] tempchar;
     }
@@ -79,7 +79,7 @@ std::string Grid::AddQuotes(std::string value)
     value.resize(value.size()-1);
     }
 
-  if(value.find(' ') != -1)
+  if((int)value.find(' ') != -1)
     {
     temp = "'";
     temp += value;

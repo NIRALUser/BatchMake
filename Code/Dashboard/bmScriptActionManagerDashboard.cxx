@@ -131,8 +131,6 @@ ScriptActionManager::AddBatchBoard(const char* var,
                                    const char* title,
                                    const char* isPublic)
 {
-  bool found = false;
-
   // Get the project name
   DashboardExperiment* exp = NULL;
   std::vector<DashboardExperiment>::iterator it = m_Dashboard.experiments.begin();
@@ -173,3 +171,4 @@ ScriptActionManager::AddBatchBoard(const char* var,
 
 
 } // end namespace bm
+

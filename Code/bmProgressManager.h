@@ -29,7 +29,7 @@ class ProgressManager
 {
 public:
   ProgressManager();
-  ~ProgressManager();
+  virtual ~ProgressManager();
   virtual void SetStatus(MString status);
   virtual void Stop();
   virtual void IsRunning();

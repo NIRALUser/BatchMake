@@ -55,7 +55,7 @@ void ScriptGetListSizeAction::Execute()
   std::vector<MString> list = m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
 
   char* size = new char[10];
-  sprintf(size,"'%d'",list.size());
+  sprintf(size,"'%zu'",list.size());
   value = size;
   delete [] size;
 

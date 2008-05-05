@@ -42,7 +42,7 @@ public:
   ScriptParser();
 
   /** Destructor */
-  ~ScriptParser();
+  virtual ~ScriptParser();
   
   void Load(MString filename);
   bool Parse(MString Line);
