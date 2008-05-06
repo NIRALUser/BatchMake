@@ -2155,7 +2155,7 @@ ModuleFactory
     if ((*cit).second.Type == type)
       {
       // module is in the cache, check the timestamp
-      if (commandModifiedTime == (*cit).second.ModifiedTime)
+      if (commandModifiedTime == (int)(*cit).second.ModifiedTime)
         {
         // can safely use the cached verion
         this->InternalFileMap->insert( commandName );
@@ -2245,7 +2245,7 @@ ModuleFactory
       {
       // last time we saw this file, it was not a module,
       // check the modified times to see if we need to recheck
-      if (commandModifiedTime == (*cit).second.ModifiedTime)
+      if (commandModifiedTime == (int)(*cit).second.ModifiedTime)
         {
         // can safely skip the file
         stream << commandName << " is not a plugin (cache)." << std::endl;

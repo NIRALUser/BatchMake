@@ -2082,8 +2082,8 @@ unsigned char SystemInfo::GetAPICId()
 /** Count the number of CPUs. Works only on windows. */
 int SystemInfo::CPUCount()
 {
-#ifdef WIN32
   unsigned char StatusFlag  = 0;
+#ifdef WIN32
   SYSTEM_INFO info;
 
   m_NumberOfPhysicalCPU = 0;
@@ -2184,8 +2184,8 @@ int SystemInfo::CPUCount()
     StatusFlag = HT_NOT_CAPABLE;
     m_NumberOfLogicalCPU = 1;
     }
-  return StatusFlag;
 #endif
+  return StatusFlag;
 }
 
 /** Return the number of logical CPUs on the system */

@@ -1328,7 +1328,7 @@ int main(int argc, char **argv)
             for(int d=0; d<3; d++)
               {
               indx3[d] = indx[d] + indx2[d];
-              if(indx3[d] >= size[d])
+              if(indx3[d] >= (int)size[d])
                 {
                 invalid = true;
                 break;

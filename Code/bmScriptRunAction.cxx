@@ -187,7 +187,6 @@ void ScriptRunAction::Execute()
   int n=0;
 
   int m_Offset = 0;
-  int m_Offset2 = 0;
   while (m_Offset != -1 && n<100)
     {
     m_Offset = m_Output.find("\n");

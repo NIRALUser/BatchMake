@@ -183,7 +183,7 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
     int        sock;
     char      buffer[512];
     char      protocol[20],host[256],request[1024];
-    int        l,port,chars,err;
+    int        l,port,chars;
     MemBuffer    headersBuffer,messageBuffer;
     char      headerSend[1024];
     bool      done;
@@ -195,6 +195,7 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
         return 1;
 
 #ifdef WIN32
+    int err;
     WSADATA    WsaData;
     err = WSAStartup (0x0101, &WsaData);              // Init Winsock
     if(err!=0)
@@ -264,7 +265,7 @@ int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *p
     strcat(headerSend, "\r\n");
     if(postLength)
       {
-      sprintf(buffer,"Content-Length: %ld\r\n",postLength-4);
+      sprintf(buffer,"Content-Length: %ld\r\n",(long int)postLength-4);
       SendString(sock,buffer);
       strcat(headerSend, buffer);
       }
@@ -422,13 +423,21 @@ std::string HttpRequest::CreateFile(std::string name,std::string filename)
   m_text += name;
   m_text += "\"; filename=\"";
  
-  if (filename.rfind("/") != -1)
-   m_text += filename.substr(filename.rfind("/")+1);
+  if ((int)filename.rfind("/") != -1)
+    {
+    m_text += filename.substr(filename.rfind("/")+1);
+    } 
   else
-   if (filename.rfind("\\") != -1)
+    {
+    if ((int)filename.rfind("\\") != -1)
+      {
       m_text += filename.substr(filename.rfind("\\")+1);
+      }
     else
+      {
       m_text += filename;
+      }
+    }
 
   m_text += "\"\r\n";
   m_text += "Content-Type: text/plain\r\n";
@@ -476,12 +485,10 @@ std::string HttpRequest::Send(std::string url)
   MessageStruct  req;
 
   if ((m_ParamList.size() == 0) && (m_Filenames.size() == 0))
-  {
+    {
     std::cerr << "No Param or File defined !" << std::endl;
     return "-2";
-  }
-
-  unsigned long textLenght = 0;
+    }
 
   std::string m_text;
   unsigned int i=0;
