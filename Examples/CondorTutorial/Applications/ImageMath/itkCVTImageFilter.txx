@@ -127,7 +127,7 @@ CVTImageFilter< TInputImage, TOutputImage >
   m_OutputImage->Allocate();
   m_OutputImage->FillBuffer( 0 );
 
-  for(int j=0; j<m_NumberOfCentroids; j++)
+  for(unsigned int j=0; j<m_NumberOfCentroids; j++)
     {
     std::cout << "Initial Centroid [" << j << "] = " << m_Centroids[j] 
               << std::endl;
@@ -144,14 +144,14 @@ CVTImageFilter< TInputImage, TOutputImage >
               << " : EDiff = " << iterationEnergyDifference << std::endl;
     ContinuousIndexType indx;
     indx.Fill(0);
-    for(int j=0; j<m_NumberOfCentroids; j++)
+    for(unsigned int j=0; j<m_NumberOfCentroids; j++)
       {
-      for(int i=0; i<ImageDimension; i++)
+      for(unsigned int i=0; i<ImageDimension; i++)
         {
         indx[i] = indx[i] + m_Centroids[j][i];
         }
       }
-    for(int i=0; i<ImageDimension; i++)
+    for(unsigned int i=0; i<ImageDimension; i++)
       {
       indx[i] = indx[i] / m_NumberOfCentroids;
       }
@@ -161,7 +161,7 @@ CVTImageFilter< TInputImage, TOutputImage >
   // Generate output image
 
   IndexType iIndx;
-  for(int j=0; j<m_NumberOfCentroids; j++)
+  for(int j=0; j<(int)m_NumberOfCentroids; j++)
     {
     for(int i=0; i<ImageDimension; i++)
       {
@@ -170,9 +170,9 @@ CVTImageFilter< TInputImage, TOutputImage >
         {
         iIndx[i] = 0;
         }
-      if(iIndx[i] > m_InputImageSize[i]-1)
+      if(iIndx[i] > (int)m_InputImageSize[i]-1)
         {
-        iIndx[i] = m_InputImageSize[i]-1;
+        iIndx[i] = (int)m_InputImageSize[i]-1;
         }
       }
     m_OutputImage->SetPixel(iIndx, j+1);
@@ -225,7 +225,7 @@ CVTImageFilter< TInputImage, TOutputImage >
   unsigned int * nearest = new unsigned int[m_NumberOfSamplesPerBatch];
   PointArrayType batch(m_NumberOfSamplesPerBatch);
 
-  for ( j = 0; j < m_NumberOfCentroids; j++ )
+  for ( j = 0; j < (int)m_NumberOfCentroids; j++ )
     {
     centroids2[j] = m_Centroids[j];
     count[j] = 1;
@@ -238,7 +238,7 @@ CVTImageFilter< TInputImage, TOutputImage >
   int get;
   int have = 0;
   double dist;
-  while ( have < m_NumberOfSamples )
+  while ( have < (int)m_NumberOfSamples )
     {
     //std::cout << " computing iteration have = " << have << std::endl;
     if( m_NumberOfSamples-have < m_NumberOfSamplesPerBatch )
@@ -272,7 +272,7 @@ CVTImageFilter< TInputImage, TOutputImage >
       }
     }
 
-  for ( j = 0; j < m_NumberOfCentroids; j++ )
+  for ( j = 0; j < (int)m_NumberOfCentroids; j++ )
     {
     for ( i = 0; i < ImageDimension; i++ )
       {
@@ -281,7 +281,7 @@ CVTImageFilter< TInputImage, TOutputImage >
     }
 
   energyDiff = 0.0;
-  for ( j = 0; j < m_NumberOfCentroids; j++ )
+  for ( j = 0; j < (int)m_NumberOfCentroids; j++ )
     {
     term = 0.0;
     for ( i = 0; i < ImageDimension; i++ )
@@ -363,7 +363,7 @@ CVTImageFilter< TInputImage, TOutputImage >
         (*sample).push_back(iIndx);
         }
       delete [] gridSize;
-      for ( j = len; j < sampleSize; j++ )
+      for (j = len; j < (int)sampleSize; j++ )
         {
         for ( i = 0; i < ImageDimension; i++ )
           {
@@ -373,9 +373,9 @@ CVTImageFilter< TInputImage, TOutputImage >
             {
             iIndx[i] = 0;
             }
-          if(iIndx[i] > m_InputImageSize[i]-1)
+          if(iIndx[i] > (int)m_InputImageSize[i]-1)
             {
-            iIndx[i] = m_InputImageSize[i]-1;
+            iIndx[i] = (int)m_InputImageSize[i]-1;
             }
           }
         (*sample).push_back(iIndx);
@@ -384,7 +384,7 @@ CVTImageFilter< TInputImage, TOutputImage >
       }
     case CVT_RANDOM:
       {
-      for ( j = 0; j < sampleSize; j++ )
+      for ( j = 0; j < (int)sampleSize; j++ )
         {
         u = 1;
         p1 = 0;
@@ -398,7 +398,7 @@ CVTImageFilter< TInputImage, TOutputImage >
               {
               iIndx[i] = 0;
               }
-            if(iIndx[i] > m_InputImageSize[i]-1)
+            if(iIndx[i] > (int)m_InputImageSize[i]-1)
               {
               iIndx[i] = m_InputImageSize[i]-1;
               }

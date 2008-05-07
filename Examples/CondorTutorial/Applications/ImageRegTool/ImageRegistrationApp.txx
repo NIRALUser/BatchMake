@@ -685,6 +685,11 @@ ImageRegistrationApp< TImage >
       registrator->SetOptimizerToOnePlusOnePlusGradient();
       break;
       }
+    case LBFGS:
+      {
+      std::cout << "LBFGS not supported" << std::endl;
+      return; 
+      }
     }
 
   RigidParametersType params = m_RigidRegTransform->GetParameters();
@@ -765,6 +770,11 @@ ImageRegistrationApp< TImage >
       {
       registrator->SetOptimizerToOnePlusOnePlusGradient();
       break;
+      }
+    case LBFGS:
+      {
+      std::cout << "LBFGS not supported" << std::endl;
+      return; 
       }
     }
 

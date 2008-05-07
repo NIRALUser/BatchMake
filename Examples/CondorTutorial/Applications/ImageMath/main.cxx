@@ -1219,7 +1219,7 @@ int main(int argc, char **argv)
         {
         std::cout << "Segmenting" << std::endl;
 
-        int mode = command.GetValueAsInt(*it,"mode");
+        //int mode = command.GetValueAsInt(*it,"mode");
 
         float threshLow = command.GetValueAsFloat(*it,"threshLow");
         float threshHigh = command.GetValueAsFloat(*it,"threshHigh");
@@ -1361,7 +1361,7 @@ int main(int argc, char **argv)
             }
           int i = 0;
           indx[i]++;
-          while(!done && indx[i]>=size[i])
+          while(!done && indx[i]>=(int)size[i])
             {
             indx[i] = 0;
             i++;
