@@ -58,6 +58,7 @@
   #include "bmScriptGridMaxNodesAction.h"
   #include "bmScriptGridSetGroupingAction.h"
   #include "bmScriptGridExecutableDirectoryAction.h"
+  #include "bmScriptGridTransferFileAction.h"
 #endif
 
 #ifdef BM_DASHBOARD
@@ -256,6 +257,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, GridMaxNodes);
   BM_NEWKEYWORD(_list, GridTempDirectory);
   BM_NEWKEYWORD(_list, GridExecutableDirectory);
+  BM_NEWKEYWORD(_list, GridTransferFile);
   BM_NEWKEYWORD(_list, Glob);
   BM_NEWKEYWORD(_list, GetFilename);
   BM_NEWKEYWORD(_list, ConvertImage);
@@ -322,6 +324,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, GridMaxNodes);
   BM_NEWACTION(option, GridTempDirectory);
   BM_NEWACTION(option, GridExecutableDirectory);
+  BM_NEWACTION(option, GridTransferFile);
 #endif
 
 #ifdef BM_DASHBOARD

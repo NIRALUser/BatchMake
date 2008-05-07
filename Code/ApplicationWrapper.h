@@ -56,7 +56,9 @@ public:
   bool AutomaticCommandLineParsingSlicer(const char * _path);
 
   /** Return the current command line arguments */
-  std::string GetCurrentCommandLineArguments(bool relativePath=true);
+  std::string GetCurrentCommandLineArguments(bool relativePath=true,
+                                             const char* inputDirectory=NULL,
+                                             const char* outputDirectory=NULL);
 
   /** Set the parameter value */
   void SetParameterValue(std::string first, std::string second, std::string value);

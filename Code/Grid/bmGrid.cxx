@@ -36,9 +36,10 @@ Grid::Grid()
   m_MaxNodes = -1;
   m_Grouping = true;
   m_GridTempDirectory = "";
-  m_GridExecutableDirectory = "";
+  m_ExecutableDirectory = "";
   m_NextAppIsAfterEndBarrier = false;
   m_CurrentScope = 0;
+  m_TransferFiles = ALL;
 }
 
 /** Destructor */
@@ -349,7 +350,7 @@ void Grid::WriteGAD()
     }
 
   fprintf(fic,"  <parameter name=\"Executable\" value=\"%s%s\"/>\n",
-                                       m_GridExecutableDirectory.c_str(),applicationName.c_str());
+                                       m_ExecutableDirectory.c_str(),applicationName.c_str());
 
   std::string commandline = "";
   itParams = params.begin();
@@ -870,11 +871,26 @@ void Grid::WriteCondor()
       {
       fprintf(fic,"initialdir     = %s\n",m_OutputDirectory.c_str());
       }
-
-    fprintf(fic,"executable    = %s\n",(*it).GetApplicationPath().toChar());
+    
+    std::string executable = (*it).GetApplicationPath().toChar();
+    
+    if(m_TransferFiles!=ALL && m_TransferFiles!=EXECUTABLE)
+      {
+      std::string executableDirectory = m_ExecutableDirectory;
+      if(m_ExecutableDirectory[m_ExecutableDirectory.size()-1] != '/')
+        {
+        executableDirectory = m_ExecutableDirectory+"/";
+        }
+      executable = executableDirectory+itksys::SystemTools::GetFilenameName(executable);
+      }
+      
+    fprintf(fic,"executable    = %s\n",executable.c_str());
 
     // We need to escape double-quotes if any and add the 
-    std::string arguments = (*it).GetCurrentCommandLineArguments(false);
+    std::string arguments = (*it).GetCurrentCommandLineArguments(true,
+                                                                 m_DataDirectory.c_str(),
+                                                                 m_OutputDirectory.c_str()
+                                                                 );
     long int posDQ = arguments.find("\"");
     while(posDQ != -1)
       {
@@ -927,11 +943,15 @@ void Grid::WriteCondor()
         externalData += datavalue;
         itExternalData++;
         }
-      fprintf(fic,"should_transfer_files = yes\n");
-      fprintf(fic,"transfer_input_files = %s\n",externalData.c_str());
+      
+      if(m_TransferFiles != NONE)
+        {  
+        fprintf(fic,"should_transfer_files = yes\n");
+        fprintf(fic,"transfer_input_files = %s\n",externalData.c_str());
+        }  
       }
 
-    if(gotExternalData)
+    if(m_TransferFiles!=NONE && gotExternalData)
       {
       fprintf(fic,"when_to_transfer_output = ON_EXIT_OR_EVICT\n");
       }

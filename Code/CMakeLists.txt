@@ -151,6 +151,7 @@ IF(GRID_SUPPORT)
     Grid/bmScriptGridMaxNodesAction.cxx
     Grid/bmScriptGridTempDirectoryAction.cxx
     Grid/bmScriptGridExecutableDirectoryAction.cxx  
+    Grid/bmScriptGridTransferFileAction.cxx  
     )
 
   IF(DASHBOARD_SUPPORT)

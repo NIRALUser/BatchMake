@@ -65,10 +65,11 @@ void ApplicationWrapper::SetApplicationPath(MString applicationpath)
 
 
 /** Return the current command line arguments */
-std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath)
+std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath,
+                                                               const char* inputDirectory,
+                                                               const char* outputDirectory)
 {
   std::string line = "";
-  std::string* pline = new std::string;
 
   std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
   std::vector<ApplicationWrapperParam>::iterator end = m_params.end();
@@ -84,10 +85,10 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
     bool valueDefined = (*it).IsValueDefined();
 
     if(valueDefined)
-    {
-      if(pline->size()>0)
+      {
+      if(line.size()>0)
         {
-    *pline += " ";
+        line += " ";
         }
       
       // remove the absolute path if the relativePath is on
@@ -97,33 +98,47 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
         appname = appname.rend("\\");
         appname = appname.removeChar('\\');
         appname = appname.removeChar('/');
-
+        appname = appname.removeChar('\'');
         appname = appname.removeChar('\"');
-        std::string sappname = "\"";
-        sappname += appname.toChar();
+        std::string sappname = appname.toChar();
 
         while(sappname[sappname.size()-1]==' ')
           {
           sappname = sappname.substr(0,sappname.size()-1);
           }
 
-        sappname += "\"";
-
-        *pline += sappname;
+        
+        // Preappend the directories
+        if(inputDirectory && (*it).GetExternalData()==1)
+          {
+          std::string slash = "";
+          if(inputDirectory[strlen(inputDirectory)-1] != '/')
+            {
+            slash = "/";
+            }
+          sappname = inputDirectory+slash+sappname;
+          }
+        else if(outputDirectory && (*it).GetExternalData()==2)
+          {
+          std::string slash = "";
+          if(inputDirectory[strlen(inputDirectory)-1] != '/')
+            {
+            slash = "/";
+            }
+          sappname = outputDirectory+slash+sappname;
+          }
+          
+        line += "\""+sappname+"\"";
         }
       else
         {
-        *pline += (*it).GetValue().toChar();
+        line += (*it).GetValue().toChar();
         }   
-    
-    (*it).CheckSubValueDefined(relativePath, pline);  
-
+      (*it).CheckSubValueDefined(relativePath, &line);
       }
     it++;
     }
   
-  line = *pline;
-  delete pline;
   return line;
 }
 
