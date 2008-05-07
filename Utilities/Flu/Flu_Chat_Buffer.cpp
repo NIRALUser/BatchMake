@@ -10,8 +10,10 @@
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
  * 
  ***************************************************************/
-
-
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4800 )
+#pragma warning ( disable : 4996 )
+#endif
 
 #include <FL/fl_draw.H>
 #include "FLU/Flu_Chat_Buffer.h"

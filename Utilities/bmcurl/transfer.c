@@ -837,7 +837,7 @@ CURLcode Curl_readwrite(struct connectdata *conn,
               k->timeofdoc = curl_getdate(k->p+strlen("Last-Modified:"),
                                           &secs);
               if(data->set.get_filetime)
-                data->info.filetime = k->timeofdoc;
+                data->info.filetime = (long)k->timeofdoc;
             }
             else if((checkprefix("WWW-Authenticate:", k->p) &&
                      (401 == k->httpcode)) ||

@@ -19,8 +19,8 @@
 #endif
 #include <iostream>
 #include <itksys/SystemTools.hxx>
+#include <itksys/SystemInformation.hxx>
 #include <itkMultiThreader.h>
-#include "SystemInfo.h"
 #include "metaCommand.h"
 
 int main(int argc, char * argv[]) 

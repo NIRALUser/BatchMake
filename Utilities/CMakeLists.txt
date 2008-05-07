@@ -32,7 +32,6 @@ SET(BatchMakeUtilities_HDRS
   TCPSocket.h
   XMLBufferReader.h
   SliceExtractor.h
-  SystemInfo.h
   HttpRequest.h
   )
 
@@ -46,7 +45,6 @@ SET(BatchMakeUtilities_SRCS
   TCPSocket.cxx
   XMLBufferReader.cxx
   SliceExtractor.cxx
-  SystemInfo.cxx
   HttpRequest.cxx
   )
 

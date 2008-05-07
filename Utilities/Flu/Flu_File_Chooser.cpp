@@ -10,8 +10,10 @@
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
  * 
  ***************************************************************/
-
-
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4800 )
+#pragma warning ( disable : 4996 )
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -4019,7 +4021,7 @@ void Flu_File_Chooser :: cd( const char *path )
 
     // store date as human readable and sortable integer
     entry->date = formatDate( ctime( &s.st_mtime ) );//ctime( &s.st_mtime );
-    entry->idate = s.st_mtime;
+    entry->idate = (unsigned int)s.st_mtime;
 
     // convert the permissions into UNIX style rwx-rwx-rwx (user-group-others)
     /*

@@ -1,9 +1,10 @@
 #include <iostream>
 // This file is located in BatchMake_SOURCE_DIR/Utilities
-#include "SystemInfo.h"
+#include <itksys/SystemInformation.hxx>
+
 int main(int argc, char * argv[]) 
 { 
-  SystemInfo info;
+  itksys::SystemInformation info;
   info.RunCPUCheck();
   std::cout << "CPU_SPEED_MHZ=" << (int) info.GetProcessorClockFrequency() 
             << std::endl;

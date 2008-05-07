@@ -939,7 +939,7 @@ CURLcode ftp_getfiletime(struct connectdata *conn, char *file)
                  "%04d%02d%02d %02d:%02d:%02d GMT",
                  year, month, day, hour, minute, second);
         /* now, convert this into a time() value: */
-        conn->data->info.filetime = curl_getdate(buf, &secs);
+        conn->data->info.filetime = (long)curl_getdate(buf, &secs);
       }
     }
     break;

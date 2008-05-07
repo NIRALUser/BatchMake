@@ -2,7 +2,7 @@
 #include <itksys/Process.h>
 #include <itksys/SystemTools.hxx>
 #include <itkMultiThreader.h>
-#include "SystemInfo.h"
+#include <itksys/SystemInformation.hxx>
 #include "metaCommand.h"
 
 struct ThreadStruct
@@ -90,7 +90,7 @@ ITK_THREAD_RETURN_TYPE CheckMemoryCallback(void * arg)
 {
   //unsigned int ThreadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
   ThreadStruct* str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
-  SystemInfo info;
+  itksys::SystemInformation info;
 
   unsigned long n = 0;
   float virtualMemUsed = 0;

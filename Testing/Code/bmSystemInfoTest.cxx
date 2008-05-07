@@ -18,12 +18,12 @@ PURPOSE.  See the above copyright notices for more information.
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "SystemInfo.h"
+#include <itksys/SystemInformation.hxx>
 #include <iostream>
 
 int SystemInfoTest(int argc, char* argv[])
 {
-  SystemInfo info;
+  itksys::SystemInformation info;
   info.RunCPUCheck();
   info.RunOSCheck();
   info.RunMemoryCheck();
