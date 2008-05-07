@@ -157,7 +157,8 @@ local void init_linkedlist(ll)
     ll->first_block = ll->last_block = NULL;
 }
 
-local void free_linkedlist(ll)
+
+void free_linkedlist(ll)
     linkedlist_data* ll;
 {
     free_datablock(ll->first_block);
@@ -220,7 +221,7 @@ local int add_data_in_datablock(ll,buf,len)
 }
 
 
-local int write_datablock(fout,ll)
+int write_datablock(fout,ll)
     FILE * fout;
     linkedlist_data* ll;    
 {
