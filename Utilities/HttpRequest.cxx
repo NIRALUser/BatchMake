@@ -197,7 +197,7 @@ void HttpRequest::ParseURL(const char* url,char* protocol,int lprotocol,
     free(work);
 }
 
-int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,const char *post,
+int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char *post,
         unsigned int postLength,MessageStruct *req)
 {
     struct    sockaddr_in  sin;
