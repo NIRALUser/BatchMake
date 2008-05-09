@@ -29,8 +29,8 @@ class XMLWriter
 public:
   XMLWriter();
   ~XMLWriter();
-  void Start(char *);
-  void End(char *);
+  void Start(const char *);
+  void End(const char *);
   void Write(MString balise,MString value);
   void Write(MString balise,int value);
   void Write(MString balise,float value);

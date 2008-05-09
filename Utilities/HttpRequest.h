@@ -64,7 +64,7 @@ private:
   void    SendString(int sock,std::string str);
         bool          ValidHostChar(char ch);
   void    ParseURL(const char* url,char* protocol,int lprotocol, char* host,int lhost,char* request,int lrequest,int *port);
-  int      SendHTTP(const char*  url,char* headers,unsigned char *post, unsigned int postLength,MessageStruct *req);
+  int      SendHTTP(const char*  url,char* headers,const char *post, unsigned int postLength,MessageStruct *req);
   std::string CreateFile(std::string name,std::string filename);
 
   typedef std::string StringType;

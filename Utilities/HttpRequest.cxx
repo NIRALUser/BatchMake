@@ -197,7 +197,7 @@ void HttpRequest::ParseURL(const char* url,char* protocol,int lprotocol,
     free(work);
 }
 
-int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,unsigned char *post,
+int HttpRequest::SendHTTP(const char*  url,char*  headerReceive,const char *post,
         unsigned int postLength,MessageStruct *req)
 {
     struct    sockaddr_in  sin;
@@ -542,7 +542,7 @@ std::string HttpRequest::Send(std::string url)
 
   if (SendHTTP(  url.c_str(),
     "Content-Type: multipart/form-data; boundary=\"29772313742745\"\r\n",
-    (unsigned char*)m_text.c_str(),
+    m_text.c_str(),
     m_text.length(),
     &req) == 1)
     {

@@ -37,17 +37,16 @@ int XMLWriter::Open(const char* filename)
 }
 
 
-void XMLWriter::Start(char* name)
+void XMLWriter::Start(const char* name)
 {
   startTab();
   networkfile << "<" << name << ">" << std::endl;
 }
 
-void XMLWriter::End(char* name)
+void XMLWriter::End(const char* name)
 {
   endTab();
   networkfile << "</" << name << ">" << std::endl;
-  
 }
 
 void XMLWriter::startTab()
