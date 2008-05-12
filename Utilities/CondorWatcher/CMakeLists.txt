@@ -51,12 +51,15 @@ ENDMACRO(MOVE_EXECUTABLE_TOP_BINARY NAME)
 MOVE_EXECUTABLE_TOP_BINARY(CondorWatcherTool BatchMake_CONDOR_WATCHER_TOOL_EXE)
 
 # Installation file
-INSTALL(TARGETS CondorWatcherTool CondorWatcher  
+  INSTALL(TARGETS CondorWatcherTool
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib/BatchMake
         ARCHIVE DESTINATION lib/BatchMake)
-INSTALL(FILES ${CondorWatcher_HDRS} 
-        DESTINATION include/BatchMake/Utilities/CondorWatcher)
-INSTALL(FILES ${CondorWatcher_SRCS} ${CondorWatcherGUI_SRCS} main.cxx 
-        DESTINATION source/Batchmake/Utilities/CondorWatcher)
-INSTALL(FILES CMakeLists.txt DESTINATION source/Batchmake/Utilities/CondorWatcher)
+IF(BATCHMAKE_INSTALL_SOURCE)
+  INSTALL(FILES ${CondorWatcher_HDRS} 
+          DESTINATION include/BatchMake/Utilities/CondorWatcher)
+  INSTALL(FILES ${CondorWatcher_SRCS} ${CondorWatcherGUI_SRCS} main.cxx 
+          DESTINATION source/Batchmake/Utilities/CondorWatcher)
+  INSTALL(FILES CMakeLists.txt DESTINATION source/Batchmake/Utilities/CondorWatcher)
+ENDIF(BATCHMAKE_INSTALL_SOURCE)
+

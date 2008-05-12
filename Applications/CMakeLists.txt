@@ -124,12 +124,14 @@ INSTALL(TARGETS BatchMake bmGetCPUInfo bmGetMemoryInfo bmGetCPUSpeed
         ARCHIVE DESTINATION lib/BatchMake
         RUNTIME DESTINATION bin
         )
-INSTALL(FILES BatchMake.cxx BatchMake.ico BatchMake.rc Whetstone.h
-        GetCPUInfo.cxx GetMemoryInfo.cxx GetCPUSpeed.cxx Whetstone.cxx
-        bmGridSend.cxx bmGridStore.cxx bmSliceExtractor.cxx CheckMemory.cxx
-        DESTINATION source/BatchMake/Applications
-        )
-INSTALL(FILES CMakeLists.txt 
-        DESTINATION source/BatchMake/Applications
-        )
 
+IF(BATCHMAKE_INSTALL_SOURCE)
+  INSTALL(FILES BatchMake.cxx BatchMake.ico BatchMake.rc Whetstone.h
+          GetCPUInfo.cxx GetMemoryInfo.cxx GetCPUSpeed.cxx Whetstone.cxx
+          bmGridSend.cxx bmGridStore.cxx bmSliceExtractor.cxx CheckMemory.cxx
+          DESTINATION source/BatchMake/Applications
+          )
+  INSTALL(FILES CMakeLists.txt 
+          DESTINATION source/BatchMake/Applications
+         )
+ENDIF(BATCHMAKE_INSTALL_SOURCE)

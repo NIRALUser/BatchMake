@@ -10,9 +10,12 @@ IF(GRID_SUPPORT)
     )
 ENDIF(GRID_SUPPORT)
 
-INSTALL(FILES CMakeLists.txt 
-        DESTINATION source/BatchMake/Examples)
+IF(BATCHMAKE_INSTALL_SOURCE)
+  INSTALL(FILES CMakeLists.txt 
+          DESTINATION source/BatchMake/Examples)
+ENDIF(BATCHMAKE_INSTALL_SOURCE)
 
+# Install the examples scripts
 FILE(GLOB Scripts Scripts/?*.*)
 INSTALL(FILES ${Scripts} 
-        DESTINATION source/BatchMake/Examples/Scripts)
+        DESTINATION examples/scripts)

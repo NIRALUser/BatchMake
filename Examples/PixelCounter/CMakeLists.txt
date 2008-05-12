@@ -11,5 +11,5 @@ CONFIGURE_FILE(${PixelCounter_SOURCE_DIR}/PixelCounter.bmm
 INSTALL(TARGETS PixelCounter
         RUNTIME DESTINATION bin)
 INSTALL(FILES PixelCounter.bmm DESTINATION bin/Applications)
-INSTALL(FILES main.cxx DESTINATION source/Examples/PixelCounter)
-INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/PixelCounter)
+#INSTALL(FILES main.cxx DESTINATION source/Examples/PixelCounter)
+#INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/PixelCounter)

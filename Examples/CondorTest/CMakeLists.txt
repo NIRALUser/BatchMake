@@ -19,6 +19,6 @@ ENDIF(WIN32)
 
 INSTALL(TARGETS bmCondorTest 
         RUNTIME DESTINATION bin)
-INSTALL(FILES bmCondorTest.cxx DESTINATION source/Examples/CondorTest)
-INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/CondorTest)
+#INSTALL(FILES bmCondorTest.cxx DESTINATION source/Examples/CondorTest)
+#INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/CondorTest)
 

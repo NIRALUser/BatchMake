@@ -65,15 +65,15 @@ ENDIF(USE_FLTK)
 
 #---------------------------------------------------------------------
 # Installation file
-
-INSTALL(TARGETS BatchMakeUtilities 
-        ARCHIVE DESTINATION lib/BatchMake
-        LIBRARY DESTINATION lib/BatchMake
-        RUNTIME DESTINATION bin)
-INSTALL(FILES ${BatchMakeUtilities_HDRS} 
-        DESTINATION include/BatchMake/Utilities)
-INSTALL(FILES ${BatchMakeUtilities_SRCS} 
-        DESTINATION source/BatchMake/Utilities)
-INSTALL(FILES CMakeLists.txt 
-        DESTINATION source/BatchMake/Utilities)
-
+IF(BATCHMAKE_INSTALL_SOURCE)
+  INSTALL(TARGETS BatchMakeUtilities 
+          ARCHIVE DESTINATION lib/BatchMake
+          LIBRARY DESTINATION lib/BatchMake
+          RUNTIME DESTINATION bin)
+  INSTALL(FILES ${BatchMakeUtilities_HDRS} 
+          DESTINATION include/BatchMake/Utilities)
+  INSTALL(FILES ${BatchMakeUtilities_SRCS} 
+          DESTINATION source/BatchMake/Utilities)
+  INSTALL(FILES CMakeLists.txt 
+          DESTINATION source/BatchMake/Utilities)
+ENDIF(BATCHMAKE_INSTALL_SOURCE)

@@ -267,14 +267,18 @@ ENDIF(BatchMake_USE_KWSTYLE)
 CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/bmConfigure.h.in 
                ${BatchMake_BINARY_DIR}/bmConfigure.h)
 
-INSTALL(FILES ${BatchMake_BINARY_DIR}/bmConfigure.h 
-  DESTINATION include/BatchMake)
+SET(BATCHMAKE_PACKAGE_SOURCE OFF)
 
-INSTALL(FILES CMakeLists.txt Copyright.txt ReadMe.txt DartConfig.cmake
-  DESTINATION source/BatchMake)
+IF(BATCHMAKE_PACKAGE_SOURCE)
+  INSTALL(FILES ${BatchMake_BINARY_DIR}/bmConfigure.h 
+    DESTINATION include/BatchMake)
 
-FILE(GLOB IMAGES Images/?*.*)
-INSTALL(FILES ${IMAGES} DESTINATION source/BatchMake/Images)
+  INSTALL(FILES CMakeLists.txt Copyright.txt ReadMe.txt DartConfig.cmake
+    DESTINATION source/BatchMake)
+
+  FILE(GLOB IMAGES Images/?*.*)
+    INSTALL(FILES ${IMAGES} DESTINATION source/BatchMake/Images)
+ENDIF(BATCHMAKE_PACKAGE_SOURCE)
 
 #-----------------------------------------------------------------------------
 # CPack options

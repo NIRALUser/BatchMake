@@ -108,7 +108,7 @@ INCLUDE (GenerateModuleDescriptionParserConfig.cmake)
 CONFIGURE_FILE(${ModuleDescriptionParser_SOURCE_DIR}/UseModuleDescriptionParser.cmake.in
                ${ModuleDescriptionParser_BINARY_DIR}/UseModuleDescriptionParser.cmake COPYONLY IMMEDIATE)
 
-
+IF(BATCHMAKE_INSTALL_SOURCE)
 INSTALL(TARGETS ModuleDescriptionParser 
     RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
     LIBRARY DESTINATION lib/ModuleDescriptionParser COMPONENT RuntimeLibraries
@@ -122,3 +122,4 @@ INSTALL(FILES
      ${ModuleDescriptionParser_BINARY_DIR}/UseModuleDescriptionParser.cmake 
      ${ModuleDescriptionParser_BINARY_DIR}/install/ModuleDescriptionParserConfig.cmake 
      DESTINATION lib/ModuleDescriptionParser COMPONENT Development)
+ENDIF(BATCHMAKE_INSTALL_SOURCE)
