@@ -106,7 +106,9 @@ void ScriptEditorGUIControls::Show()
     int y = g_Scripteditorgui->y() + (g_Scripteditorgui->w() - ui->g_Splashscreen->w())/2;
     ui->g_Splashscreen->position(x,y);
 
-    m_SplashBuffer = "BatchMake 1.0.4\n";
+    m_SplashBuffer = "BatchMake ";
+    m_SplashBuffer += BatchMake_EXTENDED_VERSION_STRING;
+    m_SplashBuffer += "\n";
     m_SplashBuffer += "Copyright (c) 2007 Kitware Inc.\n\n";
 #ifdef BM_DASHBOARD     
     m_SplashBuffer += "Dashboard Module: [enabled]\n";
