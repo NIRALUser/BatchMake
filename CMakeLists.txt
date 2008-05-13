@@ -274,15 +274,15 @@ CONFIGURE_FILE(${BatchMake_SOURCE_DIR}/bmConfigure.h.in
 
 SET(BATCHMAKE_PACKAGE_SOURCE OFF)
 
-IF(BATCHMAKE_PACKAGE_SOURCE)
-  INSTALL(FILES ${BatchMake_BINARY_DIR}/bmConfigure.h 
-    DESTINATION include/BatchMake)
+INSTALL(FILES ${BatchMake_BINARY_DIR}/bmConfigure.h 
+  DESTINATION include/BatchMake)
 
+IF(BATCHMAKE_PACKAGE_SOURCE)
   INSTALL(FILES CMakeLists.txt Copyright.txt ReadMe.txt DartConfig.cmake
     DESTINATION source/BatchMake)
 
   FILE(GLOB IMAGES Images/?*.*)
-    INSTALL(FILES ${IMAGES} DESTINATION source/BatchMake/Images)
+  INSTALL(FILES ${IMAGES} DESTINATION source/BatchMake/Images)
 ENDIF(BATCHMAKE_PACKAGE_SOURCE)
 
 #-----------------------------------------------------------------------------

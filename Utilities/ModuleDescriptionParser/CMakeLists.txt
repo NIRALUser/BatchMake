@@ -105,21 +105,20 @@ ENDIF(BUILD_TESTING)
 
 INCLUDE (GenerateModuleDescriptionParserConfig.cmake) 
 
-CONFIGURE_FILE(${ModuleDescriptionParser_SOURCE_DIR}/UseModuleDescriptionParser.cmake.in
-               ${ModuleDescriptionParser_BINARY_DIR}/UseModuleDescriptionParser.cmake COPYONLY IMMEDIATE)
+CONFIGURE_FILE(
+  ${ModuleDescriptionParser_SOURCE_DIR}/UseModuleDescriptionParser.cmake.in
+  ${ModuleDescriptionParser_BINARY_DIR}/UseModuleDescriptionParser.cmake COPYONLY IMMEDIATE)
 
-IF(BATCHMAKE_INSTALL_SOURCE)
 INSTALL(TARGETS ModuleDescriptionParser 
-    RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-    LIBRARY DESTINATION lib/ModuleDescriptionParser COMPONENT RuntimeLibraries
-    ARCHIVE DESTINATION lib/ModuleDescriptionParser COMPONENT Development)
+  RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
+  LIBRARY DESTINATION lib/ModuleDescriptionParser COMPONENT RuntimeLibraries
+  ARCHIVE DESTINATION lib/ModuleDescriptionParser COMPONENT Development)
 
 FILE(GLOB __files1 "${ModuleDescriptionParser_SOURCE_DIR}/*.h")
 INSTALL(FILES ${__files1} DESTINATION include/ModuleDescriptionParser COMPONENT Development)
 INSTALL(FILES ${ModuleDescriptionParser_BINARY_DIR}/ModuleDescriptionParserConfigure.h DESTINATION include/ModuleDescriptionParser COMPONENT Development)
 
 INSTALL(FILES 
-     ${ModuleDescriptionParser_BINARY_DIR}/UseModuleDescriptionParser.cmake 
-     ${ModuleDescriptionParser_BINARY_DIR}/install/ModuleDescriptionParserConfig.cmake 
-     DESTINATION lib/ModuleDescriptionParser COMPONENT Development)
-ENDIF(BATCHMAKE_INSTALL_SOURCE)
+  ${ModuleDescriptionParser_BINARY_DIR}/UseModuleDescriptionParser.cmake 
+  ${ModuleDescriptionParser_BINARY_DIR}/install/ModuleDescriptionParserConfig.cmake 
+  DESTINATION lib/ModuleDescriptionParser COMPONENT Development)

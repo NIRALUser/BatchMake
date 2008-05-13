@@ -298,13 +298,13 @@ IF(BATCHMAKE_USE_XCEDE)
 ENDIF(BATCHMAKE_USE_XCEDE)
 
 # Installation file
+INSTALL(TARGETS BatchMakeLib
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib/BatchMake
+  ARCHIVE DESTINATION lib/BatchMake)
+INSTALL(FILES ${BatchMake_HDRS}  ${BatchMakeLib_HDRS}  
+  DESTINATION include/BatchMake)
 IF(BATCHMAKE_INSTALL_SOURCE)
-  INSTALL(TARGETS BatchMakeLib
-          RUNTIME DESTINATION bin
-          LIBRARY DESTINATION lib/BatchMake
-          ARCHIVE DESTINATION lib/BatchMake)
-  INSTALL(FILES ${BatchMake_HDRS}  ${BatchMakeLib_HDRS}  
-          DESTINATION include/BatchMake/Code)
   INSTALL(FILES CMakeLists.txt DESTINATION source/Code)
   INSTALL(FILES ${BatchMakeLib_SRCS} DESTINATION source/Code)
   IF(USE_FLTK)

@@ -50,14 +50,14 @@ ADD_LIBRARY(FLU ${FLU_SRCS})
 FILE(GLOB FLU_HDRS FLU/*.h)
 
 # Installation file
+INSTALL(TARGETS FLU
+  RUNTIME DESTINATION bin
+  ARCHIVE DESTINATION lib/BatchMake)
+INSTALL(FILES ${FLU_HDRS} 
+  DESTINATION include/BatchMake/Utilities/Flu/FLU)
 IF(BATCHMAKE_INSTALL_SOURCE)
-  INSTALL(TARGETS FLU
-          RUNTIME DESTINATION bin
-          ARCHIVE DESTINATION lib/BatchMake)
-  INSTALL(FILES ${FLU_HDRS} 
-          DESTINATION include/BatchMake/Utilities/Flu/FLU)
   INSTALL(FILES ${FLU_SRCS} ${CondorWatcherGUI_SRCS} 
-          DESTINATION source/BatchMake/Utilities/Flu)
+    DESTINATION source/BatchMake/Utilities/Flu)
   INSTALL(FILES CMakeLists.txt 
-          DESTINATION source/BatchMake/Utilities/Flu)
+    DESTINATION source/BatchMake/Utilities/Flu)
 ENDIF(BATCHMAKE_INSTALL_SOURCE)
