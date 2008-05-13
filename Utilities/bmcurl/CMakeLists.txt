@@ -7,7 +7,11 @@
 #   called bmcurl but CMake project is called LIBCURL.  This was maintained to
 #   keep compatibility with CMake's CURL distribution.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.0)
+cmake_minimum_required(VERSION 2.4)
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
 PROJECT(LIBCURL C)
 
 #-----------------------------------------------------------------------------
