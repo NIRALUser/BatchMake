@@ -877,7 +877,7 @@ void Grid::WriteCondor()
     if(m_TransferFiles!=ALL && m_TransferFiles!=EXECUTABLE)
       {
       std::string executableDirectory = m_ExecutableDirectory;
-      if(m_ExecutableDirectory[m_ExecutableDirectory.size()-1] != '/')
+      if(m_ExecutableDirectory.size()>0 && m_ExecutableDirectory[m_ExecutableDirectory.size()-1] != '/')
         {
         executableDirectory = m_ExecutableDirectory+"/";
         }
@@ -931,7 +931,7 @@ void Grid::WriteCondor()
     
     std::vector<std::string> otherinputdata = (*it).GetInputDataToTransfer();
     if(externalData.size() > 0 || otherinputdata.size()>0)
-      {
+      {   
       std::vector<std::string>::const_iterator itExternalData = otherinputdata.begin();
       while(itExternalData != otherinputdata.end())
         {
@@ -946,13 +946,13 @@ void Grid::WriteCondor()
       
       if(m_TransferFiles != NONE)
         {  
-        fprintf(fic,"should_transfer_files = yes\n");
         fprintf(fic,"transfer_input_files = %s\n",externalData.c_str());
         }  
       }
 
     if(m_TransferFiles!=NONE && gotExternalData)
       {
+      fprintf(fic,"should_transfer_files = yes\n");
       fprintf(fic,"when_to_transfer_output = ON_EXIT_OR_EVICT\n");
       }
 
