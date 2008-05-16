@@ -109,7 +109,7 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
 
         
         // Preappend the directories
-        if(inputDirectory && (*it).GetExternalData()==1)
+        if(inputDirectory && strlen(inputDirectory)>0 && (*it).GetExternalData()==1)
           {
           std::string slash = "";
           if(inputDirectory[strlen(inputDirectory)-1] != '/')
@@ -118,10 +118,10 @@ std::string ApplicationWrapper::GetCurrentCommandLineArguments(bool relativePath
             }
           sappname = inputDirectory+slash+sappname;
           }
-        else if(outputDirectory && (*it).GetExternalData()==2)
+        else if(outputDirectory && strlen(outputDirectory)>0 && (*it).GetExternalData()==2)
           {
           std::string slash = "";
-          if(inputDirectory[strlen(inputDirectory)-1] != '/')
+          if(outputDirectory[strlen(outputDirectory)-1] != '/')
             {
             slash = "/";
             }
