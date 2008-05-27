@@ -28,6 +28,9 @@ namespace bm {
 class ScriptEditorGUIBase
 {
 public:
+  ScriptEditorGUIBase(){};
+  virtual ~ScriptEditorGUIBase() {};
+
   virtual void OnOpenScript() = 0;
   virtual void OnSaveScript() = 0;
   virtual void OnCompile() = 0;
