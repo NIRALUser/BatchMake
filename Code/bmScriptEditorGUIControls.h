@@ -28,7 +28,9 @@
 #include "XMLIniIO.h"
 
 #ifdef BM_GRID
-  #include "CondorWatcher.h"
+  #if !defined(__APPLE__) 
+    #include "CondorWatcher.h"
+  #endif
 #endif
 
 namespace bm {
@@ -76,7 +78,9 @@ protected:
   MString m_Title;
 
 #ifdef BM_GRID
+  #if !defined(__APPLE__) 
   CondorWatcher* m_CondorWatcher;
+  #endif
 #endif
   std::string m_SplashBuffer;
 

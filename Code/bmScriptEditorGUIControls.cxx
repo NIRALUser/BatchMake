@@ -56,7 +56,9 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
   g_editor->SetScriptEditorGUI(this);
 
 #ifdef BM_GRID
+  #if !defined(__APPLE__) 
   m_CondorWatcher = new CondorWatcher;
+  #endif
 #endif
 
   m_WrappedApplicationsPath = "/Applications";
@@ -69,7 +71,9 @@ ScriptEditorGUIControls::~ScriptEditorGUIControls()
   delete m_InitFile;
 
 #ifdef BM_GRID
+  #if !defined(__APPLE__) 
   delete m_CondorWatcher;
+  #endif
 #endif
 }
 
@@ -159,8 +163,6 @@ void ScriptEditorGUIControls::Show()
   m_Title = MString(g_Scripteditorgui->label()) + " [script]";
   g_Scripteditorgui->label(m_Title.toChar());
   g_editor->SetParentWindow(g_Scripteditorgui);
-
-
 }
 
 
@@ -408,12 +410,14 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     }
 
   grid.WriteCondor();
-  
+ 
+#if !defined(__APPLE__)
   if(fl_ask("Run condor watcher?"))
     {
     m_CondorWatcher->Window->show();
     m_CondorWatcher->Watch();
     }
+#endif
 
   if(fl_ask("Run current script?"))
     {
@@ -497,3 +501,4 @@ void ScriptEditorGUIControls::OnGenerateScripts()
 }
 
 } // end namespace bm
+

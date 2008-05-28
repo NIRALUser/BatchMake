@@ -58,8 +58,11 @@ IF(USE_FLTK)
   TARGET_LINK_LIBRARIES(BatchMakeUtilities ${FLTK_LIBRARIES} FLU)
   ADD_DEPENDENCIES(BatchMakeUtilities FLU)
   IF(GRID_SUPPORT)
+    # Bug with FLTK on Mac causes the CondorWatcher to load the window
+    IF(NOT APPLE)
     TARGET_LINK_LIBRARIES(BatchMakeUtilities CondorWatcher)
     ADD_DEPENDENCIES(BatchMakeUtilities CondorWatcher)
+    ENDIF(NOT APPLE)
   ENDIF(GRID_SUPPORT)
 ENDIF(USE_FLTK)
 
