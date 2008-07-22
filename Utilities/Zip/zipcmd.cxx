@@ -1,5 +1,7 @@
 #include "zlib.h"
 #include <iostream>
+#include <cstring>
+#include <cstdlib>
 
 #if defined(MSDOS) || defined(OS2) || defined(WIN32)
 #  include <fcntl.h>

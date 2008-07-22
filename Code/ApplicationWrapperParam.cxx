@@ -15,6 +15,7 @@
 
 #include "ApplicationWrapperParam.h"
 #include <iostream>
+#include <cstring>
 
 ApplicationWrapperParam::ApplicationWrapperParam()
 {

@@ -24,7 +24,7 @@
 #include "FL/Fl_Text_Editor.H"
 #include "FL/fl_ask.H"
 #include "FL/Fl_Browser.H"
-#include "Fl/Fl_Output.h"
+#include "Fl/Fl_Output.H"
 #include "FLU/Flu_Tree_Browser.h"
 #include <FL/Fl_Window.H>
 #include "MString.h"

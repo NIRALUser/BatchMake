@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include <itksys/Process.h>
 #include <itksys/SystemTools.hxx>
 #include <itkMultiThreader.h>

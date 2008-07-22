@@ -14,6 +14,9 @@
 =========================================================================*/
 
 #include "MString.h"
+#include <cstring>
+#include <cstdlib>
+
 
 MString::MString()
 {

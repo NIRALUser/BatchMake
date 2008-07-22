@@ -15,6 +15,7 @@
 #include "ModuleFactory.h"
 #include "itksys/Directory.hxx"
 #include "itksys/SystemTools.hxx"
+#include <cstdlib>
 
 void WarningMessage(const char *msg);
 void ErrorMessage(const char *msg);

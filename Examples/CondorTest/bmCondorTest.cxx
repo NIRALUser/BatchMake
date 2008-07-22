@@ -13,6 +13,7 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
+#include <cstring>
 #include <iostream>
 
 #ifdef WIN32

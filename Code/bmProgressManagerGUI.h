@@ -25,7 +25,7 @@
 #include "bmProgressGUIControls.h"
 #include "bmProgressManager.h"
 #include "FLU/Flu_Tree_Browser.h"
-#include "FL/Fl_Progress.h"
+#include "FL/Fl_Progress.H"
 
 namespace bm {
 
