@@ -89,6 +89,7 @@
   #include "bmScriptGetXnatDataSetsAction.h"
   #include "bmScriptDownloadXnatDataSetAction.h"
   #include "bmScriptGetXnatFilenameAction.h"
+  #include "bmScriptGetXnatURIAction.h" 
   #include "bmScriptGetXcedeDataSetsAction.h"
   #include "bmScriptDownloadXcedeDataSetAction.h"
   #include "bmScriptGetXcedeFilenameAction.h"
@@ -269,6 +270,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, GetXnatDataSets);
   BM_NEWKEYWORD(_list, DownloadXnatDataSet);
   BM_NEWKEYWORD(_list, GetXnatFilename);
+  BM_NEWKEYWORD(_list, GetXnatURI);
   BM_NEWKEYWORD(_list, GetXcedeDataSets);
   BM_NEWKEYWORD(_list, DownloadXcedeDataSet);
   BM_NEWKEYWORD(_list, GetXcedeFilename);
@@ -354,6 +356,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, GetXnatDataSets);
   BM_NEWACTION(option, DownloadXnatDataSet);
   BM_NEWACTION(option, GetXnatFilename);
+  BM_NEWACTION(option, GetXnatURI);  
   BM_NEWACTION(option, GetXcedeDataSets);
   BM_NEWACTION(option, DownloadXcedeDataSet);
   BM_NEWACTION(option, GetXcedeFilename);

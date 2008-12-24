@@ -31,16 +31,16 @@ ScriptGetXcedeDataSetsAction::~ScriptGetXcedeDataSetsAction()
 bool ScriptGetXcedeDataSetsAction::TestParam(ScriptError* error,int linenumber)
 {
    if (m_Parameters.size() < 2)
-   {
+     {
      error->SetError(MString("No enough parameter for GetXcedeDataSets (requires 2 parameters min)"),linenumber);
      return false;
-   }
+     }
 
    if (m_Parameters.size() > 5)
-   {
+     {
      error->SetError(MString("Too much parameters for GetXcedeDataSets (requires 5 parameters max)"),linenumber);
      return false;
-   }
+     }
 
   m_Manager->SetTestVariable(m_Parameters[0]);
 

@@ -126,6 +126,7 @@ IF(BATCHMAKE_USE_XCEDE)
   bmScriptDownloadXnatDataSetAction.cxx
   bmScriptGetXnatDataSetsAction.cxx
   bmScriptGetXnatFilenameAction.cxx
+  bmScriptGetXnatURIAction.cxx
   bmScriptGetXcedeDataSetsAction.cxx
   bmScriptDownloadXcedeDataSetAction.cxx
   bmScriptGetXcedeFilenameAction.cxx

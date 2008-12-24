@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptGetXnatFilenameAction.cxx
+  Module:    bmScriptGetXnatURIAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -12,33 +12,32 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
-#include "bmScriptGetXnatFilenameAction.h"
+#include "bmScriptGetXnatURIAction.h"
 #include <fstream>
 #include "XcedeLib/XnatCatalog.h"
 
 namespace bm {
 
-ScriptGetXnatFilenameAction::ScriptGetXnatFilenameAction()
+ScriptGetXnatURIAction::ScriptGetXnatURIAction()
 : ScriptAction()
 {
 }
 
-ScriptGetXnatFilenameAction::~ScriptGetXnatFilenameAction()
+ScriptGetXnatURIAction::~ScriptGetXnatURIAction()
 {
 }
 
-
-bool ScriptGetXnatFilenameAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptGetXnatURIAction::TestParam(ScriptError* error,int linenumber)
 {
    if (m_Parameters.size() < 2)
      {
-     error->SetError(MString("No enough parameter for GetXnatFilename (requires 2 parameters)"),linenumber);
+     error->SetError(MString("No enough parameter for GetXnatURI (requires 2 parameters)"),linenumber);
      return false;
      }
 
    if (m_Parameters.size() > 2)
      {
-     error->SetError(MString("Too much parameters for GetXnatFilename (requires 2 parameters)"),linenumber);
+     error->SetError(MString("Too much parameters for GetXnatURI (requires 2 parameters)"),linenumber);
      return false;
      }
 
@@ -53,12 +52,12 @@ bool ScriptGetXnatFilenameAction::TestParam(ScriptError* error,int linenumber)
 }
 
 
-MString ScriptGetXnatFilenameAction::Help()
+MString ScriptGetXnatURIAction::Help()
 {
-  return "GetXnatFilename(<variable> <url>)";
+  return "GetXnatURI(<variable> <url>)";
 }
 
-void ScriptGetXnatFilenameAction::Execute()
+void ScriptGetXnatURIAction::Execute()
 {
   MString m_value;
   std::string dataSet = m_Manager->Convert(m_Parameters[1]).removeChar('\'').toChar();
@@ -66,7 +65,7 @@ void ScriptGetXnatFilenameAction::Execute()
   XnatCatalog xnatCatalog;
 
   m_value += "'";
-  m_value += xnatCatalog.GetXnatFilename(dataSet);
+  m_value += xnatCatalog.GetXnatUrl(dataSet);
   m_value += "'";
 
   m_Manager->SetVariable(m_Parameters[0], m_value);

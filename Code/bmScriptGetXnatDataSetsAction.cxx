@@ -71,14 +71,14 @@ void ScriptGetXnatDataSetsAction::Execute()
     {
     std::string login = m_Manager->Convert(m_Parameters[2]).removeChar('\'').toChar();
     std::string password = m_Manager->Convert(m_Parameters[3]).removeChar('\'').toChar();
-    dataSets = xnatCatalog.GetXnatDataSets(doc, login, password);  
+    dataSets = xnatCatalog.GetXnatDataSets(doc, login, password);
     }
   else
     {
-    dataSets = xnatCatalog.GetXnatDataSets(doc);  
+    dataSets = xnatCatalog.GetXnatDataSets(doc);
     }
   for(int i=0 ; i<(int)dataSets.size() ; i++)
-    {
+    {    
     m_value += "'";
     m_value += dataSets[i];
     m_value += "' ";
