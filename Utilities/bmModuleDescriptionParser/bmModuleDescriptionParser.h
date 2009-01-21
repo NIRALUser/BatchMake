@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include "ModuleDescriptionParserWin32Header.h"
+#include "bmModuleDescriptionParserWin32Header.h"
 
 class ModuleDescription;
 class ModuleParameterGroup;

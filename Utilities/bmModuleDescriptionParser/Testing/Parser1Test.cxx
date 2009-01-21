@@ -16,8 +16,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "ModuleDescriptionParser.h"
-#include "ModuleDescription.h"
+#include "bmModuleDescriptionParser.h"
+#include "bmModuleDescription.h"
 
 int main (int argc, char *argv[])
 {

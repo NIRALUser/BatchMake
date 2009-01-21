@@ -14,9 +14,9 @@
 #ifndef __ModuleFactory_h
 #define __ModuleFactory_h
 
-#include "ModuleDescriptionParserWin32Header.h"
+#include "bmModuleDescriptionParserWin32Header.h"
 
-#include "ModuleDescription.h"
+#include "bmModuleDescription.h"
 
 #include <vector>
 

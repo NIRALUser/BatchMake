@@ -15,9 +15,9 @@
 #ifndef __BatchMakeUtilities_h
 #define __BatchMakeUtilities_h
 
-#include "ModuleDescriptionParserWin32Header.h"
+#include "bmModuleDescriptionParserWin32Header.h"
 
-#include "ModuleDescription.h"
+#include "bmModuleDescription.h"
 
 ModuleDescriptionParser_EXPORT std::string GenerateBatchMakeWrapper(const ModuleDescription &module);
 

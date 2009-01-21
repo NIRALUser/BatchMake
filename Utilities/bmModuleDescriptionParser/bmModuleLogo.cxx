@@ -12,7 +12,7 @@
 
 ==========================================================================*/
 
-#include "ModuleLogo.h"
+#include "bmModuleLogo.h"
 
 ModuleLogo::ModuleLogo()
   : Width(0), Height(0), PixelSize(0), BufferLength(0), Options(0), Logo("")

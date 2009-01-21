@@ -15,8 +15,8 @@
 #ifndef __ModuleParameterGroup_h
 #define __ModuleParameterGroup_h
 
-#include "ModuleDescriptionParserWin32Header.h"
-#include "ModuleParameter.h"
+#include "bmModuleDescriptionParserWin32Header.h"
+#include "bmModuleParameter.h"
 
 #include <vector>
 #include <string>

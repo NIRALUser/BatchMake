@@ -1,7 +1,7 @@
 #include "BatchMakeUtilities.h"
 
-#include "ModuleParameterGroup.h"
-#include "ModuleParameter.h"
+#include "bmModuleParameterGroup.h"
+#include "bmModuleParameter.h"
 #include <sstream>
 #include <map>
 #include <vector>

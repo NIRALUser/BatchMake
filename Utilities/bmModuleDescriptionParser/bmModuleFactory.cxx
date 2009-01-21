@@ -17,9 +17,9 @@
 #include "itksys/Process.h"
 #include "itksys/Base64.h"
 
-#include "ModuleFactory.h"
-#include "ModuleDescriptionParser.h"
-#include "ModuleDescription.h"
+#include "bmModuleFactory.h"
+#include "bmModuleDescriptionParser.h"
+#include "bmModuleDescription.h"
 
 #include <set>
 #include <map>

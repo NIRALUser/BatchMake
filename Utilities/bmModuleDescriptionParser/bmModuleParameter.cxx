@@ -11,7 +11,7 @@
   Version:   $Revision$
 
 ==========================================================================*/
-#include "ModuleParameter.h"
+#include "bmModuleParameter.h"
 
 void
 splitString (const std::string &text,

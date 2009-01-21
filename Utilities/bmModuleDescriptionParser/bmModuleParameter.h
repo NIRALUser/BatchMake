@@ -14,7 +14,7 @@
 #ifndef __ModuleParameter_h
 #define __ModuleParameter_h
 
-#include "ModuleDescriptionParserWin32Header.h"
+#include "bmModuleDescriptionParserWin32Header.h"
 
 #include <map>
 #include <string>

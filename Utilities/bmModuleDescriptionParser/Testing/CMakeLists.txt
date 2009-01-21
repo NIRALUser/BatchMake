@@ -2,11 +2,11 @@ Project(ModuleDescriptionParserTesting)
 
 SET ( PARSER1TEST_SOURCE Parser1Test )
 ADD_EXECUTABLE ( Parser1Test ${PARSER1TEST_SOURCE})
-TARGET_LINK_LIBRARIES ( Parser1Test ModuleDescriptionParser )
+TARGET_LINK_LIBRARIES ( Parser1Test bmModuleDescriptionParser )
 
 SET ( ModuleFactoryTest_SOURCE ModuleFactoryTest )
 ADD_EXECUTABLE ( ModuleFactoryTest ${ModuleFactoryTest_SOURCE})
-TARGET_LINK_LIBRARIES ( ModuleFactoryTest ModuleDescriptionParser )
+TARGET_LINK_LIBRARIES ( ModuleFactoryTest bmModuleDescriptionParser )
 
 INCLUDE_DIRECTORIES(
   ${ModuleDescriptionParser_SOURCE_DIR}

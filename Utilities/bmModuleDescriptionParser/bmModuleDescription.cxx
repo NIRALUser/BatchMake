@@ -12,7 +12,7 @@
 
 ==========================================================================*/
 
-#include "ModuleDescription.h"
+#include "bmModuleDescription.h"
 
 
 ModuleDescription::ModuleDescription()

@@ -12,7 +12,7 @@
 
 ==========================================================================*/
 
-#include "ModuleParameterGroup.h"
+#include "bmModuleParameterGroup.h"
 
 ModuleParameterGroup
 ::ModuleParameterGroup(const ModuleParameterGroup &parameters)

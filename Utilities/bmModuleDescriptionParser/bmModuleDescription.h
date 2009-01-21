@@ -15,12 +15,12 @@
 #ifndef __ModuleDescription_h
 #define __ModuleDescription_h
 
-#include "ModuleDescriptionParserWin32Header.h"
+#include "bmModuleDescriptionParserWin32Header.h"
 
-#include "ModuleParameterGroup.h"
+#include "bmModuleParameterGroup.h"
 
-#include "ModuleProcessInformation.h"
-#include "ModuleLogo.h"
+#include "bmModuleProcessInformation.h"
+#include "bmModuleLogo.h"
 
 #include <string>
 #include <vector>

@@ -11,9 +11,9 @@
   Version:   $Revision$
 
 ==========================================================================*/
-#include "ModuleDescriptionParser.h"
+#include "bmModuleDescriptionParser.h"
 
-#include "ModuleDescription.h"
+#include "bmModuleDescription.h"
 
 #include <iostream>
 #include <string>

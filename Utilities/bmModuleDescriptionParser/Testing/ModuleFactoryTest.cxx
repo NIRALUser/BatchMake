@@ -12,7 +12,7 @@
 
 ==========================================================================*/
 #include <string>
-#include "ModuleFactory.h"
+#include "bmModuleFactory.h"
 #include "itksys/Directory.hxx"
 #include "itksys/SystemTools.hxx"
 #include <cstdlib>
