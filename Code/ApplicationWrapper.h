@@ -25,8 +25,8 @@
 #include "ApplicationWrapperParam.h"
 #include "MString.h"
 #include "XMLReader.h"
-#include "ModuleDescription.h"
-#include "ModuleDescriptionParser.h"
+#include "bmModuleDescription.h"
+#include "bmModuleDescriptionParser.h"
 
 class ApplicationWrapper
 {

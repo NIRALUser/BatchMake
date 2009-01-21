@@ -12,7 +12,7 @@ ENDIF(USE_FLTK)
 #---------------------------------------------------------------------
 #  External Libraries
 
-SUBDIRS(Zip bmcurl ModuleDescriptionParser)
+SUBDIRS(Zip bmcurl bmModuleDescriptionParser)
 
 IF(BATCHMAKE_USE_XCEDE)
   SUBDIRS(XcedeLib)

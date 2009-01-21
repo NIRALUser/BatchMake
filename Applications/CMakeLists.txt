@@ -2,8 +2,8 @@
 #------------------------------------------------------------------------
 # Create BatchMake application
 INCLUDE_DIRECTORIES(
-    ${BatchMake_SOURCE_DIR}/Utilities/ModuleDescriptionParser
-    ${BatchMake_BINARY_DIR}/Utilities/ModuleDescriptionParser
+    ${BatchMake_SOURCE_DIR}/Utilities/bmModuleDescriptionParser
+    ${BatchMake_BINARY_DIR}/Utilities/bmModuleDescriptionParser
   )
 
 SET(BatchMake_SRCS BatchMake.cxx)

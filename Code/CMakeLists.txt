@@ -58,8 +58,8 @@ SET(BatchMakeLib_HDRS
   )
 
 INCLUDE_DIRECTORIES(
-    ${BatchMake_SOURCE_DIR}/Utilities/ModuleDescriptionParser
-    ${BatchMake_BINARY_DIR}/Utilities/ModuleDescriptionParser
+    ${BatchMake_SOURCE_DIR}/Utilities/bmModuleDescriptionParser
+    ${BatchMake_BINARY_DIR}/Utilities/bmModuleDescriptionParser
   )
 
 
@@ -265,7 +265,7 @@ ELSE(USE_FLTK)
 
 ENDIF(USE_FLTK)
  
-TARGET_LINK_LIBRARIES(BatchMakeLib BatchMakeUtilities ModuleDescriptionParser)
+TARGET_LINK_LIBRARIES(BatchMakeLib BatchMakeUtilities bmModuleDescriptionParser)
 
 IF(DASHBOARD_SUPPORT)
 
