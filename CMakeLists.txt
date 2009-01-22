@@ -122,6 +122,8 @@ SET(BatchMake_INCLUDE_PATH
   ${BatchMake_SOURCE_DIR}/Utilities
   ${BatchMake_BINARY_DIR}
   ${BatchMake_BINARY_DIR}/Code
+  ${BatchMake_SOURCE_DIR}/Utilities/bmModuleDescriptionParser
+  ${BatchMake_BINARY_DIR}/Utilities/bmModuleDescriptionParser 
   )
 
 IF(USE_FLTK)
