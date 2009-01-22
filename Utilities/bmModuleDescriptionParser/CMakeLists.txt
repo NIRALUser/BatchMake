@@ -81,7 +81,9 @@ ENDIF(USE_PYTHON)
 
 IF ( NOT WIN32 )
   IF(NOT APPLE)
-    TARGET_LINK_LIBRARIES( bmModuleDescriptionParser util)
+    IF (NOT CMAKE_SYSTEM MATCHES "SunOS.*")
+      TARGET_LINK_LIBRARIES( bmModuleDescriptionParser util)
+    ENDIF (NOT CMAKE_SYSTEM MATCHES "SunOS.*") 
   ENDIF(NOT APPLE)
 ENDIF ( NOT WIN32 )
 
