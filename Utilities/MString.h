@@ -17,7 +17,6 @@
 #ifndef __MString_h_
 #define __MString_h_
 
-#include "MString.h"
 #include <ostream>
 #include <iostream>
 #include <stdio.h>
@@ -36,6 +35,8 @@ public:
 
   std::string GetValue();
   const std::string GetConstValue() const;
+  std::string& GetRefValue();
+  const std::string& GetConstRefValue()const;
   MString arg(int value);
   MString arg(float value);
   MString arg(unsigned int value);
@@ -50,16 +51,16 @@ public:
   bool toBool();
   int length();
   MString mid(int begin,int nb=-1);
-  bool operator==(MString);
-  bool operator==(const char*);
-  bool operator!=(MString);
-  bool operator!=(const char*);
+  bool operator==(MString)const;
+  bool operator==(const char*)const;
+  bool operator!=(MString)const;
+  bool operator!=(const char*)const;
   void operator=(const MString &);
   void operator=(const char*);
   void operator+=(MString);
   void operator+=(const char*);
   void operator+=(const char);
-  bool operator<(MString);
+  bool operator<(MString)const;
   MString operator+(int);
   MString operator+(MString);
   MString operator+(const char*);

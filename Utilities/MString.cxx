@@ -16,7 +16,7 @@
 #include "MString.h"
 #include <cstring>
 #include <cstdlib>
-
+#include <algorithm>
 
 MString::MString()
 {
@@ -101,13 +101,23 @@ const std::string MString::GetConstValue() const
   return m_value;
 }
 
+std::string& MString::GetRefValue()
+{
+  return m_value;
+}
+
+const std::string& MString::GetConstRefValue() const
+{
+  return m_value;
+}
+
 const char* MString::latin1()
 {
   return m_value.c_str();
 }
 
 
-bool MString::operator==(MString value)
+bool MString::operator==(MString value)const
 {
   if (m_value.compare(value.GetValue()) == 0)
     return true;
@@ -115,7 +125,7 @@ bool MString::operator==(MString value)
     return false;
 }
 
-bool MString::operator==(const char* value)
+bool MString::operator==(const char* value)const
 {
   if (m_value.compare(value) == 0)
     return true;
@@ -123,7 +133,7 @@ bool MString::operator==(const char* value)
     return false;
 }
 
-bool MString::operator!=(MString value)
+bool MString::operator!=(MString value)const
 {
   if (m_value.compare(value.GetValue()) == 0)
     return false;
@@ -131,7 +141,7 @@ bool MString::operator!=(MString value)
     return true;
 }
 
-bool MString::operator!=(const char* value)
+bool MString::operator!=(const char* value)const
 {
   if (m_value.compare(value) == 0)
     return false;
@@ -139,7 +149,7 @@ bool MString::operator!=(const char* value)
     return true;
 }
 
-bool MString::operator<(MString value)
+bool MString::operator<(MString value)const
 {
   if (m_value.compare(value.GetValue()) < 0)
     return true;
@@ -355,6 +365,7 @@ MString MString::duplicateChar(const char key)
 
 MString MString::replaceChar(const char key,const char key2)
 {
+  /*
   std::string m_newvalue = "";
   for (unsigned int i=0;i<m_value.length();i++)
   {
@@ -363,6 +374,11 @@ MString MString::replaceChar(const char key,const char key2)
     else
       m_newvalue += m_value[i];
   }
+  return m_newvalue;
+  */
+  // create a string with same size of m_value
+  std::string m_newvalue(m_value.size(), char());
+  std::replace_copy(m_value.begin(), m_value.end(), m_newvalue.begin(), key, key2);
   return m_newvalue;
 }
 
@@ -373,7 +389,7 @@ MString MString::replace(const char* key,const char* key2)
   pos = m_newvalue.find(key);
   while(pos != -1)
     {
-    m_newvalue= m_newvalue.replace(pos,strlen(key),key2);
+    m_newvalue.replace(pos,strlen(key),key2);
     pos = m_newvalue.find(key);
     }
 

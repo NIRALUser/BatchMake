@@ -25,6 +25,7 @@ ENDIF(BATCHMAKE_USE_XCEDE)
 
 SET(BatchMakeUtilities_HDRS
   MString.h
+  BMString.h
   Timer.h
   XMLReader.h
   XMLWriter.h
@@ -38,6 +39,7 @@ SET(BatchMakeUtilities_HDRS
 
 SET(BatchMakeUtilities_SRCS
   MString.cxx
+  BMString.cxx
   Timer.cxx
   XMLReader.cxx
   XMLWriter.cxx
