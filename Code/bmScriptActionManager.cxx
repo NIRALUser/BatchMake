@@ -47,6 +47,7 @@
 #include "bmScriptGetListSizeAction.h"
 #include "bmScriptExitAction.h"
 #include "bmScriptMathAction.h"
+#include "BMString.h"
 
 #ifdef BM_GRID
   #include "bmScriptGridSingleNodeAction.h"
@@ -563,8 +564,8 @@ void ScriptActionManager::SetVariable(MString name,MString value)
 
 
 /** Return the value of a given variable. The variable (name) can
- *  be ${i} $i or i */
-std::vector<MString> ScriptActionManager::GetVariable(MString name)
+ *  be ${i} $i or i 
+std::vector<MString> ScriptActionManager::GetVariable(MString name)const
 {
   // We strip any ${} or $ as a variable name
   MString varname = name.removeChar('$');
@@ -593,6 +594,45 @@ std::vector<MString> ScriptActionManager::GetVariable(MString name)
           }
         }
       return _list;
+      }
+    }
+
+  return _list;
+}*/
+
+std::vector<MString> ScriptActionManager::GetVariable(const MString& name)const
+{
+  // We strip any ${} or $ as a variable name
+  BMString varname( name );
+  varname.removeAllChars('$');
+  varname.removeAllChars('{');
+  varname.removeAllChars('}');
+
+  std::vector<MString> _list;
+  std::vector<variablestruct*>::const_iterator it = m_VariableList.begin();
+  std::vector<variablestruct*>::const_iterator end = m_VariableList.end();
+  for( ; it != end; ++it)
+    {
+    if ( (*it)->name == varname.latin1())
+      {
+      BMString _param = (*it)->value;
+      while (!_param.isEmpty())
+        {
+        _param.removeChar(' ');
+        _param.removeChar('\'');
+        BMString _value( _param.beginCopy("\'") );
+        if (!_value.isEmpty())
+          {
+          _list.push_back(_value.latin1());
+          }
+        _param.end("\'");
+        if (_param.length() != 0)
+          {
+          ++_param;
+          }
+        }
+      // the variable is found and the list is initialized
+      break;
       }
     }
 
@@ -681,7 +721,7 @@ void ScriptActionManager::DisplayVariableList()
               << "\t" << m_VariableList[i]->value.toChar() << std::endl;
     }
 }
-
+/*
 MString ScriptActionManager::Convert(MString param)
 {
   MString _value="'";
@@ -758,7 +798,88 @@ MString ScriptActionManager::Convert(MString param)
   return _value;
 
 }
+*/
 
+MString ScriptActionManager::Convert(const MString& param)const
+{
+  MString _value="'";
+  bool _vardetected = false;
+  MString _var;
+  
+  std::string::const_iterator it = param.GetConstRefValue().begin();
+  std::string::const_iterator end = param.GetConstRefValue().end();
+  for ( ; it != end ; ++it)
+    {
+    if ( *it == '$')
+      {
+      _vardetected=true;
+      _var = "";
+      }
+    else if (_vardetected)
+      {
+      if ((_var.length() == 0) && (*it == '{'))
+        {
+        _var = "";
+        }
+      else if (( *it == ' ') || ( *it == '}') || 
+               ( *it == '\'')  || ( (it + 1) == end ))
+        {
+        if (( (it+1)== end ) && ( *it != '}') && ( *it != '\''))
+          {
+          _var += *it;
+          }
+
+        _vardetected = false;
+
+        //MString _variable;
+        std::vector<MString> _variable = this->GetVariable(_var);
+        std::vector<MString>::const_iterator it2 = _variable.begin();
+        std::vector<MString>::const_iterator end2 = _variable.end();
+        for (; it2 != end2; ++it2)
+          {
+          if ( it2 != _variable.begin() )
+            {
+            _value += "'";
+            }
+
+          if ( *it2 != "null" )
+            {
+            _value += *it2;
+            }
+          if ( (it2+1) != end2 )
+            {
+            _value += "' ";
+            }
+          }
+
+        if ( *it == ' ' )
+          {
+          _value += " ";
+          }
+        }
+      else
+        {
+        _var += *it;
+        }
+      }
+    else if ( *it != '\'')
+      {
+      if ( *it == ' ')
+        {
+        _value += " ";
+        }
+      else
+        {
+        _value += *it;
+        }
+      }
+    }
+
+  _value += "'";
+
+  return _value;
+
+}
 
 MString ScriptActionManager::ConvertExtra(MString param)
 {

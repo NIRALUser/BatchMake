@@ -14,6 +14,7 @@
 =========================================================================*/
 #include "bmScriptForEachAction.h"
 #include <fstream>
+#include "BMString.h"
 
 namespace bm {
 
@@ -65,7 +66,7 @@ MString ScriptForEachAction::Help()
 {
   return "ForEach(<variable> <$variable>|'value1 value2 ...') ... EndForEach(<variable>)";
 }
-
+/*
 void ScriptForEachAction::CreateLoop()
 { 
   m_ForLoop.clear();
@@ -99,6 +100,48 @@ void ScriptForEachAction::CreateLoop()
       if (m_value.length() != 0)
         {
         m_ForLoop.push_back(MString("'") + m_value + "'");
+        }
+      }
+    }
+}*/
+
+void ScriptForEachAction::CreateLoop()
+{ 
+  m_ForLoop.clear();
+  BMString m_paramlist( m_Manager->Convert(m_Parameters[1]) );
+  //BMString m_paramlist2( m_Manager->Convert(m_Parameters[1]) );
+  //BMString m_paramlist3( m_Manager->Convert(m_Parameters[1]) );
+  //BMString m_paramlist4( m_Manager->Convert(m_Parameters[1]) );
+  //BMString m_paramlist5( m_Manager->Convert(m_Parameters[1]) );
+  //ScriptAction::ParametersType m_params;
+  BMString m_value = "";
+
+  //for (unsigned int i=0; i<m_Parameters.size();i++)
+    {
+    while ( (!m_paramlist.isEmpty()) && (m_paramlist != m_value))
+      {
+      m_paramlist.removeChar(' ');
+
+      if ( m_paramlist.startWith('\'') )
+        {
+        m_paramlist.removeChar('\'');
+        m_value = m_paramlist.beginCopy("\'");
+        m_paramlist.end("\'");
+
+        if (m_paramlist.length() != 0)
+          {
+          ++m_paramlist;
+          }
+        }
+      else
+        {
+        m_value = m_paramlist.beginCopy(" ");
+        m_paramlist.end(" ");
+        }
+        
+      if (!m_value.isEmpty())
+        {
+        m_ForLoop.push_back(MString("'") + m_value.GetValue() + "'");
         }
       }
     }

@@ -117,12 +117,13 @@ public:
 
   void Execute(); 
 
-  MString Convert(MString param);
+  //MString Convert(MString param);
+  MString Convert(const MString& param)const;
   MString ConvertExtra(MString param);
 
   void                 SetVariable(MString name, MString value);
   void                 SetSocketVariable(MString name);
-  std::vector<MString> GetVariable(MString name);
+  std::vector<MString> GetVariable(const MString& name)const;
   
   void DisplayVariableList();
   void SetLineNumber(int linenumber);
