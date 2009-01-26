@@ -14,8 +14,8 @@
 =========================================================================*/
 
 #include "BMString.h"
-//#include <cstring>
-//#include <cstdlib>
+#include <cstring> // strlen
+#include <cstdlib> // really needed ?
 #include <cctype>
 
 #include <sstream>
