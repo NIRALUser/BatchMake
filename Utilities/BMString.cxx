@@ -538,14 +538,14 @@ BMString BMString::replaceCopy(const char* key,const char* key2)const
 BMString& BMString::toLower()
 {
   std::transform( m_value.begin(), m_value.end(), 
-                  m_value.begin(), std::tolower );
+                  m_value.begin(), static_cast<int(*)(int)>(std::tolower) );
   return *this;
 }
 
 BMString& BMString::toUpper()
 {
    std::transform( m_value.begin(), m_value.end(), 
-                  m_value.begin(), std::toupper );
+                  m_value.begin(), static_cast<int(*)(int)>(std::toupper) );
   return *this;
 }
 
