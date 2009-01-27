@@ -11,7 +11,7 @@
   Version:   $Revision$
 
 ==========================================================================*/
-#include "ModuleProcessInformation.h"
+#include "bmModuleProcessInformation.h"
 
 
 std::ostream& operator<<(std::ostream &os, const ModuleProcessInformation &p)
