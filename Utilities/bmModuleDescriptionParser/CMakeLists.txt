@@ -1,20 +1,53 @@
+project(bmModuleDescriptionParser)
+
 cmake_minimum_required(VERSION 2.4)
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-PROJECT(bmModuleDescriptionParser)
-
-CONFIGURE_FILE(
-  ${bmModuleDescriptionParser_SOURCE_DIR}/bmModuleDescriptionParserConfigure.h.in 
-  ${bmModuleDescriptionParser_BINARY_DIR}/bmModuleDescriptionParserConfigure.h
-)
-
 ## ITK is required for expat.h
-FIND_PACKAGE(ITK REQUIRED)
-INCLUDE(${ITK_USE_FILE})
 
-SET(bmModuleDescriptionParser_SRCS
+find_package(ITK REQUIRED)
+include(${ITK_USE_FILE})
+
+if(bmModuleDescriptionParser_USE_PYTHON)
+  find_package(PythonLibs)
+endif(bmModuleDescriptionParser_USE_PYTHON)
+
+if(NOT DEFINED BUILD_SHARED_LIBS)
+  option(BUILD_SHARED_LIBS "Build with shared libraries." ON)
+endif(NOT DEFINED BUILD_SHARED_LIBS)
+ 
+# --------------------------------------------------------------------------
+# Include dirs
+
+set(include_dirs
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR} 
+  )
+
+if(bmModuleDescriptionParser_USE_PYTHON)
+  set(include_dirs ${include_dirs} ${PYTHON_INCLUDE_PATH})
+endif(bmModuleDescriptionParser_USE_PYTHON)
+
+include_directories(${include_dirs})
+
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/bmModuleDescriptionParserConfigure.h.in 
+  ${CMAKE_CURRENT_BINARY_DIR}/bmModuleDescriptionParserConfigure.h
+  )
+
+file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+install(FILES 
+  ${headers} 
+  "${CMAKE_CURRENT_BINARY_DIR}/bmModuleDescriptionParserConfigure.h"
+  DESTINATION include/${PROJECT_NAME} COMPONENT Development
+  )
+
+# --------------------------------------------------------------------------
+# Sources
+
+set(bmModuleDescriptionParser_SRCS
   bmModuleParameter.cxx
   bmModuleParameterGroup.cxx
   bmModuleDescription.cxx
@@ -23,107 +56,90 @@ SET(bmModuleDescriptionParser_SRCS
   bmModuleLogo.cxx
   bmModuleFactory.cxx
   BatchMakeUtilities.cxx
+  )
+
+if(USE_BFD)
+  if(NOT WIN32)
+    include(CheckIncludeFile)
+    check_include_file(bfd.h HAVE_BFD_HEADER)
+
+    if(HAVE_BFD_HEADER)
+      # make sure we can build with libbfd
+      message(STATUS "Testing libbfd")
+      try_compile(HAVE_BFD
+        ${CMAKE_CURRENT_BINARY_DIR}/CMake
+        ${CMAKE_CURRENT_SOURCE_DIR}/CMake
+        TestBFD
+        CMAKE_FLAGS 
+        -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        OUTPUT_VARIABLE OUTPUT)
+      message(${OUTPUT})
+      if(HAVE_BFD)
+        message(STATUS "Testing libbfd - ok. ModuleFactory will look for global symbols in plugin executables.")
+      else(HAVE_BFD)
+        message(STATUS "Testing libbfd - error.  ModuleFactory will not look for global symbols in plugin executables.")
+      endif(HAVE_BFD)
+    endif(HAVE_BFD_HEADER)
+
+    if(HAVE_BFD)
+      set(bmModuleDescriptionParser_SRCS 
+        ${bmModuleDescriptionParser_SRCS} 
+        BinaryFileDescriptor.cxx)
+    endif(HAVE_BFD)
+  endif(NOT WIN32)
+endif(USE_BFD)
+
+# --------------------------------------------------------------------------
+# Build and install the library
+
+set(lib_name bmModuleDescriptionParser)
+add_library(${lib_name} 
+  ${bmModuleDescriptionParser_SRCS}
 )
 
-IF (USE_BFD)
-  IF (NOT WIN32)
-    INCLUDE(CheckIncludeFile)
-    CHECK_INCLUDE_FILE(bfd.h HAVE_BFD_HEADER)
-
-    IF (HAVE_BFD_HEADER)
-       # make sure we can build with libbfd
-       MESSAGE(STATUS "Testing libbfd")
-       TRY_COMPILE(HAVE_BFD
-                   ${bmModuleDescriptionParser_BINARY_DIR}/CMake
-                   ${bmModuleDescriptionParser_SOURCE_DIR}/CMake
-                   TestBFD
-                   CMAKE_FLAGS 
-                      -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
-                      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                   OUTPUT_VARIABLE OUTPUT)
-       MESSAGE(${OUTPUT})
-       IF (HAVE_BFD)
-         MESSAGE(STATUS "Testing libbfd - ok. ModuleFactory will look for global symbols in plugin executables.")
-       ELSE (HAVE_BFD)
-         MESSAGE(STATUS "Testing libbfd - error.  ModuleFactory will not look for global symbols in plugin executables.")
-       ENDIF (HAVE_BFD)
-    ENDIF (HAVE_BFD_HEADER)
-
-    IF (HAVE_BFD)
-      SET(bmModuleDescriptionParser_SRCS 
-            ${bmModuleDescriptionParser_SRCS} 
-            bmBinaryFileDescriptor.cxx)
-    ENDIF (HAVE_BFD)
-  ENDIF (NOT WIN32)
-ENDIF (USE_BFD)
-
-
-INCLUDE_DIRECTORIES(
-  ${bmModuleDescriptionParser_BINARY_DIR}
-  ${bmModuleDescriptionParser_SOURCE_DIR} 
-)
-
-IF(USE_PYTHON)
-  FIND_PACKAGE(PythonLibs)
-ENDIF(USE_PYTHON)
-
-IF(USE_PYTHON)
-# Python requires a pointer to the Slicer Application
-INCLUDE_DIRECTORIES(
-  ${PYTHON_INCLUDE_PATH}
-)
-ENDIF(USE_PYTHON)
-
-ADD_LIBRARY(bmModuleDescriptionParser ${bmModuleDescriptionParser_SRCS})
-IF(USE_PYTHON)
-ADD_DEFINITIONS(-DUSE_PYTHON)
-ENDIF(USE_PYTHON)
-
-IF ( NOT WIN32 )
-  IF(NOT APPLE)
-    IF (NOT CMAKE_SYSTEM MATCHES "SunOS.*")
-      TARGET_LINK_LIBRARIES( bmModuleDescriptionParser util)
-    ENDIF (NOT CMAKE_SYSTEM MATCHES "SunOS.*") 
-  ENDIF(NOT APPLE)
-ENDIF ( NOT WIN32 )
-
-TARGET_LINK_LIBRARIES(bmModuleDescriptionParser
+set(link_libs
   ITKEXPAT
   itksys
-)
-IF(USE_PYTHON)
-   TARGET_LINK_LIBRARIES(bmModuleDescriptionParser
-     ${PYTHON_LIBRARIES}
   )
-ENDIF(USE_PYTHON)
+if(bmModuleDescriptionParser_USE_PYTHON)
+  set(link_libs ${link_libs} ${PYTHON_LIBRARIES})
+endif(bmModuleDescriptionParser_USE_PYTHON)
+if(NOT WIN32 AND NOT APPLE AND NOT UNIX)
+  set(link_libs ${link_libs} util pthread)
+endif(NOT WIN32 AND NOT APPLE AND NOT UNIX)
+if(UNIX)
+  set(link_libs ${link_libs} pthread)
+endif(UNIX)
+if(NOT WIN32 AND HAVE_BFD)
+  set(link_libs ${link_libs} bfd iberty)
+endif(NOT WIN32 AND HAVE_BFD)
 
-IF (NOT WIN32)
-  IF (HAVE_BFD)
-    TARGET_LINK_LIBRARIES(bmModuleDescriptionParser bfd iberty)
-  ENDIF(HAVE_BFD)
-ENDIF (NOT WIN32)
+target_link_libraries(${lib_name} ${link_libs})
 
-IF(BUILD_TESTING)
-  SUBDIRS(Testing)
-ENDIF(BUILD_TESTING)
-
-
-INCLUDE (GenerateModuleDescriptionParserConfig.cmake) 
-
-CONFIGURE_FILE(
-  ${bmModuleDescriptionParser_SOURCE_DIR}/UseModuleDescriptionParser.cmake.in
-  ${bmModuleDescriptionParser_BINARY_DIR}/UseModuleDescriptionParser.cmake COPYONLY IMMEDIATE)
-
-INSTALL(TARGETS bmModuleDescriptionParser 
+install(TARGETS ${lib_name} 
   RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
-  LIBRARY DESTINATION lib/bmModuleDescriptionParser COMPONENT RuntimeLibraries
-  ARCHIVE DESTINATION lib/bmModuleDescriptionParser COMPONENT Development)
+  LIBRARY DESTINATION lib/${PROJECT_NAME} COMPONENT RuntimeLibraries
+  ARCHIVE DESTINATION lib/${PROJECT_NAME} COMPONENT Development
+  )
 
-FILE(GLOB __files1 "${bmModuleDescriptionParser_SOURCE_DIR}/*.h")
-INSTALL(FILES ${__files1} DESTINATION include/bmModuleDescriptionParser COMPONENT Development)
-INSTALL(FILES ${bmModuleDescriptionParser_BINARY_DIR}/bmModuleDescriptionParserConfigure.h DESTINATION include/bmModuleDescriptionParser COMPONENT Development)
+# --------------------------------------------------------------------------
+# Testing
 
-INSTALL(FILES 
-  ${bmModuleDescriptionParser_BINARY_DIR}/UsebmModuleDescriptionParser.cmake 
-  ${bmModuleDescriptionParser_BINARY_DIR}/install/bmModuleDescriptionParserConfig.cmake 
-  DESTINATION lib/bmModuleDescriptionParser COMPONENT Development)
+if(BUILD_TESTING)
+  subdirs(Testing)
+endif(BUILD_TESTING)
+
+# --------------------------------------------------------------------------
+# Install support files
+
+include(GenerateModuleDescriptionParserConfig.cmake) 
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/UseModuleDescriptionParser.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/UseModuleDescriptionParser.cmake COPYONLY IMMEDIATE)
+
+install(FILES 
+  ${CMAKE_CURRENT_BINARY_DIR}/UseModuleDescriptionParser.cmake 
+  ${CMAKE_CURRENT_BINARY_DIR}/install/bmModuleDescriptionParserConfig.cmake 
+  DESTINATION lib/${PROJECT_NAME} COMPONENT Development
+  )

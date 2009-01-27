@@ -6,12 +6,12 @@
   or http://www.slicer.org/copyright/copyright.txt for details.
 
   Program:   Module Description Parser
-  Module:    $HeadURL: http://www.na-mic.org/svn/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleProcessInformation.cxx $
+  Module:    $HeadURL: http://svn.slicer.org/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleProcessInformation.cxx $
   Date:      $Date$
   Version:   $Revision$
 
 ==========================================================================*/
-#include "bmModuleProcessInformation.h"
+#include "ModuleProcessInformation.h"
 
 
 std::ostream& operator<<(std::ostream &os, const ModuleProcessInformation &p)

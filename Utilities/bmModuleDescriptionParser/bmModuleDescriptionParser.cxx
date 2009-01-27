@@ -6,7 +6,7 @@
   or http://www.slicer.org/copyright/copyright.txt for details.
 
   Program:   Module Description Parser
-  Module:    $HeadURL: http://www.na-mic.org/svn/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleDescriptionParser.cxx $
+  Module:    $HeadURL: http://svn.slicer.org/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleDescriptionParser.cxx $
   Date:      $Date$
   Version:   $Revision$
 
@@ -113,13 +113,7 @@ public:
   int ErrorLine;                               /* Error line number */
   int Depth;                                   /* The depth of the tag */
 
-  ParserState()
-    {
-    Debug = false;
-    Error = false;
-    Depth = -1;
-    LastData.reserve(10); 
-    };
+  ParserState():LastData(10),Debug(false),Error(false),Depth(-1){};
 };
 
 /***************************
@@ -799,7 +793,8 @@ startElement(void *userData, const char *element, const char **attrs)
       else if ((strcmp(attrs[2*attr], "type") == 0))
         {
         if ((strcmp(attrs[2*attr+1], "linear") == 0) ||
-            (strcmp(attrs[2*attr+1], "nonlinear") == 0))
+            (strcmp(attrs[2*attr+1], "nonlinear") == 0) ||
+            (strcmp(attrs[2*attr+1], "bspline") == 0))
           {
           parameter->SetType(attrs[2*attr+1]);
           }
@@ -888,7 +883,8 @@ startElement(void *userData, const char *element, const char **attrs)
         }
       else if ((strcmp(attrs[2*attr], "type") == 0))
         {
-        if ((strcmp(attrs[2*attr+1], "scalar") == 0) ||
+        if ((strcmp(attrs[2*attr+1], "any") == 0) ||
+            (strcmp(attrs[2*attr+1], "scalar") == 0) ||
             (strcmp(attrs[2*attr+1], "label") == 0) ||
             (strcmp(attrs[2*attr+1], "tensor") == 0) ||
             (strcmp(attrs[2*attr+1], "diffusion-weighted") == 0) ||
@@ -898,7 +894,7 @@ startElement(void *userData, const char *element, const char **attrs)
           }
         else
           {
-          std::string error("ModuleDescriptionParser Error: \"" + std::string(attrs[2*attr+1]) + "\" is not a valid value for the attribute \"" + "type" + "\". Only \"scalar\", \"label\" , \"tensor\", \"diffusion-weighted\"  and \"vector\" are accepted.");
+          std::string error("ModuleDescriptionParser Error: \"" + std::string(attrs[2*attr+1]) + "\" is not a valid value for the attribute \"" + "type" + "\". Only \"scalar\", \"label\" , \"tensor\", \"diffusion-weighted\", \"vector\" and \"any\" are accepted.");
           if (ps->ErrorDescription.size() == 0)
             {
             ps->ErrorDescription = error;
@@ -1144,6 +1140,42 @@ startElement(void *userData, const char *element, const char **attrs)
         }
       }
     parameter->SetTag(name);
+    }
+  else if (parameter && (name == "flag"))
+    {
+    int attrCount = XML_GetSpecifiedAttributeCount(ps->Parser);
+    if (attrCount > 0)
+      {
+      for (int i=0; i < attrCount/2; ++i)
+        {
+        if (strcmp(attrs[2*i], "alias") == 0)
+          {
+          parameter->SetFlagAliasesAsString(attrs[2*i+1]);
+          }
+        else if (strcmp(attrs[2*i], "deprecatedalias") == 0)
+          {
+          parameter->SetDeprecatedFlagAliasesAsString(attrs[2*i+1]);
+          }
+        }
+      }
+    }
+  else if (parameter && (name == "longflag"))
+    {
+    int attrCount = XML_GetSpecifiedAttributeCount(ps->Parser);
+    if (attrCount > 0)
+      {
+      for (int i=0; i < attrCount/2; ++i)
+        {
+        if (strcmp(attrs[2*i], "alias") == 0)
+          {
+          parameter->SetLongFlagAliasesAsString(attrs[2*i+1]);
+          }
+        else if (strcmp(attrs[2*i], "deprecatedalias") == 0)
+          {
+          parameter->SetDeprecatedLongFlagAliasesAsString(attrs[2*i+1]);
+          }
+        }
+      }
     }
   ps->CurrentParameter = parameter;
   ps->CurrentGroup = group;
@@ -1582,7 +1614,7 @@ ModuleDescriptionParser::Parse( const std::string& xml, ModuleDescription& descr
   if (strncmp(xml.c_str(),"<?xml ", 6) != 0)
     {
     std::string required("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-    std::cerr << "ModuleDesriptionParser: first line must be " << std::endl;
+    std::cerr << "ModuleDescriptionParser: first line must be " << std::endl;
     std::cerr << required << std::endl;
     return 1;
     }
@@ -1625,6 +1657,7 @@ ModuleDescriptionParser::Parse( const std::string& xml, ModuleDescription& descr
       status = 1;
       }
     }
+
   XML_ParserFree(parser);
 
   description = parserState.CurrentDescription;

@@ -6,12 +6,12 @@
   or http://www.slicer.org/copyright/copyright.txt for details.
 
   Program:   Module Description Parser
-  Module:    $HeadURL: http://www.na-mic.org/svn/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleFactory.cxx $
+  Module:    $HeadURL: http://svn.slicer.org/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleFactory.cxx $
   Date:      $Date$
   Version:   $Revision$
 
 ==========================================================================*/
-#include "itksys/DynamicLoader.hxx" 
+#include "itksys/DynamicLoader.hxx"
 #include "itksys/Directory.hxx"
 #include "itksys/SystemTools.hxx"
 #include "itksys/Process.h"
@@ -33,7 +33,9 @@
 #include "BinaryFileDescriptor.h"
 #endif
 
-#ifdef USE_PYTHON
+#include "bmModuleDescriptionParserConfigure.h" /* ModuleDescriptionParser_USE_PYTHON */
+
+#ifdef ModuleDescriptionParser_USE_PYTHON
 // If debug, Python wants pythonxx_d.lib, so fake it out
 #ifdef _DEBUG
 #undef _DEBUG
@@ -49,13 +51,12 @@ splitString (std::string &text,
              std::string &separators,
              std::vector<std::string> &words)
 {
-  int n = text.length();
-  int start, stop;
-  start = text.find_first_not_of(separators);
-  while ((start >= 0) && (start < n))
+  const std::string::size_type n = text.length();
+  std::string::size_type start = text.find_first_not_of(separators);
+  while (start < n)
     {
-    stop = text.find_first_of(separators, start);
-    if ((stop < 0) || (stop > n)) stop = n;
+    std::string::size_type stop = text.find_first_of(separators, start);
+    if (stop > n) stop = n;
     words.push_back(text.substr(start, stop - start));
     start = text.find_first_not_of(separators, stop+1);
     }
@@ -168,7 +169,7 @@ NameIsExecutable(const char* name)
  */
 typedef char * (*XMLModuleDescriptionFunction)();
 typedef int (*ModuleEntryPoint)(int argc, char* argv[]);
-typedef unsigned char * (*ModuleLogoFunction)(int *width, int *height, int *pixel_size, unsigned long *bufferLength);
+typedef const char * (*ModuleLogoFunction)(int *width, int *height, int *pixel_size, unsigned long *bufferLength);
 
 
 // Private implementaton of an std::map
@@ -183,7 +184,7 @@ class ModuleFileMap : public std::set<std::string> {};
 struct ModuleCacheEntry
 {
   std::string Location;        // complete path to a file
-  unsigned int ModifiedTime;    // file's modified time
+  long int ModifiedTime;    // file's modified time
   std::string Type;            // SharedObjectModule, CommandLineModule, PythonModule, NotAModule
 //  std::string Title;           // name of the module
   std::string XMLDescription;  // Module description
@@ -355,7 +356,7 @@ ModuleFactory
   numberOfShared = this->ScanForSharedObjectModules();
   numberOfPeekedExecutables = this->ScanForCommandLineModulesByPeeking();
   numberOfExecutables = this->ScanForCommandLineModulesByExecuting();
-#ifdef USE_PYTHON
+#ifdef ModuleDescriptionParser_USE_PYTHON
   // Be sure that python is initialized
   Py_Initialize();
   numberOfPython = this->ScanForPythonModulesByLoading();
@@ -383,9 +384,9 @@ ModuleFactory
   
   // self-describing shared object modules live in a prescribed path
   // and have a prescribed symbol.
-  if (this->SearchPath == "")
+  if (this->SearchPaths == "")
     {
-    this->WarningMessage( "Empty module search path." );
+    this->WarningMessage( "Empty module search paths." );
     return 0;
     }
   
@@ -395,7 +396,7 @@ ModuleFactory
 #else
   std::string delim(":");
 #endif
-  splitString(this->SearchPath, delim, modulePaths);
+  splitString(this->SearchPaths, delim, modulePaths);
 
   std::vector<std::string>::const_iterator pit;
   long numberTested = 0;
@@ -473,9 +474,9 @@ ModuleFactory
   //
   // self-describing shared object modules live in a prescribed path
   // and have a prescribed symbol.
-  if (this->SearchPath == "")
+  if (this->SearchPaths == "")
     {
-    this->WarningMessage( "Empty module search path." );
+    this->WarningMessage( "Empty module search paths." );
     return 0;
     }
   
@@ -485,7 +486,7 @@ ModuleFactory
 #else
   std::string delim(":");
 #endif
-  splitString(this->SearchPath, delim, modulePaths);
+  splitString(this->SearchPaths, delim, modulePaths);
 
   std::vector<std::string>::const_iterator pit;
   long numberTested = 0;
@@ -505,6 +506,7 @@ ModuleFactory
 
     for ( unsigned int ii=0; ii < directory.GetNumberOfFiles(); ++ii)
       {
+      bool isAPlugin = true;
       const char *filename = directory.GetFile(ii);
       
       // skip any directories
@@ -563,7 +565,7 @@ ModuleFactory
             ModuleEntryPoint entryPoint = 0;
 
             ModuleLogoFunction logoFunction = 0;
-            unsigned char *logoImage = 0;
+            char *logoImage = 0;
             int *logoWidth=0, *logoHeight=0, *logoPixelSize=0;
             unsigned long *logoLength=0;
             
@@ -581,7 +583,7 @@ ModuleFactory
               if (entryPoint)
                 {
                 // look for logo variables
-                logoImage = (unsigned char *)itksys::DynamicLoader::GetSymbolAddress(lib, "ModuleLogoImage");
+                logoImage = (char *)itksys::DynamicLoader::GetSymbolAddress(lib, "ModuleLogoImage");
                 
                 if (logoImage)
                   {
@@ -667,7 +669,7 @@ ModuleFactory
                     unsigned long bufferLength;
                     
                     // call the logo function to get the pixels and information
-                    unsigned char *logo = (*logoFunction)(&width, &height,
+                    const char *logo = (*logoFunction)(&width, &height,
                                                           &pixelSize,
                                                           &bufferLength);
                     
@@ -725,7 +727,8 @@ ModuleFactory
                   entry.LogoHeight = module.GetLogo().GetHeight();
                   entry.LogoPixelSize = module.GetLogo().GetPixelSize();
                   entry.LogoLength = module.GetLogo().GetBufferLength();
-                  entry.Logo = std::string((char *)module.GetLogo().GetLogo());
+                  //entry.Logo = std::string((const unsigned char *)module.GetLogo().GetLogo());
+                  entry.Logo = std::string(module.GetLogo().GetLogo());
                   }
                 else
                   {
@@ -744,6 +747,7 @@ ModuleFactory
                 // not a plugin, no xml description, close the library
                 itksys::DynamicLoader::CloseLibrary(lib);
 
+                isAPlugin = false;
                 information << filename
                             << " is not a plugin (no XML description)."
                             << std::endl;
@@ -759,6 +763,7 @@ ModuleFactory
               // not a plugin, doesn't have the symbols, close the library
               itksys::DynamicLoader::CloseLibrary(lib);
 
+              isAPlugin = false;
               information << filename
                           << " is not a plugin (no entry points)."
                           << std::endl;
@@ -791,9 +796,9 @@ ModuleFactory
   // self-describing command-line modules live in a prescribed
   // path and respond to a command line argument "--xml"
   //
-  if (this->SearchPath == "")
+  if (this->SearchPaths == "")
     {
-    this->WarningMessage( "Empty module search path." ); 
+    this->WarningMessage( "Empty module search paths." ); 
     return 0;
     }
   
@@ -803,7 +808,7 @@ ModuleFactory
 #else
   std::string delim(":");
 #endif
-  splitString(this->SearchPath, delim, modulePaths);
+  splitString(this->SearchPaths, delim, modulePaths);
 
   std::vector<std::string>::const_iterator pit;
   long numberTested = 0;
@@ -824,6 +829,7 @@ ModuleFactory
 
     for ( unsigned int ii=0; ii < directory.GetNumberOfFiles(); ++ii)
       {
+      bool isAPlugin = true;
       const char *filename = directory.GetFile(ii);
       
       // skip any directories
@@ -882,7 +888,7 @@ ModuleFactory
                                   itksysProcess_Option_Detach, 0);
           itksysProcess_SetOption(process,
                                   itksysProcess_Option_HideWindow, 1);
-          itksysProcess_SetTimeout(process, 5.0); // 5 seconds
+          itksysProcess_SetTimeout(process, 10.0); // seconds
 
           // execute the command
           itksysProcess_Execute(process);
@@ -908,6 +914,7 @@ ModuleFactory
                 }
               }
             }
+          itksysProcess_SetTimeout(process, 10.0);
           itksysProcess_WaitForExit(process, 0);
 
           // check the exit state / error state of the process
@@ -1004,7 +1011,8 @@ ModuleFactory
                   entry.LogoHeight = module.GetLogo().GetHeight();
                   entry.LogoPixelSize = module.GetLogo().GetPixelSize();
                   entry.LogoLength = module.GetLogo().GetBufferLength();
-                  entry.Logo = std::string((char *)module.GetLogo().GetLogo());
+                  //entry.Logo = std::string((const unsigned char *)module.GetLogo().GetLogo());
+                  entry.Logo = std::string(module.GetLogo().GetLogo());
                   }
                 else
                   {
@@ -1020,20 +1028,24 @@ ModuleFactory
                 }
               else
                 {
+                isAPlugin = false;
                 information << filename << " is not a plugin (did not generate an XML description)." << std::endl;
                 }
               }
             else
               {
+              isAPlugin = false;
               information << filename << " is not a plugin (exited with errors)." << std::endl;
               }
             }
           else if (result == itksysProcess_State_Expired)
             {
+            isAPlugin = false;
             information << filename << " is not a plugin (timeout exceeded)." << std::endl;
             }
           else
             {
+            isAPlugin = false;
             information << filename << " is not a plugin (did not exit cleanly)." << std::endl;
             }
 
@@ -1069,9 +1081,9 @@ ModuleFactory
   // self-describing command-line modules live in a prescribed
   // path and respond to a command line argument "--xml"
   //
-  if (this->SearchPath == "")
+  if (this->SearchPaths == "")
     {
-    this->WarningMessage( "Empty module search path." ); 
+    this->WarningMessage( "Empty module search paths." ); 
     return 0;
     }
   
@@ -1081,7 +1093,7 @@ ModuleFactory
 #else
   std::string delim(":");
 #endif
-  splitString(this->SearchPath, delim, modulePaths);
+  splitString(this->SearchPaths, delim, modulePaths);
 
   std::vector<std::string>::const_iterator pit;
   long numberTested = 0;
@@ -1201,7 +1213,8 @@ ModuleFactory
                   {
                   // construct a module logo and set it on the module
                   ModuleLogo mLogo;
-                  mLogo.SetLogo( logoImage, *logoWidth, *logoHeight,
+                  mLogo.SetLogo( (const char *)logoImage, 
+                                 *logoWidth, *logoHeight,
                                  *logoPixelSize, *logoLength, 0);
                   module.SetLogo(mLogo);
                   }
@@ -1320,9 +1333,9 @@ ModuleFactory
   // self-describing command-line modules live in a prescribed
   // path and respond to a command line argument "--xml"
   //
-  if (this->SearchPath == "")
+  if (this->SearchPaths == "")
     {
-    this->WarningMessage( "Empty module search path." ); 
+    this->WarningMessage( "Empty module search paths." ); 
     return 0;
     }
   
@@ -1332,7 +1345,7 @@ ModuleFactory
 #else
   std::string delim(":");
 #endif
-  splitString(this->SearchPath, delim, modulePaths);
+  splitString(this->SearchPaths, delim, modulePaths);
 
   std::vector<std::string>::const_iterator pit;
   long numberTested = 0;
@@ -1527,7 +1540,7 @@ ModuleFactory
                   entry.LogoLength = 0;
                   entry.Logo = "None";
                   }
-                
+
                 (*this->InternalCache)[entry.Location] = entry;
                 this->CacheModified = true;
                 }
@@ -1540,12 +1553,12 @@ ModuleFactory
     this->InformationMessage( information.str().c_str() );
     }
   t1 = itksys::SystemTools::GetTime();
-  
+
   std::stringstream information;
   information << "Tested " << numberTested << " files as command line executable plugins by peeking. Found "
               << numberFound << " new plugins in " << t1 - t0
               << " seconds." << std::endl;
-  
+
   this->InformationMessage( information.str().c_str() );
 
   return numberFound;
@@ -1577,7 +1590,7 @@ ModuleFactory
                           itksysProcess_Option_Detach, 0);
   itksysProcess_SetOption(process,
                           itksysProcess_Option_HideWindow, 1);
-  itksysProcess_SetTimeout(process, 5.0); // 5 seconds
+  itksysProcess_SetTimeout(process, 10.0); // seconds
   
   // execute the command
   itksysProcess_Execute(process);
@@ -1649,7 +1662,8 @@ ModuleFactory
 
         // make a ModuleLogo and configure it
         ModuleLogo mLogo;
-        mLogo.SetLogo( (unsigned char *)logo.c_str(), width, height, pixelSize, bufferLength, 0);
+        //mLogo.SetLogo( (unsigned char *)logo.c_str(), width, height, pixelSize, bufferLength, 0);
+        mLogo.SetLogo( logo.c_str(), width, height, pixelSize, bufferLength, 0);
 
         // set the log on the module
         module.SetLogo(mLogo);
@@ -1683,15 +1697,15 @@ ModuleFactory
 ::ScanForPythonModulesByLoading()
 {
   long numberFound = 0;
-  
-#ifdef USE_PYTHON
 
+#ifdef ModuleDescriptionParser_USE_PYTHON
   long numberTested = 0;
+
   double t0, t1;
   // add any of the self-describing Python modules available
-  if (this->SearchPath == "")
+  if (this->SearchPaths == "")
     {
-    this->WarningMessage( "Empty module search path." );
+    this->WarningMessage( "Empty module search paths." );
     return 0;
     }
 
@@ -1709,7 +1723,7 @@ ModuleFactory
 #else
   std::string delim(":");
 #endif
-  splitString(this->SearchPath, delim, modulePaths);
+  splitString(this->SearchPaths, delim, modulePaths);
 
   std::vector<std::string>::const_iterator pit;
   
@@ -1962,8 +1976,7 @@ ModuleFactory
           entry.ModifiedTime = atoi(words[1].c_str());
           
           // trim the Type of leading whitespace
-          std::string::size_type pos;
-          pos = words[2].find_first_not_of(" \t\r\n");
+          std::string::size_type pos = words[2].find_first_not_of(" \t\r\n");
           if (pos != std::string::npos)
             {
             words[2].erase(0, pos);
@@ -2155,7 +2168,7 @@ ModuleFactory
     if ((*cit).second.Type == type)
       {
       // module is in the cache, check the timestamp
-      if (commandModifiedTime == (int)(*cit).second.ModifiedTime)
+      if (commandModifiedTime == (*cit).second.ModifiedTime)
         {
         // can safely use the cached verion
         this->InternalFileMap->insert( commandName );
@@ -2181,7 +2194,7 @@ ModuleFactory
         if ((*cit).second.Logo != "None")
           {
           ModuleLogo logo;
-          logo.SetLogo( (unsigned char *)
+          logo.SetLogo(
                         (*cit).second.Logo.c_str(),
                         (*cit).second.LogoWidth,
                         (*cit).second.LogoHeight,
@@ -2245,7 +2258,7 @@ ModuleFactory
       {
       // last time we saw this file, it was not a module,
       // check the modified times to see if we need to recheck
-      if (commandModifiedTime == (int)(*cit).second.ModifiedTime)
+      if (commandModifiedTime == (*cit).second.ModifiedTime)
         {
         // can safely skip the file
         stream << commandName << " is not a plugin (cache)." << std::endl;

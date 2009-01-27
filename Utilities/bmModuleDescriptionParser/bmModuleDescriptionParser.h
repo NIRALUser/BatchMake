@@ -6,7 +6,7 @@
   or http://www.slicer.org/copyright/copyright.txt for details.
 
   Program:   Module Description Parser
-  Module:    $HeadURL: http://www.na-mic.org/svn/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleDescriptionParser.h $
+  Module:    $HeadURL: http://svn.slicer.org/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleDescriptionParser.h $
   Date:      $Date$
   Version:   $Revision$
 
@@ -15,7 +15,6 @@
 #define __ModuleDescriptionParser_h
 
 #include <string>
-#include <vector>
 
 #include "bmModuleDescriptionParserWin32Header.h"
 

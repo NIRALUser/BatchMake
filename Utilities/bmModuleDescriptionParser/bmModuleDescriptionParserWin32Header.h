@@ -6,7 +6,7 @@
   or http://www.slicer.org/copyright/copyright.txt for details.
 
   Program:   Module Description Parser
-  Module:    $HeadURL: http://www.na-mic.org/svn/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleDescriptionParserWin32Header.h $
+  Module:    $HeadURL: http://svn.slicer.org/Slicer3/trunk/Libs/ModuleDescriptionParser/ModuleDescriptionParserWin32Header.h $
   Date:      $Date$
   Version:   $Revision$
 
@@ -16,13 +16,13 @@
 // The ModuleDescriptionParserWin32Header captures some system differences between Unix
 // and Windows operating systems. 
 
-#ifndef __ModuleDescriptionParserWin32Header_h
-#define __ModuleDescriptionParserWin32Header_h
+#ifndef __bmModuleDescriptionParserWin32Header_h
+#define __bmModuleDescriptionParserWin32Header_h
 
 #include <bmModuleDescriptionParserConfigure.h>
 
-#if defined(WIN32) && !defined(ModuleDescriptionParser_STATIC)
-#if defined(ModuleDescriptionParser_EXPORTS)
+#if defined(WIN32) && !defined(bmModuleDescriptionParser_STATIC)
+#if defined(bmModuleDescriptionParser_EXPORTS)
 #define ModuleDescriptionParser_EXPORT __declspec( dllexport ) 
 #else
 #define ModuleDescriptionParser_EXPORT __declspec( dllimport ) 
