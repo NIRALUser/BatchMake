@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptExtractStringAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 

@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptGetFilenameAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include <itksys/SystemTools.hxx>
 
 namespace bm {
@@ -66,7 +68,10 @@ void ScriptGetFilenameAction::Execute()
     }
   else
     {
-    std::cout << "ScriptGetFilenameAction: " << option.toChar() << " not defined!" << std::endl;
+    //std::cout << "ScriptGetFilenameAction: " << option.toChar() << " not defined!" << std::endl;
+    m_ProgressManager->AddError( MString("ScriptGetFilenameAction: ") 
+                               + option.toChar() 
+                               + " not defined!" );
     }
   value += "'";
   m_Manager->SetVariable(m_Parameters[0],value);

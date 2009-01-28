@@ -17,6 +17,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <algorithm>
+#include <sstream>
 
 MString::MString()
 {
@@ -60,34 +61,58 @@ MString::~MString()
   
 MString MString::arg(int value)
 {
-  char text[200];
-  sprintf(text,"%i",value);
-  m_value.replace(m_value.find("%"),2,text);
+  std::string arg;
+  std::stringstream ss;
+  ss << value;
+  ss >> arg;
+  size_t pos = m_value.find('%');
+  if (pos != std::string::npos)
+    {
+    m_value.replace(pos,2,arg);
+    }
   return m_value;
 }
 
 MString MString::arg(unsigned int value)
 {
-  char text[200];
-  sprintf(text,"%i",value);
-  m_value.replace(m_value.find("%"),2,text);
+  std::string arg;
+  std::stringstream ss;
+  ss << value;
+  ss >> arg;
+  size_t pos = m_value.find('%');
+  if (pos != std::string::npos)
+    {
+    m_value.replace(pos,2,arg);
+    }
   return m_value;
 }
 
 MString MString::arg(unsigned long int value)
 {
-  char text[200];
-  sprintf(text,"%zu",value);
-  m_value.replace(m_value.find("%"),2,text);
+  std::string arg;
+  std::stringstream ss;
+  ss << value;
+  ss >> arg;
+  size_t pos = m_value.find('%');
+  if (pos != std::string::npos)
+    {
+    m_value.replace(pos,2,arg);
+    }
   return m_value;
 }
 
 
 MString MString::arg(float value)
 {
-  char text[200];
-  sprintf(text,"%f",value);
-  m_value.replace(m_value.find("%"),2,text);
+  std::string arg;
+  std::stringstream ss;
+  ss << value;
+  ss >> arg;
+  size_t pos = m_value.find('%');
+  if (pos != std::string::npos)
+    {
+    m_value.replace(pos,2,arg);
+    }
   return m_value;
 }
 
@@ -217,10 +242,12 @@ char MString::operator[](int offset)
   return m_value[offset];
 }
 
-const char* MString::toChar()
+const char* MString::toChar()const
 {
-  if (m_value.length() == 0)
+  if ( m_value.length() == 0 )
+    {
     return "";
+    }
 
   return m_value.c_str();
 }
@@ -248,7 +275,7 @@ bool MString::toBool()
    return true;
 }
 
-int MString::length()
+int MString::length()const
 { 
   return strlen(m_value.c_str());
 }
@@ -266,7 +293,7 @@ int MString::rfind(const char* key,int offset)
   return m_value.rfind(key,offset);
 }
 
-MString MString::mid(int begin,int nb)
+MString MString::mid(int begin,int nb)const
 {
   if (nb == -1)
     return m_value.substr(begin,m_value.length());
@@ -474,6 +501,66 @@ bool MString::isInBetweenChar(char val,long int pos)
     pos1 = m_value.find(val,pos2+1);
     }
   return false;
+}
+
+bool MString::isVariable()const
+{
+  // a variable must start with ''' precedes 0 or many ' ' (spaces)
+  // a variable must end with ''' followed 1 or many ' ' (spaces)
+  // only two ''' can be in the string
+  std::string::const_iterator it = m_value.begin();
+  std::string::const_iterator end = m_value.end();
+  for( ; it != end && *it == ' '; ++it)
+    {
+    ;
+    }
+  if( it == end || *it != '\'' )
+    {
+    return false;
+    }
+  ++it;
+  it = std::find(it,end,'\'');
+  if( it == end )
+    {
+    return false;
+    }
+  for( ; it != end && *it == ' '; ++it)
+    {
+    ;
+    }
+  if( it != end )
+    {
+    return false;
+    }
+  return true;
+}
+
+// Extract the string that is between two ' characters
+// if value == "'foo'", returns "foo"
+MString  MString::fromVariable()const
+{
+  if( !this->isVariable() )
+    {
+    return "";
+    }
+  size_t start = m_value.find('\'');
+  size_t end = m_value.rfind('\'');
+  if ( start == std::string::npos || end == std::string::npos )
+    {
+    return "";
+    }
+  return this->mid(start + 1, end - 1 - start);
+}
+
+// Create a string with its content surrounded by two ' characters
+// if value == "foo", returns "'foo'"
+MString  MString::toVariable()const
+{
+  if ( !this->isVariable() )
+    {
+    return std::string("'")+ m_value + std::string("'");
+    }
+  return *this;
 }
 
 /** Convert Wildcars to RegEx */

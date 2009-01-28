@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptDataDirectoryAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -59,6 +61,7 @@ void ScriptDataDirectoryAction::Execute()
     {
     m_GridModule->SetDataDirectory(m_Parameters[0].toChar());
     }
+  return;
 }
 
 } // end namespace bm

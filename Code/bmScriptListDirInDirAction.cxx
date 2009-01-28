@@ -14,6 +14,9 @@
 =========================================================================*/
 
 #include "bmScriptListDirInDirAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
+
 #include <itksys/Directory.hxx>
 #include <itksys/SystemTools.hxx>
 #include <itksys/RegularExpression.hxx>

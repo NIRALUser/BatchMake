@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptDashboardSendAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include "HttpRequest.h"
 
 namespace bm {
@@ -181,27 +183,26 @@ void ScriptDashboardSendAction::Execute()
   if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
+    return;
     }
-  else
+  
+  if (m_Output.toInt() != 0)
     {
-    if (m_Output.toInt() == 0)
+    m_ProgressManager->FinishAction("Dashboard problem when sending data");
+    switch(m_Output.toInt())
       {
-      m_ProgressManager->FinishAction(MString("Data sent"));
+      case 1 :  m_ProgressManager->AddError("Bad user name"); break;
+      case 2 :  m_ProgressManager->AddError("Bad project name"); break;
+      case 3 :  m_ProgressManager->AddError("User doesn't belong to project"); break;
+      case 4 :  m_ProgressManager->AddError("Over quota: please use DbClear function first"); break;
+      case 5 :  m_ProgressManager->AddError("Host Database error"); break;
+      case -1 : m_ProgressManager->AddError("Connexion problem"); break;
       }
-    else
-      {
-      m_ProgressManager->FinishAction(MString("Dashboard problem when sending data"));
-      switch(m_Output.toInt())
-        {
-        case 1 :  m_ProgressManager->AddError("Bad user name"); break;
-        case 2 :  m_ProgressManager->AddError("Bad project name"); break;
-        case 3 :  m_ProgressManager->AddError("User doesn't belong to project"); break;
-        case 4 :  m_ProgressManager->AddError("Over quota: please use DbClear function first"); break;
-        case 5 :  m_ProgressManager->AddError("Host Database error"); break;
-        case -1 : m_ProgressManager->AddError("Connexion problem"); break;
-        }  
-      }
+    return;
     }
+  
+  m_ProgressManager->FinishAction("Data sent");
+  return;
 }
 
 } // end namespace bm

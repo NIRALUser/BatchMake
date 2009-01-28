@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptGlobAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include <itksys/Glob.hxx>
 #include <itksys/SystemTools.hxx>
 

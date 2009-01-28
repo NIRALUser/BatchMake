@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptAddMethodIdealOutputAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include "HttpRequest.h"
 
 namespace bm {

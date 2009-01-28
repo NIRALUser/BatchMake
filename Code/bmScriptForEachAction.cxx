@@ -13,6 +13,9 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "bmScriptForEachAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
+
 #include <fstream>
 #include "BMString.h"
 
@@ -170,13 +173,21 @@ void ScriptForEachAction::Execute()
     m_Manager->SetVariable(m_Parameters[0],m_ForLoop[loop]); 
     for (unsigned int i=0;i<m_Action.size();i++)
       {
-      if (!m_ProgressManager->IsStop())
+      m_Action[i]->Execute();
+      if (m_ProgressManager->IsStop())
         {
-        m_Action[i]->Execute();
+        break;
         }
       }
-
+    if ( m_ProgressManager->IsStop() )
+      {
+      break;
+      }
     this->CreateLoop();
+    if ( m_ProgressManager->IsStop() )
+      {
+      break;
+      }
     }
 #ifdef BM_GRID
   if(m_GridModule)

@@ -14,6 +14,10 @@
 =========================================================================*/
 
 #include "bmScriptGetListSizeAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
+#include <sstream>
+#include <string>
 
 namespace bm {
 
@@ -51,15 +55,17 @@ MString ScriptGetListSizeAction::Help()
 
 void ScriptGetListSizeAction::Execute()
 {
-  MString value;
-  std::vector<MString> list = m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
+  const std::vector<MString> list = 
+    m_Manager->GetParamsFromVariable( m_Manager->Convert(m_Parameters[1]) );
 
-  char* size = new char[10];
-  sprintf(size,"'%zu'",list.size());
-  value = size;
-  delete [] size;
-
-  m_Manager->SetVariable(m_Parameters[0],value);
+  std::stringstream size;
+  if( !(size << list.size()) )
+    {
+    m_ProgressManager->AddError("Cannot convert list size into variable value");
+    return;
+    }
+  
+  m_Manager->SetVariable( m_Parameters[0], size.str() );
 }
 
 } // end namespace bm

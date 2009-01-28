@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptExtractSliceAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include "SliceExtractor.h"
 
 namespace bm {
@@ -30,7 +32,9 @@ ScriptExtractSliceAction::~ScriptExtractSliceAction()
 bool ScriptExtractSliceAction::TestParam(ScriptError* error,int linenumber)
 {
   for (unsigned int i=0;i<m_Parameters.size();i++)
-      m_Manager->TestConvert(m_Parameters[i],linenumber);
+    {
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
+    }
     
   if (m_Parameters.size() < 2)
   {

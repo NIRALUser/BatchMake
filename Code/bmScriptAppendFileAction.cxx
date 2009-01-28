@@ -14,6 +14,9 @@
 =========================================================================*/
 
 #include "bmScriptAppendFileAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
+#include <ostream>
 
 namespace bm {
 
@@ -29,13 +32,15 @@ ScriptAppendFileAction::~ScriptAppendFileAction()
 bool ScriptAppendFileAction::TestParam(ScriptError* error,int linenumber)
 {
   for (unsigned int i=0;i<m_Parameters.size();i++)
-    m_Manager->TestConvert(m_Parameters[i],linenumber);
+    {
+    m_Manager->TestConvert(m_Parameters[i],linenumber);\
+    }
     
   if (m_Parameters.size() < 2)
-  {
+    {
     error->SetError(MString("No enough parameter for AppendFile"),linenumber);
     return false;
-  }   
+    }   
 
   return true;
 }
@@ -48,9 +53,16 @@ MString ScriptAppendFileAction::Help()
 
 void ScriptAppendFileAction::Execute()
 {
+  MString m_filename = m_Manager->Convert(m_Parameters[0]).removeChar('\'');
   std::ofstream m_file;
-   m_file.open((m_Manager->Convert(m_Parameters[0]).removeChar('\'')).latin1(),std::ofstream::binary | ios_base::app);
-
+   m_file.open(m_filename.latin1(), std::ofstream::binary | ios_base::app);
+  
+  if ( m_file.fail() )
+    {
+    m_ProgressManager->AddError(
+      MString("AppendFile: Cannot write in file ") + m_filename );
+    return;
+    }
 
   MString m_value;
   for (unsigned int i=1;i<m_Parameters.size();i++)
@@ -80,7 +92,8 @@ void ScriptAppendFileAction::Execute()
     } 
   }
 
-    m_file.close();  
+  m_file.close();
+  return;
 }
 
 } // end namespace bm

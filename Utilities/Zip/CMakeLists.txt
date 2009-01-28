@@ -53,7 +53,7 @@ SET(Unzip_SRCS
 CONFIGURE_FILE(${Zip_SOURCE_DIR}/zlibDllConfig.h.in
                ${Zip_BINARY_DIR}/zlibDllConfig.h)
 
-ADD_LIBRARY(BatchMakeZLib ${ZLib_SRCS})
+ADD_LIBRARY(BatchMakeZLib ${ZLib_SRCS} ${ZLib_HDRS})
 
 ADD_EXECUTABLE(Zip ${Zip_SRCS})
 TARGET_LINK_LIBRARIES(Zip BatchMakeZLib)

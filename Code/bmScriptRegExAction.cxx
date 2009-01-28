@@ -14,6 +14,9 @@
 =========================================================================*/
 
 #include "bmScriptRegExAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
+
 #include <stdio.h>
 #include "itksys/RegularExpression.hxx"
 
@@ -80,12 +83,13 @@ void ScriptRegExAction::Execute()
 
   if (!regEx.compile(expression.toChar()))
     {
+    std::string e = "Failed to compile regular expression ";
+    e += expression.toChar();
     if (this->m_Manager)
-       {
-       std::string e = "Failed to compile regular expression ";
-       e += expression.toChar();
-       this->m_Manager->GetError()->SetError(MString(e.c_str())); 
-       }
+      {
+      this->m_Manager->GetError()->SetError(MString(e.c_str())); 
+      }
+    this->m_ProgressManager->AddError(e.c_str());
     return;
     }
 
@@ -131,6 +135,8 @@ void ScriptRegExAction::Execute()
               this->m_Manager->GetError()->SetError(
                   MString("replace-expression ends in a backslash")); 
               }
+            this->m_ProgressManager->AddError(
+              "replace-expression ends in a backslash");
             return;
             }
           if((replace[r+1] >= '0') && (replace[r+1] <= '9'))
@@ -147,13 +153,14 @@ void ScriptRegExAction::Execute()
             }
           else
             {
-            if (this->m_Manager)
-              {
-              std::string e = "mode REPLACE: Unknown escape \"";
+            std::string e = "mode REPLACE: Unknown escape \"";
               e += replace.substr(r, 2);
               e += "\"in replace-expression.";
-              this->m_Manager->GetError()->SetError(MString(e.c_str()));
+            if (this->m_Manager)
+              {
+              this->m_Manager->GetError()->SetError(e.c_str());
               }
+            this->m_ProgressManager->AddError(e.c_str());
             return;
             }
           r += 2;
@@ -177,11 +184,12 @@ void ScriptRegExAction::Execute()
         // Make sure the match had some text.
         if(r-l2 == 0)
           {
+          std::string e = "mode REPLACE: regex \"" + regex + "\" matched empty string";
           if (this->m_Manager)
             {
-            std::string e = "mode REPLACE: regex \"" + regex + "\" matched empty string";
             this->m_Manager->GetError()->SetError(MString(e.c_str()));
             }
+          this->m_ProgressManager->AddError(e.c_str());
           return ;
           }
         
@@ -207,13 +215,14 @@ void ScriptRegExAction::Execute()
               }
             else
               {
-              if (this->m_Manager)
-                {
-                std::string e = "mode REPLACE: replace expression \""+
+              std::string e = "mode REPLACE: replace expression \""+
                 replace+"\" contains an out-of-range escape for regex \""+
                 regex+"\".";
+              if (this->m_Manager)
+                {
                 this->m_Manager->GetError()->SetError(MString(e.c_str()));
                 }
+              this->m_ProgressManager->AddError(e.c_str());
               return;
               }
             }

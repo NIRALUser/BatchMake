@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptCreateDashboardAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include "HttpRequest.h"
 
 namespace bm {
@@ -117,6 +119,7 @@ void ScriptCreateDashboardAction::Execute()
     long pos1 = m_Output.find("\n",pos);
     bboard->SQLid = m_Output.substr(pos+13,pos1-pos-13);
     }
+  return;
 }
 
 } // end namespace bm

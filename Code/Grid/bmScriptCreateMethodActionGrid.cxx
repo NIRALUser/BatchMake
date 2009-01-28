@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptCreateMethodAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 

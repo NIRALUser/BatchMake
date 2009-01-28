@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptDashboardHostAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -56,6 +58,7 @@ MString ScriptDashboardHostAction::Help()
 void ScriptDashboardHostAction::Execute()
 {
   m_Manager->SetDashboardURL(m_Parameters[0].toChar());
+  return;
 }
 
 } // end namespace bm

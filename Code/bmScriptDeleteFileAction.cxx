@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptDeleteFileAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -29,7 +31,9 @@ ScriptDeleteFileAction::~ScriptDeleteFileAction()
 bool ScriptDeleteFileAction::TestParam(ScriptError* error,int linenumber)
 {
   for (unsigned int i=0;i<m_Parameters.size();i++)
-      m_Manager->TestConvert(m_Parameters[i],linenumber);
+    {
+    m_Manager->TestConvert(m_Parameters[i],linenumber);
+    }
     
   if (m_Parameters.size() > 1)
   {
@@ -53,15 +57,13 @@ MString ScriptDeleteFileAction::Help()
 
 void ScriptDeleteFileAction::Execute()
 {
-  std::ifstream m_file;
   MString location = (m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1();
-  
-  m_file.open(location.toChar());
-
-  if( m_file.is_open() )
+  if ( remove( location.toChar() ) != 0 )
     {
-    m_file.close();  
-    remove( location.toChar() );
+    m_ProgressManager->AddError(
+      MString("DeleteFile: File ") + location +
+      MString(" could not be deleted. Errno: %1").arg(errno) );
+    return;
     }
 }
 

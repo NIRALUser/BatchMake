@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptGetTimeAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include <itksys/SystemTools.hxx>
 
 namespace bm {
@@ -59,14 +61,10 @@ MString ScriptGetTimeAction::Help()
 
 void ScriptGetTimeAction::Execute()
 {
-  MString m_value = "'";
-
-  char* time = new char[255];
-  sprintf(time,"%f",itksys::SystemTools::GetTime());
-  m_value += time;
-  m_value += "'";
+  //sprintf(time,"%f",itksys::SystemTools::GetTime());
+  MString m_value = MString( itksys::SystemTools::GetTime() ).toVariable();
+  
   m_Manager->SetVariable(m_Parameters[0], m_value);
-  delete [] time;
 }
 
 } // end namespace bm

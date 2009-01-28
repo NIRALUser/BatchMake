@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptSendTCPAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -59,9 +61,11 @@ void ScriptSendTCPAction::Execute()
   TCPSocket* socket = m_Manager->GetVariableSocket(m_Parameters[0]);
   int err = socket->SendMessage(m_value.toChar());
   
-  if( err == -1 )
+  if( err != 0 )
     {
-    std::cout<<"error sending the message"<<std::endl;
+    //std::cout<<"error sending the message"<<std::endl;
+    this->m_ProgressManager->AddError("SendTCP: Error sending the message");
+    return;
     }
 }
 

@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptDashboardKeyAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -56,6 +58,7 @@ MString ScriptDashboardKeyAction::Help()
 void ScriptDashboardKeyAction::Execute()
 {
   m_Manager->SetDashboardKey(m_Parameters[0].toChar());
+  return;
 }
 
 } // end namespace bm

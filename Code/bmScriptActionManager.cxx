@@ -35,6 +35,7 @@
 #include "bmScriptExtractStringAction.h"
 #include "bmScriptIncludeAction.h"
 #include "bmScriptSinAction.h"
+#include "bmScriptCopyFileAction.h"
 #include "bmScriptDeleteFileAction.h"
 #include "bmScriptRegExAction.h"
 #include "bmScriptMakeDirectoryAction.h"
@@ -46,6 +47,10 @@
 #include "bmScriptFileExistsAction.h"
 #include "bmScriptGetListSizeAction.h"
 #include "bmScriptExitAction.h"
+#include "bmScriptExitOnErrorAction.h"
+#include "bmScriptAddErrorAction.h"
+#include "bmScriptGetErrorCountAction.h"
+#include "bmScriptClearErrorsAction.h"
 #include "bmScriptMathAction.h"
 #include "BMString.h"
 
@@ -237,6 +242,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, AddDashboardLabel);
   BM_NEWKEYWORD(_list, CreateGraph);
   BM_NEWKEYWORD(_list, Sin);
+  BM_NEWKEYWORD(_list, CopyFile);
   BM_NEWKEYWORD(_list, DeleteFile);
   BM_NEWKEYWORD(_list, OpenTCPSocket);
   BM_NEWKEYWORD(_list, SendTCP);
@@ -265,6 +271,10 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
   BM_NEWKEYWORD(_list, ConvertImage);
   BM_NEWKEYWORD(_list, FileExists);
   BM_NEWKEYWORD(_list, Exit);
+  BM_NEWKEYWORD(_list, ExitOnError);
+  BM_NEWKEYWORD(_list, AddError);
+  BM_NEWKEYWORD(_list, GetErrorCount);
+  BM_NEWKEYWORD(_list, ClearErrors);
   BM_NEWKEYWORD(_list, Math);
   
 #ifdef BM_XCEDE
@@ -304,6 +314,7 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, ExtractString);
   BM_NEWACTION(option, Include);
   BM_NEWACTION(option, Sin);
+  BM_NEWACTION(option, CopyFile);
   BM_NEWACTION(option, DeleteFile);
   BM_NEWACTION(option, RegEx);
   BM_NEWACTION(option, MakeDirectory);
@@ -315,6 +326,10 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   BM_NEWACTION(option, ConvertImage);
   BM_NEWACTION(option, FileExists);
   BM_NEWACTION(option, Exit);
+  BM_NEWACTION(option, ExitOnError);
+  BM_NEWACTION(option, AddError);
+  BM_NEWACTION(option, GetErrorCount);
+  BM_NEWACTION(option, ClearErrors);
   BM_NEWACTION(option, Math);
   
 #ifdef BM_GRID
@@ -499,8 +514,8 @@ void ScriptActionManager::Execute()
 {
   Timer m_timer;
   m_timer.start();
-
-  for (unsigned int i=0;i<m_ActionList.size();i++)
+  m_ProgressManager->Start();
+  for( unsigned int i=0 ; i < m_ActionList.size() ; i++)
     {
     m_ActionList[i]->Execute();
     if (m_ProgressManager->IsStop())
@@ -508,7 +523,9 @@ void ScriptActionManager::Execute()
       break;
       } 
     }
-  m_ProgressManager->SetFinished(MString("Total Execution time: %1ms").arg(m_timer.getMilliseconds()));
+  m_ProgressManager->SetFinished(
+    BMString("Total Execution time: %1ms")
+      .arg(m_timer.getMilliseconds()).toMString() );
 }
 
 void ScriptActionManager::SetTestVariable(MString name)

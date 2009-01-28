@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptOpenTCPSocketAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -59,9 +61,11 @@ void ScriptOpenTCPSocketAction::Execute()
   TCPSocket* socket = m_Manager->GetVariableSocket(m_Parameters[0]);
   int err = socket->OpenSocket(m_Parameters[1].toChar(),m_Parameters[2].toInt());
   
-  if( err == -1 )
+  if( err != 0 )
     {
-    std::cout<<"error creating the TCPsocket"<<std::endl;
+    //std::cout<<"error creating the TCPsocket"<<std::endl;
+    m_ProgressManager->AddError("OpenTCPSocker: Error creating the TCPSocket ");
+    return;
     }
 }
 

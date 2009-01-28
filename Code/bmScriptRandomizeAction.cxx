@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptRandomizeAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include <time.h>
 
 namespace bm {
@@ -84,14 +86,13 @@ void ScriptRandomizeAction::Execute()
   MString m_value;
   if (m_Parameters[1].toLower() == "uniform")
     {
-    char* m_text = new char[100];
     float m_min = m_Parameters[2].toFloat();
     float m_max = m_Parameters[3].toFloat();
-    sprintf(m_text,"'%f'",(((float)rand()*(m_max-m_min))/(float)RAND_MAX)+m_min);
-    m_value = m_text;
+    //sprintf(m_text,"'%f'",(((float)rand()*(m_max-m_min))/(float)RAND_MAX)+m_min);
+    m_value = MString( ( ( (float)rand() * ( m_max - m_min ) ) / 
+                           (float)RAND_MAX ) + m_min ).toVariable();
     }
   
-
   m_Manager->SetVariable(m_Parameters[0],m_value);
 }
 

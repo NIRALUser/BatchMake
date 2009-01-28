@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptConvertImageAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include "SliceExtractor.h"
 
 namespace bm {
@@ -142,15 +144,18 @@ void ScriptConvertImageAction::Execute()
         break;
       case itk::ImageIOBase::UNKNOWNCOMPONENTTYPE:
       default:
-        std::cout << "unknown component type" << std::endl;
+        //std::cout << "unknown component type" << std::endl;
+        m_ProgressManager->AddError( "unknown component type");
         break;
       }
     }
   catch( itk::ExceptionObject &excep)
     {
-    std::cerr << excep << std::endl;
+    //std::cerr << excep << std::endl;
+    m_ProgressManager->AddError( excep.GetDescription() );
     return;
     }
+  return;
 }
 
 } // end namespace bm

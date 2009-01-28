@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptGridTransferFileAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -55,29 +57,31 @@ MString ScriptGridTransferFileAction::Help()
 /** */
 void ScriptGridTransferFileAction::Execute()
 {   
-  if(m_GridModule)
-    {   
-    if(m_Parameters[0] == "ALL")
-      {
-      m_GridModule->SetTransferFile(Grid::ALL);
-      }
-    else if(m_Parameters[0] == "EXECUTABLE")
-      {
-      m_GridModule->SetTransferFile(Grid::EXECUTABLE);
-      }
-    else if(m_Parameters[0] == "INPUT_FILES")
-      {
-      m_GridModule->SetTransferFile(Grid::INPUT_FILES);
-      }
-    else if(m_Parameters[0] == "OUTPUT_FILES")
-      {
-      m_GridModule->SetTransferFile(Grid::OUTPUT_FILES);
-      }  
-    else if(m_Parameters[0] == "NONE")
-      {
-      m_GridModule->SetTransferFile(Grid::NONE);  
-      } 
+  if(!m_GridModule)
+    {
+    return;
     }
+
+  if(m_Parameters[0] == "ALL")
+    {
+    m_GridModule->SetTransferFile(Grid::ALL);
+    }
+  else if(m_Parameters[0] == "EXECUTABLE")
+    {
+    m_GridModule->SetTransferFile(Grid::EXECUTABLE);
+    }
+  else if(m_Parameters[0] == "INPUT_FILES")
+    {
+    m_GridModule->SetTransferFile(Grid::INPUT_FILES);
+    }
+  else if(m_Parameters[0] == "OUTPUT_FILES")
+    {
+    m_GridModule->SetTransferFile(Grid::OUTPUT_FILES);
+    }  
+  else if(m_Parameters[0] == "NONE")
+    {
+    m_GridModule->SetTransferFile(Grid::NONE);  
+    } 
 }
 
 } // end namespace bm

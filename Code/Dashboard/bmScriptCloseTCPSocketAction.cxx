@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptCloseTCPSocketAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -60,8 +62,13 @@ void ScriptCloseTCPSocketAction::Execute()
   
   if( err == false )
     {
-    std::cout<<"socket cannot be removed"<<std::endl;
+    //std::cerr << "Socket cannot be removed" << std::endl;
+    m_ProgressManager->AddError( 
+      MString("CloseTCPSocker: Socket ") + m_Parameters[0] 
+                                         + " cannot be removed" );
+    return ;
     }
+  return ;
 }
 
 } // end namespace bm

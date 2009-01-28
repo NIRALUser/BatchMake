@@ -53,6 +53,7 @@ public:
    *  a valid char* ("").
   */
   const char* toChar()const;
+  MString toMString()const;
 
   int toInt()const;
   float toFloat()const;
@@ -144,7 +145,20 @@ public:
   int count(const char key)const;
 
   bool isInBetweenChar(char val,long int pos)const;
-
+  
+  /** Returns true if the content of the string is a variable
+   * if value == "'foo'", returns true, if value == "foo", returns false
+  */
+  bool  isVariable()const;
+  /** Extract the string that is between two ' characters
+   *  if value == "'foo'", returns "foo"
+  */
+  BMString  fromVariable()const;
+  /** Create a string with its content surrounded by two ' characters
+   *  if value == "foo", returns "'foo'"
+  */
+  BMString  toVariable()const;
+  
   //static std::string ConvertWildcardToRegEx(const char* wildcard);
   /** returns the RegExp string */
   BMString ConvertWildcardToRegEx()const;

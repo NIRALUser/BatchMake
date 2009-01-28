@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptEchoAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 

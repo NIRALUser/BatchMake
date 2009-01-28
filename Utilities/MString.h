@@ -43,14 +43,14 @@ public:
   MString arg(unsigned long value);
 
   const char* latin1();
-  const char* toChar();
+  const char* toChar()const;
 
   int toInt();
   float toFloat();
   double toDouble();
   bool toBool();
-  int length();
-  MString mid(int begin,int nb=-1);
+  int length()const;
+  MString mid(int begin,int nb=-1)const;
   bool operator==(MString)const;
   bool operator==(const char*)const;
   bool operator!=(MString)const;
@@ -88,6 +88,19 @@ public:
   bool isInBetweenChar(char val,long int pos);
 
   static std::string ConvertWildcardToRegEx(const char* wildcard);
+  
+  /** Returns true if the content of the string is a variable
+   *  if value == "'foo'", returns true, if value == "foo", returns false
+  */
+  bool  isVariable()const;
+  /** Extract the string that is between two ' characters
+   *  if value == "'foo'", returns "foo"
+  */
+  MString  fromVariable()const;
+  /** Create a string with its content surrounded by two ' characters
+   *  if value == "foo", returns "'foo'"
+  */
+  MString  toVariable()const;
 
 private:
   std::string m_value;

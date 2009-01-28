@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptMakeDirectoryAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include "itksys/SystemTools.hxx"
 
 namespace bm {
@@ -63,6 +65,9 @@ void ScriptMakeDirectoryAction::Execute()
       {
       this->m_Manager->GetError()->SetError(MString("Failed to create directory ") + dirname); 
       }
+    m_ProgressManager->AddError( 
+      MString("Failed to create directory ") + dirname );
+    return;
     }
 }
 

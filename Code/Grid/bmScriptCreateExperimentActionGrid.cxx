@@ -14,6 +14,9 @@
 =========================================================================*/
 
 #include "bmScriptCreateExperimentAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
+#include "ApplicationWrapper.h"
 #include "HttpRequest.h"
 
 namespace bm {

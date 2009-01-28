@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptSetAppOptionAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -132,7 +134,9 @@ void ScriptSetAppOptionAction::Execute()
 
   if(!appFound) 
     {
-    std::cout << "Cannot find application : "  << appName.toChar() << std::endl;
+    //std::cout << "Cannot find application : "  << appName.toChar() << std::endl;
+    m_ProgressManager->AddError( 
+      MString("SetAppOption: Cannot find application") + appName );
     return;
     }
 

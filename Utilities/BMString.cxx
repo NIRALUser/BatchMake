@@ -147,6 +147,12 @@ const char* BMString::toChar()const
   return m_value.c_str();
 }
 
+MString BMString::toMString()const
+{
+  return MString(m_value);
+}
+
+
 int BMString::toInt()const
 {
   return atoi(m_value.c_str());
@@ -600,37 +606,65 @@ bool BMString::isInBetweenChar(char val,long int pos)const
   return false;
 }
 
-/** Convert Wildcars to RegEx 
-std::string BMString::ConvertWildcardToRegEx(const char* wildcard)
+bool BMString::isVariable()const
 {
-  std::string s;
-  s += '^';
-  for (unsigned int i = 0; i< strlen(wildcard); i++) 
+  // a variable must start with ''' precedes 0 or many ' ' (spaces)
+  // a variable must end with ''' followed 1 or many ' ' (spaces)
+  // only two ''' can be in the string
+  std::string::const_iterator it = m_value.begin();
+  std::string::const_iterator end = m_value.end();
+  for( ; it != end && *it == ' '; ++it)
     {
-    char c = wildcard[i];
-    switch(c)
-      {
-      case '*':
-        s+= ".*";
-        break;
-      case '?':
-        s += ".";
-        break;
-      // escape special regexp-characters
-      case '(': case ')': case '[': case ']': case '$':
-      case '^': case '.': case '{': case '}': case '|':
-      case '\\':
-        s += "\\";
-        s += c;
-        break;
-      default:
-        s += c;
-      break;
-      }
+    ;
     }
-  s += '$';
-  return s;
-}*/
+  if( it == end || *it != '\'' )
+    {
+    return false;
+    }
+  ++it;
+  it = std::find(it,end,'\'');
+  if( it == end )
+    {
+    return false;
+    }
+  for( ; it != end && *it == ' '; ++it)
+    {
+    ;
+    }
+  if( it != end )
+    {
+    return false;
+    }
+  return true;
+}
+
+// Extract the string that is between two ' characters
+// if value == "'foo'", returns "foo"
+BMString  BMString::fromVariable()const
+{
+  if( !this->isVariable() )
+    {
+    return "";
+    }
+  size_t start = m_value.find('\'');
+  size_t end = m_value.rfind('\'');
+  if ( start == std::string::npos || end == std::string::npos )
+    {
+    return "";
+    }
+  return this->midCopy(start + 1, end - 1 - start);
+}
+
+// Create a string with its content surrounded by two ' characters
+// if value == "foo", returns "'foo'"
+BMString  BMString::toVariable()const
+{
+  if ( !this->isVariable() )
+    {
+    return std::string("'")+ m_value + std::string("'");
+    }
+  return *this;
+}
 
 BMString BMString::ConvertWildcardToRegEx()const
 {

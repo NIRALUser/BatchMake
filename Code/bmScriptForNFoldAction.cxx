@@ -13,6 +13,8 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "bmScriptForNFoldAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 #include <fstream>
 #include <string>
@@ -189,10 +191,15 @@ void ScriptForNFoldAction::Execute()
     m_Manager->SetVariable(m_Parameters[2], loopTest);
     for (i=0; i<m_Action.size(); i++)
       {
-      if (!m_ProgressManager->IsStop())
+      m_Action[i]->Execute();
+      if (m_ProgressManager->IsStop())
         {
-        m_Action[i]->Execute();
+        break;
         }
+      }
+    if (m_ProgressManager->IsStop())
+      {
+      break;
       }
     }
 #ifdef BM_GRID

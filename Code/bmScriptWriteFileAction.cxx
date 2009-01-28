@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptWriteFileAction.h"
+#include "bmScriptActionManager.h"
+#include "ApplicationWrapper.h"
 
 namespace bm {
 
@@ -48,9 +50,18 @@ MString ScriptWriteFileAction::Help()
 
 void ScriptWriteFileAction::Execute()
 {
+  MString m_filename = m_Manager->Convert(m_Parameters[0]).rbegin("'")+1;
   std::ofstream m_file;
-   m_file.open((m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1(),ios_base::binary | ios_base::out | ios_base::trunc);
-
+   m_file.open( m_filename.latin1(),
+                ios_base::binary | ios_base::out | ios_base::trunc);
+  
+  if( m_file.fail() )
+    {
+    m_ProgressManager->AddError( 
+      MString("WriteFile: Can't write in file ") + m_filename );
+    return;
+    }
+  
   MString m_value;
   for (unsigned int i=1;i<m_Parameters.size();i++)
   {
@@ -78,7 +89,7 @@ void ScriptWriteFileAction::Execute()
     } 
   }
 
-  m_file.close();  
+  m_file.close();
 }
 
 } // end namespace bm

@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptGetParamAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -63,30 +65,36 @@ MString ScriptGetParamAction::Help()
 void ScriptGetParamAction::Execute()
 {
   MString m_value;
-  std::vector<MString> m_list = m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
+  std::vector<MString> m_list = 
+    m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
 
   for (unsigned int i=2;i<m_Parameters.size();i++)
-  {
-  // if we have the variable we want the value
-  MString m_param = m_Parameters[i];
-  if(m_Parameters[i][0] == '$')
     {
-    m_param = m_Manager->Convert(m_Parameters[i]);
-    }
+    // if we have the variable we want the value
+    MString m_param = m_Parameters[i];
+    if(m_Parameters[i][0] == '$')
+      {
+      m_param = m_Manager->Convert(m_Parameters[i]);
+      }
 
-   m_param = m_param.removeChar('\'');
+    m_param = m_param.removeChar('\'');
 
     if (m_param.toInt() >= (int)m_list.size())
-    {
-      m_Manager->GetError()->SetStatus(MString("GetParam: Exeed value for param %1").arg(i));
+      {
+      m_ProgressManager->AddError(
+        MString("GetParam: Exeed value for param %1").arg(i) );
+      m_Manager->GetError()->SetStatus(
+        MString("GetParam: Exeed value for param %1").arg(i));
       return;
+      }
+
+     if (m_value != "")
+      {
+      m_value+=" ";
+      }
+      
+    m_value+= m_list[m_param.toInt()]; 
     }
-
-      if (m_value != "")
-        m_value+=" ";
-
-      m_value+= m_list[m_param.toInt()]; 
-  }
 
   m_Manager->SetVariable(m_Parameters[0],m_value);
 }

@@ -36,24 +36,24 @@ class ProgressManagerGUI : public ProgressManager
 public:
   ProgressManagerGUI();
   ~ProgressManagerGUI();
-  void SetStatus(MString status);
+  void SetStatus(const MString& status);
   void IsRunning();
   void SetProgressGUI(ProgressGUIControls* ProgressGUI);
-  void AddAction(MString name);
-  void FinishAction(MString output);
-  void AddOutput(MString output);
-  void AddError(MString output);
+  void AddAction(const MString& name);
+  void FinishAction(const MString& output);
+  void AddOutput(const MString& output);
+  void AddError(const MString& output);
   void Stop();
-  void SetFinished(MString message);
-  void DisplayOutput(MString message);
-  void DisplayError(MString message);
-  void DisplayInfo(MString message);
+  void SetFinished(const MString& message);
+  void DisplayOutput(const MString& message);
+  void DisplayError(const MString& message);
+  void DisplayInfo(const MString& message);
 
 protected:
   ProgressGUIControls* m_ProgressGUI;
   Flu_Tree_Browser::Node* m_CurrentNode;
-  Flu_Tree_Browser::Node* m_Outputnode;
-  Flu_Tree_Browser::Node* m_Errornode;
+  Flu_Tree_Browser::Node* m_OutputNode;
+  Flu_Tree_Browser::Node* m_ErrorNode;
   Fl_Progress* m_Progress;
   int m_Offset;
 

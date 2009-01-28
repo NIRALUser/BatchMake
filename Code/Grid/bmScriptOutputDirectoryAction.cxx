@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptOutputDirectoryAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -55,10 +57,11 @@ MString ScriptOutputDirectoryAction::Help()
 /** */
 void ScriptOutputDirectoryAction::Execute()
 {
-  if(m_GridModule)
+  if(!m_GridModule)
     {
-    m_GridModule->SetOutputDirectory(m_Parameters[0].toChar());
+    return;
     }
+  m_GridModule->SetOutputDirectory(m_Parameters[0].toChar());
 }
 
 } // end namespace bm

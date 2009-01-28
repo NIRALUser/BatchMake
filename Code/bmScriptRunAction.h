@@ -24,6 +24,9 @@
 #include <iostream>
 #include "MString.h"
 #include "bmScriptAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
+#include "ApplicationWrapper.h"
 
 namespace bm {
 

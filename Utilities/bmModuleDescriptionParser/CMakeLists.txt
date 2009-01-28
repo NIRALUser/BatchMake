@@ -47,6 +47,17 @@ install(FILES
 # --------------------------------------------------------------------------
 # Sources
 
+set(bmModuleDescriptionParser_HDRS
+  BatchMakeUtilities.h
+  bmModuleDescription.h
+  bmModuleDescriptionParser.h
+  bmModuleFactory.h
+  bmModuleLogo.h
+  bmModuleParameter.h
+  bmModuleParameterGroup.h
+  bmModuleProcessInformation.h
+  )
+
 set(bmModuleDescriptionParser_SRCS
   bmModuleParameter.cxx
   bmModuleParameterGroup.cxx
@@ -96,6 +107,7 @@ endif(USE_BFD)
 set(lib_name bmModuleDescriptionParser)
 add_library(${lib_name} 
   ${bmModuleDescriptionParser_SRCS}
+  ${bmModuleDescriptionParser_HDRS}
 )
 
 set(link_libs

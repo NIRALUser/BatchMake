@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptCreateExperimentAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include "HttpRequest.h"
 
 namespace bm {
@@ -117,6 +119,7 @@ void ScriptCreateExperimentAction::Execute()
       }
     }
 */
+  return;
 }
 
 } // end namespace bm

@@ -13,6 +13,8 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "bmScriptSetAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 

@@ -21,19 +21,25 @@
 #endif
 
 #include <vector>
-#include <iostream>
+//#include <iostream>
 #include "MString.h"
-#include "bmScriptActionManager.h"
-#include "bmProgressManager.h"
-#include "bmScriptError.h"
+//#include "bmScriptActionManager.h"
+//#include "bmProgressManager.h"
+//#include "bmScriptError.h"
 
-#ifdef BM_GRID
-  #include "bmGrid.h"
-#endif
+//#ifdef BM_GRID
+  //#include "bmGrid.h"
+//#endif
 
 namespace bm {
 
+#ifdef BM_GRID
+  class Grid;
+#endif
+
 class ScriptActionManager;
+class ProgressManager;
+class ScriptError;
 
 class ScriptAction
 {

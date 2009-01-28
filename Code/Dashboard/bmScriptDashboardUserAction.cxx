@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptDashboardUserAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -56,6 +58,7 @@ MString ScriptDashboardUserAction::Help()
 void ScriptDashboardUserAction::Execute()
 {
   m_Manager->SetDashboardUser(m_Parameters[0].toChar());
+  return;
 }
 
 } // end namespace bm

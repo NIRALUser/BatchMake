@@ -14,6 +14,9 @@
 =========================================================================*/
 
 #include "bmScriptExtractSliceAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
+#include "ApplicationWrapper.h"
 #include "SliceExtractor.h"
 
 namespace bm {

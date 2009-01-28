@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptCreateGraphAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include "HttpRequest.h"
 
 namespace bm {
@@ -117,6 +119,7 @@ void ScriptCreateGraphAction::Execute()
       }
     }
 */
+  return;
 }
 
 } // end namespace bm

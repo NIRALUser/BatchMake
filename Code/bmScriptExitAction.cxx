@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptExitAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 
 namespace bm {
 
@@ -45,6 +47,7 @@ MString ScriptExitAction::Help()
 
 void ScriptExitAction::Execute()
 {
+  m_ProgressManager->AddOutput("Script has been stopped manually");
   m_ProgressManager->Stop();
 }
 

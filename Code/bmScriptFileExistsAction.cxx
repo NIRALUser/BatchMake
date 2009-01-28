@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "bmScriptFileExistsAction.h"
+#include "bmScriptError.h"
+#include "bmScriptActionManager.h"
 #include <itksys/SystemTools.hxx>
 
 namespace bm {
