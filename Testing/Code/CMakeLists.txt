@@ -1,3 +1,4 @@
+Project(BatchMakeTest)
 #--------------------------------------------------------------------
 # Source
 
@@ -13,7 +14,7 @@ IF(DASHBOARD_SUPPORT)
     bmSystemInfoTest.cxx
     bmFileActionsTest.cxx
     )
-  SET (TEST_DATA ${BATCHMAKE_TESTS_SOURCE_DIR}/TestData)
+  SET (TEST_DATA ${BatchMakeTest_SOURCE_DIR}/TestData)
 
   ADD_TEST(DashboardSendTest ${BATCHMAKE_TESTS} DashboardSendTest)
   ADD_TEST(SystemInfoTest ${BATCHMAKE_TESTS} SystemInfoTest)
