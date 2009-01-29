@@ -367,8 +367,8 @@ private:
 
 ModuleDescriptionParser_EXPORT std::ostream & operator<<(std::ostream &os, const ModuleParameter &parameter);
 
-void splitString( std::string &text,
-                  std::string &separators,
+void splitString( const std::string &text,
+                  const std::string &separators,
                   std::vector<std::string> &words );
 
 #endif
