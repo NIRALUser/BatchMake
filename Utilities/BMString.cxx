@@ -369,7 +369,7 @@ BMString& BMString::rbegin(const char* key,int offset)
   size_t m_offset = m_value.rfind(key,offset);
   if (m_offset != std::string::npos)
     {
-    m_value.erase(0,m_offset);
+    m_value.erase(m_offset);
     }
   return *this;
 }
