@@ -42,7 +42,7 @@ ENDIF(APPLE)
 
 SET(BatchMake_VERSION_MAJOR "1")
 SET(BatchMake_VERSION_MINOR "0")
-SET(BatchMake_VERSION_PATCH "7")
+SET(BatchMake_VERSION_PATCH "8")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
