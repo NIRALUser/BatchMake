@@ -42,7 +42,7 @@ int main (int argc, char *argv[])
     {
     if (strcmp (myDir.GetFile(i), "..") == 0) continue;
 
-    ModuleFactory moduleFactory;
+    bm::ModuleFactory moduleFactory;
     std::string searchPath(argv[1]);
     searchPath += myDir.GetFile(i);
     if (!itksys::SystemTools::FileIsDirectory(searchPath.c_str())) continue;

@@ -11,16 +11,18 @@
   Version:   $Revision$
 
 ==========================================================================*/
-#ifndef __ModuleDescriptionParser_h
-#define __ModuleDescriptionParser_h
+#ifndef __bmModuleDescriptionParser_h
+#define __bmModuleDescriptionParser_h
 
 #include <string>
 
 #include "bmModuleDescriptionParserWin32Header.h"
 
+namespace bm
+{
+
 class ModuleDescription;
 class ModuleParameterGroup;
-
 
 class ModuleDescriptionParser_EXPORT ModuleDescriptionParser
 {
@@ -30,5 +32,7 @@ public:
 
   int Parse( const std::string& xml, ModuleDescription& description);
 };
+
+} // end namespace bm
 
 #endif

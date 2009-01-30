@@ -25,6 +25,9 @@
 #include <string>
 #include <vector>
 
+namespace bm
+{
+
 class ModuleDescriptionParser_EXPORT ModuleDescription
 {
 public:
@@ -284,5 +287,7 @@ private:
 };
 
 ModuleDescriptionParser_EXPORT std::ostream & operator<<(std::ostream &os, const ModuleDescription &module);
+
+}//end namespace bm
 
 #endif

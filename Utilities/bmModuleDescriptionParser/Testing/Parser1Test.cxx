@@ -43,8 +43,8 @@ int main (int argc, char *argv[])
   fin.read (XML, len);
   XML[len] = '\0';
 
-  ModuleDescription module;
-  ModuleDescriptionParser parser;
+  bm::ModuleDescription module;
+  bm::ModuleDescriptionParser parser;
   if (parser.Parse(XML, module))
     {
     return EXIT_FAILURE;

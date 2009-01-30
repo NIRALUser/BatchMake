@@ -13,6 +13,8 @@
 ==========================================================================*/
 #include "bmModuleProcessInformation.h"
 
+namespace bm
+{
 
 std::ostream& operator<<(std::ostream &os, const ModuleProcessInformation &p)
 {
@@ -24,3 +26,5 @@ std::ostream& operator<<(std::ostream &os, const ModuleProcessInformation &p)
 
   return os;
 }
+
+} //end namespace bm

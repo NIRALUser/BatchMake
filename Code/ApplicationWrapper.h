@@ -130,7 +130,7 @@ private:
   unsigned long m_ExecutionBlockNumber;
   std::vector<std::string> m_InputDataToTransfer;
 
-  bool AddSlicerModuleDescription(ModuleDescription* moduleDescription);
+  bool AddSlicerModuleDescription(bm::ModuleDescription* moduleDescription);
 
 };
 

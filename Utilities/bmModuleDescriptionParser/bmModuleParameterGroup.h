@@ -12,14 +12,17 @@
 
 ==========================================================================*/
 
-#ifndef __ModuleParameterGroup_h
-#define __ModuleParameterGroup_h
+#ifndef __bmModuleParameterGroup_h
+#define __bmModuleParameterGroup_h
 
 #include "bmModuleDescriptionParserWin32Header.h"
 #include "bmModuleParameter.h"
 
 #include <vector>
 #include <string>
+
+namespace bm
+{
 
 class ModuleDescriptionParser_EXPORT ModuleParameterGroup
 {
@@ -73,5 +76,7 @@ private:
 };
 
 ModuleDescriptionParser_EXPORT std::ostream & operator<<(std::ostream &os, const ModuleParameterGroup &group);
+
+} // end namespace
 
 #endif

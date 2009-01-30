@@ -14,6 +14,8 @@
 
 #include "bmModuleDescription.h"
 
+namespace bm
+{
 
 ModuleDescription::ModuleDescription()
 {
@@ -209,3 +211,5 @@ ModuleDescription
 {
   return this->Logo;
 }
+
+} //end namespace bm

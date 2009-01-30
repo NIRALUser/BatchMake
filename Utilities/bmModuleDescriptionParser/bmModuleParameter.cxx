@@ -13,6 +13,9 @@
 ==========================================================================*/
 #include "bmModuleParameter.h"
 
+namespace bm
+{
+
 void
 splitString (const std::string &text,
              const std::string &separators,
@@ -290,3 +293,4 @@ std::ostream & operator<<(std::ostream &os, const ModuleParameter &parameter)
   return os;
 }
 
+} //end namespace bm

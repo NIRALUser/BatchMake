@@ -12,11 +12,14 @@
 
 ==========================================================================*/
 
-#ifndef __ModuleProcessInformation_h
-#define __ModuleProcessInformation_h
+#ifndef __bmModuleProcessInformation_h
+#define __bmModuleProcessInformation_h
 
 #include <ostream>
 #include <cstring>
+
+namespace bm
+{
 
 extern "C" {
   struct ModuleProcessInformation
@@ -50,6 +53,7 @@ extern "C" {
 };
 
 std::ostream& operator<<(std::ostream &os, const ModuleProcessInformation &p);
-    
+
+} // end namespace bm
 
 #endif

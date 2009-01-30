@@ -12,11 +12,14 @@
 
 ==========================================================================*/
 
-#ifndef __ModuleLogo_h
-#define __ModuleLogo_h
+#ifndef __bmModuleLogo_h
+#define __bmModuleLogo_h
 
 #include "bmModuleDescriptionParserWin32Header.h"
 #include <string>
+
+namespace bm
+{
 
 class ModuleDescriptionParser_EXPORT ModuleLogo
 {
@@ -44,5 +47,7 @@ private:
   int Options;
   std::string Logo;
 };
+
+} //end namespace bm
 
 #endif

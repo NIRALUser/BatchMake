@@ -14,6 +14,9 @@
 
 #include "bmModuleLogo.h"
 
+namespace bm
+{
+
 ModuleLogo::ModuleLogo()
   : Width(0), Height(0), PixelSize(0), BufferLength(0), Options(0), Logo("")
 {
@@ -98,3 +101,5 @@ ModuleLogo
 {
   return this->Logo.c_str();
 }
+
+} //end namespace bm

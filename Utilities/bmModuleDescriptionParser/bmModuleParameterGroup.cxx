@@ -14,6 +14,9 @@
 
 #include "bmModuleParameterGroup.h"
 
+namespace bm
+{
+
 ModuleParameterGroup
 ::ModuleParameterGroup(const ModuleParameterGroup &parameters)
 {
@@ -47,3 +50,5 @@ std::ostream & operator<<(std::ostream &os, const ModuleParameterGroup &group)
     }
   return os;
 }
+
+} //end namespace bm

@@ -21,6 +21,9 @@
 #include <stack>
 #include "expat.h"
 
+namespace bm
+{
+
 /*********************
  * Utility procedures for strings
  *********************/
@@ -1664,3 +1667,5 @@ ModuleDescriptionParser::Parse( const std::string& xml, ModuleDescription& descr
   return status;
 
 }
+
+} //end namespace bm

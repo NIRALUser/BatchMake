@@ -11,12 +11,14 @@
   Version:   $Revision$
 
 ==========================================================================*/
-#ifndef __ModuleFactory_h
-#define __ModuleFactory_h
+#ifndef __bmModuleFactory_h
+#define __bmModuleFactory_h
 
 #include "bmModuleDescriptionParserWin32Header.h"
-
 #include "bmModuleDescription.h"
+
+namespace bm
+{
 
 class ModuleDescriptionMap;
 class ModuleFileMap;
@@ -151,5 +153,6 @@ private:
   CallbackFunctionType ModuleDiscoveryMessageCallback;
 };
 
+}//end namespace bm
 
 #endif

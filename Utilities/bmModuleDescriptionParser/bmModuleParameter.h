@@ -11,14 +11,17 @@
   Version:   $Revision$
 
 ==========================================================================*/
-#ifndef __ModuleParameter_h
-#define __ModuleParameter_h
+#ifndef __bmModuleParameter_h
+#define __bmModuleParameter_h
 
 #include "bmModuleDescriptionParserWin32Header.h"
 
 #include <string>
 #include <vector>
 #include <iostream>
+
+namespace bm
+{
 
 /** \class ModuleParameter
  *  \brief Class to describe a single parameter to a module.
@@ -367,8 +370,6 @@ private:
 
 ModuleDescriptionParser_EXPORT std::ostream & operator<<(std::ostream &os, const ModuleParameter &parameter);
 
-void splitString( const std::string &text,
-                  const std::string &separators,
-                  std::vector<std::string> &words );
+} // end namespace bm
 
 #endif

@@ -771,8 +771,8 @@ bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const char * _path)
       } break;
     }
   itksysProcess_Delete(gp);
-  ModuleDescription moduleDescription;
-  ModuleDescriptionParser parser;
+  bm::ModuleDescription moduleDescription;
+  bm::ModuleDescriptionParser parser;
 
   parser.Parse(output.c_str(),moduleDescription);
 
@@ -784,7 +784,7 @@ bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const char * _path)
 
 /** Convert a Module description to an internal representation */
 bool ApplicationWrapper::
-AddSlicerModuleDescription(ModuleDescription* module)
+AddSlicerModuleDescription(bm::ModuleDescription* module)
 {
   // BatchMake only understands parameter types:
   //     file=0, bool=1, int=2, float=3, string=4, enum=5
@@ -847,11 +847,11 @@ AddSlicerModuleDescription(ModuleDescription* module)
   this->SetApplicationPath(path);
 
   
-  std::vector<ModuleParameterGroup>::const_iterator pgbeginit
+  std::vector<bm::ModuleParameterGroup>::const_iterator pgbeginit
     = module->GetParameterGroups().begin();
-  std::vector<ModuleParameterGroup>::const_iterator pgendit
+  std::vector<bm::ModuleParameterGroup>::const_iterator pgendit
     = module->GetParameterGroups().end();
-  std::vector<ModuleParameterGroup>::const_iterator pgit;
+  std::vector<bm::ModuleParameterGroup>::const_iterator pgit;
 
   ModuleParameterToBatchMakeTypeMap::iterator mp2bmIt;
 
@@ -864,11 +864,11 @@ AddSlicerModuleDescription(ModuleDescription* module)
   for (pgit = pgbeginit; pgit != pgendit; ++pgit)
     {
     // iterate over each parameter in this group
-    std::vector<ModuleParameter>::const_iterator pbeginit
+    std::vector<bm::ModuleParameter>::const_iterator pbeginit
       = (*pgit).GetParameters().begin();
-    std::vector<ModuleParameter>::const_iterator pendit
+    std::vector<bm::ModuleParameter>::const_iterator pendit
       = (*pgit).GetParameters().end();
-    std::vector<ModuleParameter>::const_iterator pit;
+    std::vector<bm::ModuleParameter>::const_iterator pit;
 
     for (pit = pbeginit; pit != pendit; ++pit)
       {
@@ -989,15 +989,15 @@ AddSlicerModuleDescription(ModuleDescription* module)
   // now tack on any parameters that are based on indices
   //
   // build a list of indices to traverse in order
-  std::map<int, ModuleParameter> indexmap;
+  std::map<int, bm::ModuleParameter> indexmap;
   for (pgit = pgbeginit; pgit != pgendit; ++pgit)
     {
     // iterate over each parameter in this group
-    std::vector<ModuleParameter>::const_iterator pbeginit
+    std::vector<bm::ModuleParameter>::const_iterator pbeginit
       = (*pgit).GetParameters().begin();
-    std::vector<ModuleParameter>::const_iterator pendit
+    std::vector<bm::ModuleParameter>::const_iterator pendit
       = (*pgit).GetParameters().end();
-    std::vector<ModuleParameter>::const_iterator pit;
+    std::vector<bm::ModuleParameter>::const_iterator pit;
   
     for (pit = pbeginit; pit != pendit; ++pit)
       {
@@ -1009,7 +1009,7 @@ AddSlicerModuleDescription(ModuleDescription* module)
     }
 
   // walk the index parameters in order
-  std::map<int, ModuleParameter>::const_iterator iit;
+  std::map<int, bm::ModuleParameter>::const_iterator iit;
   for (iit = indexmap.begin(); iit != indexmap.end(); ++iit)
     {
     ApplicationWrapperParam param;

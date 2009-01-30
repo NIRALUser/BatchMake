@@ -12,13 +12,18 @@
 
 ==========================================================================*/
 
-#ifndef __BatchMakeUtilities_h
-#define __BatchMakeUtilities_h
+#ifndef __bmBatchMakeUtilities_h
+#define __bmBatchMakeUtilities_h
 
 #include "bmModuleDescriptionParserWin32Header.h"
 
 #include "bmModuleDescription.h"
 
+namespace bm
+{
+
 ModuleDescriptionParser_EXPORT std::string GenerateBatchMakeWrapper(const ModuleDescription &module);
+
+}
 
 #endif

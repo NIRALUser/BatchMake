@@ -7,6 +7,9 @@
 #include <map>
 #include <vector>
 
+namespace bm
+{
+
 std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
 {
   std::ostringstream wrapper;
@@ -312,3 +315,5 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
 
   return wrapper.str();
 }
+
+} // end namespace bm
