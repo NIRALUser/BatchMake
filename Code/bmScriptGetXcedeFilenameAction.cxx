@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "bmScriptGetXcedeFilenameAction.h"
 #include <fstream>
+#include "bmScriptActionManager.h"
+#include "bmScriptError.h"
 #include "XcedeLib/XcedeCatalog.h"
 
 namespace bm {

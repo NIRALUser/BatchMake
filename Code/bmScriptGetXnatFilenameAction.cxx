@@ -14,6 +14,8 @@
 =========================================================================*/
 #include "bmScriptGetXnatFilenameAction.h"
 #include <fstream>
+#include "bmScriptActionManager.h"
+#include "bmScriptError.h"
 #include "XcedeLib/XnatCatalog.h"
 
 namespace bm {
