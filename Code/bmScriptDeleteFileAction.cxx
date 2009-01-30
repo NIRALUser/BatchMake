@@ -17,6 +17,8 @@
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 
+#include <cerrno>
+
 namespace bm {
 
 ScriptDeleteFileAction::ScriptDeleteFileAction()
