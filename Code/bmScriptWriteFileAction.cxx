@@ -50,7 +50,7 @@ MString ScriptWriteFileAction::Help()
 
 void ScriptWriteFileAction::Execute()
 {
-  MString m_filename = m_Manager->Convert(m_Parameters[0]).rbegin("'")+1;
+  BMString m_filename = m_Manager->Convert(m_Parameters[0]).rbegin("'")+1;
   std::ofstream m_file;
    m_file.open( m_filename.latin1(),
                 ios_base::binary | ios_base::out | ios_base::trunc);
@@ -58,14 +58,14 @@ void ScriptWriteFileAction::Execute()
   if( m_file.fail() )
     {
     m_ProgressManager->AddError( 
-      MString("WriteFile: Can't write in file ") + m_filename );
+      BMString("WriteFile: Can't write in file ") + m_filename );
     return;
     }
   
-  MString m_value;
+  BMString m_value;
   for (unsigned int i=1;i<m_Parameters.size();i++)
   {
-    MString m_text = m_Manager->Convert(m_Parameters[i]).removeChar('\'').latin1();
+    BMString m_text = m_Manager->Convert(m_Parameters[i]).removeAllChars('\'');
     bool m_insert;
     for (int l=0;l<m_text.length();l++)
     {

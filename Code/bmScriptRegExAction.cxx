@@ -64,7 +64,7 @@ bool ScriptRegExAction::TestParam(ScriptError* error,int linenumber)
  
 MString ScriptRegExAction::Help()
 {
-  return "RegEx(<newvar> <var> <RegularExpression> <Mode: Can be MATCH, REPLACE, FOUND>)";
+  return "RegEx(<newvar> <var> <RegularExpression> <MATCH or REPLACE>)";
 }
 
 
@@ -73,11 +73,11 @@ void ScriptRegExAction::Execute()
   m_Manager->SetVariable(m_Parameters[0],"");
   itksys::RegularExpression regEx;
 
-  MString expression = m_Manager->Convert(m_Parameters[2]);
-  expression = expression.removeChar('\'');
+  BMString expression = m_Manager->Convert(m_Parameters[2]);
+  expression.removeAllChars('\'');
 
-  MString word = m_Manager->Convert(m_Parameters[1]);
-  word = word.removeChar('\'');
+  BMString word = m_Manager->Convert(m_Parameters[1]);
+  word.removeAllChars('\'');
 
   std::string regex = expression.GetValue();
 
@@ -85,11 +85,7 @@ void ScriptRegExAction::Execute()
     {
     std::string e = "Failed to compile regular expression ";
     e += expression.toChar();
-    if (this->m_Manager)
-      {
-      this->m_Manager->GetError()->SetError(MString(e.c_str())); 
-      }
-    this->m_ProgressManager->AddError(e.c_str());
+    this->m_ProgressManager->AddError(e);
     return;
     }
 
@@ -108,8 +104,8 @@ void ScriptRegExAction::Execute()
     {
     if(regEx.find(word.toChar()))
       {
-      MString replaceS = m_Manager->Convert(m_Parameters[4]);
-      std::string replace = replaceS.removeChar('\'').GetValue();
+      BMString replaceS = m_Manager->Convert(m_Parameters[4]);
+      std::string replace = replaceS.removeAllChars('\'').GetValue();
 
       // Pull apart the replace expression to find the escaped [0-9] values.
       std::vector<RegexReplacement> replacement;
@@ -130,11 +126,6 @@ void ScriptRegExAction::Execute()
             }
           if(r == (replace.length()-1))
             {
-            if (this->m_Manager)
-              {
-              this->m_Manager->GetError()->SetError(
-                  MString("replace-expression ends in a backslash")); 
-              }
             this->m_ProgressManager->AddError(
               "replace-expression ends in a backslash");
             return;
@@ -156,11 +147,7 @@ void ScriptRegExAction::Execute()
             std::string e = "mode REPLACE: Unknown escape \"";
               e += replace.substr(r, 2);
               e += "\"in replace-expression.";
-            if (this->m_Manager)
-              {
-              this->m_Manager->GetError()->SetError(e.c_str());
-              }
-            this->m_ProgressManager->AddError(e.c_str());
+            this->m_ProgressManager->AddError(e);
             return;
             }
           r += 2;

@@ -77,7 +77,7 @@ public:
   void draw();
   static void TabPressed(void*);
   int handle( int event );
-  static bool Find(std::list<MString> array,MString key);
+  static bool Find(/*const std::list<BMString>& array,*/const BMString& key);
   void UpdateKeyword();
   void UpdateApplicationsList();
   void UpdateVariable();

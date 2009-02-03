@@ -32,36 +32,45 @@ void ScriptErrorGUI::SetTextDisplay(Fl_Text_Display* textdisplay)
   m_TextDisplay = textdisplay;
 }
 
-void ScriptErrorGUI::SetError(MString error,int linenumber)
+void ScriptErrorGUI::SetError( const BMString& error,int linenumber)
 {
    if (m_TextDisplay)
    {
     if (linenumber != -1)
-     m_TextDisplay->buffer()->append((MString(" Error (%1): ").arg(linenumber) + error + "\n").toChar());
+     m_TextDisplay->buffer()->append((BMString(" Error (%1): ").arg(linenumber) + error + "\n").toChar());
     else
-     m_TextDisplay->buffer()->append((MString(" Error: ").arg(linenumber) + error + "\n").toChar());
+     m_TextDisplay->buffer()->append((BMString(" Error: ").arg(linenumber) + error + "\n").toChar());
    }
 
     nb_error++;
 }
 
-void ScriptErrorGUI::SetWarning(MString warning,int linenumber)
+void ScriptErrorGUI::SetWarning(const BMString& warning,int linenumber)
 {
-   if (m_TextDisplay)
-      m_TextDisplay->buffer()->append((MString(" Warning (%1): ").arg(linenumber) + warning + "\n").toChar());
+  if (m_TextDisplay)
+    {
+    m_TextDisplay->buffer()->append(
+      (BMString(" Warning (%1): ").arg(linenumber) + warning + "\n").toChar() );
+    }
   nb_warning++;
 }
 
-void ScriptErrorGUI::SetStatus(MString status)
+void ScriptErrorGUI::SetStatus(const BMString& status)
 {
-   if (m_TextDisplay)
-      m_TextDisplay->buffer()->append( (status + "\n").toChar());
+  if (m_TextDisplay)
+    {
+    m_TextDisplay->buffer()->append( (status + "\n").toChar() );
+    }
 }
 
 void ScriptErrorGUI::DisplaySummary()
 {
   if (m_TextDisplay)
-     m_TextDisplay->buffer()->append((MString("%1 error(s), ").arg(nb_error) +  MString("%1 warning(s)").arg(nb_warning) + "\n").toChar());
+    {
+    m_TextDisplay->buffer()->append(
+      (BMString("%1 error(s), ").arg(nb_error) +  
+       BMString("%1 warning(s)").arg(nb_warning) + "\n").toChar());
+    }
 
 }
 

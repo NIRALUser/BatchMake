@@ -123,11 +123,11 @@ void ScriptForEachAction::CreateLoop()
     {
     while ( (!m_paramlist.isEmpty()) && (m_paramlist != m_value))
       {
-      m_paramlist.removeChar(' ');
+      m_paramlist.removeFirstChar(' ');
 
       if ( m_paramlist.startWith('\'') )
         {
-        m_paramlist.removeChar('\'');
+        m_paramlist.removeFirstChar('\'');
         m_value = m_paramlist.beginCopy("\'");
         m_paramlist.end("\'");
 
@@ -144,7 +144,7 @@ void ScriptForEachAction::CreateLoop()
         
       if (!m_value.isEmpty())
         {
-        m_ForLoop.push_back(MString("'") + m_value.GetValue() + "'");
+        m_ForLoop.push_back( m_value.toVariable() );
         }
       }
     }

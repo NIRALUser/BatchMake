@@ -86,8 +86,8 @@ void ScriptAddMethodIdealOutputAction::Execute()
   m_ProgressManager->IsRunning();
 
   HttpRequest m_request;
-  m_request.AddParam("user",m_Manager->GetDashboardUser());
-  m_request.AddParam("userkey",m_Manager->GetDashboardKey());
+  m_request.AddParam("user",m_Manager->GetDashboardUser().c_str());
+  m_request.AddParam("userkey",m_Manager->GetDashboardKey().c_str());
 
   // Get the project name
   const ScriptActionManager::Dashboard * dashboard = m_Manager->GetDashboard();

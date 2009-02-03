@@ -49,8 +49,9 @@ bool ScriptSequenceAction::TestParam(ScriptError* error,int linenumber)
     {
     if (!m_Parameters[j].isFloat())
       {
-      error->SetError(MString("Parameter %1 should be a float for Sequence ").
-                      arg(j) + m_Parameters[j], linenumber);
+      error->SetError(
+        BMString("Parameter %1 should be a float for Sequence ").arg(j) 
+        + m_Parameters[j], linenumber);
       return false;
       }
     }

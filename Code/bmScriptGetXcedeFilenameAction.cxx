@@ -34,13 +34,13 @@ bool ScriptGetXcedeFilenameAction::TestParam(ScriptError* error,int linenumber)
 {
   if (m_Parameters.size() < 2)
     {
-    error->SetError(MString("No enough parameter for GetXcedeFilename (requires 2 parameters)"),linenumber);
+    error->SetError("No enough parameter for GetXcedeFilename (requires 2 parameters)",linenumber);
     return false;
     }
 
   if (m_Parameters.size() > 2)
     {
-    error->SetError(MString("Too much parameters for GetXcedeFilename (requires 2 parameters)"),linenumber);
+    error->SetError("Too much parameters for GetXcedeFilename (requires 2 parameters)",linenumber);
     return false;
     }
 
@@ -63,7 +63,7 @@ MString ScriptGetXcedeFilenameAction::Help()
 void ScriptGetXcedeFilenameAction::Execute()
 {
   MString m_value;
-  std::string dataSet = m_Manager->Convert(m_Parameters[1]).removeChar('\'').toChar();
+  std::string dataSet = m_Manager->Convert(m_Parameters[1]).fromVariable().GetValue();
 
   XcedeCatalog xcedeCatalog;
 

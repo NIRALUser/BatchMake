@@ -77,8 +77,8 @@ void ScriptCreateGraphAction::Execute()
   m_ProgressManager->IsRunning();
 
   HttpRequest m_request;
-  m_request.AddParam("user",m_Manager->GetDashboardUser());
-  m_request.AddParam("userkey",m_Manager->GetDashboardKey());
+  m_request.AddParam("user",m_Manager->GetDashboardUser().c_str());
+  m_request.AddParam("userkey",m_Manager->GetDashboardKey().c_str());
   m_request.AddParam("project",m_Parameters[1].toChar());
   m_request.AddParam("method","CreateGraph");
   m_request.AddParam("name",m_Parameters[2].toChar());
@@ -88,7 +88,7 @@ void ScriptCreateGraphAction::Execute()
     }
   m_request.AddParam("hostname",m_request.GetHostName().c_str());
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());
-  m_request.AddFile("script",m_Manager->GetScriptFullPath());
+  m_request.AddFile("script",m_Manager->GetScriptFullPath().toChar());
 
   url += "/dashboard.php";
   std::string m_Output = m_request.Send(url.c_str());

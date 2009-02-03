@@ -60,20 +60,21 @@ void ScriptExtractSliceAction::Execute()
     }
 #endif
 
-  MString m_input = m_Manager->Convert(m_Parameters[0]).removeChar('\'').latin1();
-  MString m_Output = m_Manager->Convert(m_Parameters[1]).removeChar('\'').latin1();
+  BMString m_input = m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
+  BMString m_Output = m_Manager->Convert(m_Parameters[1]).removeAllChars('\'');
    
   SliceExtractor m_sliceextractor;
  
   if(m_Parameters.size()>2)
     {
-    MString m_orientation = m_Manager->Convert(m_Parameters[2]).removeChar('\'').latin1();
+    BMString m_orientation = 
+      m_Manager->Convert(m_Parameters[2]).removeAllChars('\'');
     m_sliceextractor.SetOrientation(m_orientation.toInt());
     }
   
   if(m_Parameters.size()>3)
     {
-    MString m_slice = m_Manager->Convert(m_Parameters[3]).removeChar('\'').latin1();
+    BMString m_slice = m_Manager->Convert(m_Parameters[3]).removeAllChars('\'');
     m_sliceextractor.SetSlice(m_slice.toInt());
     }
 
@@ -82,7 +83,7 @@ void ScriptExtractSliceAction::Execute()
     m_sliceextractor.SetFromMiddleSlice(true);
     }
 
-  m_sliceextractor.Extract(m_input.toChar(),m_Output.toChar());
+  m_sliceextractor.Extract(m_input.GetValue(),m_Output.GetValue());
 }
 
 } // end namespace bm

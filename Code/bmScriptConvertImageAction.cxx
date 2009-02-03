@@ -92,8 +92,10 @@ void ScriptConvertImageAction::Execute()
     }
 #endif
 */
-  MString inputImage = m_Manager->Convert(m_Parameters[0]).removeChar('\'').latin1();
-  MString outputImage = m_Manager->Convert(m_Parameters[1]).removeChar('\'').latin1();
+  BMString inputImage = 
+    m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
+  BMString outputImage = 
+    m_Manager->Convert(m_Parameters[1]).removeAllChars('\'');
    
   itk::ImageIOBase::IOPixelType pixelType;
   itk::ImageIOBase::IOComponentType componentType;

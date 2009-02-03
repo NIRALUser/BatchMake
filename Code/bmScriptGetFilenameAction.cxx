@@ -41,37 +41,36 @@ MString ScriptGetFilenameAction::Help()
 
 void ScriptGetFilenameAction::Execute()
 {
-  MString input = m_Manager->Convert(m_Parameters[1]);
-  MString option = m_Manager->Convert(m_Parameters[2]).toLower();
+  BMString input = m_Manager->Convert(m_Parameters[1]);
+  BMString option = m_Manager->Convert(m_Parameters[2]).toLower();
 
   MString value = "'";
-  if(!strcmp(option.toChar(),"'name'"))
+  if( option == "'name'" )
     {
     value += itksys::SystemTools::GetFilenameName(input.toChar());
     }
-  else if(!strcmp(option.toChar(),"'path'"))
+  else if( option == "'path'" )
     {
     value += itksys::SystemTools::GetFilenamePath(input.toChar());
     }
-  else if(!strcmp(option.toChar(),"'name_without_extension'"))
+  else if( option == "'name_without_extension'" )
     {
     value += itksys::SystemTools::GetFilenameWithoutExtension(input.toChar());
     }
-  else if(!strcmp(option.toChar(),"'parent_path'"))
+  else if( option == "'parent_path'" )
     {
     std::string currentPath = itksys::SystemTools::GetFilenamePath(input.toChar());
     value += itksys::SystemTools::GetFilenamePath(currentPath);
     }
-  else if(!strcmp(option.toChar(),"'extension'"))
+  else if( option == "'extension'" )
     {
     value += itksys::SystemTools::GetFilenameExtension(input.toChar());
     }
   else
     {
     //std::cout << "ScriptGetFilenameAction: " << option.toChar() << " not defined!" << std::endl;
-    m_ProgressManager->AddError( MString("ScriptGetFilenameAction: ") 
-                               + option.toChar() 
-                               + " not defined!" );
+    m_ProgressManager->AddError( 
+      BMString("ScriptGetFilenameAction: ") + option + " not defined!" );
     }
   value += "'";
   m_Manager->SetVariable(m_Parameters[0],value);

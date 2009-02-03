@@ -54,8 +54,7 @@ MString ScriptSetAppOptionAction::Help()
 
 void ScriptSetAppOptionAction::Execute()
 {
-  MString m_value;
-  m_value=m_Manager->Convert(m_Parameters[1]);
+  BMString m_value = m_Manager->Convert(m_Parameters[1]);
 
   unsigned int i; 
   for (i=2;i<m_Parameters.size();i++)
@@ -64,36 +63,37 @@ void ScriptSetAppOptionAction::Execute()
       {
       m_value+= " ";
       }
-    m_value+=m_Manager->Convert(m_Parameters[i]);
+    m_value += m_Manager->Convert(m_Parameters[i]);
     }
 
   // First we search the name of the variable
-  long pos = m_Parameters[0].find(".",0);
-  std::string first = m_Parameters[0].mid(0,pos).toChar();
+  const BMString firstParam = m_Parameters[0];
+  long pos = firstParam.find(".",0);
+  std::string first = firstParam.midCopy(0,pos).GetValue();
 
-  long pos1 = m_Parameters[0].find(".",pos+1);
+  long pos1 = firstParam.find(".",pos+1);
 
   std::string second = "";
   std::string third = "";  
   if(pos1 !=-1)
     {
-    second = m_Parameters[0].mid(pos+1,pos1-pos-1).toChar();
+    second = firstParam.midCopy(pos+1,pos1-pos-1).GetValue();
     }
   else if(pos>-1)
     {
-    second = m_Parameters[0].mid(pos+1,m_Parameters.size()-pos-1).toChar();
+    second = firstParam.midCopy(pos+1,m_Parameters.size()-pos-1).GetValue();
     }
 
   if(pos1 > -1)
     {
-    third = m_Parameters[0].mid(pos1+1,m_Parameters.size()-pos1-1).toChar();
+    third = firstParam.midCopy(pos1+1,m_Parameters.size()-pos1-1).GetValue();
     }
 
   // Copy the values
   std::string value = "";
   for(i=1;i<m_Parameters.size();i++)
     {
-    std::string param = m_Parameters[i].toChar();
+    std::string param = m_Parameters[i].GetValue();
     long int currentpos = 0;
     long int posvar = param.find("${");
 
@@ -117,9 +117,10 @@ void ScriptSetAppOptionAction::Execute()
     value += " ";
     }
   ApplicationWrapper * app = NULL;
-  MString appName = m_Manager->GetVariable(first.c_str())[0];
+  BMString appName = m_Manager->GetVariable(first.c_str())[0];
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  ScriptActionManager::ApplicationWrapperListType::iterator it = 
+    m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*it)->GetApplicationPath().toChar(),appName.toChar()))
@@ -136,7 +137,7 @@ void ScriptSetAppOptionAction::Execute()
     {
     //std::cout << "Cannot find application : "  << appName.toChar() << std::endl;
     m_ProgressManager->AddError( 
-      MString("SetAppOption: Cannot find application") + appName );
+      BMString("SetAppOption: Cannot find application") + appName );
     return;
     }
 
@@ -146,7 +147,7 @@ void ScriptSetAppOptionAction::Execute()
   m_value += app->GetCurrentCommandLineArguments(false);
   m_value += "'";
 
-  m_Manager->SetVariable(first.c_str(),m_value);
+  m_Manager->SetVariable(first,m_value);
 
 }
 

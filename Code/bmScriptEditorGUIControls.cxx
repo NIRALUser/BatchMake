@@ -61,7 +61,7 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
   #endif
 #endif
 
-  m_WrappedApplicationsPath = "/Applications";
+  m_WrappedApplicationsPath = "Applications";
   m_InitFile = new XMLIniIO();
 }
 
@@ -144,15 +144,23 @@ void ScriptEditorGUIControls::Show()
     {
     MString wrappedApplicationPath = m_InitFile->Find("WrappedApplicationsPath");
     if(wrappedApplicationPath.GetValue().size()>0)
-      {      
+      {
       m_WrappedApplicationsPath = wrappedApplicationPath.toChar();  
       }  
     }
   else // if the init file doesn't exist we write the default value
     {
-    std::string apppath = m_ApplicationPath.toChar();
-    apppath += "/Applications";
-    m_InitFile->Update("WrappedApplicationsPath",apppath.c_str());
+    //std::string apppath = m_ApplicationPath.toChar();
+    //apppath += "/Applications";
+    //m_InitFile->Update("WrappedApplicationsPath",apppath.c_str());
+    if( !itksys::SystemTools::FileIsFullPath(
+                                            m_WrappedApplicationsPath.c_str()) )
+      {
+      m_WrappedApplicationsPath = 
+        (m_ApplicationPath + "/" + m_WrappedApplicationsPath.c_str()).toChar();
+      }
+    m_InitFile->Update("WrappedApplicationsPath",
+                       m_WrappedApplicationsPath.c_str());
     m_InitFile->Write();
     }
 
@@ -426,13 +434,13 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     run += filename;
     std::cout << "Running Condor script " << run.c_str() << std::endl;
     starter.Execute(run.c_str());
-    MString output = starter.GetOutput();
-    output = output.replaceChar(13,' ');
-    output = output.replaceChar(10,' ');
+    BMString output = starter.GetOutput();
+    output.replaceAllChars(13,' ');
+    output.replaceAllChars(10,' ');
     m_Errorgui->SetStatus(output);
-    MString error = starter.GetError();
-    error = error.replaceChar(13,' ');
-    error = error.replaceChar(10,' ');
+    BMString error = starter.GetError();
+    error.replaceAllChars(13,' ');
+    error.replaceAllChars(10,' ');
     m_Errorgui->SetStatus(error);
     }
 

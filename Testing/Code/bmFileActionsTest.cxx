@@ -30,8 +30,6 @@ int FileActionsTest (int argc, char *argv[])
   std::string filename(argv[1]);
   
   bm::ScriptParser m_Parser;
-  //m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
-  //m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath.toChar());
   if( m_Parser.Execute( filename.c_str()) == false )
     {
     return EXIT_FAILURE;

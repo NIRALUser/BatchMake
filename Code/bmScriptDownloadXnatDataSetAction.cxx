@@ -34,13 +34,13 @@ bool ScriptDownloadXnatDataSetAction::TestParam(ScriptError* error,int linenumbe
 {
    if (m_Parameters.size() < 2)
    {
-     error->SetError(MString("No enough parameter for DownloadXcedeDataSet (requires 2 parameters min)"),linenumber);
+     error->SetError("No enough parameter for DownloadXcedeDataSet (requires 2 parameters min)",linenumber);
      return false;
    }
 
    if (m_Parameters.size() > 4)
    {
-     error->SetError(MString("Too much parameters for DownloadXcedeDataSet (requires 4 parameters max)"),linenumber);
+     error->SetError("Too much parameters for DownloadXcedeDataSet (requires 4 parameters max)",linenumber);
      return false;
    }
 
@@ -62,14 +62,14 @@ return "DownloadXnatDataSet(<dataSet> <directory> [login] [password])";
 
 void ScriptDownloadXnatDataSetAction::Execute()
 {
-  std::string dataSet = m_Manager->Convert(m_Parameters[0]).removeChar('\'').toChar();
-  std::string directory = m_Manager->Convert(m_Parameters[1]).removeChar('\'').toChar();
+  std::string dataSet = m_Manager->Convert(m_Parameters[0]).fromVariable().GetValue();
+  std::string directory = m_Manager->Convert(m_Parameters[1]).fromVariable().GetValue();
   XnatCatalog xnatCatalog;
 
   if(m_Parameters.size() > 4)
     {
-    std::string login = m_Manager->Convert(m_Parameters[2]).removeChar('\'').toChar();
-    std::string password = m_Manager->Convert(m_Parameters[3]).removeChar('\'').toChar();
+    std::string login = m_Manager->Convert(m_Parameters[2]).fromVariable().GetValue();
+    std::string password = m_Manager->Convert(m_Parameters[3]).fromVariable().GetValue();
     xnatCatalog.DownloadXnatDatasets(dataSet, directory, login, password);
     }
   else

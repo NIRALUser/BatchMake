@@ -53,34 +53,34 @@ MString ScriptIncAction::Help()
 
 void ScriptIncAction::Execute()
 {
-  MString m_value = m_Manager->Convert(m_Parameters[0]);
+  BMString m_value = m_Manager->Convert(m_Parameters[0]);
 
   // if we have the variable we want the value
   if(m_Parameters[0][0] != '$')
     {
-    MString temp = "${";
+    BMString temp = "${";
     temp += m_Parameters[0];
     temp += "}";
     m_value = m_Manager->Convert(temp);
     }
   // We want the value of the variable
-  MString m_inc = m_Parameters[1];
+  BMString m_inc = m_Parameters[1];
 
   // get the value without the ''
-  MString test = (MString(m_value).rbegin("'"))+1;
+  BMString test = (BMString(m_value).rbegin("'"))+1;
   float val = test.toFloat();
   float inc = m_inc.toFloat();
   float sum = val + inc;
-  MString newVal(sum);
+  BMString newVal(sum);
   m_value ="'";
   m_value += newVal;
   m_value +="'";
 
-  MString param = m_Parameters[0];
+  BMString param = m_Parameters[0];
   // if we have the $ we want to set the var not the value
   if(m_Parameters[0][0] == '$')
     {
-    param= m_Parameters[0].rbegin("}")+2;
+    param = BMString(m_Parameters[0]).rbegin("}")+2;
     }
 
   m_Manager->SetVariable(param,m_value);

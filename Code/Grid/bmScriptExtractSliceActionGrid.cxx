@@ -46,19 +46,19 @@ void ScriptExtractSliceAction::GenerateGrid()
     return;
     }
 
-  MString m_input = m_Manager->Convert(m_Parameters[0]).removeChar('\'').latin1();
-  MString m_Output = m_Manager->Convert(m_Parameters[1]).removeChar('\'').latin1();
+  BMString m_input = m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
+  BMString m_Output = m_Manager->Convert(m_Parameters[1]).removeAllChars('\'');
   
-  MString m_orientation = "-1";
+  BMString m_orientation = "-1";
   if(m_Parameters.size()>2)
     {
-    m_orientation = m_Manager->Convert(m_Parameters[2]).removeChar('\'').latin1();
+    m_orientation = m_Manager->Convert(m_Parameters[2]).removeAllChars('\'');
     }
 
-  MString m_slice = "-1";
+  BMString m_slice = "-1";
   if(m_Parameters.size()>3)
     {
-    m_slice = m_Manager->Convert(m_Parameters[2]).removeChar('\'').latin1();
+    m_slice = m_Manager->Convert(m_Parameters[2]).removeAllChars('\'');
     }
   // m_Manager->Convert(m_Parameters[3]).removeChar('\'').latin1();
 

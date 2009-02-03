@@ -43,7 +43,7 @@ protected:
   void CreateLoop();
 
   std::vector<ScriptAction*> m_Action;
-  std::vector<MString> m_ForLoop;
+  std::vector<BMString> m_ForLoop;
 
 };
 

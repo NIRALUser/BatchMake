@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <iostream>
-#include "MString.h"
+#include "BMString.h"
 #include "bmScriptAction.h"
 
 namespace bm {
@@ -36,7 +36,7 @@ public:
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();
 
-  void GenerateGrid(std::string name,std::string value);
+  void GenerateGrid( const BMString& name, const BMString& value);
 
 };
 

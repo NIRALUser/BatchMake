@@ -43,11 +43,14 @@ bool ScriptIncludeAction::TestParam(ScriptError* error,int linenumber)
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
 
-  MString filename = m_Manager->Convert(m_Parameters[0]);
-  filename = filename.removeChar('\'');
+  BMString filename = m_Manager->Convert(m_Parameters[0]);
+  filename.removeAllChars('\'');
 
   std::string fileToInclude = filename.toChar();
-  std::string currentScriptPath = itksys::SystemTools::GetFilenamePath(static_cast<ScriptParser*>(m_Manager->GetParser())->GetCurrentFilename().c_str());
+  std::string currentScriptPath = 
+    itksys::SystemTools::GetFilenamePath(
+      static_cast<ScriptParser*>(
+        m_Manager->GetParser())->GetCurrentFilename().c_str());
 
   // Test if the script exists
   if(!itksys::SystemTools::FileExists(fileToInclude.c_str()))
@@ -57,7 +60,8 @@ bool ScriptIncludeAction::TestParam(ScriptError* error,int linenumber)
 
   long line = static_cast<ScriptParser*>(m_Manager->GetParser())->GetLineNumber();
   static_cast<ScriptParser*>(m_Manager->GetParser())->RemoveCodeLine(line-1);
-  static_cast<ScriptParser*>(m_Manager->GetParser())->Compile(fileToInclude.c_str(),line-1,true); // don't parse
+  static_cast<ScriptParser*>(m_Manager->GetParser())->Compile(
+    fileToInclude.c_str(),line-1,true); // don't parse
 
   return true;
 }

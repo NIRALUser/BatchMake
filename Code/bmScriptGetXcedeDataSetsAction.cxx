@@ -34,13 +34,13 @@ bool ScriptGetXcedeDataSetsAction::TestParam(ScriptError* error,int linenumber)
 {
    if (m_Parameters.size() < 2)
      {
-     error->SetError(MString("No enough parameter for GetXcedeDataSets (requires 2 parameters min)"),linenumber);
+     error->SetError("No enough parameter for GetXcedeDataSets (requires 2 parameters min)",linenumber);
      return false;
      }
 
    if (m_Parameters.size() > 5)
      {
-     error->SetError(MString("Too much parameters for GetXcedeDataSets (requires 5 parameters max)"),linenumber);
+     error->SetError("Too much parameters for GetXcedeDataSets (requires 5 parameters max)",linenumber);
      return false;
      }
 
@@ -63,8 +63,8 @@ MString ScriptGetXcedeDataSetsAction::Help()
 void ScriptGetXcedeDataSetsAction::Execute()
 {
   MString m_value;
-  std::string catalog = m_Manager->Convert(m_Parameters[1]).removeChar('\'').toChar();
-  std::string catalogId = m_Manager->Convert(m_Parameters[2]).removeChar('\'').toChar();
+  std::string catalog = m_Manager->Convert(m_Parameters[1]).fromVariable().GetValue();
+  std::string catalogId = m_Manager->Convert(m_Parameters[2]).fromVariable().GetValue();
   std::vector<std::string> dataSets;
 
   XcedeCatalog xcedeCatalog;
@@ -72,8 +72,8 @@ void ScriptGetXcedeDataSetsAction::Execute()
 
   if(m_Parameters.size() > 4)
     {
-    std::string login = m_Manager->Convert(m_Parameters[3]).removeChar('\'').toChar();
-    std::string password = m_Manager->Convert(m_Parameters[4]).removeChar('\'').toChar();
+    std::string login = m_Manager->Convert(m_Parameters[3]).fromVariable().GetValue();
+    std::string password = m_Manager->Convert(m_Parameters[4]).fromVariable().GetValue();
     dataSets = xcedeCatalog.GetXcedeDataSets(doc, catalogId, login, password);
     }
   else

@@ -22,7 +22,7 @@
 
 #include <vector>
 //#include <iostream>
-#include "MString.h"
+#include "BMString.h"
 //#include "bmScriptActionManager.h"
 //#include "bmProgressManager.h"
 //#include "bmScriptError.h"
@@ -47,12 +47,12 @@ public:
   ScriptAction();
   virtual ~ScriptAction();
   
-  typedef std::vector<MString> ParametersType;
+  typedef std::vector<BMString> ParametersType;
   typedef char* (*Help_Func)(void);
 
-  virtual void SetName(MString name);
-  virtual MString GetName();
-  virtual void SetParameters(ParametersType parameters);
+  virtual void SetName( const BMString& name);
+  virtual const BMString& GetName()const ;
+  virtual void SetParameters( const ParametersType& parameters);
   virtual void Execute();
   virtual void SetParent(ScriptAction* parent);
   virtual ScriptAction* GetParent();
@@ -68,8 +68,8 @@ public:
 #endif
 
 protected:
-  ParametersType m_Parameters;
-  MString m_Name;
+  const ParametersType m_Parameters;
+  BMString m_Name;
   ScriptAction* m_Parent;
   ScriptActionManager* m_Manager;
   ProgressManager* m_ProgressManager;

@@ -50,15 +50,15 @@ MString ScriptSinAction::Help()
 
 void ScriptSinAction::Execute()
 {
-  MString m_value;
-  MString test = m_Manager->Convert(m_Parameters[1]);
+  BMString m_value;
+  BMString test = m_Manager->Convert(m_Parameters[1]);
   //test = test.removeChar('\'');
   float m_X = test.fromVariable().toFloat();
   m_X = static_cast<float>(sin(m_X));
   //char m_text[100];
   //sprintf(m_text,"'%f'",(float)sin(m_X));
   //m_value = m_text;
-  m_value = MString( m_X ).toVariable();
+  m_value = BMString( m_X ).toVariable();
   m_Manager->SetVariable(m_Parameters[0],m_value);
 }
 

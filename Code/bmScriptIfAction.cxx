@@ -73,7 +73,7 @@ MString ScriptIfAction::Help()
 /** Return the status of the current condition*/
 bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigned int conditionSize)
 {
-  MString left = m_Parameters[startingParameter];
+  BMString left = m_Parameters[startingParameter];
   if(left[0] == '$')
     {
     if ((m_Manager->GetVariable(m_Parameters[startingParameter])).size())
@@ -86,7 +86,7 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
       }
     }
   
-  MString right = "";
+  BMString right = "";
 
   if(conditionSize>2)
     {
@@ -106,42 +106,42 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
       return true;
       }
     }
-  else if (m_Parameters[startingParameter+1].toLower() == "==")
+  else if (m_Parameters[startingParameter+1].toLowerCopy() == "==")
     {
     if (left == right)
       {
       return true;
       }
     }
-  else if (m_Parameters[startingParameter+1].toLower() == "!=")
+  else if (m_Parameters[startingParameter+1].toLowerCopy() == "!=")
     {
     if (left != right)
       {
       return true;
       }
     }
-  else if (m_Parameters[startingParameter+1].toLower() == ">")
+  else if (m_Parameters[startingParameter+1].toLowerCopy() == ">")
     {
     if (left.toFloat() > right.toFloat())
       {
       return true;
       }
     } 
-  else if (m_Parameters[startingParameter+1].toLower() == "<")
+  else if (m_Parameters[startingParameter+1].toLowerCopy() == "<")
     {
     if (left.toFloat() < right.toFloat())
       {
       return true;
       }
     }
-  else if (m_Parameters[startingParameter+1].toLower() == ">=")
+  else if (m_Parameters[startingParameter+1].toLowerCopy() == ">=")
     {
     if (left.toFloat() >= right.toFloat())
       {
       return true;
       }
     }
-  else if (m_Parameters[startingParameter+1].toLower() == "<=")
+  else if (m_Parameters[startingParameter+1].toLowerCopy() == "<=")
     {
     if (left.toFloat() <= right.toFloat())
       {

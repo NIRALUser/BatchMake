@@ -64,8 +64,8 @@ void ScriptCloseTCPSocketAction::Execute()
     {
     //std::cerr << "Socket cannot be removed" << std::endl;
     m_ProgressManager->AddError( 
-      MString("CloseTCPSocker: Socket ") + m_Parameters[0] 
-                                         + " cannot be removed" );
+      BMString("CloseTCPSocker: Socket ") + m_Parameters[0] 
+                                          + " cannot be removed" );
     return ;
     }
   return ;

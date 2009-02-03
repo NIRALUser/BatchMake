@@ -102,12 +102,13 @@
 #endif
 
 #include "Timer.h"
+#include <algorithm>
 
 #define BM_NEWACTION(option, iname)\
-if (option == MString(#iname).toLower())  return new Script##iname##Action();
+if (option == BMString(#iname).toLower())  return new Script##iname##Action();
 
 #define BM_NEWKEYWORD(keywordList, iname)\
-keywordList.push_back(MString(#iname));
+keywordList.push_back(BMString(#iname));
 
 namespace bm {
 
@@ -150,17 +151,17 @@ ScriptActionManager::~ScriptActionManager()
   //delete m_ProgressManager;
 }
 
-void ScriptActionManager::SetApplicationPath(MString applicationpath)
+void ScriptActionManager::SetApplicationPath( const BMString& applicationpath )
 {
   m_ApplicationPath = applicationpath;
 }
 
-void ScriptActionManager::SetScriptPath(MString scriptpath)
+void ScriptActionManager::SetScriptPath( const BMString& scriptpath )
 {
   m_ScriptPath = scriptpath;
 }
 
-void ScriptActionManager::SetScriptFullPath(const char* scriptpath)
+void ScriptActionManager::SetScriptFullPath(const BMString& scriptpath)
 {
   m_ScriptFullPath = scriptpath;
 }
@@ -204,10 +205,9 @@ void ScriptActionManager::SetLineNumber(int linenumber)
   m_LineNumber = linenumber;
 }
 
-
-std::vector<MString> ScriptActionManager::GetKeywordList()
+std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
 {
-  std::vector<MString> _list;
+  std::vector<BMString> _list;
   BM_NEWKEYWORD(_list, ForEach);
   BM_NEWKEYWORD(_list, ForNFold);
   BM_NEWKEYWORD(_list, Sequence);
@@ -291,7 +291,7 @@ std::vector<MString> ScriptActionManager::GetKeywordList()
 }
 
 
-ScriptAction* ScriptActionManager::CreateAction(MString option)
+ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
 {
   BM_NEWACTION(option, ForEach);
   BM_NEWACTION(option, ForNFold);
@@ -381,61 +381,68 @@ ScriptAction* ScriptActionManager::CreateAction(MString option)
   return 0;
 }
 
-void ScriptActionManager::SetApplicationWrapperList(std::vector<ApplicationWrapper*>* applicationlist)
+void ScriptActionManager
+::SetApplicationWrapperList( std::vector<ApplicationWrapper*>* applicationlist )
 {
   m_ApplicationWrapperList = applicationlist;
 }
 
 void ScriptActionManager::Reset()
 {
-   m_VariableTestList.clear();
-   m_VariableList.clear();
-   SetVariable(MString("applicationpath"),MString("'") + m_ApplicationPath + "'");
+  m_VariableTestList.clear();
+  m_VariableList.clear();
+  this->SetVariable( "applicationpath", m_ApplicationPath.toVariable() );
   
-   if (m_ScriptPath.length() == 0)
-      SetVariable(MString("scriptpath"),MString("'") + m_ApplicationPath + "'");
-   else
-      SetVariable(MString("scriptpath"),MString("'") + m_ScriptPath + "'");
+  if (m_ScriptPath.length() == 0)
+    {
+    this->SetVariable( "scriptpath", m_ApplicationPath.toVariable() );
+    }
+  else
+    {
+    this->SetVariable( "scriptpath", m_ScriptPath.toVariable() );
+    }
    
-   SetTestVariable(MString("applicationpath"));
-   SetTestVariable(MString("scriptpath"));
+  this->SetTestVariable("applicationpath");
+  this->SetTestVariable("scriptpath");
 
-   if (m_ApplicationWrapperList)
-   {
-     for (unsigned int k=0;k<m_ApplicationWrapperList->size();k++)
-     { 
-       SetVariable((*m_ApplicationWrapperList)[k]->GetName(),MString("'") + (*m_ApplicationWrapperList)[k]->GetApplicationPath() + "'");
-       SetTestVariable((*m_ApplicationWrapperList)[k]->GetName()); 
-     }
-   }
+  if (m_ApplicationWrapperList)
+    {
+    for( unsigned int k=0; k < m_ApplicationWrapperList->size(); k++ )
+      { 
+      this->SetVariable( (*m_ApplicationWrapperList)[k]->GetName(),
+                         (*m_ApplicationWrapperList)[k]->GetApplicationPath().toVariable() );
+      this->SetTestVariable((*m_ApplicationWrapperList)[k]->GetName()); 
+      }
+    }
 
-   m_ParentAction = 0;
-   for (unsigned int i=0;i<m_ActionList.size();i++)
-     {
-     m_ActionList[i]->Delete();
-     }
+  m_ParentAction = 0;
+  for( unsigned int i=0; i < m_ActionList.size(); i++ )
+    {
+    m_ActionList[i]->Delete();
+    }
   
-   m_ActionList.clear();
+  m_ActionList.clear();
 
 #ifdef BM_DASHBOARD
-   m_Dashboard.url = "";
-   m_Dashboard.user = "";
-   m_Dashboard.password = "";
-   m_Dashboard.experiments.clear();
+  m_Dashboard.url = "";
+  m_Dashboard.user = "";
+  m_Dashboard.password = "";
+  m_Dashboard.experiments.clear();
 #endif
 }
 
-void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
+void ScriptActionManager
+::AddAction( const BMString& option, const std::vector<BMString>& param )
 {
-  if ((option == "endforeach") || (option == "endif") ||
-       option == "endfornfold")
+  if( (option == "endforeach") || (option == "endif") ||
+       option == "endfornfold" )
     {
-    if (m_ParentAction != 0)
+    if( m_ParentAction != 0 )
       {
       m_ParentAction = m_ParentAction->GetParent();
       }
     }
-  else if (option == "else")
+  else if( option == "else" )
     {
     ((ScriptIfAction*)m_ParentAction)->SetMode(1);
     }
@@ -443,17 +450,17 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
     {
     ScriptAction* _action = CreateAction(option);
 
-    if(_action != 0)
+    if( _action != 0 )
      {
      m_InternalActionList.push_back(_action);
      }    
 
-    if (_action == 0)
+    if( _action == 0 )
       {
-      m_Error->SetError(MString("Undefined parameter [") + option + "]" ,
+      m_Error->SetError( BMString("Undefined parameter [") + option + "]" ,
                         m_LineNumber);
       }
-    else if(option == "include")
+    else if( option == "include" )
       {
       _action->SetName(option);
       _action->SetParameters(param);
@@ -465,11 +472,11 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
       _action->SetGridModule(m_GridModule);
 #endif
 
-      if (!_action->TestParam(m_Error,m_LineNumber))
+      if( !_action->TestParam(m_Error,m_LineNumber) )
         {
-        if (_action->Help() != "")
+        if ( _action->Help() != "" )
           {
-          m_Error->SetStatus(MString("\tCommand: ") + _action->Help());
+          m_Error->SetStatus( BMString("\tCommand: ") + _action->Help() );
           }
         }
       }
@@ -485,24 +492,24 @@ void ScriptActionManager::AddAction(MString option,std::vector<MString> param)
       _action->SetGridModule(m_GridModule);
 #endif
 
-      if (!_action->TestParam(m_Error,m_LineNumber))
+      if ( !_action->TestParam( m_Error, m_LineNumber ) )
         {
-        if (_action->Help() != "")
+        if ( _action->Help() != "" )
           {
-          m_Error->SetStatus(MString("\tCommand: ") + _action->Help());
+          m_Error->SetStatus( BMString("\tCommand: ") + _action->Help() );
           }
         }
         
-        if (m_ParentAction == 0)
+        if ( m_ParentAction == 0 )
           {
-          AddAction(_action);
+          this->AddAction( _action );
           }
         else
           {
-          m_ParentAction->AddAction(_action);
+          m_ParentAction->AddAction( _action );
           }
-        if ((option == "foreach")  || (option == "if") ||
-            (option == "fornfold"))
+        if( (option == "foreach")  || (option == "if") ||
+             (option == "fornfold") )
           {
           m_ParentAction = _action;
           }
@@ -528,55 +535,63 @@ void ScriptActionManager::Execute()
       .arg(m_timer.getMilliseconds()).toMString() );
 }
 
-void ScriptActionManager::SetTestVariable(MString name)
+void ScriptActionManager::SetTestVariable( const BMString& name )
 {
   bool _detected = false;
-  for (unsigned int i=0;i<m_VariableTestList.size();i++)
+  for( unsigned int i = 0; i < m_VariableTestList.size(); i++ )
     {
-    if (m_VariableTestList[i] == name)
+    if ( m_VariableTestList[i] == name )
       {
       _detected = true;
       }
     }
 
-  if (_detected == false)
+  if ( _detected == false )
     {
-    m_VariableTestList.push_back(name);
+    m_VariableTestList.push_back( name );
     }
 }
 
 
-bool ScriptActionManager::IsTestVariable(MString name)
+bool ScriptActionManager::IsTestVariable( const BMString& name )const
 {
-  for (unsigned int i=0;i<m_VariableTestList.size();i++)
-  {
-     if (m_VariableTestList[i] == name)
-        return true;
-  }
-
-  return false;
+  std::vector<BMString>::const_iterator it = 
+    std::find( m_VariableTestList.begin(), m_VariableTestList.end(), name);
+  if( it == m_VariableTestList.end() )
+    {
+    // name has not been found in VariableTestList
+    return false;
+    }
+  return true;
 }
 
 
-void ScriptActionManager::SetVariable(MString name,MString value)
+void ScriptActionManager
+::SetVariable( const BMString& name, const BMString& value )
 {
+  /*
   bool _detected = false;
-  for (unsigned int i=0;i<m_VariableList.size();i++)
+  std::vector<variablestruct*>::iterator it;
+  std::vector<variablestruct*>::iterator end = m_VariableList.end();
+  for( it = m_VariableList.begin(); it != end; ++it)
     {
-     if (m_VariableList[i]->name == name)
+     if( (*it)->name == name)
        {
        _detected = true;
-       m_VariableList[i]->value = value;
+       (*it)->value = value;
+       // @todo shall we break here ?
        }
     }
 
-  if (_detected == false)
+  if( _detected == false )
     {
     variablestruct* m_newvar = new variablestruct;
     m_newvar->name = name;
     m_newvar->value = value;
     m_VariableList.push_back(m_newvar);
     }
+  */
+  m_VariableList[name] = value;
 }
 
 
@@ -617,7 +632,8 @@ std::vector<MString> ScriptActionManager::GetVariable(MString name)const
   return _list;
 }*/
 
-std::vector<MString> ScriptActionManager::GetVariable(const MString& name)const
+std::vector<BMString> ScriptActionManager
+::GetVariable( const BMString& name )const
 {
   // We strip any ${} or $ as a variable name
   BMString varname( name );
@@ -625,41 +641,35 @@ std::vector<MString> ScriptActionManager::GetVariable(const MString& name)const
   varname.removeAllChars('{');
   varname.removeAllChars('}');
 
-  std::vector<MString> _list;
+  std::vector<BMString> _list;
+  /*
   std::vector<variablestruct*>::const_iterator it = m_VariableList.begin();
   std::vector<variablestruct*>::const_iterator end = m_VariableList.end();
   for( ; it != end; ++it)
     {
-    if ( (*it)->name == varname.latin1())
+    if ( (*it)->name == varname )
       {
-      BMString _param = (*it)->value;
-      while (!_param.isEmpty())
-        {
-        _param.removeChar(' ');
-        _param.removeChar('\'');
-        BMString _value( _param.beginCopy("\'") );
-        if (!_value.isEmpty())
-          {
-          _list.push_back(_value.latin1());
-          }
-        _param.end("\'");
-        if (_param.length() != 0)
-          {
-          ++_param;
-          }
-        }
-      // the variable is found and the list is initialized
+      _list = (*it)->value.extractVariables();
+      // the variable is found
       break;
       }
     }
-
+  */
+  std::map<BMString,BMString>::const_iterator it = 
+    m_VariableList.find( varname );
+  if( it != m_VariableList.end() )
+    {
+    _list = it->second.extractVariables();
+    }
   return _list;
 }
 
-void ScriptActionManager::SetSocketVariable(MString name)
+void ScriptActionManager::SetSocketVariable(const BMString& name)
 {
+  /*
   bool _detected = false;
-  for (unsigned int i=0;i<m_VariableSocketList.size();i++)
+  unsigned int size = m_VariableSocketList.size();
+  for( unsigned int i=0 ; i < size; ++i )
     {
     if (m_VariableSocketList[i]->name == name)
       {
@@ -674,11 +684,15 @@ void ScriptActionManager::SetSocketVariable(MString name)
     m_newvar->name = name;
     m_VariableSocketList.push_back(m_newvar);
     }
+  */
+  m_VariableSocketList[name];
 }
 
-TCPSocket* ScriptActionManager::GetVariableSocket(MString name)
+TCPSocket* ScriptActionManager::GetVariableSocket(const BMString& name)
 {
-  for (unsigned int i=0;i<m_VariableSocketList.size();i++)
+  /*
+  unsigned int size = m_VariableSocketList.size();
+  for( unsigned int i = 0; i < size; ++i )
   {
      if (m_VariableSocketList[i]->name == name)
      {
@@ -686,42 +700,34 @@ TCPSocket* ScriptActionManager::GetVariableSocket(MString name)
      }
   }
   return NULL;
-}
-
-std::vector<MString> ScriptActionManager::GetParamsFromVariable(MString var)
-{
-  std::vector<MString> params;
-  MString tmpVar = var;
-
-  MString curParam = "";
-
-  while ((tmpVar != "") && (tmpVar != curParam))
+  */
+  TCPSocket* res = NULL;
+  std::map<BMString,TCPSocket>::iterator it = m_VariableSocketList.find(name);
+  if( it != m_VariableSocketList.end() )
     {
-    tmpVar = tmpVar.removeChar(' ', true);
-    curParam = tmpVar.begin(" ");
-    if (curParam.length() != 0)
-      {
-      params.push_back(curParam);
-      }
-    tmpVar = tmpVar.end(" ");
+    res = &(it->second);
     }
-
-  return params;
+  return res;
 }
 
-MString ScriptActionManager::GetVariableFromParams(const 
-                                                   std::vector<MString> &  
-                                                   params)
+std::vector<BMString> ScriptActionManager
+::GetParamsFromVariable(const BMString& var)const
 {
-  MString var = "";
+  return var.tokenize(" ");
+}
 
-  unsigned int i;
-  for(i=0; i<params.size(); i++)
+BMString ScriptActionManager
+::GetVariableFromParams(const std::vector<BMString> & params)const
+{
+  BMString var;
+  
+  unsigned int size = params.size();
+  for( unsigned int i = 0; i < size; ++i)
     {
     var += params[i];
-    if(i<params.size()-1)
+    if( i < size - 1 )
       {
-      var += " ";
+      var += ' ';
       }
     }
 
@@ -729,13 +735,23 @@ MString ScriptActionManager::GetVariableFromParams(const
 }
 
 
-void ScriptActionManager::DisplayVariableList()
+void ScriptActionManager::DisplayVariableList()const
 {
   std::cout << "Variable List" << std::endl;
-  for (unsigned int i=0;i<m_VariableList.size();i++)
+  /*
+  unsigned int size = m_VariableList.size();
+  for( unsigned int i = 0; i < size; ++i)
     {
     std::cout << m_VariableList[i]->name.toChar() 
               << "\t" << m_VariableList[i]->value.toChar() << std::endl;
+    }
+  */
+  std::map<BMString,BMString>::const_iterator it;
+  std::map<BMString,BMString>::const_iterator end = m_VariableList.end();
+  for( it = m_VariableList.begin(); it != end; ++it)
+    {
+    std::cout << it->first.toChar() << "\t" 
+              << it->second.toChar() << std::endl;
     }
 }
 /*
@@ -817,14 +833,14 @@ MString ScriptActionManager::Convert(MString param)
 }
 */
 
-MString ScriptActionManager::Convert(const MString& param)const
+BMString ScriptActionManager::Convert(const BMString& param)const
 {
-  MString _value="'";
+  BMString _value="'";
   bool _vardetected = false;
-  MString _var;
+  BMString _var;
   
-  std::string::const_iterator it = param.GetConstRefValue().begin();
-  std::string::const_iterator end = param.GetConstRefValue().end();
+  std::string::const_iterator it = param.GetConstValue().begin();
+  std::string::const_iterator end = param.GetConstValue().end();
   for ( ; it != end ; ++it)
     {
     if ( *it == '$')
@@ -849,9 +865,9 @@ MString ScriptActionManager::Convert(const MString& param)const
         _vardetected = false;
 
         //MString _variable;
-        std::vector<MString> _variable = this->GetVariable(_var);
-        std::vector<MString>::const_iterator it2 = _variable.begin();
-        std::vector<MString>::const_iterator end2 = _variable.end();
+        std::vector<BMString> _variable = this->GetVariable(_var);
+        std::vector<BMString>::const_iterator it2 = _variable.begin();
+        std::vector<BMString>::const_iterator end2 = _variable.end();
         for (; it2 != end2; ++it2)
           {
           if ( it2 != _variable.begin() )
@@ -898,11 +914,11 @@ MString ScriptActionManager::Convert(const MString& param)const
 
 }
 
-MString ScriptActionManager::ConvertExtra(MString param)
+BMString ScriptActionManager::ConvertExtra(const BMString& param)const
 {
-  MString _value="'";
+  BMString _value="'";
   bool _vardetected = false;
-  MString _var;
+  BMString _var;
 
   for (int i=0;i<param.length();i++)
   {
@@ -924,7 +940,7 @@ MString ScriptActionManager::ConvertExtra(MString param)
 
          _vardetected=false;
          //MString _variable;
-         std::vector<MString> _variable =  GetVariable(_var);
+         std::vector<BMString> _variable =  GetVariable(_var);
          for (unsigned int k=0;k<_variable.size();k++)
          {
            if (k!=0)
@@ -954,10 +970,10 @@ MString ScriptActionManager::ConvertExtra(MString param)
 }
 
 
-bool ScriptActionManager::TestConvert(MString param, int linenumber)
+bool ScriptActionManager::TestConvert(const BMString& param, int linenumber)
 {
   bool _vardetected = false;
-  MString _var;
+  BMString _var;
   for (int i=0; i<param.length(); i++)
     {
     if (param[i] == '$')
@@ -983,7 +999,7 @@ bool ScriptActionManager::TestConvert(MString param, int linenumber)
 
         if (IsTestVariable(_var) == false)
           {
-          m_Error->SetError(MString("Undefined variable [") 
+          m_Error->SetError(BMString("Undefined variable [") 
                             + _var + "]", m_LineNumber);
           return false;
           }
@@ -1000,9 +1016,11 @@ bool ScriptActionManager::TestConvert(MString param, int linenumber)
 bool ScriptActionManager::TestParam()
 {
   bool flag = true;
-  for (unsigned int i=0;i<m_ActionList.size();i++)
+  std::vector<ScriptAction*>::iterator it;
+  std::vector<ScriptAction*>::iterator end = m_ActionList.end();
+  for ( it = m_ActionList.begin(); it != end; ++it )
     {
-    if (!m_ActionList[i]->TestParam(m_Error))
+    if ( !(*it)->TestParam(m_Error) )
       {
       flag = false;
       }
@@ -1010,23 +1028,25 @@ bool ScriptActionManager::TestParam()
   return flag;
 }
 
-bool ScriptActionManager::RemoveSocket(MString name)
+bool ScriptActionManager::RemoveSocket(const BMString& name)
 {
+ /*
   bool found = false;
   std::vector<variablestructsocket*>::iterator it;
-  it = m_VariableSocketList.begin();
-  
-  while( it != m_VariableSocketList.end() )
-  {
-     if( (*it)->name == name)
-     {
-        m_VariableSocketList.erase(it);
-        found = true;
-        return found;
-     }
-     ++it;
-  }
+  std::vector<variablestructsocket*>::iterator end = m_VariableSocketList.end();
+  for(it = m_VariableSocketList.begin(); it != end; ++it )
+    {
+    if( (*it)->name == name)
+      {
+      m_VariableSocketList.erase(it);
+      found = true;
+      break;
+      }
+    }
   return found;
+  */
+  unsigned int eraseCount = m_VariableSocketList.erase(name);
+  return eraseCount == 1;
 }
 
 } // end namespace bm

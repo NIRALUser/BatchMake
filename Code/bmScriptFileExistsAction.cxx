@@ -54,21 +54,21 @@ MString ScriptFileExistsAction::Help()
 
 void ScriptFileExistsAction::Execute()
 {
-  MString filename = m_Manager->Convert(m_Parameters[1]);  
-  filename = filename.removeChar('\'');
+  BMString filename = m_Manager->Convert(m_Parameters[1]);  
+  filename = filename.removeAllChars('\'');
 
   MString value = "0";
 
-  if(itksys::SystemTools::FileExists(filename.toChar()))
+  if( itksys::SystemTools::FileExists(filename.toChar()) )
     {
     value = "1";
     }
  
-  MString param = m_Parameters[0];
+  BMString param = m_Parameters[0];
   // if we have the $ we want to set the var not the value
   if(m_Parameters[0][0] == '$')
     {
-    param= m_Parameters[0].rbegin("}")+2;
+    param= m_Parameters[0].rbeginCopy("}")+2;
     }
 
   m_Manager->SetVariable(param,value);

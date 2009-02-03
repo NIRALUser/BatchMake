@@ -34,13 +34,13 @@ bool ScriptGetXnatDataSetsAction::TestParam(ScriptError* error,int linenumber)
 {
   if(m_Parameters.size() < 2)
     {
-    error->SetError(MString("No enough parameter for GetXnatDataSets (requires 2 parameters min)"),linenumber);
+    error->SetError("No enough parameter for GetXnatDataSets (requires 2 parameters min)",linenumber);
     return false;
     }
 
   if(m_Parameters.size() > 4)
     {
-    error->SetError(MString("Too much parameters for GetXnatDataSets (requires 4 parameters max)"),linenumber);
+    error->SetError("Too much parameters for GetXnatDataSets (requires 4 parameters max)",linenumber);
     return false;
     }
 
@@ -63,7 +63,7 @@ MString ScriptGetXnatDataSetsAction::Help()
 void ScriptGetXnatDataSetsAction::Execute()
 {
   MString m_value;
-  std::string catalog = m_Manager->Convert(m_Parameters[1]).removeChar('\'').toChar();
+  std::string catalog = m_Manager->Convert(m_Parameters[1]).fromVariable().GetValue();
   std::vector<std::string> dataSets;
 
   XnatCatalog xnatCatalog;
@@ -71,8 +71,8 @@ void ScriptGetXnatDataSetsAction::Execute()
 
   if(m_Parameters.size() > 2)
     {
-    std::string login = m_Manager->Convert(m_Parameters[2]).removeChar('\'').toChar();
-    std::string password = m_Manager->Convert(m_Parameters[3]).removeChar('\'').toChar();
+    std::string login = m_Manager->Convert(m_Parameters[2]).fromVariable().GetValue();
+    std::string password = m_Manager->Convert(m_Parameters[3]).fromVariable().GetValue();
     dataSets = xnatCatalog.GetXnatDataSets(doc, login, password);
     }
   else

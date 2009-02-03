@@ -50,18 +50,18 @@ MString ScriptExitOnErrorAction::Help()
 void ScriptExitOnErrorAction::Execute()
 {
   bool exitOnError = false;
-  MString m_value = m_Parameters[0];
+  BMString m_value = m_Parameters[0];
   if ( m_value.isVariable() )
     {
     m_value = m_value.fromVariable();
     }
   if( m_value.isInt() )
     {
-    exitOnError = m_value.toInt() == 1;
+    exitOnError = (m_value.toInt() == 1);
     }
   else
     {
-    exitOnError = (m_value.toLower() == "true");
+    exitOnError = (m_value.toLowerCopy() == "true");
     }
   m_ProgressManager->SetStopOnError(exitOnError);
 }

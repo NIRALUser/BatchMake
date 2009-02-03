@@ -21,7 +21,7 @@
 #endif
 
 #include <iostream>
-#include "MString.h"
+#include "BMString.h"
 
 namespace bm {
 
@@ -30,18 +30,18 @@ class ProgressManager
 public:
   ProgressManager();
   virtual ~ProgressManager();
-  virtual void SetStatus(const MString& status);
+  virtual void SetStatus(const BMString& status);
   virtual void Start(bool resetErrors = true);
   virtual void Stop();
   virtual void IsRunning();
-  virtual void AddAction(const MString& name);
-  virtual void FinishAction(const MString& output);
-  virtual void AddOutput(const MString& output);
-  virtual void AddError(const MString& output);
+  virtual void AddAction(const BMString& name);
+  virtual void FinishAction(const BMString& output);
+  virtual void AddOutput(const BMString& output);
+  virtual void AddError(const BMString& output);
   virtual bool IsStop();
-  virtual void SetFinished(const MString& message);
-  virtual void DisplayOutput(const MString& message);
-  virtual void DisplayError(const MString& message);
+  virtual void SetFinished(const BMString& message);
+  virtual void DisplayOutput(const BMString& message);
+  virtual void DisplayError(const BMString& message);
   /** Define the behavior to have when an error is added. If stop is set to 
    *  true, next time AddError() is called, it will automatically call Stop() 
    *  and the next action won't be executed. If stop is set to false, then 

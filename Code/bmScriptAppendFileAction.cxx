@@ -53,21 +53,21 @@ MString ScriptAppendFileAction::Help()
 
 void ScriptAppendFileAction::Execute()
 {
-  MString m_filename = m_Manager->Convert(m_Parameters[0]).removeChar('\'');
+  BMString m_filename = m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
   std::ofstream m_file;
    m_file.open(m_filename.latin1(), std::ofstream::binary | ios_base::app);
   
   if ( m_file.fail() )
     {
     m_ProgressManager->AddError(
-      MString("AppendFile: Cannot write in file ") + m_filename );
+      BMString("AppendFile: Cannot write in file ") + m_filename );
     return;
     }
 
-  MString m_value;
+  BMString m_value;
   for (unsigned int i=1;i<m_Parameters.size();i++)
   {
-    MString m_text = m_Manager->Convert(m_Parameters[i]).removeChar('\'').latin1();
+    BMString m_text = m_Manager->Convert(m_Parameters[i]).removeAllChars('\'');
     bool m_insert;
     for (int l=0;l<m_text.length();l++)
     {

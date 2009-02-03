@@ -57,20 +57,24 @@ MString ScriptListDirInDirAction::Help()
 
 void ScriptListDirInDirAction::Execute()
 {
-  MString m_initdir = m_Manager->Convert(m_Parameters[1]);
+  BMString m_initdir = m_Manager->Convert(m_Parameters[1]);
   if (m_initdir.startWith('\''))
-    m_initdir = m_initdir.rbegin("'") + 1;
+    {
+    m_initdir.rbegin("'") + 1;
+    }
 
-  MString m_filter = "*";
+  BMString m_filter = "*";
   if (m_Parameters.size() == 3 && strcmp(m_Parameters[2].toChar(),"NOOVERWRITE"))
     {
     m_filter = m_Manager->Convert(m_Parameters[2]);
     if (m_filter.startWith('\''))
-      m_filter = m_filter.rbegin("'") + 1;
+      {
+      m_filter.rbegin("'") + 1;
+      }
     }
 
   // By default the value is the current value of the first variable
-  MString value = "";
+  BMString value = "";
 
   bool checkOverwrite = false;
  
@@ -80,7 +84,7 @@ void ScriptListDirInDirAction::Execute()
     )
     {
     checkOverwrite = true;
-    std::vector<MString> values = m_Manager->GetVariable(m_Parameters[0]);
+    std::vector<BMString> values = m_Manager->GetVariable(m_Parameters[0]);
     for(unsigned int i=0;i<values.size();i++)
       {
       if(i>0)
@@ -88,7 +92,7 @@ void ScriptListDirInDirAction::Execute()
         value += " ";
         }
       value += "'";
-      value += values[i].toChar();
+      value += values[i];
       value += "'";
       }
     }
@@ -107,11 +111,12 @@ void ScriptListDirInDirAction::Execute()
     m_ProgressManager->AddAction("Action: ListDirInDir()");
     std::string error = dir;
     error += " is not a valid directory";
-    m_ProgressManager->AddError(error.c_str());
+    m_ProgressManager->AddError(error);
     return;
     }
 
-  std::string regexFromWildcard = MString::ConvertWildcardToRegEx(m_filter.toChar());
+  std::string regexFromWildcard = 
+    m_filter.ConvertWildcardToRegEx( ).GetValue();
   itksys::RegularExpression regex(regexFromWildcard.c_str());
 
   for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
@@ -135,7 +140,7 @@ void ScriptListDirInDirAction::Execute()
       bool exists = false;
       if(checkOverwrite)
         {
-        std::vector<MString> values = m_Manager->GetVariable(m_Parameters[0]);
+        std::vector<BMString> values = m_Manager->GetVariable(m_Parameters[0]);
         for(unsigned int i=0;i<values.size();i++)
           {
           if(!strcmp(values[i].toChar(),dname.c_str()))
@@ -151,7 +156,7 @@ void ScriptListDirInDirAction::Execute()
           {
           value += " ";
           }
-        value += MString("'") + MString(dname.c_str()) + MString("'");
+        value += BMString("'") + BMString(dname) + BMString("'");
         }
       }
     }

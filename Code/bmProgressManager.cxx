@@ -28,7 +28,7 @@ ProgressManager::~ProgressManager()
 }
 
 
-void ProgressManager::SetStatus(const MString& status)
+void ProgressManager::SetStatus(const BMString& status)
 {
   std::cout << "Status: " << status.toChar() << std::endl;
 }
@@ -38,15 +38,15 @@ void ProgressManager::IsRunning()
 {
 }
 
-void ProgressManager::AddAction(const MString& name)
+void ProgressManager::AddAction(const BMString& name)
 {
 }
 
-void ProgressManager::FinishAction(const MString& output)
+void ProgressManager::FinishAction(const BMString& output)
 {
 }
 
-void ProgressManager::AddOutput(const MString& output)
+void ProgressManager::AddOutput(const BMString& output)
 {
   if( output.length() )
     {
@@ -54,7 +54,7 @@ void ProgressManager::AddOutput(const MString& output)
     }
 }
 
-void ProgressManager::AddError(const MString& error)
+void ProgressManager::AddError(const BMString& error)
 {
   if( error.length() )
     {
@@ -86,16 +86,16 @@ void ProgressManager::Start(bool reset)
     }
 }
 
-void ProgressManager::SetFinished(const MString& message)
+void ProgressManager::SetFinished(const BMString& message)
 {
 }
 
-void ProgressManager::DisplayOutput(const MString& message)
+void ProgressManager::DisplayOutput(const BMString& message)
 {
   std::cout << message.toChar();
 }
 
-void ProgressManager::DisplayError(const MString& message)
+void ProgressManager::DisplayError(const BMString& message)
 {
   std::cout << message.toChar();
 }

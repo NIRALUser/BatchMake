@@ -29,24 +29,26 @@ ScriptAction::~ScriptAction()
 {
 }
 
-void ScriptAction::SetName(MString name)
+void ScriptAction::SetName(const BMString& name)
 {
   m_Name = name;
 }
 
-MString ScriptAction::GetName()
+const BMString& ScriptAction::GetName()const
 {
   return m_Name;
 }
 
-
-void ScriptAction::SetParameters(ParametersType parameters)
+void ScriptAction::SetParameters( const ParametersType& parameters)
 {
+  /*
   m_Parameters.clear();
   for (unsigned int i=0;i<parameters.size();i++)
     {
     m_Parameters.push_back(parameters[i]);
     }
+  */
+  const_cast<ParametersType&>(m_Parameters) = parameters;
 }
 
 

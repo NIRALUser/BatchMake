@@ -43,18 +43,20 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
 
-  MString appName = m_Parameters[1];
-  appName = appName.removeChar('@');
+  BMString appName = m_Parameters[1];
+  appName.removeAllChars('@');
 
   bool appFound = false;
 
   if(!m_Manager->GetApplicationWrapperList())
     {
-    error->SetError(MString("Calling SetApp() but no applications are defined"),linenumber);
+    error->SetError(
+      "Calling SetApp() but no applications are defined",linenumber);
     return false;
     }
 
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
+  ScriptActionManager::ApplicationWrapperListType::iterator it = 
+    m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
@@ -88,7 +90,7 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
     {
     std::string errorstr = "SetApp() cannot find the application: ";
     errorstr += appName.toChar();
-    error->SetError(MString(errorstr.c_str()),linenumber);
+    error->SetError(errorstr,linenumber);
     }
 
   return true;
@@ -102,8 +104,8 @@ MString ScriptSetAppAction::Help()
 
 void ScriptSetAppAction::Execute()
 {
-  MString appName = m_Parameters[1];
-  appName = appName.removeChar('@');
+  BMString appName = m_Parameters[1];
+  appName.removeAllChars('@');
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())

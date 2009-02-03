@@ -52,15 +52,15 @@ MString ScriptSetIdealOutputAction::Help()
 
 void ScriptSetIdealOutputAction::Execute()
 {
-  MString m_value;
-  MString param;
+  BMString m_value;
+  BMString param;
   // We check if the parameter 1 is a defined variable
   // This is used by the output application
-  std::vector<MString> vars = m_Manager->GetVariable(m_Parameters[1]);
+  std::vector<BMString> vars = m_Manager->GetVariable(m_Parameters[1]);
   if(vars.size()>0 && m_Parameters[1][0] != '$' && m_Parameters[1][1] != '{')
     {
     param = "${";
-    param += m_Parameters[1].toChar();
+    param += m_Parameters[1];
     param += "}\0";
     }
   else
@@ -70,25 +70,25 @@ void ScriptSetIdealOutputAction::Execute()
 
   m_value = m_Manager->Convert(param);
 
-  for (unsigned int i=2;i<m_Parameters.size();i++)
+  for (unsigned int i = 2; i < m_Parameters.size(); i++ )
     {
     if (m_value != "")
       {
       m_value+= " ";
       }
-    m_value+=m_Manager->Convert(m_Parameters[i]);
+    m_value += m_Manager->Convert(m_Parameters[i]);
     }
 
-  std::string varname = m_Parameters[0].toChar();
+  BMString varname = m_Parameters[0].toChar();
   varname += "_ideal_output";
 
-  m_Manager->SetVariable(varname.c_str(),m_value);
+  m_Manager->SetVariable(varname,m_value);
 
 #ifdef BM_GRID
   // If we are on the grid we use the bmGridStore to store the variable
   if(m_GridModule)
     {
-    this->GenerateGrid(varname.c_str(),m_value.toChar());
+    this->GenerateGrid(varname,m_value);
     return;
     }
 #endif

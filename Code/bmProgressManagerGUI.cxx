@@ -41,7 +41,7 @@ void ProgressManagerGUI::SetProgressGUI(ProgressGUIControls* ProgressGUI)
   m_ProgressGUI->g_progress->get_root()->branch_icons( &image_server, &image_server );
 }
 
-void ProgressManagerGUI::SetStatus(const MString& status)
+void ProgressManagerGUI::SetStatus(const BMString& status)
 {
   //m_ProgressGUI->g_Progressgui->show();
 }
@@ -66,13 +66,13 @@ void ProgressManagerGUI::IsRunning()
   Fl::check();
 }
 
-void ProgressManagerGUI::AddAction(const MString& name)
+void ProgressManagerGUI::AddAction(const BMString& name)
 {
   Fl_Group *m_group = new Fl_Group( 0, 0, 400, 20);
   m_group->resizable( NULL );
   m_group->end();
 
-  std::string title = name.GetConstRefValue();
+  std::string title = name.GetValue();
 
   long int pos = title.find_last_of("/");
   long int pos2 = title.find_last_of("\\");
@@ -110,11 +110,11 @@ void ProgressManagerGUI::AddAction(const MString& name)
   m_ErrorNode = NULL;
 
   //(MString("%1 - ").arg(m_Offset++) + name).toChar();
-  MString m_index;
+  BMString m_index;
   if (m_Offset <10)
-     m_index = MString("0%1 -").arg(m_Offset++);
+     m_index = BMString("0%1 -").arg(m_Offset++);
   else
-     m_index = MString("%1 -").arg(m_Offset++);
+     m_index = BMString("%1 -").arg(m_Offset++);
 
   if( m_CurrentNode )
     {
@@ -130,7 +130,7 @@ void ProgressManagerGUI::AddAction(const MString& name)
   m_ProgressGUI->g_progress->set_hilighted(m_CurrentNode);
 }
 
-void ProgressManagerGUI::FinishAction(const MString& output)
+void ProgressManagerGUI::FinishAction(const BMString& output)
 { 
   m_Progress->value(m_Progress->maximum()+1);
   if (m_CurrentNode)
@@ -165,7 +165,7 @@ void ProgressManagerGUI::FinishAction(const MString& output)
   Fl::check();
 }
 
-void ProgressManagerGUI::AddOutput(const MString& output)
+void ProgressManagerGUI::AddOutput(const BMString& output)
 { 
   if (output == "")
     {
@@ -195,7 +195,7 @@ void ProgressManagerGUI::AddOutput(const MString& output)
     m_CurrentNode ? m_CurrentNode : m_OutputNode );
 }
 
-void ProgressManagerGUI::AddError(const MString& error)
+void ProgressManagerGUI::AddError(const BMString& error)
 { 
   if (error == "")
     {
@@ -239,7 +239,7 @@ void ProgressManagerGUI::Stop()
   Fl::check();
 }
 
-void ProgressManagerGUI::SetFinished(const MString& message)
+void ProgressManagerGUI::SetFinished(const BMString& message)
 {
   m_CurrentNode  =  m_ProgressGUI->g_progress->add_branch("Processing finished !");
   m_CurrentNode->branch_icon( &image_output );
@@ -252,21 +252,21 @@ void ProgressManagerGUI::SetFinished(const MString& message)
   m_ProgressGUI->g_progress->set_hilighted(m_CurrentNode);
 }
 
-void ProgressManagerGUI::DisplayOutput(const MString& message)
+void ProgressManagerGUI::DisplayOutput(const BMString& message)
 {
   m_ProgressGUI->m_Buffer->append(message.toChar());
   m_ProgressGUI->g_output->scroll(m_ProgressGUI->m_Buffer->line_start(m_ProgressGUI->m_Buffer->length()),0); // m_ProgressGUI->m_Buffer->line_start(m_ProgressGUI->m_Buffer->length()),0);
   Fl::check();
 }
 
-void ProgressManagerGUI::DisplayError(const MString& message)
+void ProgressManagerGUI::DisplayError(const BMString& message)
 {
   m_ProgressGUI->m_Buffer->append(message.toChar());
   m_ProgressGUI->g_output->scroll(m_ProgressGUI->m_Buffer->line_start(m_ProgressGUI->m_Buffer->length()),0); // m_ProgressGUI->m_Buffer->line_start(m_ProgressGUI->m_Buffer->length()),0);
   Fl::check();
 }
 
-void ProgressManagerGUI::DisplayInfo(const MString& message)
+void ProgressManagerGUI::DisplayInfo(const BMString& message)
 {
   m_ProgressGUI->m_Buffer->append(message.toChar());
   m_ProgressGUI->g_output->scroll(m_ProgressGUI->m_Buffer->line_start(m_ProgressGUI->m_Buffer->length()),0); // m_ProgressGUI->m_Buffer->line_start(m_ProgressGUI->m_Buffer->length()),0);

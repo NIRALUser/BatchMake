@@ -35,40 +35,40 @@ bool ScriptRandomizeAction::TestParam(ScriptError* error,int linenumber)
 
   if (m_Parameters.size() <4)
     {
-    error->SetError(MString("No enough parameter for Randomize"),linenumber);
+    error->SetError( BMString("No enough parameter for Randomize"), linenumber);
     return false;
     }
 
-  if ((m_Parameters[1].toLower() != "gaussian")\
-      && (m_Parameters[1].toLower() != "uniform")\
-      && (m_Parameters[1].toLower() != "categorical"))
+  if ((m_Parameters[1].toLowerCopy() != "gaussian")\
+      && (m_Parameters[1].toLowerCopy() != "uniform")\
+      && (m_Parameters[1].toLowerCopy() != "categorical"))
     {
-    error->SetError(MString("No valid parameters for Randomize [") 
-                    + m_Parameters[1] + "]",linenumber);
+    error->SetError( BMString("No valid parameters for Randomize [") 
+                      + m_Parameters[1] + "]",linenumber);
     return false;
     }
 
-  if ((m_Parameters[1].toLower() == "gaussian") \
+  if ((m_Parameters[1].toLowerCopy() == "gaussian") \
       && (m_Parameters.size() != 4))
     {
-    error->SetError(MString("Incorret number of parameters for Randomize [")
-                    + m_Parameters[1] + "]",linenumber);
+    error->SetError( BMString("Incorret number of parameters for Randomize [")
+                      + m_Parameters[1] + "]",linenumber);
     return false;
     }
 
-  if ((m_Parameters[1].toLower()== "uniform") \
+  if ((m_Parameters[1].toLowerCopy()== "uniform") \
        && (m_Parameters.size() != 4))
     {
-    error->SetError(MString("Incorret number of parameters for Randomize [")
-                    + m_Parameters[1] + "]",linenumber);
+    error->SetError( BMString("Incorret number of parameters for Randomize [")
+                      + m_Parameters[1] + "]",linenumber);
     return false;
     }
 
-  if ((m_Parameters[1].toLower() == "categorical") \
+  if ((m_Parameters[1].toLowerCopy() == "categorical") \
        && (m_Parameters.size() < 4))
     {
-    error->SetError(MString("Incorret number of parameters for Randomize"),
-                    linenumber);
+    error->SetError( BMString("Incorret number of parameters for Randomize"),
+                     linenumber);
     return false;
     }
 
@@ -83,13 +83,14 @@ MString ScriptRandomizeAction::Help()
 
 void ScriptRandomizeAction::Execute()
 {
-  MString m_value;
-  if (m_Parameters[1].toLower() == "uniform")
+  BMString m_param = m_Parameters[1];
+  BMString m_value;
+  if ( m_param.toLower() == "uniform")
     {
     float m_min = m_Parameters[2].toFloat();
     float m_max = m_Parameters[3].toFloat();
     //sprintf(m_text,"'%f'",(((float)rand()*(m_max-m_min))/(float)RAND_MAX)+m_min);
-    m_value = MString( ( ( (float)rand() * ( m_max - m_min ) ) / 
+    m_value = BMString( ( ( (float)rand() * ( m_max - m_min ) ) / 
                            (float)RAND_MAX ) + m_min ).toVariable();
     }
   

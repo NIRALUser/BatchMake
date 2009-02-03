@@ -25,8 +25,10 @@
 #include "bmProgressManager.h"
 #include "ApplicationWrapper.h"
 #include <vector>
+#include <map>
 #include <iostream>
 #include "MString.h"
+#include "BMString.h"
 #include "TCPSocket.h"
 
 #ifdef BM_GRID
@@ -48,18 +50,20 @@ public:
   ScriptActionManager();
   virtual ~ScriptActionManager();
   
+  /*
   struct variablestruct
     {
-    MString name;
-    MString value;
+    BMString name;
+    BMString value;
     };
-    
+  */
+  /*
   struct variablestructsocket
     {
-    MString   name;
+    BMString   name;
     TCPSocket socket;
     };
-
+  */
   struct DashboardMethodParameter
     {
     std::string variable;
@@ -104,28 +108,27 @@ public:
     std::vector<DashboardExperiment> experiments;
     };
    
-  ScriptAction* CreateAction(MString option);
+  ScriptAction* CreateAction(const BMString& option);
 
-  void        SetApplicationPath(MString applicationpath);
-  void        SetScriptPath(MString scriptpath);
-  void        SetScriptFullPath(const char* scriptpath);
-  const char* GetScriptFullPath() 
-         { return m_ScriptFullPath.c_str(); }
+  void        SetApplicationPath(const BMString& applicationpath);
+  void        SetScriptPath(const BMString& scriptpath);
+  void        SetScriptFullPath(const BMString& scriptpath);
+  const BMString& GetScriptFullPath()const { return m_ScriptFullPath; }
 
   void AddAction(ScriptAction* action);
-  void AddAction(MString option, std::vector<MString> param);
+  void AddAction( const BMString& option, const std::vector<BMString>& param );
 
   void Execute(); 
 
   //MString Convert(MString param);
-  MString Convert(const MString& param)const;
-  MString ConvertExtra(MString param);
+  BMString Convert(const BMString& param)const;
+  BMString ConvertExtra(const BMString& param)const;
 
-  void                 SetVariable(MString name, MString value);
-  void                 SetSocketVariable(MString name);
-  std::vector<MString> GetVariable(const MString& name)const;
+  void                  SetVariable(const BMString& name, const BMString& value);
+  void                  SetSocketVariable(const BMString& name);
+  std::vector<BMString> GetVariable(const BMString& name)const;
   
-  void DisplayVariableList();
+  void DisplayVariableList()const;
   void SetLineNumber(int linenumber);
   int  GetLineNumber() 
          { return m_LineNumber; }
@@ -138,14 +141,14 @@ public:
 
   bool TestParam();
   void Reset();
-  bool TestConvert(MString param, int linenumber);
+  bool TestConvert(const BMString& param, int linenumber);
 
-  void SetTestVariable(MString name);
-  bool IsTestVariable(MString name);
+  void SetTestVariable(const BMString& name);
+  bool IsTestVariable(const BMString& name)const;
 
-  std::vector<MString> GetParamsFromVariable(MString name);
-  MString              GetVariableFromParams(const std::vector<MString> &
-                                             params);
+  std::vector<BMString> GetParamsFromVariable( const BMString& name )const;
+  BMString              GetVariableFromParams( const std::vector<BMString> &
+                                               params )const;
 
   void SetParser(void* parser) 
          { m_Parser = parser; }
@@ -164,8 +167,9 @@ public:
   ApplicationsListType* GetApplicationsList() 
          { return m_ApplicationsList; }
 
-  std::vector<MString> GetKeywordList();
-
+  std::vector<BMString> GenerateKeywordList()const;
+  
+  
 #ifdef BM_GRID
   void SetGridModule(Grid* grid) 
          { m_GridModule = grid; }
@@ -178,55 +182,59 @@ public:
   const char* GetDashboardURL() 
          { return m_Dashboard.url.c_str(); }
   
-  void SetDashboardUser(const char* user) 
+  void SetDashboardUser( const std::string& user) 
          { m_Dashboard.user = user; }
-  void SetDashboardKey(const char* key) 
+  void SetDashboardKey( const std::string& key) 
          { m_Dashboard.key = key; }
 
-  const char* GetDashboardUser() 
-         { return m_Dashboard.user.c_str(); }
-  const char* GetDashboardKey() 
-         { return m_Dashboard.key.c_str(); }
+  const std::string& GetDashboardUser() const
+         { return m_Dashboard.user; }
+  const std::string& GetDashboardKey()const
+         { return m_Dashboard.key; }
 
-  bool AddDashboardExperiment(const char* var,
-                              const char* projectName,
-                              const char* experimentName);
-  bool AddDashboardMethod(const char* var,
-                          const char* expvar,
-                          const char* methodName);
+  bool AddDashboardExperiment( const std::string& var,
+                               const std::string& projectName,
+                               const std::string& experimentName );
+  bool AddDashboardMethod( const std::string& var,
+                           const std::string& expvar,
+                           const std::string& methodName );
 
-  bool AddDashboardMethodParameter(const char* var,
-                                   const char* methVar, 
-                                   const char* name,
+  bool AddDashboardMethodParameter(const std::string& var,
+                                   const std::string& methVar, 
+                                   const std::string& name,
                                    bool output=false,
                                    bool ideal=false,
-                                   const char* type=NULL);
+                                   const std::string& type = "");
 
-  BatchBoard*  AddBatchBoard(const char* var,
-                             const char* experimentVar,
-                             const char* title,
-                             const char* isPublic);
+  BatchBoard*  AddBatchBoard(const std::string& var,
+                             const std::string& experimentVar,
+                             const std::string& title,
+                             const std::string& isPublic);
 
   /** Get the dashboard as a const method, onlt to retrieve data from it */
   const Dashboard * GetDashboard() const 
           { return &m_Dashboard; }
 #endif
 
-  TCPSocket* GetVariableSocket(MString name);
-  bool RemoveSocket(MString name);
+  TCPSocket* GetVariableSocket( const BMString& name);
+  bool RemoveSocket( const BMString& name);
 
 protected:
+  
   std::vector<ScriptAction*>         m_ActionList;
   ScriptAction                     * m_ParentAction;
-  std::vector<variablestruct*>       m_VariableList;
-  std::vector<MString>               m_VariableTestList;
-  std::vector<variablestructsocket*> m_VariableSocketList;
+  //std::vector<variablestruct*>       m_VariableList;
+  // key = Variable Name, content = Variable Value
+  std::map<BMString,BMString>        m_VariableList;
+  std::vector<BMString>              m_VariableTestList;
+  //std::vector<variablestructsocket*> m_VariableSocketList;
+  std::map<BMString,TCPSocket>        m_VariableSocketList;
   int                                m_LineNumber;
   ScriptError                      * m_Error;
   ProgressManager                  * m_ProgressManager;
-  MString                            m_ApplicationPath;
-  MString                            m_ScriptPath;
-  std::string                        m_ScriptFullPath;
+  BMString                           m_ApplicationPath;
+  BMString                           m_ScriptPath;
+  BMString                           m_ScriptFullPath;
   ApplicationWrapperListType       * m_ApplicationWrapperList;
   ApplicationsListType             * m_ApplicationsList;
   void                             * m_Parser;

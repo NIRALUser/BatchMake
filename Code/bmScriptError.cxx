@@ -45,26 +45,29 @@ int ScriptError::GetWarning()
 }
 
 
-void ScriptError::SetError(MString error,int linenumber)
+void ScriptError::SetError( const BMString& error, int linenumber )
 {
-  std::cout << " Error (" << linenumber << "): '" << error.toChar() << std::endl;
+  std::cout << " Error (" << linenumber 
+            << "): '"     << error.toChar() << std::endl;
   nb_error++;
 }
 
-void ScriptError::SetWarning(MString warning,int linenumber)
+void ScriptError::SetWarning( const BMString& warning, int linenumber )
 {
-    std::cout << " Warning (" << linenumber << "): '" << warning.toChar() << std::endl;
+    std::cout << " Warning (" << linenumber 
+              << "): '"       << warning.toChar() << std::endl;
     nb_warning++;
 }
 
-void ScriptError::SetStatus(MString status)
+void ScriptError::SetStatus( const BMString& status )
 {
       std::cout << status.toChar() << std::endl;
 }
 
 void ScriptError::DisplaySummary()
 {
-      std::cout << nb_error << " error(s), " << nb_warning <<" warning(s)" << std::endl;
+      std::cout << nb_error   << " error(s), " 
+                << nb_warning <<" warning(s)" << std::endl;
 }
 
 } // end namespace bm

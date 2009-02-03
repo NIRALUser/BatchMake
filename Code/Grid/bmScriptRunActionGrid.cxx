@@ -41,7 +41,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
 
   // second we try to find the current variable in the list of applications
   ApplicationWrapper * application = NULL;
-  MString appName = m_Manager->GetVariable(appvar)[0];
+  BMString appName = m_Manager->GetVariable(appvar)[0];
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
@@ -111,13 +111,13 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     app.SetParameterValue("parse","","1");
     app.SetParameterValue("parse.parse","",xmloutputname.c_str());
     //std::string appvarname = "-a ";
-    MString appn = m_Parameters[1];
-    appn = appn.removeChar('$');
-    appn = appn.removeChar('{');
-    appn = appn.removeChar('}');
+    BMString appn = m_Parameters[1];
+    appn.removeAllChars('$');
+    appn.removeAllChars('{');
+    appn.removeAllChars('}');
     //appvarname += appn.toChar();
     app.SetParameterValue("appname","","1");
-    app.SetParameterValue("appname.appname","",appn.toChar());
+    app.SetParameterValue("appname.appname","",appn.GetValue());
     m_GridModule->AddApplication(&app);
     }
   

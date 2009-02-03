@@ -22,7 +22,7 @@
 
 #include <bmScriptError.h>
 #include <iostream>
-#include "MString.h"
+#include "BMString.h"
 #include <FL/Fl_Text_Display.H>
 
 namespace bm {
@@ -34,9 +34,9 @@ public:
   ~ScriptErrorGUI();
 
   void SetTextDisplay(Fl_Text_Display* textdisplay);
-  void SetError(MString error,int line=-1);
-  void SetWarning(MString warning,int line=-1);
-  void SetStatus(MString status);
+  void SetError(const BMString& error,int line=-1);
+  void SetWarning(const BMString& warning,int line=-1);
+  void SetStatus(const BMString& status);
   void DisplaySummary();
 
 protected:

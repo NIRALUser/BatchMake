@@ -21,7 +21,7 @@
 #endif
 
 #include <iostream>
-#include "MString.h"
+#include "BMString.h"
 
 namespace bm {
 
@@ -32,9 +32,9 @@ public:
   
   ScriptError();
   virtual ~ScriptError();
-  virtual void SetError(MString error,int line=-1);
-  virtual void SetWarning(MString warning,int line=-1);
-  virtual void SetStatus(MString status);
+  virtual void SetError( const BMString& error, int line=-1 );
+  virtual void SetWarning( const BMString& warning, int line=-1 );
+  virtual void SetStatus( const BMString& status );
   virtual void DisplaySummary();
   virtual int GetError();
   virtual int GetWarning();

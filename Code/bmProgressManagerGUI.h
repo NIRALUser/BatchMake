@@ -36,18 +36,18 @@ class ProgressManagerGUI : public ProgressManager
 public:
   ProgressManagerGUI();
   ~ProgressManagerGUI();
-  void SetStatus(const MString& status);
+  void SetStatus(const BMString& status);
   void IsRunning();
   void SetProgressGUI(ProgressGUIControls* ProgressGUI);
-  void AddAction(const MString& name);
-  void FinishAction(const MString& output);
-  void AddOutput(const MString& output);
-  void AddError(const MString& output);
+  void AddAction(const BMString& name);
+  void FinishAction(const BMString& output);
+  void AddOutput(const BMString& output);
+  void AddError(const BMString& output);
   void Stop();
-  void SetFinished(const MString& message);
-  void DisplayOutput(const MString& message);
-  void DisplayError(const MString& message);
-  void DisplayInfo(const MString& message);
+  void SetFinished(const BMString& message);
+  void DisplayOutput(const BMString& message);
+  void DisplayError(const BMString& message);
+  void DisplayInfo(const BMString& message);
 
 protected:
   ProgressGUIControls* m_ProgressGUI;

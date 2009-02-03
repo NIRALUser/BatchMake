@@ -22,6 +22,7 @@
 //#include <stdio.h>
 #include <string>
 #include "MString.h"
+#include <vector>
 
 class BMString
 {
@@ -38,6 +39,7 @@ public:
 
   /** returns a copy of the internal string */
   std::string GetValue()const;
+  const std::string& GetConstValue()const;
   //const std::string& GetConstValue() const;
   
   BMString& arg(int value);
@@ -129,8 +131,8 @@ public:
   bool startWith(char key)const;
   bool endWith(char key)const;
   
-  /** remove just the first occurence of a char */
-  BMString& removeChar(char key);
+  /** remove the first char of the string if it is equal to key */
+  BMString& removeFirstChar(char key);
   BMString& removeAllChars(char key);
   BMString  removeAllCharsCopy(char key)const;
   BMString& duplicateChar(char key);
@@ -142,6 +144,8 @@ public:
   BMString replaceCopy(const char* key,const char* key2)const;
   BMString& toLower();
   BMString& toUpper();
+  BMString toLowerCopy()const;
+  BMString toUpperCopy()const;
   int count(const char key)const;
 
   bool isInBetweenChar(char val,long int pos)const;
@@ -158,6 +162,17 @@ public:
    *  if value == "foo", returns "'foo'"
   */
   BMString  toVariable()const;
+  
+  /** Extract all the substrings that are between 2 separator chars
+   *  For example, if the string is " 'toto' 'titi' 'tata'" and the separator 
+   *  key is ', extractVariables returns "toto", "titi", "tata"
+   */
+  std::vector<BMString> extractVariables()const;
+  /** Slightly different version. Here the sub strings don't have to be
+   *
+  */
+  std::vector<BMString> tokenize( const std::string& delimiters = " " )const;
+  
   
   //static std::string ConvertWildcardToRegEx(const char* wildcard);
   /** returns the RegExp string */

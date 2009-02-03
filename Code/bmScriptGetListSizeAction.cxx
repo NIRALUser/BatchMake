@@ -55,7 +55,7 @@ MString ScriptGetListSizeAction::Help()
 
 void ScriptGetListSizeAction::Execute()
 {
-  const std::vector<MString> list = 
+  const std::vector<BMString> list = 
     m_Manager->GetParamsFromVariable( m_Manager->Convert(m_Parameters[1]) );
 
   std::stringstream size;

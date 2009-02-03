@@ -21,7 +21,7 @@
 #endif
 
 #include <iostream>
-#include "MString.h"
+#include "BMString.h"
 #include "bmProgressManager.h"
 #include <itkMultiThreader.h>
 #include <itksys/SystemTools.hxx>
@@ -34,14 +34,14 @@ class Launch
 public:
   Launch();
   ~Launch();
-  void Execute(MString _command);
+  void Execute(const BMString& _command);
 
   /** Set/Get the progress manager */
   void SetProgressManager(ProgressManager* progressmanager);
   ProgressManager* GetProgressManager();
 
-  MString GetOutput();
-  MString GetError();
+  const BMString& GetOutput()const;
+  const BMString& GetError()const;
   int     GetExitStatus();
   
    /** Static function used as a "callback" by the MultiThreader.  The threading
@@ -64,8 +64,8 @@ protected:
   void RunCommand();
 
   ProgressManager* m_ProgressManager;
-  MString m_Output;
-  MString m_Error;
+  BMString m_Output;
+  BMString m_Error;
   int m_ExitStatus;
   std::string m_Command;
   itksysProcess* m_Process;

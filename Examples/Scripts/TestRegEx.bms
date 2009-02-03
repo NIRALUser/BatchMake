@@ -1,5 +1,5 @@
 set(myvar 'foo-bar.h')
-regEx(test ${myvar} 'foo-.')
+regEx(test ${myvar} 'foo-.' MATCH)
 echo(${test})
 
 if(${test} == 'foo-b')

@@ -88,18 +88,18 @@ void ScriptForNFoldAction::CreateLoop()
 { 
   unsigned int numberOfFolds = m_Parameters[3].toInt();
 
-  std::vector<MString> forDataList;
-  MString forDataString = m_Manager->Convert(m_Parameters[4]);
-  MString forDataItem = "";
+  std::vector<BMString> forDataList;
+  BMString forDataString = m_Manager->Convert(m_Parameters[4]);
+  BMString forDataItem = "";
 
   while ((forDataString != "") && (forDataString != forDataItem))
     {
-    forDataString = forDataString.removeChar(' ', true);
+    forDataString.removeFirstChar(' ');
 
     if (forDataString.startWith('\''))
       {
-      forDataString = forDataString.removeChar('\'', true);
-      forDataItem = forDataString.begin("\'");
+      forDataString.removeFirstChar('\'');
+      forDataItem = forDataString.beginCopy("\'");
       forDataString = forDataString.end("\'");
 
       if (forDataString.length() != 0)
@@ -109,13 +109,13 @@ void ScriptForNFoldAction::CreateLoop()
       }
     else
       {
-      forDataItem = forDataString.begin(" ");
-      forDataString = forDataString.end(" ");
+      forDataItem = forDataString.beginCopy(" ");
+      forDataString.end(" ");
       }
       
     if (forDataItem.length() != 0)
       {
-      forDataList.push_back(MString("'") + forDataItem + "'");
+      forDataList.push_back(BMString("'") + forDataItem + "'");
       }
     }
 
@@ -159,9 +159,9 @@ void ScriptForNFoldAction::Execute()
 
   this->CreateLoop();
 
-  MString loopCount;
-  MString loopTrain;
-  MString loopTest;
+  BMString loopCount;
+  BMString loopTrain;
+  BMString loopTest;
   unsigned int i, loop;
   for (loop=0; loop<m_Folds.size(); loop++)
     {
@@ -172,7 +172,7 @@ void ScriptForNFoldAction::Execute()
       }
 #endif
 
-    loopCount = MString((int)loop);
+    loopCount = BMString((int)loop);
     loopTest = "";
     loopTrain = "";
     for(i=0; i<m_Folds.size(); i++)

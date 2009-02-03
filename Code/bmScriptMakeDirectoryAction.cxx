@@ -49,7 +49,7 @@ MString ScriptMakeDirectoryAction::Help()
 
 void ScriptMakeDirectoryAction::Execute()
 {
-  MString dirname = this->m_Manager->Convert(this->m_Parameters[0]);
+  BMString dirname = this->m_Manager->Convert(this->m_Parameters[0]);
 
   // If we have a variable MakeDirectory(${dir}), get the dirname
   if(m_Parameters[0][0] == '$')
@@ -57,16 +57,12 @@ void ScriptMakeDirectoryAction::Execute()
     dirname = m_Manager->Convert(this->m_Parameters[0]);
     }
 
-  dirname = dirname.removeChar('\'');
-  if (!itksys::SystemTools::MakeDirectory(dirname.toChar()))
+  dirname.removeAllChars('\'');
+  if( !itksys::SystemTools::MakeDirectory(dirname.toChar()) )
     {
-    // failed to create dir.. notify manager
-    if (this->m_Manager)
-      {
-      this->m_Manager->GetError()->SetError(MString("Failed to create directory ") + dirname); 
-      }
+    // failed to create dir..
     m_ProgressManager->AddError( 
-      MString("Failed to create directory ") + dirname );
+      BMString("Failed to create directory ") + dirname );
     return;
     }
 }

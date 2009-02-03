@@ -29,7 +29,6 @@ int XMLReader::Open(const char* filename)
   /** Open file for reading */
   networkfile.open(filename,ifstream::binary);
   if (networkfile == NULL) return -1;
-
   
   return 0;
 } 

@@ -64,27 +64,27 @@ MString ScriptGetParamAction::Help()
 
 void ScriptGetParamAction::Execute()
 {
-  MString m_value;
-  std::vector<MString> m_list = 
+  BMString m_value;
+  std::vector<BMString> m_list = 
     m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
 
   for (unsigned int i=2;i<m_Parameters.size();i++)
     {
     // if we have the variable we want the value
-    MString m_param = m_Parameters[i];
+    BMString m_param = m_Parameters[i];
     if(m_Parameters[i][0] == '$')
       {
       m_param = m_Manager->Convert(m_Parameters[i]);
       }
 
-    m_param = m_param.removeChar('\'');
+    m_param.removeAllChars('\'');
 
     if (m_param.toInt() >= (int)m_list.size())
       {
       m_ProgressManager->AddError(
-        MString("GetParam: Exeed value for param %1").arg(i) );
+        BMString("GetParam: Exeed value for param %1").arg(i) );
       m_Manager->GetError()->SetStatus(
-        MString("GetParam: Exeed value for param %1").arg(i));
+        BMString("GetParam: Exeed value for param %1").arg(i));
       return;
       }
 

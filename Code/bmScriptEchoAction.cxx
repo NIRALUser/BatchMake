@@ -44,10 +44,10 @@ MString ScriptEchoAction::Help()
 
 void ScriptEchoAction::Execute()
 {
-  MString m_value;
+  BMString m_value;
   for (unsigned int i=0;i<m_Parameters.size();i++)
     {
-    m_value += m_Manager->Convert(m_Parameters[i]).removeChar('\'');
+    m_value += m_Manager->Convert(m_Parameters[i]).removeAllChars('\'');
     }
   m_Manager->GetProgressManager()->DisplayOutput(m_value+"\n");
 }

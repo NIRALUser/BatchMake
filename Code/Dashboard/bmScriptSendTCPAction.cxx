@@ -56,7 +56,8 @@ MString ScriptSendTCPAction::Help()
 /** */
 void ScriptSendTCPAction::Execute()
 {
-  MString m_value = m_Manager->Convert(m_Parameters[1]).removeChar('\'').latin1();
+  BMString m_value = m_Manager->Convert(m_Parameters[1]);
+  m_value.removeAllChars('\'');
 
   TCPSocket* socket = m_Manager->GetVariableSocket(m_Parameters[0]);
   int err = socket->SendMessage(m_value.toChar());

@@ -55,10 +55,10 @@ void ScriptDbClearAction::Execute()
   m_ProgressManager->IsRunning();
   HttpRequest m_request;
 
-  MString m_host = m_Manager->Convert(m_Parameters[0]).removeChar('\'').latin1();
-  MString m_account = m_Manager->Convert(m_Parameters[1]).removeChar('\'').latin1();
-  MString m_password = m_Manager->Convert(m_Parameters[2]).removeChar('\'').latin1(); 
-  MString m_project = m_Manager->Convert(m_Parameters[3]).removeChar('\'').latin1();
+  BMString m_host = m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
+  BMString m_account = m_Manager->Convert(m_Parameters[1]).removeAllChars('\'');
+  BMString m_password = m_Manager->Convert(m_Parameters[2]).removeAllChars('\''); 
+  BMString m_project = m_Manager->Convert(m_Parameters[3]).removeAllChars('\'');
 
   m_request.AddParam("hostname",m_request.GetHostName().c_str());
   m_request.AddParam("hostip",m_request.GetHostIp().c_str());

@@ -20,13 +20,15 @@
 namespace bm {
 
 /** Generate the condor script */
-void ScriptSetIdealOutputAction::GenerateGrid(std::string name,std::string value)
+void ScriptSetIdealOutputAction
+::GenerateGrid( const BMString& name, const BMString& value)
 {
   // We create the bmGridStore application and send it to condor
   ApplicationWrapper app;
-  MString appName = "bmGridStore";
+  BMString appName = "bmGridStore";
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator itApp = m_Manager->GetApplicationWrapperList()->begin();
+  ScriptActionManager::ApplicationWrapperListType::iterator itApp = 
+    m_Manager->GetApplicationWrapperList()->begin();
   while (itApp != m_Manager->GetApplicationWrapperList()->end())
     {
     if(!strcmp((*itApp)->GetName().toChar(),appName.toChar()))
@@ -46,8 +48,8 @@ void ScriptSetIdealOutputAction::GenerateGrid(std::string name,std::string value
     }   
 
   app.SetParameterValue("filename","",m_GridModule->GetCurrentScopeFile());
-  app.SetParameterValue("name","",name);
-  app.SetParameterValue("value","",value);
+  app.SetParameterValue("name","",name.GetValue());
+  app.SetParameterValue("value","",value.GetValue());
 
   m_GridModule->AddApplication(&app);
 }

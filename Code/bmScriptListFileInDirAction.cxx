@@ -59,23 +59,30 @@ MString ScriptListFileInDirAction::Help()
 
 void ScriptListFileInDirAction::Execute()
 {
-  MString m_initdir = m_Manager->Convert(m_Parameters[1]);
-  if (m_initdir.startWith('\''))
-    m_initdir = m_initdir.rbegin("'") + 1;
+  BMString m_initdir = m_Manager->Convert(m_Parameters[1]);
+  if( m_initdir.isEmpty() )
+    {
+    m_ProgressManager->AddError( "ListFileInDir: Directory is empty" );
+    return;
+    }
+  if( m_initdir.isVariable() )
+    {
+    m_initdir = m_initdir.fromVariable();
+    }
 
-  MString m_filter = "*";
+  BMString m_filter = "*";
   if (m_Parameters.size() == 3)
     {
     m_filter = m_Manager->Convert(m_Parameters[2]);
-    if (m_filter.startWith('\''))
+    if (m_filter.isVariable())
       {
-      m_filter = m_filter.rbegin("'") + 1;
+      m_filter = m_filter.fromVariable();
       }
     }
 
-  MString m_value;
+  BMString m_value;
 
-  std::string dir = m_initdir.toChar();
+  std::string dir = m_initdir.GetValue();
 
   if( (dir[dir.length()-1] != '/') && (dir[dir.length()-1] != '\\') )
     {
@@ -88,7 +95,7 @@ void ScriptListFileInDirAction::Execute()
     m_ProgressManager->AddAction("Action: ListFileInDir()");
     std::string error = dir;
     error += " is not a valid directory";
-    m_ProgressManager->AddError(error.c_str());
+    m_ProgressManager->AddError(error);
     return;
     }
 
@@ -99,11 +106,11 @@ void ScriptListFileInDirAction::Execute()
     m_ProgressManager->AddAction("Action: ListFileInDir()");
     std::string error = dir;
     error += " is not a valid directory";
-    m_ProgressManager->AddError(error.c_str());
+    m_ProgressManager->AddError(error);
     return;
     }
 
-  std::string regexFromWildcard = MString::ConvertWildcardToRegEx(m_filter.toChar());
+  std::string regexFromWildcard = m_filter.ConvertWildcardToRegEx().GetValue();
   itksys::RegularExpression regex(regexFromWildcard.c_str());
 
   for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
@@ -119,7 +126,7 @@ void ScriptListFileInDirAction::Execute()
         {
         m_value += " ";
         }
-      m_value += MString("'") + MString(dname) + MString("'");
+      m_value += BMString(dname).toVariable();
       }
     }
 

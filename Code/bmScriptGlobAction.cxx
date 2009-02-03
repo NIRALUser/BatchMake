@@ -49,10 +49,10 @@ MString ScriptGlobAction::Help()
 void ScriptGlobAction::Execute()
 {
   // Read the glob expression
-  MString globexpression = m_Manager->Convert(m_Parameters[1]);
+  BMString globexpression = m_Manager->Convert(m_Parameters[1]);
   if (globexpression.startWith('\''))
     {
-    globexpression = globexpression.rbegin("'") + 1;
+    globexpression.rbegin("'") + 1;
     }
 
   itksys::Glob glob;
@@ -60,7 +60,7 @@ void ScriptGlobAction::Execute()
   // Are we recursive
   if (m_Parameters.size() == 3)
     {
-    MString recurse = m_Manager->Convert(m_Parameters[2]);
+    BMString recurse = m_Manager->Convert(m_Parameters[2]);
     if(recurse.find("RECURSIVE")!= -1 || recurse.find("recursive")!= -1)
       {
       glob.RecurseOn();
@@ -72,9 +72,9 @@ void ScriptGlobAction::Execute()
     globexpression += "*.*";
     }
 
-  MString value="";
+  BMString value="";
  
-  std::string convertedGlobExpression = globexpression.toChar();
+  std::string convertedGlobExpression = globexpression.GetValue();
   itksys::SystemTools::ConvertToUnixSlashes(convertedGlobExpression);
 
   if(glob.FindFiles(convertedGlobExpression))
@@ -87,7 +87,7 @@ void ScriptGlobAction::Execute()
         {
         value += " ";
         }
-      value += MString("'") + MString(filenames[i]) + MString("'");
+      value += BMString("'") + BMString(filenames[i]) + BMString("'");
       }
     }
 

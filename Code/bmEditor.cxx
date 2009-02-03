@@ -33,7 +33,7 @@ Fl_Text_Display::Style_Table_Entry styletable[] = {  // Style table
 };
 
 
-static std::list<MString> m_keywords;
+static std::list<BMString> m_keywords;
 
 const char *code_types[] = {  // List of known C/C++ types...
     "else",
@@ -202,21 +202,17 @@ void Editor::UpdateApplicationsList()
 /** Update the list of keywords */
 void Editor::UpdateKeyword()
 { 
-  m_keywords.clear();
   m_Browser->clear();
 
-  std::vector<MString> m_list = m_Manager->GetKeywordList();
-  for (unsigned int i=0;i<m_list.size();i++)
-    { 
-    m_keywords.push_back(m_list[i]);
-    }
-   
+  std::vector<BMString> m_list = m_Manager->GenerateKeywordList();
+  m_keywords = std::list<BMString>( m_list.begin(), m_list.end() );
+     
   m_keywords.sort();
-  std::list<MString>::iterator it = m_keywords.begin();
-  while (it != m_keywords.end())
+  std::list<BMString>::iterator it;
+  std::list<BMString>::iterator end = m_keywords.end();
+  for( it = m_keywords.begin(); it != end; ++it)
     { 
     m_Browser->add((*it).toChar());
-    it++;
     }
   m_Browser->resize(13,15,200,80);
   m_Browser->end();
@@ -245,16 +241,16 @@ void Editor::SetModified(bool flag)
 }
 
 
-bool Editor::Find(std::list<MString> array,MString key)
+bool Editor::Find(/*std::list<MString> array,*/const BMString& key)
 {
-  std::list<MString>::iterator it = m_keywords.begin();
-  while (it != m_keywords.end())
+  std::list<BMString>::const_iterator it;
+  std::list<BMString>::const_iterator end = m_keywords.end();
+  for( it = m_keywords.begin(); it != end; ++it)
     {
-    if ((*it).toLower() == key)
+    if( (*it).toLowerCopy() == key )
       {
       return true;
       }
-    it++;
     }
   return false;
 }
@@ -452,7 +448,7 @@ void Editor:: style_parse(const char *text,char *style,int length)
           last = 1;
           continue;
           }
-        else if (Find(m_keywords,bufptr))
+        else if (Find(/*m_keywords,*/bufptr))
           {
           while (text < temp) 
             {
@@ -1119,7 +1115,7 @@ int Editor::handle( int event )
       int m_Offset = -1;
       int currentrating = 0;
 
-      std::list<MString>::iterator it = m_keywords.begin();
+      std::list<BMString>::const_iterator it = m_keywords.begin();
       int i =0;
       while (it != m_keywords.end())
         { 
@@ -1130,7 +1126,7 @@ int Editor::handle( int event )
           {
           if ((*it).length() > j)
             {
-            if ((m_CurrentWord.toLower()[j] != (*it).toLower()[j]))
+            if ((m_CurrentWord.toLower()[j] != (*it).toLowerCopy()[j]))
               {
               m_correctword = false;
               }

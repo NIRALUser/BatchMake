@@ -21,6 +21,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+#include <iterator>
 
 BMString::BMString()
 {
@@ -71,12 +72,11 @@ std::string BMString::GetValue()const
   return m_value;
 }
 
-/*
-const std::string BMString::GetConstValue() const
+
+const std::string& BMString::GetConstValue() const
 {
   return m_value;
 }
-*/
 
 BMString& BMString::arg(int value)
 {
@@ -435,7 +435,7 @@ bool BMString::endWith(char key)const
   return m_value[ m_value.length() - 1 ] == key;
 }
 
-BMString& BMString::removeChar(char key)
+BMString& BMString::removeFirstChar(char key)
 {
   size_t pos = m_value.find(key);
   if ( pos != std::string::npos )
@@ -507,8 +507,9 @@ BMString& BMString::replaceAllChars(char key,char key2)
 BMString BMString::replaceAllCharsCopy(char key,char key2)const
 {
   // create a string with same size of m_value
-  std::string m_newvalue(m_value.size(), char());
-  replace_copy(m_value.begin(), m_value.end(), m_newvalue.begin(), key, key2);
+  std::string m_newvalue;//(m_value.size(), char());
+  replace_copy( m_value.begin(), m_value.end(), 
+                std::back_inserter(m_newvalue), key, key2);
   return BMString(m_newvalue);
 }
 
@@ -550,9 +551,27 @@ BMString& BMString::toLower()
 
 BMString& BMString::toUpper()
 {
-   std::transform( m_value.begin(), m_value.end(), 
+  std::transform( m_value.begin(), m_value.end(), 
                   m_value.begin(), static_cast<int(*)(int)>(std::toupper) );
   return *this;
+}
+
+BMString BMString::toLowerCopy()const
+{
+  std::string res;
+  std::transform( m_value.begin(), m_value.end(), 
+                  std::back_inserter(res), 
+                  static_cast<int(*)(int)>(std::tolower) );
+  return BMString(res);
+}
+
+BMString BMString::toUpperCopy()const
+{
+  std::string res;
+  std::transform( m_value.begin(), m_value.end(), 
+                  std::back_inserter(res), 
+                  static_cast<int(*)(int)>(std::toupper) );
+  return BMString(res);
 }
 
 int BMString::count(char key)const
@@ -639,18 +658,18 @@ bool BMString::isVariable()const
 }
 
 // Extract the string that is between two ' characters
-// if value == "'foo'", returns "foo"
+// if value == "'foo'", returns "foo", if value == "foo", returns "foo"
 BMString  BMString::fromVariable()const
 {
   if( !this->isVariable() )
     {
-    return "";
+    return *this;
     }
   size_t start = m_value.find('\'');
   size_t end = m_value.rfind('\'');
-  if ( start == std::string::npos || end == std::string::npos )
+  if ( start == std::string::npos || end == std::string::npos || start == end )
     {
-    return "";
+    return *this;
     }
   return this->midCopy(start + 1, end - 1 - start);
 }
@@ -665,6 +684,57 @@ BMString  BMString::toVariable()const
     }
   return *this;
 }
+
+std::vector<BMString> BMString::extractVariables()const
+{
+  std::vector<BMString> variableList;
+  bool inVariable = false;
+  size_t pos, start;
+  size_t end = m_value.size();
+  for( pos = 0; pos != end; ++pos )
+    {
+    if( m_value[pos] == '\'' )
+      {
+      if( inVariable )
+        {
+        variableList.push_back( m_value.substr( start, pos - start ) );
+        start = std::string::npos;
+        inVariable = false;
+        }
+      else
+        {
+        start = pos + 1;
+        inVariable = true;
+        }
+      }
+    }
+  if( inVariable )
+    {
+    //variableList.push_back( m_value.substr( start, end - start ) );
+    }
+  return variableList;
+}
+
+std::vector<BMString> BMString::tokenize(const std::string& delimiters)const
+{
+  std::vector<BMString> tokens;
+  // Skip delimiters at beginning.
+  std::string::size_type lastPos = m_value.find_first_not_of(delimiters, 0);
+  // Find first "non-delimiter".
+  std::string::size_type pos     = m_value.find_first_of(delimiters, lastPos);
+
+  while( std::string::npos != pos || std::string::npos != lastPos )
+    {
+    // Found a token, add it to the vector.
+    tokens.push_back( m_value.substr(lastPos, pos - lastPos));
+    // Skip delimiters.  Note the "not_of"
+    lastPos = m_value.find_first_not_of(delimiters, pos);
+    // Find next "non-delimiter"
+    pos = m_value.find_first_of(delimiters, lastPos);
+    }
+  return tokens;
+}
+
 
 BMString BMString::ConvertWildcardToRegEx()const
 {

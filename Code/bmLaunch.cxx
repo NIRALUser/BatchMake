@@ -205,7 +205,7 @@ void Launch::RunCommand()
   itksysProcess_Delete(m_Process); 
 }
 
-void Launch::Execute(MString command)
+void Launch::Execute( const BMString& command)
 {
   m_Output = "";
   m_Error = "";
@@ -243,13 +243,13 @@ int Launch::GetExitStatus()
   return m_ExitStatus;
 }
 
-MString Launch::GetOutput()
+const BMString& Launch::GetOutput()const
 {
   return m_Output;
 }
 
 
-MString Launch::GetError()
+const BMString& Launch::GetError()const
 {
   return m_Error;
 }

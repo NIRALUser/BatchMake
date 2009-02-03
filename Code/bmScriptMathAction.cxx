@@ -54,34 +54,34 @@ MString ScriptMathAction::Help()
 
 void ScriptMathAction::Execute()
 {
-  MString value1 = m_Manager->Convert(m_Parameters[1]);
+  BMString value1 = m_Manager->Convert(m_Parameters[1]);
 
   // if we have the variable we want the value
   if(m_Parameters[1][0] != '$')
     {
-    MString temp = "${";
+    BMString temp = "${";
     temp += m_Parameters[1];
     temp += "}";
     value1 = m_Manager->Convert(temp);
     }
     
   // Second argument is the operator
-  MString op = m_Parameters[2];
+  BMString op = m_Parameters[2];
 
-  MString value2 = m_Manager->Convert(m_Parameters[3]);
+  BMString value2 = m_Manager->Convert(m_Parameters[3]);
 
   // if we have the variable we want the value
   if(m_Parameters[3][0] != '$')
     {
-    MString temp = "${";
+    BMString temp = "${";
     temp += m_Parameters[3];
     temp += "}";
     value2 = m_Manager->Convert(temp);
     }
   
   // get the value without the ''  
-  value1 = (MString(value1).rbegin("'"))+1;
-  value2 = (MString(value2).rbegin("'"))+1;
+  value1.rbegin("'")+1;
+  value2.rbegin("'")+1;
   
   if(value1.length() == 0)
     {
@@ -115,16 +115,16 @@ void ScriptMathAction::Execute()
     result = val1/val2;
     }    
   
-  MString newVal(result);
-  MString value ="'";
+  BMString newVal(result);
+  BMString value ="'";
   value += newVal;
   value +="'";
 
-  MString param = m_Parameters[0];
+  BMString param = m_Parameters[0];
   // if we have the $ we want to set the var not the value
   if(m_Parameters[0][0] == '$')
     {
-    param= m_Parameters[0].rbegin("}")+2;
+    param = m_Parameters[0].rbeginCopy("}")+2;
     }
 
   m_Manager->SetVariable(param,value);

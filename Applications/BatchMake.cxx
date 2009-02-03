@@ -31,17 +31,28 @@
  
 #include "bmScriptParser.h"
 #include "bmConfigure.h"
+#include <itksys/SystemTools.hxx>
 
 int main(int argc, char **argv)
 {
 #ifdef WIN32
-  MString m_ApplicationPath = MString(argv[0]).rbegin("\\");
-  m_ApplicationPath += "\\Applications";
+  MString m_BatchMakeBinaryPath = MString(argv[0]).rbegin("\\");
+  MString m_ApplicationPath = m_BatchMakeBinaryPath + "\\Applications";
+  
 #else
-  MString m_ApplicationPath = MString(argv[0]).rbegin("/");
-  m_ApplicationPath += "/Applications";
+  MString m_BatchMakeBinaryPath = MString(argv[0]).rbegin("/");
+  m_ApplicationPath = m_BatchMakeBinaryPath + "/Applications";
 #endif
-
+  std::string env;
+  if ( itksys::SystemTools::GetEnv("BatchMakeBinaryPath", env) )
+    {
+    m_BatchMakeBinaryPath = env;
+    }
+  if ( itksys::SystemTools::GetEnv("BatchMakeApplicationsPath", env) )
+    {
+    m_ApplicationPath = env;
+    }
+    
 #ifdef BM_USE_FLTK
   if (argc < 2)
     {
@@ -50,7 +61,8 @@ int main(int argc, char **argv)
     MString m_windowtitle("BatchMake - ");
     m_windowtitle += BatchMake_EXTENDED_VERSION_STRING;
     ui->g_Scripteditorgui->label(m_windowtitle.toChar());
-    ui->SetBatchMakeBinaryPath(m_ApplicationPath);
+    ui->SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
+    ui->SetWrappedApplicationsPath(m_ApplicationPath.toChar());
     // Initialize FLTK
     Fl::visual(FL_DOUBLE|FL_INDEX); 
     Fl::background(236,233,216);
@@ -83,8 +95,13 @@ int main(int argc, char **argv)
     command.AddOptionField("executeScript","filename",MetaCommand::STRING,true);
 
     // Specify batchmake path
-    command.SetOption("path","p",false,"Specify a the batchmake path");
+    command.SetOption("path","p",false,"Specify the batchmake path");
     command.AddOptionField("path","path",MetaCommand::STRING,true);
+    
+    // Specify application path
+    command.SetOption("applicationPath","ap",false,
+                      "Specify the path where applications are stored");
+    command.AddOptionField("applicationPath","applicationPath",MetaCommand::STRING,true);
 
     // Add application
     command.SetOption("addApplication","a",false,"Add an application");
@@ -116,16 +133,20 @@ int main(int argc, char **argv)
       
     if(command.GetOptionWasSet("path"))
       {
+      m_BatchMakeBinaryPath = command.GetValueAsString("path","path");
+      }
+    if(command.GetOptionWasSet("applicationPath"))
+      {
       m_ApplicationPath = command.GetValueAsString("path","path");
       }
-
+    
     if(command.GetOptionWasSet("compileScript"))
       {
       std::string filename = command.GetValueAsString("compileScript","filename");
       std::cout << "Compiling ..." << std::endl;
       bm::ScriptParser m_Parser;
-      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
-      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath.toChar());
+      m_Parser.LoadWrappedApplication(m_ApplicationPath);
+      m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
       m_Parser.Compile(filename);
       return 0;
       }
@@ -134,8 +155,8 @@ int main(int argc, char **argv)
       std::string filename = command.GetValueAsString("executeScript","filename");
       std::cout << "Executing ..." << std::endl;
       bm::ScriptParser m_Parser;
-      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
-      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath.toChar());
+      m_Parser.LoadWrappedApplication(m_ApplicationPath);
+      m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
       m_Parser.Execute(filename);
       return 0;
       }
@@ -162,8 +183,8 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateShell","scriptname");
       std::string outputname = command.GetValueAsString("generateShell","outputname");
       bm::ScriptParser m_Parser;
-      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
-      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
+      m_Parser.LoadWrappedApplication(m_ApplicationPath);
+      m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
      
       std::cout << "Generating shell script ...";
       bm::Grid grid;
@@ -183,8 +204,8 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateCondor","scriptname");
       std::string outputname = command.GetValueAsString("generateCondor","outputname");
       bm::ScriptParser m_Parser;
-      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
-      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
+      m_Parser.LoadWrappedApplication(m_ApplicationPath);
+      m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
      
       std::cout << "Generating condor script ...";
       bm::Grid grid;
@@ -204,8 +225,8 @@ int main(int argc, char **argv)
       std::string scriptname = command.GetValueAsString("generateGAD","scriptname");
       std::string outputname = command.GetValueAsString("generateGAD","outputname");
       bm::ScriptParser m_Parser;
-      m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
-      m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath);
+      m_Parser.LoadWrappedApplication(m_ApplicationPath);
+      m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
      
       std::cout << "Generating kwgrid script ...";
         

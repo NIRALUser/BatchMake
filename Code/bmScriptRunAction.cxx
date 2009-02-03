@@ -121,12 +121,12 @@ void ScriptRunAction::ParseXMLOutput(const char* output)
       // We only add the output values
       if((*it).name == "Output")
         {
-        MString app = m_Parameters[1];
-        app = app.removeChar('$');
-        app = app.removeChar('{');
-        app = app.removeChar('}');
-        std::string fullname = app.toChar();
-        fullname += "."+name;
+        BMString app = m_Parameters[1];
+        app.removeAllChars('$');
+        app.removeAllChars('{');
+        app.removeAllChars('}');
+        std::string fullname = app.GetValue();
+        fullname += "." + name;
         m_Manager->SetVariable(fullname,value);
         }
       }
@@ -150,38 +150,41 @@ void ScriptRunAction::Execute()
   m_timer.start();
   m_launch.SetProgressManager(m_ProgressManager);
 
-  m_ProgressManager->SetStatus(MString("Start ") + m_Manager->Convert(m_Parameters[1]).removeChar('\''));
-  MString m_actioname = m_Manager->ConvertExtra(m_Parameters[1]);
+  m_ProgressManager->SetStatus( BMString("Start ")
+    + m_Manager->Convert(m_Parameters[1]).removeAllChars('\'') );
+  BMString m_actioname = m_Manager->ConvertExtra(m_Parameters[1]);
 
-  m_actioname = m_actioname.removeChar(' ',true);
-  m_actioname = m_actioname.removeChar('\'',true);
-  m_actioname = m_actioname.begin("'").rend("\\");
+  m_actioname = m_actioname.removeFirstChar(' ');
+  m_actioname = m_actioname.removeFirstChar('\'');
+  m_actioname.begin("'").rend("\\");
  
   m_ProgressManager->AddAction(m_actioname);
 
-  m_launch.Execute(m_Manager->Convert(m_Parameters[1]).removeChar('\''));
-  MString m_Output = m_launch.GetOutput();
-  MString m_Error = m_launch.GetError();
+  m_launch.Execute(m_Manager->Convert(m_Parameters[1]).removeAllChars('\''));
+  BMString m_Output = m_launch.GetOutput();
+  BMString m_Error = m_launch.GetError();
 
   // Parse the output of the application and set the variables
   this->ParseXMLOutput(m_Output.toChar());
 
-  m_Manager->SetVariable(m_Parameters[0],MString("'") + m_Output + "'");
+  m_Manager->SetVariable(m_Parameters[0],BMString("'") + m_Output + "'");
   
   if (m_Parameters.size() > 2)
     {
-    m_Manager->SetVariable(m_Parameters[2],MString("'") + m_Error + "'");
+    m_Manager->SetVariable(m_Parameters[2],BMString("'") + m_Error + "'");
     }
   if (m_Parameters.size() > 3)
     {
     int exitStatus = m_launch.GetExitStatus();
     char* statusstring = new char[10];
     sprintf(statusstring,"%d",exitStatus);
-    m_Manager->SetVariable(m_Parameters[3],MString("'") + statusstring + "'");
+    m_Manager->SetVariable(m_Parameters[3],BMString("'") + statusstring + "'");
     delete [] statusstring;
     }
-  m_ProgressManager->SetStatus(MString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()));
-  m_ProgressManager->FinishAction(MString("Execution time: %1ms").arg(m_timer.getMilliseconds()));
+  m_ProgressManager->SetStatus(
+    BMString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()) );
+  m_ProgressManager->FinishAction(
+    BMString("Execution time: %1ms").arg(m_timer.getMilliseconds()) );
   
   // Display only the first 1000 errors in the manager
   int n=0;
@@ -190,23 +193,23 @@ void ScriptRunAction::Execute()
   while (m_Offset != -1 && n<100)
     {
     m_Offset = m_Output.find("\n");
-    m_ProgressManager->AddOutput(m_Output.begin("\n"));
+    m_ProgressManager->AddOutput( m_Output.beginCopy("\n") );
     if (m_Offset != -1)
       {
-      m_Output = m_Output.end("\n")+1;
+      m_Output.end("\n")+1;
       }
     n++;
     }
 
   m_Offset = 0;
   n=0;
-  while (m_Offset != -1 && n<100)
+  while (m_Offset != -1 && n < 100)
     {
     m_Offset = m_Error.find("\n");
-    m_ProgressManager->AddError(m_Error.begin("\n"));
+    m_ProgressManager->AddError( m_Error.beginCopy("\n") );
     if (m_Offset != -1)
       {
-      m_Error = m_Error.end("\n")+1;
+      m_Error.end("\n") + 1;
       }
     n++;
     }
