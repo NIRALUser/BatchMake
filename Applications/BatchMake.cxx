@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   
 #else
   MString m_BatchMakeBinaryPath = MString(argv[0]).rbegin("/");
-  m_ApplicationPath = m_BatchMakeBinaryPath + "/Applications";
+  MString m_ApplicationPath = m_BatchMakeBinaryPath + "/Applications";
 #endif
   std::string env;
   if ( itksys::SystemTools::GetEnv("BatchMakeBinaryPath", env) )
