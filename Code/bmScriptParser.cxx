@@ -435,32 +435,38 @@ bool ScriptParser::CheckOption(MString param)
 ScriptAction::ParametersType ScriptParser::GetParams(MString param)
 {
   ScriptAction::ParametersType m_params;
-  MString m_param = param.removeChar('(');
-  m_param = m_param.begin(")");
-  m_param = m_param.removeChar(')');
-  MString m_value = "";
+  // We take only what is inside the first pair of parenthesis.
+  // MString m_param = param.removeChar('(');
+  // m_param = m_param.begin(")");
+  // m_param = m_param.removeChar(')');
+  BMString m_param = BMString(param).rbegin(")").after("(");
+  BMString m_value = "";
   bool m_isquote = false;
 
-  for (int i=0;i<m_param.length();i++)
-  {
-      if (m_param[i] == '\'')
+  for( int i = 0; i < m_param.length(); i++ )
+    {
+    if( m_param[i] == '\'' )
       {
-        m_isquote=!m_isquote;
+      m_isquote=!m_isquote;
+      }
+  
+    if ((m_isquote) && (m_param[i] != '\''))
+      {
+      m_value += m_param[i];
       }
     
-      if ((m_isquote) && (m_param[i] != '\''))
-        m_value += m_param[i];
-      
-      if ((!m_isquote) && (m_param[i] != '\'') && (m_param[i] != ' '))
-        m_value += m_param[i];
-
-      if (((m_param[i] == ' ') && (m_value != "") && (!m_isquote)) || (i==m_param.length()-1))
+    if ((!m_isquote) && (m_param[i] != '\'') && (m_param[i] != ' '))
       {
-       // m_value = MString("'") + m_value + "'";
-        m_params.push_back(m_value);
-        m_value = "";
+      m_value += m_param[i];
       }
-   }
+
+    if (((m_param[i] == ' ') && (m_value != "") && (!m_isquote)) || (i==m_param.length()-1))
+      {
+     // m_value = MString("'") + m_value + "'";
+      m_params.push_back(m_value);
+      m_value = "";
+      }
+    }
   return m_params;
 }
 
