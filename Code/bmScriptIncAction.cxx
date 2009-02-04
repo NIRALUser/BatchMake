@@ -64,17 +64,15 @@ void ScriptIncAction::Execute()
     m_value = m_Manager->Convert(temp);
     }
   // We want the value of the variable
-  BMString m_inc = m_Parameters[1];
+  BMString m_inc = m_Manager->Convert(m_Parameters[1]);//m_Parameters[1];
 
   // get the value without the ''
-  BMString test = (BMString(m_value).rbegin("'"))+1;
+  BMString test = m_value.fromVariable();
   float val = test.toFloat();
-  float inc = m_inc.toFloat();
+  float inc = m_inc.fromVariable().toFloat();
   float sum = val + inc;
   BMString newVal(sum);
-  m_value ="'";
-  m_value += newVal;
-  m_value +="'";
+  m_value = newVal.toVariable();
 
   BMString param = m_Parameters[0];
   // if we have the $ we want to set the var not the value
