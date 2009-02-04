@@ -68,8 +68,8 @@ void ScriptDbSendFileAction::Execute()
   m_request.AddParam("account",m_account.toChar());
   m_request.AddParam("password",m_password.toChar());
   m_request.AddParam("caption",m_caption.toChar());
-
-  if (m_Filename.rend(".") == ".jpg")
+  // get extension
+  if( m_Filename.rafterCopy(".").toLower() == "jpg")
     {
     m_request.AddParam("type","2");
     }
