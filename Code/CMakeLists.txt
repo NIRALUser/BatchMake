@@ -20,6 +20,7 @@ SET(BatchMakeLib_HDRS
   bmScriptForEachAction.h
   bmScriptForNFoldAction.h
   bmScriptGetParamAction.h
+  bmScriptGetParamCountAction.h
   bmScriptIfAction.h
   bmScriptRandomizeAction.h
   bmScriptRunAction.h
@@ -88,6 +89,7 @@ SET(BatchMakeLib_SRCS
   bmScriptForEachAction.cxx
   bmScriptForNFoldAction.cxx
   bmScriptGetParamAction.cxx
+  bmScriptGetParamCountAction.cxx
   bmScriptIfAction.cxx
   bmScriptRandomizeAction.cxx
   bmScriptRunAction.cxx

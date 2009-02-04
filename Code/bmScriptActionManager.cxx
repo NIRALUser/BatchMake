@@ -25,6 +25,7 @@
 #include "bmScriptSetAppAction.h"
 #include "bmScriptSetAppOptionAction.h"
 #include "bmScriptGetParamAction.h"
+#include "bmScriptGetParamCountAction.h"
 #include "bmScriptListFileInDirAction.h"
 #include "bmScriptListDirInDirAction.h"
 #include "bmScriptIncAction.h"
@@ -220,6 +221,7 @@ std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
   BM_NEWKEYWORD(_list, ListDirInDir);
   BM_NEWKEYWORD(_list, ListFileInDir);
   BM_NEWKEYWORD(_list, GetParam);
+  BM_NEWKEYWORD(_list, GetParamCount);
   BM_NEWKEYWORD(_list, Randomize);
   BM_NEWKEYWORD(_list, Inc);
   BM_NEWKEYWORD(_list, Int);
@@ -305,6 +307,7 @@ ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
   BM_NEWACTION(option, ListDirInDir);
   BM_NEWACTION(option, ListFileInDir);
   BM_NEWACTION(option, GetParam);
+  BM_NEWACTION(option, GetParamCount);
   BM_NEWACTION(option, Randomize);
   BM_NEWACTION(option, Inc);
   BM_NEWACTION(option, Int);
