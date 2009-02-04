@@ -689,7 +689,8 @@ std::vector<BMString> BMString::extractVariables()const
 {
   std::vector<BMString> variableList;
   bool inVariable = false;
-  size_t pos, start;
+  size_t pos;
+  size_t start = 0;
   size_t end = m_value.size();
   for( pos = 0; pos != end; ++pos )
     {
