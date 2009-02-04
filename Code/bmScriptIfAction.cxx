@@ -76,9 +76,11 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
   BMString left = m_Parameters[startingParameter];
   if(left[0] == '$')
     {
-    if ((m_Manager->GetVariable(m_Parameters[startingParameter])).size())
+    std::vector<BMString> variables = 
+      m_Manager->GetVariable(m_Parameters[startingParameter]);
+    if ( variables.size() )
       {
-      left = m_Manager->GetVariable(m_Parameters[startingParameter])[0];
+      left = variables[0];
       }
     else
       {
