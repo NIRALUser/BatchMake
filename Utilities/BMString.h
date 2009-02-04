@@ -113,15 +113,15 @@ public:
   /** keep only the chain from the first occurence of key to its end.
    *  In other words, truncate from begin to first occurence of key.
   */ 
-  BMString& end(const char* key,int offset=0);
+  BMString& after(const char* key,int offset=0);
   /** return a copy of the chain from the first occurence of key to its end.
   */
-  BMString endCopy(const char* key,int offset=0)const;
+  BMString afterCopy(const char* key,int offset=0)const;
   
   BMString& rbegin(const char* key,int offset=-1);
   BMString rbeginCopy(const char* key,int offset=-1)const;
-  BMString& rend(const char* key,int offset=-1);
-  BMString rendCopy(const char* key,int offset=-1)const;
+  BMString& rafter(const char* key,int offset=-1);
+  BMString rafterCopy(const char* key,int offset=-1)const;
    
   bool isFloat()const;
   bool isInt()const;

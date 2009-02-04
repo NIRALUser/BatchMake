@@ -382,38 +382,52 @@ BMString BMString::rbeginCopy(const char* key,int offset)const
 }
 
 
-BMString& BMString::end(const char* key,int offset)
+BMString& BMString::after(const char* key,int offset)
 {
   size_t m_offset = m_value.find(key,offset);
-  if (m_offset != std::string::npos)
+  if (m_offset == std::string::npos)
     {
-    m_value.erase(0,m_offset);
+    m_value.clear();
+    }
+  else
+    {
+    m_value.erase(0,m_offset+1);
     }
   return *this;
 }
 
-BMString BMString::endCopy(const char* key,int offset)const
+BMString BMString::afterCopy(const char* key,int offset)const
 {
   size_t m_offset = m_value.find(key,offset);
-  BMString res( m_value.substr(m_offset) );
-  return res;
+  if (m_offset == std::string::npos)
+    {
+    return BMString("");
+    }
+  return BMString( m_value.substr(m_offset+1) );
 }
 
-BMString& BMString::rend(const char* key,int offset)
+BMString& BMString::rafter(const char* key,int offset)
 {
   size_t m_offset = m_value.rfind(key,offset);
-  if (m_offset != std::string::npos)
+  if (m_offset == std::string::npos)
     {
-    m_value.erase(0,m_offset);
+    m_value.clear();
+    }
+  else
+    {
+    m_value.erase(0,m_offset+1);
     }
   return *this;
 }
 
-BMString BMString::rendCopy(const char* key,int offset)const
+BMString BMString::rafterCopy(const char* key,int offset)const
 {
   size_t m_offset = m_value.rfind(key,offset);
-  BMString res( m_value.substr(m_offset) );
-  return res;
+  if (m_offset == std::string::npos)
+    {
+    return "";
+    }
+  return BMString( m_value.substr(m_offset+1) );
 }
 
 bool BMString::startWith(char key)const
@@ -627,25 +641,27 @@ bool BMString::isInBetweenChar(char val,long int pos)const
 
 bool BMString::isVariable()const
 {
-  // a variable must start with ''' precedes 0 or many ' ' (spaces)
-  // a variable must end with ''' followed 1 or many ' ' (spaces)
+  // a variable must start with ''' preceded by 0 or many ' ' (spaces)
+  // a variable must end with ''' followed by 0 or many ' ' (spaces)
   // only two ''' can be in the string
   std::string::const_iterator it = m_value.begin();
   std::string::const_iterator end = m_value.end();
+  // 0 or many preceding ' '
   for( ; it != end && *it == ' '; ++it)
     {
     ;
     }
   if( it == end || *it != '\'' )
-    {
+    {//no opening ''' char
     return false;
     }
   ++it;
   it = std::find(it,end,'\'');
   if( it == end )
-    {
+    {// no closing ''' char
     return false;
     }
+  ++it;
   for( ; it != end && *it == ' '; ++it)
     {
     ;
@@ -709,9 +725,9 @@ std::vector<BMString> BMString::extractVariables()const
         }
       }
     }
-  if( inVariable )
+  if( variableList.empty() )
     {
-    //variableList.push_back( m_value.substr( start, end - start ) );
+    variableList.push_back(m_value);
     }
   return variableList;
 }
