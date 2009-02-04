@@ -1,0 +1,12 @@
+ExitOnError( '1' )
+# basic inc
+Set( calc '15.3' )
+Set( res ${calc} )
+Inc( ${res} 0.9 )
+Echo( ${calc} ' + 0.9 = ' ${res} )
+# using a variable to inc
+Set( calc '18' )
+Set( increment '2' )
+Set( res ${calc} )
+Inc( ${res} ${increment} )
+Echo( ${calc} ' + ' ${increment} ' = ' ${res} )

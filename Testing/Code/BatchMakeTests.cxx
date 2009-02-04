@@ -28,5 +28,5 @@ void RegisterTests()
 {
   REGISTER_TEST(DashboardSendTest);
   REGISTER_TEST(SystemInfoTest);
-  REGISTER_TEST(FileActionsTest);
+  REGISTER_TEST(ActionsTest);
 }

@@ -12,14 +12,16 @@ IF(DASHBOARD_SUPPORT)
   SET(BatchMakeTest_SRCS
     bmDashboardSendTest.cxx
     bmSystemInfoTest.cxx
-    bmFileActionsTest.cxx
+    bmActionsTest.cxx
     )
   SET (TEST_DATA ${BatchMakeTest_SOURCE_DIR}/TestData)
 
   ADD_TEST(DashboardSendTest ${BATCHMAKE_TESTS} DashboardSendTest)
   ADD_TEST(SystemInfoTest ${BATCHMAKE_TESTS} SystemInfoTest)
 
-  ADD_TEST(FileActionsTest ${BATCHMAKE_TESTS} FileActionsTest ${TEST_DATA}/FileActionsTest.bms)
+  ADD_TEST(FileActionsTest   ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/FileActionsTest.bms)
+  ADD_TEST(StringActionsTest ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/StringActionsTest.bms)
+  ADD_TEST(MathActionsTest   ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/MathActionsTest.bms)
 
   ADD_EXECUTABLE(BatchMakeTests BatchMakeTests.cxx ${BatchMakeTest_SRCS})
   TARGET_LINK_LIBRARIES(BatchMakeTests ${BatchMake_LIBRARIES})

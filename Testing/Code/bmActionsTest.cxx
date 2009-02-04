@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmFileActionsTest.cpp
+  Module:    bmActionsTest.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -17,23 +17,22 @@
 #include <iostream>
 #include <fstream>
 
-#include "bmModuleDescriptionParser.h"
-#include "bmModuleDescription.h"
+#include "bmScriptParser.h"
 
-int FileActionsTest (int argc, char *argv[])
+int ActionsTest (int argc, char *argv[])
 {
   if (argc < 2)
     {
-    std::cout << "Usage: FileActionTest. Need input filename" << std::endl;
+    std::cout << "Usage: ActionTest. Need input filename" << std::endl;
     return EXIT_FAILURE;
     }
 
   std::string filename(argv[1]);
   
   bm::ScriptParser m_Parser;
-  //m_Parser.LoadWrappedApplication(m_ApplicationPath.toChar());
-  //m_Parser.SetBatchMakeBinaryPath(m_ApplicationPath.toChar());
-  m_Parser.Execute(filename.c_str());
-
+  if( m_Parser.Execute( filename.c_str()) == false )
+    {
+    return EXIT_FAILURE;
+    }
   return EXIT_SUCCESS;
 }
