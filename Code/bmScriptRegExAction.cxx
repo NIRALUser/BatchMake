@@ -64,7 +64,7 @@ bool ScriptRegExAction::TestParam(ScriptError* error,int linenumber)
  
 MString ScriptRegExAction::Help()
 {
-  return "RegEx(<newvar> <var> <RegularExpression> <MATCH or REPLACE>)";
+  return "RegEx(<newvar> <var> <RegularExpression> <MATCH or REPLACE> [replacevar])";
 }
 
 
