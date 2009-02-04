@@ -156,7 +156,8 @@ void ScriptRunAction::Execute()
 
   m_actioname = m_actioname.removeFirstChar(' ');
   m_actioname = m_actioname.removeFirstChar('\'');
-  m_actioname.begin("'").rend("\\");
+  // not sure here, shall we keep '\' or not ?
+  m_actioname.begin("'").rafter("\\");
  
   m_ProgressManager->AddAction(m_actioname);
 
@@ -196,7 +197,7 @@ void ScriptRunAction::Execute()
     m_ProgressManager->AddOutput( m_Output.beginCopy("\n") );
     if (m_Offset != -1)
       {
-      m_Output.end("\n")+1;
+      m_Output.after("\n");
       }
     n++;
     }
@@ -209,7 +210,7 @@ void ScriptRunAction::Execute()
     m_ProgressManager->AddError( m_Error.beginCopy("\n") );
     if (m_Offset != -1)
       {
-      m_Error.end("\n") + 1;
+      m_Error.after("\n");
       }
     n++;
     }

@@ -129,17 +129,12 @@ void ScriptForEachAction::CreateLoop()
         {
         m_paramlist.removeFirstChar('\'');
         m_value = m_paramlist.beginCopy("\'");
-        m_paramlist.end("\'");
-
-        if (m_paramlist.length() != 0)
-          {
-          ++m_paramlist;
-          }
+        m_paramlist.after("\'");
         }
       else
         {
         m_value = m_paramlist.beginCopy(" ");
-        m_paramlist.end(" ");
+        m_paramlist.after(" ");
         }
         
       if (!m_value.isEmpty())

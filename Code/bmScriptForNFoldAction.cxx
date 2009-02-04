@@ -100,22 +100,17 @@ void ScriptForNFoldAction::CreateLoop()
       {
       forDataString.removeFirstChar('\'');
       forDataItem = forDataString.beginCopy("\'");
-      forDataString = forDataString.end("\'");
-
-      if (forDataString.length() != 0)
-        {
-        forDataString = forDataString + 1;
-        }
+      forDataString.after("\'");
       }
     else
       {
       forDataItem = forDataString.beginCopy(" ");
-      forDataString.end(" ");
+      forDataString.after(" ");
       }
       
     if (forDataItem.length() != 0)
       {
-      forDataList.push_back(BMString("'") + forDataItem + "'");
+      forDataList.push_back( BMString("'") + forDataItem + "'" );
       }
     }
 
