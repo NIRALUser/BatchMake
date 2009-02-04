@@ -41,7 +41,7 @@ MString ScriptGetFilenameAction::Help()
 
 void ScriptGetFilenameAction::Execute()
 {
-  BMString input = m_Manager->Convert(m_Parameters[1]);
+  BMString input = m_Manager->Convert(m_Parameters[1]).fromVariable();
   BMString option = m_Manager->Convert(m_Parameters[2]).toLower();
 
   MString value = "'";
