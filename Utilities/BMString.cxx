@@ -152,6 +152,10 @@ MString BMString::toMString()const
   return MString(m_value);
 }
 
+BMString::operator std::string()const
+{
+  return m_value;
+}
 
 int BMString::toInt()const
 {
@@ -701,30 +705,100 @@ BMString  BMString::toVariable()const
   return *this;
 }
 
+bool NotQuoteNotSpace( const char& character )
+{
+  return character != '\'' && character != ' ';
+}
+
+bool QuoteOrSpace( const char& character )
+{
+  return character == '\'' || character == ' ';
+}
+
 std::vector<BMString> BMString::extractVariables()const
 {
   std::vector<BMString> variableList;
-  bool inVariable = false;
+  bool inQuote = false;
+  /*
   size_t pos;
   size_t start = 0;
   size_t end = m_value.size();
   for( pos = 0; pos != end; ++pos )
     {
-    if( m_value[pos] == '\'' )
+    if( m_value[pos] == '\'' || 
+        (m_value[pos] == ' ' && !inQuote) )
       {
-      if( inVariable )
+      if( inQuote )
         {
         variableList.push_back( m_value.substr( start, pos - start ) );
         start = std::string::npos;
-        inVariable = false;
+        inQuote = false;
         }
       else
         {
         start = pos + 1;
-        inVariable = true;
+        inQuote = true;
         }
       }
     }
+  */
+  bool inVariable = false;
+  std::string::const_iterator variableStart = m_value.begin();
+  std::string::const_iterator variableEnd = m_value.begin();
+  std::string::const_iterator end = m_value.end();
+  while( variableEnd != end )
+    {
+    if( inVariable )
+      {
+      if( inQuote) 
+        {
+        variableEnd = std::find( variableStart, end, '\'' );
+        }
+      else
+        {
+        variableEnd = std::find( variableStart, end, ' ' );
+        }
+      std::string variable;
+      std::copy( variableStart, variableEnd, std::back_inserter(variable) );
+      variableList.push_back( variable );
+      inVariable = false;
+      inQuote = false; 
+      ++variableEnd;
+      }
+    //find the next variable first character
+    while( !inVariable )
+      {
+      variableEnd = std::find_if( variableEnd, end, QuoteOrSpace );
+      if( variableEnd == end )
+        {
+        break;
+        }
+      switch( *variableEnd )
+        {
+        case '\'':
+        variableStart = ++variableEnd;
+        inVariable = true;
+        inQuote = true;
+        break;
+        case ' ':
+        default:
+        // if we found a space we have to make sure the next character is not 
+        // a space nor a quote. If spaces are represented by '_', then there
+        // is no variable in the cases:
+        // __wfjliwe...
+        // _'wfjliwe...
+        // but only in the case:
+        // _wfjliwe...
+        variableStart = ++variableEnd;
+        if( variableEnd != end && !QuoteOrSpace(*(variableEnd) ) )
+          {
+          inVariable = true;
+          inQuote = false;
+          }
+        }
+      }
+    }
+    
   if( variableList.empty() )
     {
     variableList.push_back(m_value);

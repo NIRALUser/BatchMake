@@ -56,6 +56,7 @@ public:
   */
   const char* toChar()const;
   MString toMString()const;
+  operator std::string()const;
 
   int toInt()const;
   float toFloat()const;

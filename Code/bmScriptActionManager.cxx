@@ -104,6 +104,7 @@
 
 #include "Timer.h"
 #include <algorithm>
+#include <sstream>
 
 #define BM_NEWACTION(option, iname)\
 if (option == BMString(#iname).toLower())  return new Script##iname##Action();
@@ -437,86 +438,69 @@ void ScriptActionManager::Reset()
 void ScriptActionManager
 ::AddAction( const BMString& option, const std::vector<BMString>& param )
 {
-  if( (option == "endforeach") || (option == "endif") ||
-       option == "endfornfold" )
+  if( (option == "endforeach") || 
+      (option == "endif") ||
+      (option == "endfornfold") )
     {
     if( m_ParentAction != 0 )
       {
       m_ParentAction = m_ParentAction->GetParent();
       }
+    return;
     }
-  else if( option == "else" )
+  
+  if( option == "else" )
     {
-    ((ScriptIfAction*)m_ParentAction)->SetMode(1);
+    dynamic_cast<ScriptIfAction*>(m_ParentAction)->SetMode(1);
+    return;
+    }
+
+  ScriptAction* _action = this->CreateAction(option);
+
+  if( !_action )
+   {
+   m_Error->SetError( BMString("Undefined parameter [") + option + "]" ,
+                      m_LineNumber);
+   return;
+   }
+     
+  m_InternalActionList.push_back(_action);
+  _action->SetName(option);
+  _action->SetParameters(param);
+  _action->SetParent(m_ParentAction);
+  _action->SetManager(this);
+  _action->SetProgressManager(m_ProgressManager);
+
+#ifdef BM_GRID
+  _action->SetGridModule(m_GridModule);
+#endif
+  if( !_action->TestParam(m_Error,m_LineNumber) )
+    {
+    if ( _action->Help() != "" )
+      {
+      m_Error->SetStatus( BMString("\tCommand: ") + _action->Help() );
+      }
+    }
+   
+  if( option == "include" )
+    {
+    return;
+    }
+   
+  if( m_ParentAction == 0 )
+    {
+    this->AddAction( _action );
     }
   else
     {
-    ScriptAction* _action = CreateAction(option);
+    m_ParentAction->AddAction( _action );
+    }
 
-    if( _action != 0 )
-     {
-     m_InternalActionList.push_back(_action);
-     }    
-
-    if( _action == 0 )
-      {
-      m_Error->SetError( BMString("Undefined parameter [") + option + "]" ,
-                        m_LineNumber);
-      }
-    else if( option == "include" )
-      {
-      _action->SetName(option);
-      _action->SetParameters(param);
-      _action->SetParent(m_ParentAction);
-      _action->SetManager(this);
-      _action->SetProgressManager(m_ProgressManager);
-
-#ifdef BM_GRID
-      _action->SetGridModule(m_GridModule);
-#endif
-
-      if( !_action->TestParam(m_Error,m_LineNumber) )
-        {
-        if ( _action->Help() != "" )
-          {
-          m_Error->SetStatus( BMString("\tCommand: ") + _action->Help() );
-          }
-        }
-      }
-    else
-      {
-      _action->SetName(option);
-      _action->SetParameters(param);
-      _action->SetParent(m_ParentAction);
-      _action->SetManager(this);
-      _action->SetProgressManager(m_ProgressManager);
-
-#ifdef BM_GRID
-      _action->SetGridModule(m_GridModule);
-#endif
-
-      if ( !_action->TestParam( m_Error, m_LineNumber ) )
-        {
-        if ( _action->Help() != "" )
-          {
-          m_Error->SetStatus( BMString("\tCommand: ") + _action->Help() );
-          }
-        }
-        
-        if ( m_ParentAction == 0 )
-          {
-          this->AddAction( _action );
-          }
-        else
-          {
-          m_ParentAction->AddAction( _action );
-          }
-        if( (option == "foreach")  || (option == "if") ||
-             (option == "fornfold") )
-          {
-          m_ParentAction = _action;
-          }
-        }
+  if( (option == "foreach")  || 
+      (option == "if") ||
+      (option == "fornfold") )
+    {
+    m_ParentAction = _action;
     }
 }
 
@@ -540,16 +524,8 @@ void ScriptActionManager::Execute()
 
 void ScriptActionManager::SetTestVariable( const BMString& name )
 {
-  bool _detected = false;
-  for( unsigned int i = 0; i < m_VariableTestList.size(); i++ )
-    {
-    if ( m_VariableTestList[i] == name )
-      {
-      _detected = true;
-      }
-    }
-
-  if ( _detected == false )
+  if( std::find( m_VariableTestList.begin(), m_VariableTestList.end(), name )
+        == m_VariableTestList.end() )
     {
     m_VariableTestList.push_back( name );
     }
@@ -722,6 +698,7 @@ std::vector<BMString> ScriptActionManager
 BMString ScriptActionManager
 ::GetVariableFromParams(const std::vector<BMString> & params)const
 {
+  /*
   BMString var;
   
   unsigned int size = params.size();
@@ -733,8 +710,14 @@ BMString ScriptActionManager
       var += ' ';
       }
     }
-
-  return var;
+  */
+  //separate all the params with a space
+  std::stringstream concatenatedParams;
+  std::ostream_iterator<std::string> out_it( concatenatedParams, " " );
+  std::copy( params.begin(), params.end(), out_it );
+  BMString var( concatenatedParams.str() );
+  // unfortunately a space has been added after the last param, remove it.
+  return var.rbegin( " " );
 }
 
 
