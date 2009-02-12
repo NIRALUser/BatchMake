@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include <itksys/SystemInformation.hxx>
 #include <iostream>
+#include <stdlib.h>
 
 int SystemInfoTest(int argc, char* argv[])
 {
