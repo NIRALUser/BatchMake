@@ -105,6 +105,7 @@
 #include "Timer.h"
 #include <algorithm>
 #include <sstream>
+#include <iterator>
 
 #define BM_NEWACTION(option, iname)\
 if (option == BMString(#iname).toLower())  return new Script##iname##Action();
