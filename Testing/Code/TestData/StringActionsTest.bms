@@ -1,6 +1,6 @@
 ExitOnError( '1' )
-set( string 'my car is green, really green.' )
-Set( regexp '(g[^n]*n).*(g[^n]*n)' )
+set( string 'my car is green and green.' )
+Set( regexp '(e)+' )
 echo( ${regexp} )
 RegEx( result ${string} ${regexp} MATCH )
 echo( '"'${string}'"' ' matches "'${regexp}'". "'${result}'" is found' )

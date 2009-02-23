@@ -34,104 +34,146 @@ public:
   ApplicationWrapper();
   ~ApplicationWrapper();
 
-  void SetApplicationPath(MString applicationpath);
-  MString GetApplicationPath();
-  void SetName(MString name);
-  MString GetName();
-  void SetVersion(MString version);
-  MString GetVersion();
-  void AddParam(ApplicationWrapperParam param);
-  ApplicationWrapperParam* GetParam(MString name);
-  void Save(MString filename);
-  void Load(MString filename);
-  MString GetExampleLine();
-  void ReadModule(XMLReader& m_reader, bool newVersion);
-  void ReadParam(XMLReader& m_reader, bool newVersion);
-  std::vector<ApplicationWrapperParam> & GetParams();
-  void DisplayParam(MString& m_line,int offset);
-  void DeleteParam(MString name);
-  void UpParam(MString name);
-  void DownParam(MString name);
-  bool AutomaticCommandLineParsing(const char * _path);
-  bool AutomaticCommandLineParsingSlicer(const char * _path);
+  void                SetApplicationPath( const std::string& applicationpath );
+  const std::string&  GetApplicationPath( )const;
+  void                SetName( const std::string& name );
+  const std::string&  GetName( )const;
+  
+  void                SetVersion( const std::string& version );
+  const std::string&  GetVersion( )const;
+  void                AddParam( ApplicationWrapperParam param );
+  ApplicationWrapperParam* GetParam( const std::string& name);
+  ApplicationWrapperParam* GetParam( int index );
+  void                Save( const std::string& filename );
+  void                Load( const std::string& filename );
+  MString             GetExampleLine()const;
+  void                ReadModule( XMLReader& m_reader, bool newVersion );
+  void                ReadParam( XMLReader& m_reader, bool newVersion );
+  std::vector< ApplicationWrapperParam >& GetParams();
+  const std::vector< ApplicationWrapperParam >& GetParams()const;
+  void                DisplayParam( MString& m_line, int offset )const;
+  void                DeleteParam( const std::string& name );
+  void                UpParam( const std::string& name);
+  void                DownParam( const std::string& name );
+  bool                AutomaticCommandLineParsing( const std::string& _path );
+  bool                AutomaticCommandLineParsingSlicer( 
+                                                      const std::string& _path );
 
   /** Return the current command line arguments */
-  std::string GetCurrentCommandLineArguments(bool relativePath=true,
-                                             const char* inputDirectory=NULL,
-                                             const char* outputDirectory=NULL);
+  std::string         GetCurrentCommandLineArguments( 
+    bool relativePath=true, 
+    const std::string& inputDirectory = NULL, 
+    const std::string& outputDirectory = NULL )const ;
 
   /** Set the parameter value */
-  void SetParameterValue(std::string first, std::string second, std::string value);
+  void SetParameterValue( const std::string& first, 
+                          const std::string& second, 
+                          const std::string& value );
 
   /** Return true if a parameter exists */
-  bool ParameterExists(std::string first);
+  bool ParameterExists( const std::string& first)const;
 
   /** Set/Get if the application uses sequential arguments */
-  void SetSequentialParsing(bool val)
+  void SetSequentialParsing( bool val )
     {
     m_Sequential = val; 
     m_SequentialParams.clear();
     }
   bool GetSequentialParsing() {return m_Sequential;}
 
-  void SetDataHost(const char* hostname) {m_DataHost = hostname;}
-  const char* GetDataHost() {return m_DataHost.c_str();}
+  void                SetDataHost(const std::string& hostname) 
+    {m_DataHost = hostname;}
+  const std::string&  GetDataHost()const 
+    {return m_DataHost;}
   
-  void SetOutputHost(const char* hostname) {m_OutputHost = hostname;}
-  const char* GetOutputHost() {return m_OutputHost.c_str();}
+  void SetOutputHost(const std::string& hostname) 
+    {m_OutputHost = hostname;}
+  const std::string& GetOutputHost()const 
+    {return m_OutputHost;}
  
-  void SetOutputDirectory(const char* directory) {m_OutputDirectory = directory;}
-  const char* GetOutputDirectory() {return m_OutputDirectory.c_str();}
-  void SetDataDirectory(const char* directory) {m_DataDirectory = directory;}
-  const char* GetDataDirectory() {return m_DataDirectory.c_str();}
+  void SetOutputDirectory(const std::string& directory)
+    {m_OutputDirectory = directory;}
+  const std::string& GetOutputDirectory()const 
+    {return m_OutputDirectory;}
 
-  void SetDependsOn(int val) {m_DependsOn = val;}
-  int  GetDependsOn() {return m_DependsOn;}
+  void SetDataDirectory(const std::string& directory) 
+    {m_DataDirectory = directory;}
+  const std::string& GetDataDirectory()const 
+    {return m_DataDirectory;}
 
-  void SetAfterEndBarrier(bool val) {m_AfterEndBarrier = val;}
-  bool  GetAfterEndBarrier() {return m_AfterEndBarrier;}
+  void SetDependsOn(int val) 
+    {m_DependsOn = val;}
+  int  GetDependsOn()const 
+    {return m_DependsOn;}
 
-  void SetExecutionBlockNumber(int val) {m_ExecutionBlockNumber = val;}
-  unsigned long GetExecutionBlockNumber() {return m_ExecutionBlockNumber;}
+  void SetAfterEndBarrier(bool val)
+    {m_AfterEndBarrier = val;}
+  bool  GetAfterEndBarrier()const
+    {return m_AfterEndBarrier;}
 
-  void SetDependencyTag(const char* tag) {m_DependencyTag = tag;}
-  const char* GetDependencyTag() {return m_DependencyTag.c_str();}
+  void SetExecutionBlockNumber(int val)
+    {m_ExecutionBlockNumber = val;}
+  unsigned long GetExecutionBlockNumber()const
+    {return m_ExecutionBlockNumber;}
 
-  void SetSingleNode(int single) {m_SingleNode = single;}
-  int GetSingleNode() {return m_SingleNode;}
+  void SetDependencyTag(const std::string& tag)
+    {m_DependencyTag = tag;}
+  const std::string& GetDependencyTag()const
+    {return m_DependencyTag;}
 
-  std::vector<std::string> & GetInputDataToTransfer()
+  void SetSingleNode(int single) 
+    {m_SingleNode = single;}
+  int GetSingleNode()const
+    {return m_SingleNode;}
+
+  const std::vector<std::string> & GetInputDataToTransfer()const
     {
     return m_InputDataToTransfer;
     }
 
-  void AddInputDataToTransfer(const char* filename)
+  void AddInputDataToTransfer(const std::string& filename)
     {
     m_InputDataToTransfer.push_back(filename);
     }
 
   void ClearParameterValues();
+  
+  void SetRequirements( const std::string& requirements )
+    {
+    m_Requirements = requirements;
+    }
+  
+  const std::string& GetRequirements() const
+    {
+    return m_Requirements;
+    }
 
+protected:
+  
+  
 private:
-  MString m_name;
-  MString m_applicationpath;
-  MString m_version;
-  bool    m_Sequential; // Set if we should use the sequential application
-  std::vector<ApplicationWrapperParam> m_params;
-  std::vector<ApplicationWrapperParam> m_SequentialParams;
-  std::string m_DataHost;
-  std::string m_OutputHost;
-  std::string m_OutputDirectory;
-  std::string m_DataDirectory;
-  int         m_DependsOn;
-  std::string m_DependencyTag;
-  int         m_SingleNode;
-  bool        m_AfterEndBarrier;
-  unsigned long m_ExecutionBlockNumber;
-  std::vector<std::string> m_InputDataToTransfer;
+  std::string                           m_name;
+  std::string                           m_applicationpath;
+  std::string                           m_version;
+  // Set if we should use the sequential application
+  bool                                  m_Sequential; 
+  std::vector<ApplicationWrapperParam>  m_params;
+  std::vector<ApplicationWrapperParam>  m_SequentialParams;
+  std::string                           m_DataHost;
+  std::string                           m_OutputHost;
+  std::string                           m_OutputDirectory;
+  std::string                           m_DataDirectory;
+  int                                   m_DependsOn;
+  std::string                           m_DependencyTag;
+  int                                   m_SingleNode;
+  bool                                  m_AfterEndBarrier;
+  unsigned long                         m_ExecutionBlockNumber;
+  std::vector<std::string>              m_InputDataToTransfer;
+  std::string                           m_Requirements;
 
   bool AddSlicerModuleDescription(bm::ModuleDescription* moduleDescription);
-
+  
+  //friend class bm::ApplicationWrapperGUIControls;
 };
 
 #endif

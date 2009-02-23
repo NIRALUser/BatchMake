@@ -54,6 +54,7 @@ ApplicationWrapperGUIControls::ApplicationWrapperGUIControls():ApplicationWrappe
   g_inputData->value(0);
   g_outputData->value(0);
   g_moduleversion->value("1.0");
+  g_modulerequirements->value("");
   m_Applicationwrapper = new ApplicationWrapper();
 
   m_Currentfilename="";
@@ -78,7 +79,8 @@ void ApplicationWrapperGUIControls::SetWrappedApplicationsPath(MString applicati
 void ApplicationWrapperGUIControls::SetApplicationWrapper(ApplicationWrapper* applicationwrapper)
 {
   m_Applicationwrapper = applicationwrapper;
-  m_Currentfilename = m_Applicationwrapper->GetName().removeChar(' ');
+  // @todo are you sure you want to remove spaces ? 
+  m_Currentfilename = MString(m_Applicationwrapper->GetName()).removeChar(' ');
 }
 
 void ApplicationWrapperGUIControls::Show()
@@ -200,7 +202,7 @@ void ApplicationWrapperGUIControls::OnSelectParameters()
 
 	if(is_parent)
 	  {
-	  m_param = m_Applicationwrapper->GetParam(MString(g_parameters->text()));
+	  m_param = m_Applicationwrapper->GetParam( g_parameters->text() );
 	  }
 	else
 	  {
@@ -224,7 +226,7 @@ void ApplicationWrapperGUIControls::OnSelectParameters()
 		if(found)
 			break;
 	    }
-	  m_parentParam = &m_Applicationwrapper->GetParams()[parent];
+	  m_parentParam = m_Applicationwrapper->GetParam(parent);
 	  m_param = m_parentParam->GetParamSub(childrenName.c_str());
 	  }
 
@@ -335,7 +337,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
 	    {
 		if(strcmp(m_Applicationwrapper->GetParams()[i].GetName().toChar(), g_parent->text(g_parent->value())) == 0)
 		  {
-		  m_Applicationwrapper->GetParams()[i].AddParamSub(m_param);
+		  m_Applicationwrapper->GetParam(i)->AddParamSub(m_param);
 		  break;
 		  }
 	    }
@@ -344,7 +346,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
     }
   else
     {
-    ApplicationWrapperParam* m_param = m_Applicationwrapper->GetParam(m_Currentname);
+    ApplicationWrapperParam* m_param = m_Applicationwrapper->GetParam( m_Currentname.GetConstRefValue() );
     g_parameters->replace(g_parameters->value(),g_name->value());
 
     unsigned int m_offset = 0;
@@ -378,17 +380,17 @@ void ApplicationWrapperGUIControls::OnAddParameters()
 
 	if(!m_param)
 	  {
-	  ApplicationWrapperParamSub* m_paramSub = m_Applicationwrapper->GetParam(m_Currentname);
+	  ApplicationWrapperParamSub* m_paramSub = m_Applicationwrapper->GetParam( m_Currentname.GetConstRefValue() );
 	  for(unsigned int i=0 ; i<m_Applicationwrapper->GetParams().size() ; i++)
 	    {
-	    m_paramSub = m_Applicationwrapper->GetParams()[i].GetParamSub(m_Currentname);
+	    m_paramSub = m_Applicationwrapper->GetParam(i)->GetParamSub(m_Currentname);
 	    if(m_paramSub)
 	      {
-		  break;
+		    break;
 	      }
 	    }
 
-	  m_Applicationwrapper->DeleteParam(m_Currentname);
+	  m_Applicationwrapper->DeleteParam( m_Currentname.GetConstRefValue() );
 	  MString test = g_name->value();
 	  m_paramSub->SetName(test);
 	  m_paramSub->SetType(g_type->value());
@@ -478,9 +480,10 @@ void ApplicationWrapperGUIControls::OnAddParameters()
 	  }
 	}
   
-  m_Applicationwrapper->SetApplicationPath(MString(g_path->value()));
-  m_Applicationwrapper->SetName(MString(g_modulename->value()));
-  m_Applicationwrapper->SetVersion(MString(g_moduleversion->value()));
+  m_Applicationwrapper->SetApplicationPath( g_path->value() );
+  m_Applicationwrapper->SetName( g_modulename->value() );
+  m_Applicationwrapper->SetVersion( g_moduleversion->value() );
+  m_Applicationwrapper->SetRequirements( g_modulerequirements->value() );
 
   DisplayExample();
 
@@ -510,16 +513,17 @@ void ApplicationWrapperGUIControls::OnDeleteParameters()
       }
     }
 
-  m_Applicationwrapper->SetApplicationPath(MString(g_path->value()));
-  m_Applicationwrapper->SetName(MString(g_modulename->value()));
-  m_Applicationwrapper->SetVersion(MString(g_moduleversion->value()));
+  m_Applicationwrapper->SetApplicationPath( g_path->value() );
+  m_Applicationwrapper->SetName( g_modulename->value() );
+  m_Applicationwrapper->SetVersion( g_moduleversion->value() );
+  m_Applicationwrapper->SetRequirements( g_modulerequirements->value() );
 
   const int size = g_parameters->size();
   for(int i=0 ; i<size ; i++)
     {
     g_parameters->remove(g_parameters->value());
     }
-  m_Applicationwrapper->DeleteParam(m_Currentname);
+  m_Applicationwrapper->DeleteParam( m_Currentname.GetConstRefValue() );
   this->Refresh();
   DisplayExample();
   g_parameters->value(0);
@@ -530,9 +534,10 @@ void ApplicationWrapperGUIControls::OnDeleteParameters()
 
 void ApplicationWrapperGUIControls::OnSaveModule()
 {
-  m_Applicationwrapper->SetApplicationPath(MString(g_path->value()));
-  m_Applicationwrapper->SetName(MString(g_modulename->value()));
-  m_Applicationwrapper->SetVersion(MString(g_moduleversion->value()));
+  m_Applicationwrapper->SetApplicationPath( g_path->value() );
+  m_Applicationwrapper->SetName( g_modulename->value() );
+  m_Applicationwrapper->SetVersion( g_moduleversion->value() );
+  m_Applicationwrapper->SetRequirements( g_modulerequirements->value() );
 
   if (m_Applicationwrapper->GetName() == "")
     {
@@ -558,9 +563,14 @@ void ApplicationWrapperGUIControls::OnSaveModule()
     }
 
 
-  if (m_Applicationwrapper->GetName().removeChar(' ') == m_Currentfilename)
+  if ( MString(m_Applicationwrapper->GetName()).removeChar(' ') == m_Currentfilename)
     {
-    m_Applicationwrapper->Save(m_WrappedApplicationsPath + "/" + m_Applicationwrapper->GetName().removeChar(' ') + ".bmm");
+    std::string filename = m_WrappedApplicationsPath.GetConstRefValue();
+    filename += "/";
+    filename += MString( m_Applicationwrapper->GetName() )
+      .removeChar(' ').GetConstRefValue();
+    filename += ".bmm";
+    m_Applicationwrapper->Save( filename );
     g_Applicationwrappergui->hide();
      if (m_Currentfilename == "")
        {
@@ -574,10 +584,15 @@ void ApplicationWrapperGUIControls::OnSaveModule()
     }
   else
     {
-    FILE* m_file = fopen((m_WrappedApplicationsPath + "/" + m_Applicationwrapper->GetName().removeChar(' ') + ".bmm").toChar(),"rb");
+    std::string filename = m_WrappedApplicationsPath.GetConstRefValue();
+    filename += "/";
+    filename += MString( m_Applicationwrapper->GetName() )
+      .removeChar(' ').GetConstRefValue();
+    filename += ".bmm";
+    FILE* m_file = fopen(filename.c_str(),"rb");
     if (m_file == 0)
       {
-      m_Applicationwrapper->Save(m_WrappedApplicationsPath + "/" + m_Applicationwrapper->GetName().removeChar(' ') + ".bmm");
+      m_Applicationwrapper->Save(filename);
       itksys::SystemTools::RemoveFile((m_WrappedApplicationsPath + "/" + m_Currentfilename + ".bmm").toChar());
       g_Applicationwrappergui->hide();
       if (m_Currentfilename == "")
@@ -600,9 +615,10 @@ void ApplicationWrapperGUIControls::OnSaveModule()
 
 void ApplicationWrapperGUIControls::Refresh()
 {
-  g_path->value(m_Applicationwrapper->GetApplicationPath().toChar());
-  g_modulename->value(m_Applicationwrapper->GetName().toChar());
-  g_moduleversion->value(m_Applicationwrapper->GetVersion().toChar());
+  g_path->value( m_Applicationwrapper->GetApplicationPath().c_str() );
+  g_modulename->value(m_Applicationwrapper->GetName().c_str());
+  g_moduleversion->value(m_Applicationwrapper->GetVersion().c_str());
+  g_modulerequirements->value(m_Applicationwrapper->GetRequirements().c_str());
   
   for (unsigned int i=0 ; i<m_Applicationwrapper->GetParams().size() ; i++)
     {
@@ -640,10 +656,11 @@ void ApplicationWrapperGUIControls::OnLoadModule()
  
   if(fName)
   {
-    m_Applicationwrapper->Load(MString(fName));
-    g_path->value(m_Applicationwrapper->GetApplicationPath().toChar());
-    g_modulename->value(m_Applicationwrapper->GetName().toChar());
-    g_moduleversion->value(m_Applicationwrapper->GetVersion().toChar());
+    m_Applicationwrapper->Load( fName );
+    g_path->value(m_Applicationwrapper->GetApplicationPath().c_str());
+    g_modulename->value(m_Applicationwrapper->GetName().c_str());
+    g_moduleversion->value(m_Applicationwrapper->GetVersion().c_str());
+    g_modulerequirements->value(m_Applicationwrapper->GetRequirements().c_str());
     
     for (unsigned int i=0;i<m_Applicationwrapper->GetParams().size();i++)
     {
@@ -724,7 +741,7 @@ void ApplicationWrapperGUIControls::OnDownParam()
     strcpy(m_tempname,g_parameters->text(m_offset+1));
     g_parameters->replace(m_offset+1,g_parameters->text(m_offset));
     g_parameters->replace(m_offset,m_tempname);
-    m_Applicationwrapper->DownParam(m_Currentname);
+    m_Applicationwrapper->DownParam(m_Currentname.GetConstRefValue());
     g_parameters->value(m_offset+1);
   }
   DisplayExample();
@@ -739,7 +756,7 @@ void ApplicationWrapperGUIControls::OnUpParam()
     strcpy(m_tempname,g_parameters->text(m_offset-1));
     g_parameters->replace(m_offset-1,g_parameters->text(m_offset));
     g_parameters->replace(m_offset,m_tempname);
-    m_Applicationwrapper->UpParam(m_Currentname);
+    m_Applicationwrapper->UpParam(m_Currentname.GetConstRefValue());
     g_parameters->value(m_offset-1);
   }
   DisplayExample();
@@ -770,8 +787,9 @@ void ApplicationWrapperGUIControls::AutomaticCommandLineParsing()
     m_Applicationwrapper->AutomaticCommandLineParsingSlicer( program.c_str() );
     }
 
-  g_moduleversion->value(m_Applicationwrapper->GetVersion().toChar());
-  g_modulename->value(m_Applicationwrapper->GetName().toChar());
+  g_modulerequirements->value(m_Applicationwrapper->GetRequirements().c_str());
+  g_moduleversion->value(m_Applicationwrapper->GetVersion().c_str());
+  g_modulename->value(m_Applicationwrapper->GetName().c_str());
   
   this->DisplayExample();
 }

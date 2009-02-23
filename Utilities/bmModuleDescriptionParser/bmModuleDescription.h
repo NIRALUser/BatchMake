@@ -75,6 +75,16 @@ public:
   {
     return this->Version;
   }
+  
+  void SetRequirements(const std::string &requirements)
+  {
+    this->Requirements = requirements;
+  }
+
+  const std::string& GetRequirements() const
+  {
+    return this->Requirements;
+  }
 
   void SetDocumentationURL(const std::string &documentationURL)
   {
@@ -270,6 +280,7 @@ private:
   std::string Category;
   std::string Description;
   std::string Version;
+  std::string Requirements;
   std::string DocumentationURL;
   std::string License;
   std::string Acknowledgements;

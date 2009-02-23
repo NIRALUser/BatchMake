@@ -25,12 +25,12 @@ void ScriptExtractSliceAction::GenerateGrid()
 {
   // We create the bmSliceExtractor application and send it to grid
   ApplicationWrapper app;
-  MString appName = "bmSliceExtractor";
+  BMString appName = "bmSliceExtractor";
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator itApp = m_Manager->GetApplicationWrapperList()->begin();
   while (itApp != m_Manager->GetApplicationWrapperList()->end())
     {
-    if(!strcmp((*itApp)->GetName().toChar(),appName.toChar()))
+    if( appName == (*itApp)->GetName() )
       {
       app = *(*itApp);
       appFound = true;

@@ -101,6 +101,16 @@ void Grid::SetGridBarrier()
   m_CurrentScope++;
 }
 
+void Grid::SetRequirements( const std::string& requirements )
+{
+  m_Requirements = requirements;
+}
+
+const std::string& Grid::GetRequirements()const
+{
+  return m_Requirements;
+}
+
 /** Remove a grid barrier */
 void Grid::SetDistributed(bool val) 
 {
@@ -291,14 +301,14 @@ void Grid::WriteGAD()
   
     // Check if we have external data
     // For now we skip bmGridStore
-    if(strcmp((*it).GetName().toChar(),"bmGridStore")
-       && strcmp((*it).GetName().toChar(),"bmGridSend"))
+    if( strcmp((*it).GetName().c_str(),"bmGridStore")
+       && strcmp((*it).GetName().c_str(),"bmGridSend"))
       {
      while(itParams != params.end())
       {
       if((*itParams).GetExternalData() == 1 
          && (*itParams).GetValue().length() > 0
-         && strlen((*it).GetDataHost())>0) // DATA_IN
+         && !(*it).GetDataHost().empty() ) // DATA_IN
         {
         fprintf(fic," <componentAction type=\"DataRelocation\" name=\"InputFile%d\">\n",inFile);
         fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetDataHost());
@@ -335,7 +345,7 @@ void Grid::WriteGAD()
   fprintf(fic," <componentAction type=\"JobSubmission\" name=\"app%d\">\n",appnum);
 
   // We assume that the current application is in the path of the node
-  std::string applicationName = (*it).GetApplicationPath().toChar();
+  std::string applicationName = (*it).GetApplicationPath();
   int pos = applicationName.find_last_of("/");
   int pos2 = applicationName.find_last_of("\\");
 
@@ -396,9 +406,9 @@ void Grid::WriteGAD()
         // WARNING WORKS ONLY IF ONE INPUT IMAGE
         if((*itParams).GetExternalData() == 1 
          && (*itParams).GetValue().length() > 0
-         && strlen((*it).GetDataHost())>0
-         && (strcmp((*it).GetName().toChar(),"bmGridStore") 
-         && strcmp((*it).GetName().toChar(),"bmGridSend"))
+         && !(*it).GetDataHost().empty()
+         && (strcmp((*it).GetName().c_str(),"bmGridStore") 
+         && strcmp((*it).GetName().c_str(),"bmGridSend"))
          ) // DATA_IN
           {
           char* num = new char[10];
@@ -636,9 +646,9 @@ void Grid::WriteGAD()
         // WARNING WORKS ONLY IF ONE INPUT IMAGE
         if((*itParams).GetExternalData() == 1 
          && (*itParams).GetValue().length() > 0
-         && strlen((*it).GetDataHost())>0
-         && (strcmp((*it).GetName().toChar(),"bmGridStore") 
-         && strcmp((*it).GetName().toChar(),"bmGridSend"))
+         && !(*it).GetDataHost().empty()
+         && (strcmp((*it).GetName().c_str(),"bmGridStore") 
+         && strcmp((*it).GetName().c_str(),"bmGridSend"))
          ) // DATA_IN
           {
           // Do nothing
@@ -678,14 +688,14 @@ void Grid::WriteGAD()
 
   itParams = params.begin();
 
-  if(strcmp((*it).GetName().toChar(),"bmGridStore") 
-    && strcmp((*it).GetName().toChar(),"bmGridSend"))
+  if(strcmp((*it).GetName().c_str(),"bmGridStore") 
+    && strcmp((*it).GetName().c_str(),"bmGridSend"))
     {
   while(itParams != params.end())
     {
     if((*itParams).GetExternalData() == 2 
       && (*itParams).GetValue().length() > 0
-      && strlen((*it).GetOutputHost())>0) // DATA_OUT
+      && !(*it).GetOutputHost().empty()) // DATA_OUT
       {
       fprintf(fic," <componentAction type=\"DataRelocation\" name=\"OutputFile%d\">\n",outFile);
       fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetOutputHost());
@@ -750,7 +760,7 @@ void Grid::WriteShell()
   std::vector<ApplicationWrapper>::iterator it = m_ApplicationsList.begin();
   while(it != m_ApplicationsList.end())
     {
-    fprintf(fic,"%s %s\n",(*it).GetApplicationPath().toChar(),
+    fprintf(fic,"%s %s\n",(*it).GetApplicationPath().c_str(),
                           (*it).GetCurrentCommandLineArguments(false).c_str());
     it++;
     }
@@ -872,7 +882,7 @@ void Grid::WriteCondor()
       fprintf(fic,"initialdir     = %s\n",m_OutputDirectory.c_str());
       }
     
-    std::string executable = (*it).GetApplicationPath().toChar();
+    std::string executable = (*it).GetApplicationPath();
     
     if(m_TransferFiles!=ALL && m_TransferFiles!=EXECUTABLE)
       {
@@ -900,10 +910,24 @@ void Grid::WriteCondor()
 
     fprintf(fic,"arguments     = \"%s\"\n",arguments.c_str());  
     
+    std::string requirements = m_Requirements;
+    if( !m_Requirements.empty() && !it->GetRequirements().empty() )
+      {
+      requirements += "&& ";
+      }
+    requirements += it->GetRequirements();
 #ifdef WIN32 
-    fprintf(fic,"requirements  = (OpSys == \"WINNT50\") || (OpSys == \"WINNT51\") \n");
+    if( !requirements.empty() )
+      {
+      requirements += " && ";
+      }
+    requirements += "(OpSys == \"WINNT50\") || (OpSys == \"WINNT51\")";
 #endif
-
+    if( !requirements.empty() )
+      {
+      fprintf( fic, "requirements = %s \n", requirements.c_str() );
+      }
+    
     // Check if we have external data
     const std::vector<ApplicationWrapperParam> & params = (*it).GetParams();
     std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();

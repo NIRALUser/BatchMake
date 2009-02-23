@@ -38,8 +38,8 @@ public:
   int GetParamsSubSize() const {return m_Params.size();}
   ApplicationWrapperParamSub* GetParamSub(MString name);
   void ClearParamSubValues();
-  bool ParamSubExists(std::string first);
-  bool CheckSubValueDefined(bool relativePath, std::string* line);
+  bool ParamSubExists( const std::string& first)const;
+  bool CheckSubValueDefined(bool relativePath, std::string* line)const;
   void SetParamSubValue(std::string first, std::string second, std::string value, bool boolean);
   std::vector<std::string> ShowApplicationOptionsSubParams(std::string parent) const;
  

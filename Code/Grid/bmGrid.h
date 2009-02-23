@@ -92,7 +92,11 @@ public:
   void SetGrouping(bool group) {m_Grouping = group;}
   bool GetGrouping() {return m_Grouping;}
 
-
+  /** Set/Get the requirements of the whole script. Application specific 
+   *  requirements will be concatenated to it.
+  */
+  void SetRequirements( const std::string& requirements );
+  const std::string& GetRequirements( )const;
 protected:
 
   std::string Strip(std::string value);

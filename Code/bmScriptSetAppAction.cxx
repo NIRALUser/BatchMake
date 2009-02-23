@@ -59,7 +59,7 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
     m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
-    if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
+    if( appName == (*it)->GetName() )
       {
       appFound = true;
       
@@ -110,10 +110,10 @@ void ScriptSetAppAction::Execute()
   ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
-    if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
+    if( appName == (*it)->GetName() )
       {
       m_Value = "'";
-      std::string val = (*it)->GetApplicationPath().toChar();
+      std::string val = (*it)->GetApplicationPath();
       m_Value += val.c_str();
       m_Value += "'";
       appFound = true;

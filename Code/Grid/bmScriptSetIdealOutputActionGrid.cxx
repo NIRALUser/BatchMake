@@ -25,13 +25,13 @@ void ScriptSetIdealOutputAction
 {
   // We create the bmGridStore application and send it to condor
   ApplicationWrapper app;
-  BMString appName = "bmGridStore";
+  std::string appName = "bmGridStore";
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator itApp = 
     m_Manager->GetApplicationWrapperList()->begin();
   while (itApp != m_Manager->GetApplicationWrapperList()->end())
     {
-    if(!strcmp((*itApp)->GetName().toChar(),appName.toChar()))
+    if( (*itApp)->GetName() == appName )
       {
       app = *(*itApp);
       appFound = true;
@@ -43,13 +43,13 @@ void ScriptSetIdealOutputAction
   if(!appFound)
     {
     std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend " 
-              << appName.toChar() << std::endl;
+              << appName << std::endl;
     return;
     }   
 
-  app.SetParameterValue("filename","",m_GridModule->GetCurrentScopeFile());
-  app.SetParameterValue("name","",name.GetValue());
-  app.SetParameterValue("value","",value.GetValue());
+  app.SetParameterValue("filename", "", m_GridModule->GetCurrentScopeFile() );
+  app.SetParameterValue("name",     "", name.GetValue() );
+  app.SetParameterValue("value",    "", value.GetValue() );
 
   m_GridModule->AddApplication(&app);
 }

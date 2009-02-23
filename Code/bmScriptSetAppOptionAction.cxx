@@ -123,7 +123,7 @@ void ScriptSetAppOptionAction::Execute()
     m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
-    if(!strcmp((*it)->GetApplicationPath().toChar(),appName.toChar()))
+    if( appName == (*it)->GetApplicationPath() )
       {
       (*it)->SetParameterValue(second,third,value);
       app = *it;

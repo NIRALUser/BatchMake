@@ -46,7 +46,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
   ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
-    if(!strcmp((*it)->GetApplicationPath().toChar(),appName.toChar()))
+    if( appName == (*it)->GetApplicationPath() )
       {
       application = *it;
       appFound = true;
@@ -68,7 +68,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
   else
     {
     // If the application support it. we force the application to write the output out as XML
-    std::string xmloutputname = application->GetName().toChar();
+    std::string xmloutputname = application->GetName();
     xmloutputname += ".";
     char* num = new char[10];
     sprintf(num,"%zu",m_GridModule->GetNumberOfApplications());
@@ -82,12 +82,12 @@ void ScriptRunAction::GenerateGrid(const char* appname)
 
     // We create the bmGridStore application and send it to condor
     ApplicationWrapper app;
-    MString gsName = "bmGridStore";
+    BMString gsName = "bmGridStore";
     bool gsFound = false;
     ScriptActionManager::ApplicationWrapperListType::iterator itApp = m_Manager->GetApplicationWrapperList()->begin();
     while (itApp != m_Manager->GetApplicationWrapperList()->end())
       {
-      if(!strcmp((*itApp)->GetName().toChar(),gsName.toChar()))
+      if( gsName == (*itApp)->GetName() )
         {
         app = *(*itApp);
         gsFound = true;
@@ -99,7 +99,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     if(!gsFound)
       {
       std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridStore " 
-                << appName.toChar() << std::endl;
+                << appName.GetConstValue() << std::endl;
       return;
       }
 

@@ -73,11 +73,9 @@ void ScriptRegExAction::Execute()
   m_Manager->SetVariable(m_Parameters[0],"");
   itksys::RegularExpression regEx;
 
-  BMString expression = m_Manager->Convert(m_Parameters[2]);
-  expression.removeAllChars('\'');
+  BMString expression = m_Manager->Convert(m_Parameters[2]).fromVariable();
 
-  BMString word = m_Manager->Convert(m_Parameters[1]);
-  word.removeAllChars('\'');
+  BMString word = m_Manager->Convert(m_Parameters[1]).fromVariable();
 
   std::string regex = expression.GetValue();
 

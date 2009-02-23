@@ -415,7 +415,8 @@ void ScriptActionManager::Reset()
     for( unsigned int k=0; k < m_ApplicationWrapperList->size(); k++ )
       { 
       this->SetVariable( (*m_ApplicationWrapperList)[k]->GetName(),
-                         (*m_ApplicationWrapperList)[k]->GetApplicationPath().toVariable() );
+                         BMString((*m_ApplicationWrapperList)[k]
+                          ->GetApplicationPath()).toVariable() );
       this->SetTestVariable((*m_ApplicationWrapperList)[k]->GetName()); 
       }
     }

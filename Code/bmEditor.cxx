@@ -189,7 +189,7 @@ void Editor::UpdateApplicationsList()
 
   while (it != m_Manager->GetApplicationWrapperList()->end())
     { 
-    m_ApplicationBrowser->add((*it)->GetName().toChar());
+    m_ApplicationBrowser->add( (*it)->GetName().c_str() );
     it++;
     }
 
@@ -546,7 +546,7 @@ void Editor::AddApplicationsToBrowse()
                                                   m_Manager->GetApplicationWrapperList()->begin();
             while (it != m_Manager->GetApplicationWrapperList()->end())
               { 
-              if(!strcmp((*it)->GetName().toChar(),app.c_str()))
+              if( (*it)->GetName() == app.c_str() )
                 {
                 ApplicationNameType newapp;
                 newapp.first = name;
@@ -783,7 +783,7 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
     }
 
   // Get the option from the application wrapper
-  std::vector<ApplicationWrapperParam> & params = app->GetParams();
+  const std::vector<ApplicationWrapperParam> & params = app->GetParams();
   // std::cout << "App Name = " << app->GetName().toChar() << std::endl;
   std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();
   if(params.size() == 0)
@@ -795,7 +795,7 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
   while(itParams!= params.end())
     {
     std::string text = "";
-	text += (*itParams).GetName().toChar();
+	  text += (*itParams).GetName().toChar();
     m_ApplicationOptionBrowser->add(text.c_str());
 
 	std::vector<std::string> parameters = (*itParams).ShowApplicationOptionsSubParams(text);
@@ -940,13 +940,13 @@ int Editor::handle( int event )
                                                 m_Manager->GetApplicationWrapperList()->begin();
               while (it != m_Manager->GetApplicationWrapperList()->end())
                 { 
-                if(!strcmp((*it)->GetName().toChar(),app.c_str()))
+                if( (*it)->GetName() == app )
                   {
                   ApplicationNameType newapp;
                   newapp.first = name;
                   newapp.second = (*it);
-                  std::cout << "Added " << name.c_str() << " = " 
-                            << (*it)->GetName().toChar() << std::endl;
+                  std::cout << "Added " << name << " = " 
+                            << (*it)->GetName() << std::endl;
                   // Check if the variable is already assigned to a specific application
                   int apppos = -1;
                   bool appexists = false;

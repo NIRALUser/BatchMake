@@ -53,6 +53,7 @@ public:
   MString mid(int begin,int nb=-1)const;
   bool operator==(MString)const;
   bool operator==(const char*)const;
+  bool operator==(const std::string&)const;
   bool operator!=(MString)const;
   bool operator!=(const char*)const;
   void operator=(const MString &);

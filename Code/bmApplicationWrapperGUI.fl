@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0108 
+version 1.0109 
 header_name {.h} 
 code_name {.cxx}
 class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
@@ -8,8 +8,8 @@ class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
   } {
     Fl_Window g_Applicationwrappergui {
       label {BatchMake - Application Wrapper} open
-      xywh {381 177 559 437} type Double hide resizable
-      code0 {\#include "bmApplicationWrapperGUIBase.h"} modal
+      xywh {786 309 559 401} type Double resizable
+      code0 {\#include "bmApplicationWrapperGUIBase.h"} modal visible
     } {
       Fl_Button g_selectpath {
         label {Browse && run...}
@@ -20,7 +20,7 @@ class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
         label {Application path:}
         xywh {114 79 350 20} labelsize 12 textsize 12
       }
-      Fl_Group {} {open
+      Fl_Group {} {
         xywh {15 105 540 195}
       } {
         Fl_Box {} {
@@ -81,27 +81,27 @@ class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
       }
       Fl_Choice g_parameters {
         label {Parameters:}
-        callback {OnSelectParameters()} open
+        callback {OnSelectParameters()}
         xywh {113 104 185 20} down_box BORDER_BOX labelsize 12 textsize 12
       } {}
       Fl_Choice g_enumlist {
         label {Enum list:}
-        callback {OnSelectEnumList()} open
+        callback {OnSelectEnumList()}
         xywh {115 245 375 20} down_box BORDER_BOX labelsize 12 textsize 12
       } {}
       Fl_Button g_ok {
         label Ok
         callback {OnSaveModule()}
-        xywh {290 355 80 20} box PLASTIC_UP_BOX color 180 labelsize 10
+        xywh {290 364 80 20} box PLASTIC_UP_BOX color 180 labelsize 10
       }
       Fl_Button g_cancel {
         label Cancel
         callback {OnReject()}
-        xywh {195 355 80 20} box PLASTIC_UP_BOX color 180 labelsize 10
+        xywh {195 364 80 20} box PLASTIC_UP_BOX color 180 labelsize 10
       }
       Fl_Text_Display g_commandline {
         label {Command line:} selected
-        xywh {25 315 520 20} box NO_BOX color 49 labelsize 12 align 5 textsize 12
+        xywh {25 315 520 25} box NO_BOX color 49 labelsize 12 align 5 textsize 12
       }
       Fl_Input g_modulename {
         label {Module name:}
@@ -109,7 +109,11 @@ class ApplicationWrapperGUI {open : {bm::ApplicationWrapperGUIBase}
       }
       Fl_Input g_moduleversion {
         label {Module version:}
-        xywh {115 35 40 20} labelsize 12 textsize 12
+        xywh {115 35 75 20} labelsize 12 textsize 12
+      }
+      Fl_Input g_modulerequirements {
+        label {Requirements:}
+        xywh {281 35 255 20} labelsize 12 textsize 12
       }
       Fl_Button {} {
         label U

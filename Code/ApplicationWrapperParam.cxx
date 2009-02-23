@@ -65,12 +65,12 @@ void ApplicationWrapperParam::ClearParamSubValues()
 }
 
 
-bool ApplicationWrapperParam::ParamSubExists(std::string first)
+bool ApplicationWrapperParam::ParamSubExists( const std::string& first)const 
 {
-  std::vector<ApplicationWrapperParamSub>::iterator it = m_Params.begin();
+  std::vector<ApplicationWrapperParamSub>::const_iterator it = m_Params.begin();
   while(it != m_Params.end())
     {
-    if(!strcmp((*it).GetName().toChar(),first.c_str()))
+    if( (*it).GetName() == first )
       {
       return true;
       }
@@ -80,16 +80,16 @@ bool ApplicationWrapperParam::ParamSubExists(std::string first)
 }
 
 
-bool ApplicationWrapperParam::CheckSubValueDefined(bool relativePath, std::string* line)
+bool ApplicationWrapperParam::CheckSubValueDefined(bool relativePath, std::string* line)const
 {
-  std::vector<ApplicationWrapperParamSub>::iterator it = m_Params.begin();
+  std::vector<ApplicationWrapperParamSub>::const_iterator it = m_Params.begin();
   while(it != m_Params.end())
     {
 	if((*it).IsValueDefined())
 	  {
 	  if(line->size()>0)
         {
-		*line += " ";
+		    *line += " ";
         }
 
 	  // remove the absolute path if the relativePath is on

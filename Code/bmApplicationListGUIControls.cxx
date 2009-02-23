@@ -54,7 +54,7 @@ void ApplicationListGUIControls::SetApplicationList(std::vector<ApplicationWrapp
   //Update list
   for (unsigned int i=0;i<m_applicationlist->size();i++)
     {
-    g_list->add((*m_applicationlist)[i]->GetName().toChar());
+    g_list->add((*m_applicationlist)[i]->GetName().c_str());
     if (i==0)
       {
       g_list->select_all();
@@ -156,7 +156,7 @@ void ApplicationListGUIControls::OnRemove()
   ApplicationWrapper* wrapper = *it;
   std::string app = m_WrappedApplicationsPath.toChar();
   app += "/";
-  app += wrapper->GetName().toChar();
+  app += wrapper->GetName();
   app += ".bmm";
   itksys::SystemTools::RemoveFile(app.c_str());
 
@@ -176,7 +176,7 @@ void ApplicationListGUIControls::Update(MString name)
 
 void ApplicationListGUIControls::UpdateNew(ApplicationWrapper* wrapper)
 {
-  g_list->add(wrapper->GetName().toChar());
+  g_list->add(wrapper->GetName().c_str());
   m_applicationlist->push_back(wrapper);
 }
 

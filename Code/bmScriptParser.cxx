@@ -87,7 +87,7 @@ void ScriptParser::LoadWrappedApplication(MString applicationpath)
         {
         std::string file = directory.GetFile(i);
         ApplicationWrapper* m_newapplication = new ApplicationWrapper();  
-        m_newapplication->Load(applicationpath + "/" + file.c_str());
+        m_newapplication->Load( (applicationpath + "/" + file.c_str()).GetConstValue() );
         m_ApplicationList->push_back(m_newapplication);
         }
       }

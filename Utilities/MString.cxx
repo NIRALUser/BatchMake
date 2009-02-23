@@ -158,6 +158,14 @@ bool MString::operator==(const char* value)const
     return false;
 }
 
+bool MString::operator==(const std::string& value)const
+{
+  if (m_value.compare(value) == 0)
+    return true;
+  else
+    return false;
+}
+
 bool MString::operator!=(MString value)const
 {
   if (m_value.compare(value.GetValue()) == 0)

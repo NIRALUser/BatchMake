@@ -164,8 +164,8 @@ int main(int argc, char **argv)
       {
       std::string appname = command.GetValueAsString("addApplication","appname");
       ApplicationWrapper m_ApplicationWrapper;
-      m_ApplicationWrapper.AutomaticCommandLineParsing(appname.c_str());
-      std::string moduleName = m_ApplicationWrapper.GetName().toChar();
+      m_ApplicationWrapper.AutomaticCommandLineParsing(appname);
+      std::string moduleName = m_ApplicationWrapper.GetName();
        
       std::string output = m_ApplicationPath.toChar();
       output += "/";
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
       output += ".bmm";
       std::cout << "Saving application description as: " 
                 << output.c_str() << std::endl;
-      m_ApplicationWrapper.Save(output.c_str());
+      m_ApplicationWrapper.Save(output);
  
       return 0;
       }

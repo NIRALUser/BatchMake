@@ -26,12 +26,12 @@ void ScriptDashboardSendAction::GenerateGrid()
 {
   // We create the bmGridSend application and send it to condor
   ApplicationWrapper app;
-  MString appName = "bmGridSend";
+  std::string appName = "bmGridSend";
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
-    if(!strcmp((*it)->GetName().toChar(),appName.toChar()))
+    if( (*it)->GetName() == appName )
       {
       app = *(*it);
       appFound = true;
@@ -43,7 +43,7 @@ void ScriptDashboardSendAction::GenerateGrid()
   if(!appFound)
     {
     std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend " 
-              << appName.toChar() << std::endl;
+              << appName << std::endl;
     return;
     }
 
