@@ -114,6 +114,7 @@ protected:
   std::string m_OutputDirectory;
   std::string m_GridTempDirectory;
   std::string m_ExecutableDirectory;
+  std::string m_Requirements;
 
   bool             m_Distributed;
   bool             m_DistributedTransition;
