@@ -17,7 +17,7 @@
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 
-#include <cerrno>
+#include <itksys/SystemTools.hxx>
 
 namespace bm {
 
@@ -59,13 +59,22 @@ MString ScriptDeleteFileAction::Help()
 
 void ScriptDeleteFileAction::Execute()
 {
-  MString location = (m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1();
-  if ( remove( location.toChar() ) != 0 )
+  MString location = 
+    (m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1();
+  bool res;
+  if( !itksys::SystemTools::FileIsDirectory( location.toChar() ) )
+    {
+    res = itksys::SystemTools::RemoveFile( location.toChar() );
+    }
+  else
+    {
+    res = itksys::SystemTools::RemoveADirectory( location.toChar() );
+    }
+  if( !res )
     {
     m_ProgressManager->AddError(
       MString("DeleteFile: File ") + location +
-      MString(" could not be deleted. Errno: %1").arg(errno) );
-    return;
+      MString(" failed to be deleted.") );
     }
 }
 

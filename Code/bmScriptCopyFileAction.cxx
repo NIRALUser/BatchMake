@@ -17,8 +17,7 @@
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 
-#include <fstream>
-#include <ostream>
+#include <itksys/SystemTools.hxx>
 
 namespace bm {
 
@@ -58,34 +57,35 @@ void ScriptCopyFileAction::Execute()
 {
   MString source = (m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1();
 
-  std::ifstream in( source.toChar() );
-  if( in.fail() )
-    {
-    m_ProgressManager->AddError( 
-      MString("CopyFile: Filename ") + source + MString(" does not exist.") );
-    return ;
-    }
-
   for( unsigned int i = 1; i < m_Parameters.size(); ++i)
     {
     MString destination = (m_Manager->Convert(m_Parameters[i]).rbegin("'")+1)
                               .latin1();
-    std::ofstream out( destination.toChar() );
-    in.seekg(ios_base::beg);    
-    out << in.rdbuf();  // read original file into target
-    // out destructor automatically flush the file. 
-    // no need to manually call close()
-    if( out.fail() )
+    if( itksys::SystemTools::FileIsDirectory( source.toChar() ) )
       {
-      m_ProgressManager->AddError( 
-        MString("CopyFile: Cannot write in file ") + destination );
+      if( !itksys::SystemTools::CopyADirectory( source.toChar(), 
+                                                destination.toChar() ) )
+        {
+        m_ProgressManager->AddError( 
+          MString("CopyFile: Cannot write directory \"") + source 
+                                   + "\" in directory \"" + destination + "\"" );
+        }
+      }
+    else
+      {
+      if( !itksys::SystemTools::CopyFileAlways( source.toChar(), 
+                                                destination.toChar() ) )
+        {
+        m_ProgressManager->AddError( 
+          MString("CopyFile: Cannot write file \"") + source 
+                                   + "\" in file \"" + destination + "\"" );
+        }
       }
     if( m_ProgressManager->IsStop() )
       {
       break;
       }
     }
-  in.close();
   return;
 }
 
