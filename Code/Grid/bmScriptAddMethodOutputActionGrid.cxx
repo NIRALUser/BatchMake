@@ -89,7 +89,7 @@ void ScriptAddMethodOutputAction::GenerateGrid()
   withslash = "\"";
   withslash += m_Manager->GetDashboardKey();
   withslash += "\"";
-  app.SetParameterValue("key.key","",withslash);
+  app.SetParameterValue("key","key",withslash);
 
   withslash = "\"";
   withslash += exp->project;
@@ -99,24 +99,24 @@ void ScriptAddMethodOutputAction::GenerateGrid()
   withslash = "\"";
   withslash += exp->name;
   withslash += "\"";
-  app.SetParameterValue("createMethodParameter.experiment","",withslash);
+  app.SetParameterValue("createMethodParameter","experiment",withslash);
   withslash = "\"";
   withslash += meth->name;
   withslash += "\"";
-  app.SetParameterValue("createMethodParameter.method","",withslash);
+  app.SetParameterValue("createMethodParameter","method",withslash);
   withslash = "\"";
   withslash += m_Parameters[2].toChar();
   withslash += "\"";
-  app.SetParameterValue("createMethodParameter.name","",withslash);
-  app.SetParameterValue("createMethodParameter.type","","1");
+  app.SetParameterValue("createMethodParameter","name",withslash);
+  app.SetParameterValue("createMethodParameter","type","1");
 
   if(m_Parameters.size() > 3)
     {
-    app.SetParameterValue("createMethodParameter.paramtype","",m_Parameters[3].toChar());
+    app.SetParameterValue("createMethodParameter","paramtype",m_Parameters[3].toChar());
     }
   else
     {
-    app.SetParameterValue("createMethodParameter.paramtype","","string");
+    app.SetParameterValue("createMethodParameter","paramtype","string");
     }
   m_GridModule->AddApplication(&app);
 }

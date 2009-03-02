@@ -59,7 +59,7 @@ void ScriptCreateExperimentAction::GenerateGrid()
   withslash = "\"";
   withslash += m_Manager->GetDashboardKey();
   withslash += "\"";
-  app.SetParameterValue("key.key","",withslash);
+  app.SetParameterValue("key","key",withslash);
 
   withslash = "\"";
   withslash += m_Parameters[1].toChar();
@@ -69,13 +69,13 @@ void ScriptCreateExperimentAction::GenerateGrid()
   withslash = "\"";
   withslash += m_Parameters[2].toChar();
   withslash += "\"";
-  app.SetParameterValue("createExperiment.name","",withslash);
+  app.SetParameterValue("createExperiment","name",withslash);
   if(m_Parameters.size()>3)
     {
     withslash = "\"";
     withslash += m_Parameters[3].toChar();
     withslash += "\"";
-    app.SetParameterValue("createExperiment.description","",withslash);
+    app.SetParameterValue("createExperiment","description",withslash);
     }
   m_GridModule->AddApplication(&app);
 }

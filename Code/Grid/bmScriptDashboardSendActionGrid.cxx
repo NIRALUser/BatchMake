@@ -96,7 +96,7 @@ void ScriptDashboardSendAction::GenerateGrid()
   withslash = "\"";
   withslash += m_Manager->GetDashboardKey();
   withslash += "\"";
-  app.SetParameterValue("key.key","",withslash);
+  app.SetParameterValue("key","key",withslash);
 
   withslash = "\"";
   withslash += exp->project;
@@ -106,11 +106,11 @@ void ScriptDashboardSendAction::GenerateGrid()
   withslash = "\"";
   withslash += exp->name;
   withslash += "\"";
-  app.SetParameterValue("send.experiment","",withslash);
+  app.SetParameterValue("send","experiment",withslash);
   withslash = "\"";
   withslash += meth->name;
   withslash += "\"";
-  app.SetParameterValue("send.method","",withslash);
+  app.SetParameterValue("send","method",withslash);
   app.SetParameterValue("data","","1");
  
   // Check that the experiment exist
@@ -181,7 +181,7 @@ void ScriptDashboardSendAction::GenerateGrid()
   numParam += " ";
   numParam += data;
   delete [] numParams;
-  app.SetParameterValue("data.NumberOfValues","",numParam);
+  app.SetParameterValue("data","NumberOfValues",numParam);
 
   numParams = new char[10];
   sprintf(numParams,"%d",imagenum*2);
@@ -189,7 +189,7 @@ void ScriptDashboardSendAction::GenerateGrid()
   numParam += " ";
   numParam += imagedata;
   delete [] numParams;
-  app.SetParameterValue("imagedata.NumberOfValues","",numParam);
+  app.SetParameterValue("imagedata","NumberOfValues",numParam);
 
   if(imagenum>0)
     {
@@ -197,7 +197,7 @@ void ScriptDashboardSendAction::GenerateGrid()
     }
 
   app.SetParameterValue("inputFile","","1");
-  app.SetParameterValue("inputFile.inputFile","",m_GridModule->GetCurrentScopeFile());
+  app.SetParameterValue("inputFile","inputFile",m_GridModule->GetCurrentScopeFile());
 
   m_GridModule->AddApplication(&app,m_GridModule->GetOutputDirectory());
 }

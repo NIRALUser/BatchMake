@@ -75,7 +75,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     xmloutputname += num;
     xmloutputname += ".out.xml";
     application->SetParameterValue("GenerateXMLFile","","1");
-    application->SetParameterValue("GenerateXMLFile.GenerateXMLFile","",xmloutputname);
+    application->SetParameterValue("GenerateXMLFile","GenerateXMLFile",xmloutputname);
     delete [] num;
 
     m_GridModule->AddApplication(application);
@@ -109,7 +109,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     //std::string parse = "-p ";
     //parse += xmloutputname;
     app.SetParameterValue("parse","","1");
-    app.SetParameterValue("parse.parse","",xmloutputname.c_str());
+    app.SetParameterValue("parse","parse",xmloutputname.c_str());
     //std::string appvarname = "-a ";
     BMString appn = m_Parameters[1];
     appn.removeAllChars('$');
@@ -117,7 +117,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     appn.removeAllChars('}');
     //appvarname += appn.toChar();
     app.SetParameterValue("appname","","1");
-    app.SetParameterValue("appname.appname","",appn.GetValue());
+    app.SetParameterValue("appname","appname",appn.GetValue());
     m_GridModule->AddApplication(&app);
     }
   

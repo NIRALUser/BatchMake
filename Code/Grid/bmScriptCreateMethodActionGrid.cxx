@@ -82,23 +82,23 @@ void ScriptCreateMethodAction::GenerateGrid()
   withslash = "\"";
   withslash += m_Manager->GetDashboardKey();
   withslash += "\"";
-  app.SetParameterValue("key.key","",withslash);
+  app.SetParameterValue("key","key",withslash);
 
   app.SetParameterValue("createMethod","","1");
   withslash = "\"";
   withslash += exp->name;
   withslash += "\"";
-  app.SetParameterValue("createMethod.experimentName","",withslash);
+  app.SetParameterValue("createMethod","experimentName",withslash);
   withslash = "\"";
   withslash += m_Parameters[2].toChar();
   withslash += "\"";
-  app.SetParameterValue("createMethod.name","",withslash);
+  app.SetParameterValue("createMethod","name",withslash);
   if(m_Parameters.size()>3)
     {
     withslash = "\"";
     withslash += m_Parameters[3].toChar();
     withslash += "\"";
-    app.SetParameterValue("createMethod.description","",withslash);
+    app.SetParameterValue("createMethod","description",withslash);
     }
   m_GridModule->AddApplication(&app);
 }
