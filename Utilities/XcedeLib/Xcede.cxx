@@ -1,5 +1,5 @@
 #include "Xcede.h"
-
+#include <cstring>
 
 xmlDocPtr Xcede::ParseDoc(std::string docname, std::string schema, bool validation)
 {

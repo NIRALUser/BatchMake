@@ -1,4 +1,5 @@
 #include "Project.h"
+#include <cstring>
 
 Project::Project()
 {

@@ -1,5 +1,6 @@
 #include "XnatCatalog.h"
 #include <curl.h>
+#include <cstring>
 
 std::ofstream* xnatOutputFile = NULL;
 bool xnat_write_buffer = false;
