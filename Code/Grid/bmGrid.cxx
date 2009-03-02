@@ -311,18 +311,18 @@ void Grid::WriteGAD()
          && !(*it).GetDataHost().empty() ) // DATA_IN
         {
         fprintf(fic," <componentAction type=\"DataRelocation\" name=\"InputFile%d\">\n",inFile);
-        fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetDataHost());
+        fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetDataHost().c_str());
         fprintf(fic,"  <parameter name=\"Description\" value=\"\"/>\n");
         fprintf(fic,"  <parameter name=\"Direction\" value=\"In\"/>\n");
         fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
-        fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s%s\"/>\n",(*it).GetDataDirectory(),
+        fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s%s\"/>\n",(*it).GetDataDirectory().c_str(),
                                                                   this->AddQuotes((*itParams).GetValue().toChar()).c_str());
         fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",m_GridTempDirectory.c_str(),
                               this->AddQuotes(this->GetFilename((*itParams).GetValue().toChar()).c_str()).c_str());
      
         if(dependApp)
           {
-          fprintf(fic,"  <dependency name=\"%s\" status=\"done\"/>\n",dependApp->GetDependencyTag());
+          fprintf(fic,"  <dependency name=\"%s\" status=\"done\"/>\n",dependApp->GetDependencyTag().c_str());
           }
         fprintf(fic," </componentAction>\n");
         char* dep = new char[255];
@@ -677,7 +677,7 @@ void Grid::WriteGAD()
 
   if(dependencies.size() == 0 && dependApp)
     {
-    fprintf(fic,"  <dependency name=\"%s\"/>\n",dependApp->GetDependencyTag());
+    fprintf(fic,"  <dependency name=\"%s\"/>\n",dependApp->GetDependencyTag().c_str());
     }
   
   fprintf(fic," </componentAction>\n");
@@ -698,7 +698,7 @@ void Grid::WriteGAD()
       && !(*it).GetOutputHost().empty()) // DATA_OUT
       {
       fprintf(fic," <componentAction type=\"DataRelocation\" name=\"OutputFile%d\">\n",outFile);
-      fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetOutputHost());
+      fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetOutputHost().c_str());
       fprintf(fic,"  <parameter name=\"Description\" value=\"\"/>\n");
       fprintf(fic,"  <parameter name=\"Direction\" value=\"Out\"/>\n");
       fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
@@ -706,7 +706,7 @@ void Grid::WriteGAD()
       MString valwithoutquote = (*itParams).GetValue().removeChar('"');
 
       fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s\"/>\n",valwithoutquote.toChar());
-      fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",(*it).GetOutputDirectory(),valwithoutquote.toChar());
+      fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",(*it).GetOutputDirectory().c_str(),valwithoutquote.toChar());
       fprintf(fic," <dependency name=\"%s\" status=\"done\"/>\n",appName);
       fprintf(fic," </componentAction>\n");
       char* dep = new char[255];
