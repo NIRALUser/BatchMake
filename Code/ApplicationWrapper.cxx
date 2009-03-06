@@ -95,19 +95,39 @@ std::string ApplicationWrapper
       // remove the absolute path if the relativePath is on
       if(relativePath && (*it).GetExternalData()>0)
         {
-        MString appname = (*it).GetValue().rend("/");
-        appname = appname.rend("\\");
-        appname = appname.removeChar('\\');
-        appname = appname.removeChar('/');
-        appname = appname.removeChar('\'');
-        appname = appname.removeChar('\"');
+        MString appname;
+        if( itksys::SystemTools::FileIsFullPath( (*it).GetValue().toChar() ) && 
+            (*it).GetExternalData() == 1 &&
+            !inputDirectory.empty() )
+          {
+          appname = 
+            itksys::SystemTools::RelativePath( inputDirectory.c_str(),
+                                               (*it).GetValue().toChar() );
+          }
+        else if( itksys::SystemTools::FileIsFullPath( 
+                   (*it).GetValue().toChar() ) && 
+                 (*it).GetExternalData() == 2 &&
+                 !outputDirectory.empty() )
+          {
+          appname = 
+            itksys::SystemTools::RelativePath( outputDirectory.c_str(),
+                                               (*it).GetValue().toChar() );
+          }
+        else
+          {
+          appname = (*it).GetValue().rend("/");
+          appname = appname.rend("\\");
+          appname = appname.removeChar('\\');
+          appname = appname.removeChar('/');
+          appname = appname.removeChar('\'');
+          appname = appname.removeChar('\"');
+          }
         std::string sappname = appname.toChar();
-
+        
         while(sappname[sappname.size()-1]==' ')
           {
           sappname = sappname.substr(0,sappname.size()-1);
           }
-
         
         // Preappend the directories
         if( !inputDirectory.empty() && (*it).GetExternalData()==1)
@@ -135,7 +155,8 @@ std::string ApplicationWrapper
         {
         line += (*it).GetValue().toChar();
         }   
-      (*it).CheckSubValueDefined(relativePath, &line);
+      (*it).CheckSubValueDefined( &line, relativePath, 
+                                  inputDirectory, outputDirectory );
       }
     it++;
     }

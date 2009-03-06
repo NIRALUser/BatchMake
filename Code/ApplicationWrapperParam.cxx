@@ -8,14 +8,15 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even 
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  PURPOSE.  See the above copyright notices for more information.
+  =========================================================================*/
 
 #include "ApplicationWrapperParam.h"
 #include <iostream>
 #include <cstring>
+#include <itksys/SystemTools.hxx>
 
 ApplicationWrapperParam::ApplicationWrapperParam()
 {
@@ -30,7 +31,7 @@ ApplicationWrapperParamSub* ApplicationWrapperParam::GetParamSub(MString name)
   for (unsigned int i=0 ; i<m_Params.size() ; i++)
     {
     if (m_Params[i].GetName() == name)
-	  {
+      {
       return &m_Params[i];
       }
     }
@@ -45,12 +46,12 @@ void ApplicationWrapperParam::RemoveParamSub(MString name)
   for(unsigned int i=0 ; i<m_Params.size() ; i++)
     {
     if (m_Params[i].GetName() == name)
-	  {
-	  m_Params.erase(m_it);
+      {
+      m_Params.erase(m_it);
       return;
-	  }
-	m_it++;
-	}
+      }
+    m_it++;
+    }
 }
 
 
@@ -60,7 +61,7 @@ void ApplicationWrapperParam::ClearParamSubValues()
   while(it != m_Params.end())
     {
     (*it).SetValueDefined(false);
-	it++;
+    it++;
     }
 }
 
@@ -80,49 +81,89 @@ bool ApplicationWrapperParam::ParamSubExists( const std::string& first)const
 }
 
 
-bool ApplicationWrapperParam::CheckSubValueDefined(bool relativePath, std::string* line)const
+bool ApplicationWrapperParam
+::CheckSubValueDefined( std::string* line, bool relativePath, 
+                        const std::string& inputDirectory,
+                        const std::string& outputDirectory )const
 {
   std::vector<ApplicationWrapperParamSub>::const_iterator it = m_Params.begin();
   while(it != m_Params.end())
     {
-	if((*it).IsValueDefined())
-	  {
-	  if(line->size()>0)
+    if((*it).IsValueDefined())
+      {
+      if(line->size()>0)
         {
-		    *line += " ";
+        *line += " ";
         }
-
-	  // remove the absolute path if the relativePath is on
+      
+      // remove the absolute path if the relativePath is on
       if(relativePath && (*it).GetExternalData()>0)
         {
-        MString appname = (*it).GetValue().rend("/");
-        appname = appname.rend("\\");
-        appname = appname.removeChar('\\');
-        appname = appname.removeChar('/');
-
-        appname = appname.removeChar('\"');
-        std::string sappname = "\"";
-        sappname += appname.toChar();
-
-        while(sappname[sappname.size()-1]==' ')
+        MString appname;
+        if( itksys::SystemTools::FileIsFullPath( (*it).GetValue().toChar() ) && 
+            (*it).GetExternalData() == 1 &&
+            !inputDirectory.empty() )
+          {
+          appname = 
+            itksys::SystemTools::RelativePath( inputDirectory.c_str(),
+                                               (*it).GetValue().toChar() );
+          }
+        else if( itksys::SystemTools::FileIsFullPath( 
+                   (*it).GetValue().toChar() ) && 
+                 (*it).GetExternalData() == 2 &&
+                 !outputDirectory.empty() )
+          {
+          appname = 
+            itksys::SystemTools::RelativePath( outputDirectory.c_str(),
+                                               (*it).GetValue().toChar() );
+          }
+        else
+          {
+          appname = (*it).GetValue().rend("/");
+          appname = appname.rend("\\");
+          appname = appname.removeChar('\\');
+          appname = appname.removeChar('/');
+          appname = appname.removeChar('\'');
+          appname = appname.removeChar('\"');
+          }
+        std::string sappname = appname.toChar();
+        
+        while( sappname[sappname.size()-1] == ' ' )
           {
           sappname = sappname.substr(0,sappname.size()-1);
           }
-
-        sappname += "\"";
-
-        *line += sappname;
+        
+        // Preappend the directories
+        if( !inputDirectory.empty() && (*it).GetExternalData()==1)
+          {
+          std::string slash = "";
+          if(inputDirectory[inputDirectory.length()-1] != '/')
+            {
+            slash = "/";
+            }
+          sappname = inputDirectory+slash+sappname;
+          }
+        else if(!outputDirectory.empty() && (*it).GetExternalData()==2)
+          {
+          std::string slash = "";
+          if(outputDirectory[outputDirectory.length()-1] != '/')
+            {
+            slash = "/";
+            }
+          sappname = outputDirectory+slash+sappname;
+          }
+        *line += "\"" + sappname + "\"";
         }
       else
         {
         *line += (*it).GetValue().toChar();
         } 
-	  }
-	else
-	  {
-	  return false;
-	  }
-	it++;
+      }
+    else
+      {
+      return false;
+      }
+    it++;
     }
   return false;
 }
