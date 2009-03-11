@@ -60,7 +60,7 @@ MString ScriptGetParamCountAction::Help()
 void ScriptGetParamCountAction::Execute()
 {
   std::vector<BMString> m_list = 
-    m_Manager->GetParamsFromVariable( m_Manager->Convert( m_Parameters[1] ) );
+    m_Manager->ConvertToArray( m_Parameters[1] );
   
   BMString m_param = m_Parameters[0];
   BMString m_value = BMString( static_cast<int>(m_list.size()) ).toVariable();

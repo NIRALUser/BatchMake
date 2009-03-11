@@ -30,9 +30,10 @@ ScriptEchoAction::~ScriptEchoAction()
 
 bool ScriptEchoAction::TestParam(ScriptError* error,int linenumber)
 {
-  for (unsigned int i=0;i<m_Parameters.size();i++)
-      m_Manager->TestConvert(m_Parameters[i],linenumber);
-    
+  for( unsigned int i = 0; i < m_Parameters.size() ; ++i )
+    {
+    m_Manager->TestConvert( m_Parameters[i], linenumber );
+    }
   return true;
 }
 
@@ -47,9 +48,9 @@ void ScriptEchoAction::Execute()
   BMString m_value;
   for (unsigned int i=0;i<m_Parameters.size();i++)
     {
-    m_value += m_Manager->Convert(m_Parameters[i]).removeAllChars('\'');
+    m_value += m_Manager->Convert( m_Parameters[i] ).removeAllChars('\'');
     }
-  m_Manager->GetProgressManager()->DisplayOutput(m_value+"\n");
+  m_Manager->GetProgressManager()->DisplayOutput( m_value + "\n" );
 }
 
 } // end namespace bm

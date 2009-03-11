@@ -93,7 +93,7 @@ void ScriptSetAppOptionAction::Execute()
   std::string value = "";
   for(i=1;i<m_Parameters.size();i++)
     {
-    std::string param = m_Parameters[i].GetValue();
+    std::string param = m_Parameters[i].GetConstValue();
     long int currentpos = 0;
     long int posvar = param.find("${");
 

@@ -107,8 +107,10 @@ void ScriptSetAppAction::Execute()
   BMString appName = m_Parameters[1];
   appName.removeAllChars('@');
   bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
-  while (it != m_Manager->GetApplicationWrapperList()->end())
+  ScriptActionManager::ApplicationWrapperListType::iterator it;
+  ScriptActionManager::ApplicationWrapperListType::iterator end = 
+    m_Manager->GetApplicationWrapperList()->end();
+  for( it = m_Manager->GetApplicationWrapperList()->begin(); it != end ; ++it )
     {
     if( appName == (*it)->GetName() )
       {
@@ -121,12 +123,11 @@ void ScriptSetAppAction::Execute()
       
       // Set all the variables of the application to off
       std::vector<ApplicationWrapperParam> & params = (*it)->GetParams();
-      std::vector<ApplicationWrapperParam>::iterator itParams = params.begin();
-        
-      while(itParams != params.end())
+      std::vector<ApplicationWrapperParam>::iterator itParams;
+      std::vector<ApplicationWrapperParam>::iterator endParams = params.end();
+      for( itParams = params.begin(); itParams != endParams; ++itParams)
         {
         (*itParams).SetValueDefined(false);
-        itParams++;
         }
 
       (*it)->SetSequentialParsing(false);
@@ -139,7 +140,6 @@ void ScriptSetAppAction::Execute()
         }
       break;
       }
-    it++;
     }
   m_Manager->SetVariable(m_Parameters[0],m_Value);
 }

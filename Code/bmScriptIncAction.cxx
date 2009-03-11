@@ -71,6 +71,7 @@ void ScriptIncAction::Execute()
   float val = test.toFloat();
   float inc = m_inc.fromVariable().toFloat();
   float sum = val + inc;
+  
   BMString newVal(sum);
   m_value = newVal.toVariable();
 

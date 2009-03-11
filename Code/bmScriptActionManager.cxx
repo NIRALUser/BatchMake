@@ -66,6 +66,7 @@
   #include "bmScriptGridSetGroupingAction.h"
   #include "bmScriptGridExecutableDirectoryAction.h"
   #include "bmScriptGridTransferFileAction.h"
+  #include "bmScriptRequirementsAction.h"
 #endif
 
 #ifdef BM_DASHBOARD
@@ -253,11 +254,6 @@ std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
   BM_NEWKEYWORD(_list, CloseTCPSocket);
   BM_NEWKEYWORD(_list, AddMethodInput);
   BM_NEWKEYWORD(_list, AddMethodOutput);
-  BM_NEWKEYWORD(_list, GridDataHost);
-  BM_NEWKEYWORD(_list, GridOutputHost);
-  BM_NEWKEYWORD(_list, DataDirectory);
-  BM_NEWKEYWORD(_list, OutputDirectory);
-  BM_NEWKEYWORD(_list, GridSingleNode);
   BM_NEWKEYWORD(_list, AddMethodIdealOutput);
   BM_NEWKEYWORD(_list, SetIdealOutput);
   BM_NEWKEYWORD(_list, RegEx);
@@ -265,11 +261,6 @@ std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
   BM_NEWKEYWORD(_list, GetTime);
   BM_NEWKEYWORD(_list, GetCurrentDateTime);
   BM_NEWKEYWORD(_list, GetListSize);
-  BM_NEWKEYWORD(_list, GridSetGrouping);
-  BM_NEWKEYWORD(_list, GridMaxNodes);
-  BM_NEWKEYWORD(_list, GridTempDirectory);
-  BM_NEWKEYWORD(_list, GridExecutableDirectory);
-  BM_NEWKEYWORD(_list, GridTransferFile);
   BM_NEWKEYWORD(_list, Glob);
   BM_NEWKEYWORD(_list, GetFilename);
   BM_NEWKEYWORD(_list, ConvertImage);
@@ -281,6 +272,20 @@ std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
   BM_NEWKEYWORD(_list, ClearErrors);
   BM_NEWKEYWORD(_list, Math);
   
+#ifdef BM_GRID
+  BM_NEWKEYWORD(_list, GridDataHost);
+  BM_NEWKEYWORD(_list, GridOutputHost);
+  BM_NEWKEYWORD(_list, GridSingleNode);
+  BM_NEWKEYWORD(_list, OutputDirectory);
+  BM_NEWKEYWORD(_list, DataDirectory);
+  BM_NEWKEYWORD(_list, GridSetGrouping);
+  BM_NEWKEYWORD(_list, GridMaxNodes);
+  BM_NEWKEYWORD(_list, GridTempDirectory);
+  BM_NEWKEYWORD(_list, GridExecutableDirectory);
+  BM_NEWKEYWORD(_list, GridTransferFile);
+  BM_NEWKEYWORD(_list, Requirements);
+#endif
+
 #ifdef BM_XCEDE
   BM_NEWKEYWORD(_list, GetXnatDataSets);
   BM_NEWKEYWORD(_list, DownloadXnatDataSet);
@@ -348,6 +353,7 @@ ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
   BM_NEWACTION(option, GridTempDirectory);
   BM_NEWACTION(option, GridExecutableDirectory);
   BM_NEWACTION(option, GridTransferFile);
+  BM_NEWACTION(option, Requirements);
 #endif
 
 #ifdef BM_DASHBOARD
@@ -623,25 +629,25 @@ std::vector<BMString> ScriptActionManager
   varname.removeAllChars('}');
 
   std::vector<BMString> _list;
-  /*
-  std::vector<variablestruct*>::const_iterator it = m_VariableList.begin();
-  std::vector<variablestruct*>::const_iterator end = m_VariableList.end();
-  for( ; it != end; ++it)
-    {
-    if ( (*it)->name == varname )
-      {
-      _list = (*it)->value.extractVariables();
-      // the variable is found
-      break;
-      }
-    }
-  */
   std::map<BMString,BMString>::const_iterator it = 
     m_VariableList.find( varname );
   if( it != m_VariableList.end() )
     {
     _list = it->second.extractVariables();
     }
+#ifdef VERBOSE
+  std::cout<< " GetVariable(" << name.GetConstValue() << "): ";
+  if( it != m_VariableList.end() )
+    {
+    std::cout << it->second.GetConstValue() << " -> " << std::endl;
+    }
+  std::vector<BMString>::iterator it2 = _list.begin();
+  for( ; it2 != _list.end(); ++it2 )
+    {
+    std::cout << "[" << (*it2).GetConstValue() << "]";
+    }
+  std::cout<<std::endl;
+#endif
   return _list;
 }
 
@@ -691,11 +697,13 @@ TCPSocket* ScriptActionManager::GetVariableSocket(const BMString& name)
   return res;
 }
 
+/*
 std::vector<BMString> ScriptActionManager
 ::GetParamsFromVariable(const BMString& var)const
 {
   return var.tokenize(" ");
 }
+*/
 
 BMString ScriptActionManager
 ::GetVariableFromParams(const std::vector<BMString> & params)const
@@ -821,19 +829,102 @@ MString ScriptActionManager::Convert(MString param)
 }
 */
 
+
+BMString ScriptActionManager::Convert(const BMString& parameter)const
+{
+  BMString _value="'";
+  BMString _var;
+  const std::string& param = parameter.GetConstValue();
+  std::string::size_type end = param.length();
+  std::string::size_type endQuote, endBrace;
+  for ( std::string::size_type i = 0; i < end; ++i)
+    {
+    switch( param[i] )
+      {
+      case '\'': // opening quote
+        ++i;
+        // find the closing quote
+        endQuote = param.find( '\'', i);
+        if( endQuote != std::string::npos )
+          {
+          //i+1 to remove the quote
+          _value += param.substr( i, endQuote - i);
+          }
+        else
+          {//we didn't find the closing quote, must be an error
+          //TODO add a warning instead of an error
+          m_ProgressManager->AddError( BMString( "ScriptActionManager:"
+            "Can't find closing quote in parameter: ") + param  );
+          // keep going
+          _value += param.substr( i, std::string::npos );
+          }
+        i = endQuote;
+        break;
+      case '$': // in a ${...} ?
+        if( (i + 1) < end && param[i+1] == '{' &&
+            ( endBrace = param.find( '}', i + 2 ) ) != std::string::npos )
+          {//found variable
+          //extract variable name
+          std::vector<BMString> _variable = this->GetVariable( 
+            param.substr( i + 2, endBrace - i - 2 ) );
+          std::vector<BMString>::const_iterator it2 = _variable.begin();
+          std::vector<BMString>::const_iterator end2 = _variable.end();
+          for (; it2 != end2; ++it2)
+            {
+            if ( it2 != _variable.begin() )
+              {
+              _value += "'";
+              }
+            if ( *it2 != "null" )
+              {
+              _value += (*it2).fromVariable();
+              }
+            if ( (it2+1) != end2 )
+              {
+              _value += "' ";
+              }
+            }
+          i = endBrace; 
+          }
+        else
+          {// it is not something like: ${...}, 
+          // process param[i] as a normal text
+          _value += param[i];
+          }
+        break;
+      default:
+        _value += param[i];
+        break;
+      }
+    }
+
+  _value += "'";
+#ifdef VERBOSE
+  std::cout<< "Convert param: "<< parameter.GetConstValue()
+           << " -> " << _value.GetConstValue() 
+           << std::endl;
+#endif
+  return _value;
+}
+
+
+/*
 BMString ScriptActionManager::Convert(const BMString& param)const
 {
+//  return this->ExpandParameter(param);
+  BMString _expression;
   BMString _value="'";
   bool _vardetected = false;
   BMString _var;
   
-  std::string::const_iterator it = param.GetConstValue().begin();
+  std::string::const_iterator it;
   std::string::const_iterator end = param.GetConstValue().end();
-  for ( ; it != end ; ++it)
+  std::string::const_iterator endVariable;
+  for( it = param.GetConstValue().begin() ; it != end ; ++it )
     {
-    if ( *it == '$')
+    if ( *it == '$' )
       {
-      _vardetected=true;
+      _vardetected = true;
       _var = "";
       }
     else if (_vardetected)
@@ -842,8 +933,7 @@ BMString ScriptActionManager::Convert(const BMString& param)const
         {
         _var = "";
         }
-      else if (( *it == ' ') || ( *it == '}') || 
-               ( *it == '\'')  || ( (it + 1) == end ))
+      else if( *it == '}' )
         {
         if (( (it+1)== end ) && ( *it != '}') && ( *it != '\''))
           {
@@ -853,7 +943,7 @@ BMString ScriptActionManager::Convert(const BMString& param)const
         _vardetected = false;
 
         //MString _variable;
-        std::vector<BMString> _variable = this->GetVariable(_var);
+        std::vector<BMString> _variable = this->GetVariable( _var );
         std::vector<BMString>::const_iterator it2 = _variable.begin();
         std::vector<BMString>::const_iterator end2 = _variable.end();
         for (; it2 != end2; ++it2)
@@ -865,7 +955,7 @@ BMString ScriptActionManager::Convert(const BMString& param)const
 
           if ( *it2 != "null" )
             {
-            _value += *it2;
+            _value += (*it2).fromVariable();
             }
           if ( (it2+1) != end2 )
             {
@@ -883,7 +973,11 @@ BMString ScriptActionManager::Convert(const BMString& param)const
         _var += *it;
         }
       }
-    else if ( *it != '\'')
+    else 
+      {
+      _value += *it;
+      }
+    if ( *it != '\'')
       {
       if ( *it == ' ')
         {
@@ -895,69 +989,252 @@ BMString ScriptActionManager::Convert(const BMString& param)const
         }
       }
     }
-
+  
   _value += "'";
 
+#ifdef VERBOSE
+  std::cout<< "Convert param: "<< param.GetConstValue()
+           << " -> " << _value.GetConstValue() 
+           << std::endl;
+#endif
   return _value;
 
-}
+  }*/
 
 BMString ScriptActionManager::ConvertExtra(const BMString& param)const
 {
-  BMString _value="'";
+  BMString _value;// = "'";
   bool _vardetected = false;
   BMString _var;
-
+  
   for (int i=0;i<param.length();i++)
-  {
-    if (param[i] == '$')
     {
+    if (param[i] == '$')
+      {
       _vardetected=true;
       _var = "";
-    }
+      }
     else if (_vardetected)
-    {
-       if ((_var.length() == 0) && (param[i] == '{'))
-       {
-          _var = "";
-       }
-       else if ((param[i] == ' ') || (param[i] == '}') || (param[i] == '\'')  || (i==param.length()-1))
-       {
-         if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\''))
+      {
+      if ((_var.length() == 0) && (param[i] == '{'))
+        {
+        _var = "";
+        }
+      else if ((param[i] == ' ') || (param[i] == '}') || 
+               (param[i] == '\'')  || (i==param.length()-1))
+        {
+        if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\''))
+          {
           _var+=param[i];
-
-         _vardetected=false;
-         //MString _variable;
-         std::vector<BMString> _variable =  GetVariable(_var);
-         for (unsigned int k=0;k<_variable.size();k++)
-         {
-           if (k!=0)
-             _value += "'";
-
-           if (_variable[k] != "null")
+          }
+        
+        _vardetected=false;
+        //MString _variable;
+        std::vector<BMString> _variable =  GetVariable(_var);
+        for (unsigned int k=0;k<_variable.size();k++)
+          {
+          if (k!=0)
+            {
+//            _value += "'";
+            }
+          
+          if (_variable[k] != "null")
+            {
             _value += _variable[k];
-           if (k != _variable.size()-1)
-              _value += "' ";
-         }
-
-         if (param[i] == ' ')
+            }
+          if (k != _variable.size()-1)
+            {
+            _value += " ";//"' ";
+            }
+          }
+        
+        if ( param[i] == ' ' )
           _value += "' '";
-       }
-       else
-         _var+=param[i];
-    }
-    else if (param[i] != '\'')
-      if (param[i] == ' ')
-        _value += "' '";
+        }
       else
+        _var+=param[i];
+      }
+    else if (param[i] != '\'')
+      {
+      if (param[i] == ' ')
+        {
+        _value += "' '";
+        }
+      else
+        {
         _value += param[i];
-  }
-
-  _value += "'";
+        }
+      }
+    }
+  
+  //_value += "'";
   return _value;
 }
 
 
+std::vector<BMString> ScriptActionManager
+::ConvertToArray(const BMString& parameter)const
+{
+  std::vector<BMString> _res;
+  BMString _value="'";
+  BMString _var;
+  const std::string& param = parameter.GetConstValue();
+  std::string::size_type end = param.length();
+  std::string::size_type endQuote, endBrace;
+  for ( std::string::size_type i = 0; i < end; ++i)
+    {
+    switch( param[i] )
+      {
+      case '\'': // opening quote
+        ++i;
+        // find the closing quote
+        endQuote = param.find( '\'', i);
+        if( endQuote != std::string::npos )
+          {
+          //i+1 to remove the quote
+          _value += param.substr( i, endQuote - i);
+          }
+        else
+          {//we didn't find the closing quote, must be an error
+          //TODO add a warning instead of an error
+          m_ProgressManager->AddError( BMString( "ScriptActionManager:"
+            "Can't find closing quote in parameter: ") + param  );
+          // keep going
+          _value += param.substr( i, std::string::npos );
+          }
+        i = endQuote;
+        break;
+      case ' ':
+        //check if it is a single space
+        if( (i + 1) < end && param[i+1] != ' ' )
+          {
+          // flush the variable
+          _value += "'";
+          _res.push_back( _value );
+          _value = "'";
+          }
+        else
+          {
+          // this space is part of many spaces. skip it
+          }
+        break;
+      case '$': // in a ${...} ?
+        if( (i + 1) < end && param[i+1] == '{' &&
+            ( endBrace = param.find( '}', i + 2 ) ) != std::string::npos )
+          {//found variable
+          //extract variable name
+          std::vector<BMString> _variable = this->GetVariable( 
+            param.substr( i + 2, endBrace - i - 2 ) );
+          std::vector<BMString>::const_iterator it2 = _variable.begin();
+          std::vector<BMString>::const_iterator end2 = _variable.end();
+          for (; it2 != end2; ++it2)
+            {
+            if ( *it2 != "null" )
+              {
+              _value += (*it2).fromVariable();
+              }
+            if ( (it2+1) != end2 )
+              {// flush the variable
+              _value += "'";
+              _res.push_back( _value );
+              _value = "'";
+              }
+            }
+          i = endBrace; 
+          }
+        else
+          {//it is not something like: ${...}, process param[i] as a normal text
+          _value += param[i];
+          }
+        break;
+      default:
+        _value += param[i];
+        break;
+      }
+    }
+
+  _value += "'";
+  if( _value != "''" )
+    {
+    _res.push_back( _value );
+    }
+#ifdef VERBOSE
+  std::cout<< "Convert param: "<< parameter.GetConstValue() << " -> ";
+  for( unsigned int i = 0; i < _res.size(); ++i )
+    {
+    std::cout<< '[' <<  _res[i].GetConstValue() << ']' ;
+    }
+  std::cout << std::endl;
+#endif
+  return _res;
+}
+
+
+/** If param is like: "${my_variable}" we replace its content by the 
+ *  value of my_variable between quotes: "'content'".
+ *  In other cases: "my param string", copy the content of param between
+ *  quotes in the result: "'my param string'"
+ *  if param: " toto${foo}${bar}tonton tutu", res: "'totofoo_expandedbar_expanded' 'tutu'"
+ *  
+ *
+BMString ScriptActionManager
+::ExpandParameter( const BMString& param, bool quote )const
+{
+  std::vector<BMString> variableContent = 
+    this->ExpandParameterToArray( param, quote );
+  // separate all the items by a space
+  std::stringstream concatenatedContent;
+  std::ostream_iterator<std::string> out_it( concatenatedContent, " " );
+  std::copy( variableContent.begin(), variableContent.end(), out_it );
+  BMString res( concatenatedContent.str() );
+  // a space is automatically added after the last variableContentItem, remove it.
+  return res.rbegin( " " );
+}
+*/
+/** same as "return this->Expand( param ).extractVariables();"
+ *
+std::vector<BMString> ScriptActionManager
+::ExpandParameterToArray( const BMString& param, bool quote )const
+{
+  std::vector<BMString> res;
+  BMString variable = param.extractExpandableVariable();
+  if( !variable.isEmpty() )
+    {
+    std::vector<BMString> variableContent = this->GetVariable(variable);
+    std::vector<BMString>::const_iterator it = variableContent.begin();
+    std::vector<BMString>::const_iterator end = variableContent.end();
+    for( it = variableContent.begin(); it != end; ++it )
+      {
+      BMString content = (*it != "null")? *it : "";
+      res.push_back( quote? content.toVariable() : content.fromVariable() );
+      }
+    }
+  else
+    {
+    res.push_back( quote ? param.toVariable() : param.fromVariable() );
+    }
+  return res;
+}
+*/
+
+bool ScriptActionManager::TestExpand( const BMString& param, int linenumber )const
+{
+#ifdef VERBOSE
+  std::cout << "Test Expand: " << param.GetConstValue() << std::endl;
+#endif
+  BMString variable = param.extractExpandableVariable();
+  if( !variable.isEmpty() && !this->IsTestVariable(variable) )
+    {
+    // param == ${undefined_variable}
+    m_Error->SetError( BMString("In parameter: ") + param 
+                     + ", undefined variable [" + variable + "]"
+                       , m_LineNumber );
+    return false;
+    }
+  return true;
+}
+
+/*
 bool ScriptActionManager::TestConvert(const BMString& param, int linenumber)
 {
   bool _vardetected = false;
@@ -987,8 +1264,10 @@ bool ScriptActionManager::TestConvert(const BMString& param, int linenumber)
 
         if (IsTestVariable(_var) == false)
           {
-          m_Error->SetError(BMString("Undefined variable [") 
-                            + _var + "]", m_LineNumber);
+          m_Error->SetError( BMString("In parameter: ") 
+                           + param 
+                           + ", undefined variable [" + _var + "]"
+                             , m_LineNumber );
           return false;
           }
         }
@@ -1000,6 +1279,52 @@ bool ScriptActionManager::TestConvert(const BMString& param, int linenumber)
     }
   return true;
 }
+*/
+
+bool ScriptActionManager
+::TestConvert(const BMString& parameter, int linenumber)const
+{
+#ifdef VERBOSE
+  std::cout << "Test param: "<< parameter.GetConstValue() << std::endl;
+#endif
+
+  BMString _variable;
+  const std::string& param = parameter.GetConstValue();
+  std::string::size_type end = param.length(), endBrace;
+  for ( std::string::size_type i = 0; i < end; ++i)
+    {
+    switch( param[i] )
+      {
+      case '\'': // opening quote
+        // don't test what is inside quotes
+        // find the closing quote
+        i = param.find( '\'', i+1);
+        break;
+      case '$': // in a ${...} ?
+        if( (i + 1) < end && param[i+1] == '{' &&
+            ( endBrace = param.find( '}', i + 2 ) ) != std::string::npos )
+          {// found variable
+          // extract variable name
+          _variable = param.substr( i + 2, endBrace - i - 2 );
+          if( !this->IsTestVariable( _variable)  )
+            {
+            m_Error->SetError( BMString("In parameter: ") 
+                             + param 
+                             + ", undefined variable [" + _variable + "]"
+                               , m_LineNumber );
+            return false;
+            }
+          i = endBrace; 
+          }
+        break;
+      default:
+        break;
+      }
+    }
+  return true;
+}
+
+
 
 bool ScriptActionManager::TestParam()
 {

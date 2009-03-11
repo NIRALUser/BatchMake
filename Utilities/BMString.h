@@ -38,7 +38,7 @@ public:
   ~BMString();
 
   /** returns a copy of the internal string */
-  std::string GetValue()const;
+  std::string& GetValue();
   const std::string& GetConstValue()const;
   //const std::string& GetConstValue() const;
   
@@ -152,28 +152,43 @@ public:
   bool isInBetweenChar(char val,long int pos)const;
   
   /** Returns true if the content of the string is a variable
-   * if value == "'foo'", returns true, if value == "foo", returns false
+   * if value == "'foo'" or "     'foo' ", returns true, 
+   * if value == "foo" or "'foo' 'bar'", returns false
   */
   bool  isVariable()const;
+
+  /** Returns true if the content of the string is an exandable variable 
+   * if value == "${foo}", returns true, if value == "foo" or "$foo" 
+   * or "'${foo}'", returns false.
+  */
+  bool  isExpandableVariable()const;
+
   /** Extract the string that is between two ' characters
    *  if value == "'foo'", returns "foo"
   */
   BMString  fromVariable()const;
+
   /** Create a string with its content surrounded by two ' characters
    *  if value == "foo", returns "'foo'"
   */
   BMString  toVariable()const;
   
+  /** if value == "${my_variable}", returns "my_variable".
+   *  if isExpandableVariable() returns false, extractExpandableVariable()
+   *  return an empty string.
+  */
+  BMString extractExpandableVariable()const;
+  
   /** Extract all the substrings that are between 2 separator chars
-   *  For example, if the string is " 'toto' 'titi' 'tata'" and the separator 
-   *  key is ', extractVariables returns "toto", "titi", "tata"
+   *  For example, if the string is " 'toto' titi 'tata'" and the separator 
+   *  key is ', extractVariables returns "'toto'", "titi", "'tata'"
    */
-  std::vector<BMString> extractVariables()const;
+  std::vector<BMString> extractVariables(bool keepQuotes = true)const;
+
   /** Slightly different version. Here the sub strings don't have to be
    *
   */
   std::vector<BMString> tokenize( const std::string& delimiters = " " )const;
-  
   
   //static std::string ConvertWildcardToRegEx(const char* wildcard);
   /** returns the RegExp string */

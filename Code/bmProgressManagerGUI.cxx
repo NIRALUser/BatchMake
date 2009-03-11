@@ -72,7 +72,7 @@ void ProgressManagerGUI::AddAction(const BMString& name)
   m_group->resizable( NULL );
   m_group->end();
 
-  std::string title = name.GetValue();
+  std::string title = name.GetConstValue();
 
   long int pos = title.find_last_of("/");
   long int pos2 = title.find_last_of("\\");
@@ -141,13 +141,13 @@ void ProgressManagerGUI::FinishAction(const BMString& output)
     m_CurrentNode = m_CurrentNode->parent();
     m_ErrorNode = m_CurrentNode->first();
     while( m_ErrorNode && m_ErrorNode->is_branch() && 
-         m_ErrorNode->label() != "Error" )
+           BMString(m_ErrorNode->label()) != "Error" )
       {
       m_ErrorNode = m_ErrorNode->next_sibling();
       }
     m_OutputNode = m_CurrentNode->first();
     while( m_OutputNode && m_OutputNode->is_branch() && 
-         m_OutputNode->label() != "Output" )
+           BMString(m_OutputNode->label()) != "Output" )
       {
       m_OutputNode = m_OutputNode->next_sibling();
       }

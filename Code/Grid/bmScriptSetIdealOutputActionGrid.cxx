@@ -48,8 +48,8 @@ void ScriptSetIdealOutputAction
     }   
 
   app.SetParameterValue("filename", "", m_GridModule->GetCurrentScopeFile() );
-  app.SetParameterValue("name",     "", name.GetValue() );
-  app.SetParameterValue("value",    "", value.GetValue() );
+  app.SetParameterValue("name",     "", name.GetConstValue() );
+  app.SetParameterValue("value",    "", value.GetConstValue() );
 
   m_GridModule->AddApplication(&app);
 }

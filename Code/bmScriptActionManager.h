@@ -123,6 +123,19 @@ public:
   //MString Convert(MString param);
   BMString Convert(const BMString& param)const;
   BMString ConvertExtra(const BMString& param)const;
+  std::vector<BMString> ConvertToArray( const BMString& param )const;
+  // Expand does the same than convert
+  //BMString ExpandParameter( const BMString& param, bool quote = true ) const;
+  //BMString ExpandExpression( const BMString& expression, 
+  //                          bool quote = true ) const;
+  /** Give an action parameter as input and it returns its content
+   *  expanded if needed.
+   *    param value of the script action parameter, can be: "foo", "'foo'" or "${foo}"
+   *    quote if true, every returned string are set between quotes, if false
+   *          the surrounding quotes are removed .
+   */
+  //std::vector<BMString> ExpandParameterToArray( const BMString& param, 
+  //                                              bool quote = true )const;
 
   void                  SetVariable(const BMString& name, const BMString& value);
   void                  SetSocketVariable(const BMString& name);
@@ -141,12 +154,17 @@ public:
 
   bool TestParam();
   void Reset();
-  bool TestConvert(const BMString& param, int linenumber);
+  bool TestConvert(const BMString& param, int linenumber)const;
+  /** if param looks like ${var}, verify that var is a defined variable
+   */
+  bool TestExpand( const BMString& param, int linenumber )const;
 
   void SetTestVariable(const BMString& name);
   bool IsTestVariable(const BMString& name)const;
 
+  /** Obsolete, use ExpandToArray instead
   std::vector<BMString> GetParamsFromVariable( const BMString& name )const;
+  */
   BMString              GetVariableFromParams( const std::vector<BMString> &
                                                params )const;
 

@@ -517,11 +517,11 @@ void Editor::AddApplicationsToBrowse()
     // get the current line
     std::string line = buffer()->line_text(buffer()->line_start(lpos));
     lpos =  buffer()->line_end(lpos)+1;
-    long pos = 0;
+    std::size_t pos = 0;
     MString lowercaseLine = line;
     lowercaseLine = lowercaseLine.toLower();
     std::string lowercaseLine2 = lowercaseLine.toChar();
-    if(pos = lowercaseLine2.find("setapp(") != -1)
+    if( (pos = lowercaseLine2.find("setapp(")) != std::string::npos )
       {
       long pos1 = line.find("(",pos);
       if(pos1 != -1)
@@ -913,12 +913,12 @@ int Editor::handle( int event )
         {
         // get the current line   
         std::string line = buffer()->line_text(insert_position());
-        long pos = 0;
+        std::size_t pos = 0;
         MString lowercaseLine = line;
         lowercaseLine = lowercaseLine.toLower();
         std::string lowercaseLine2 = lowercaseLine.toChar();
 
-        if(pos = lowercaseLine2.find("setapp(") != -1)
+        if( (pos = lowercaseLine2.find("setapp(")) != std::string::npos)
           {
           long pos1 = line.find("(",pos);
           if(pos1 != -1)

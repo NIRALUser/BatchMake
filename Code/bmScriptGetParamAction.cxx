@@ -66,7 +66,9 @@ void ScriptGetParamAction::Execute()
 {
   BMString m_value;
   std::vector<BMString> m_list = 
-    m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
+    //m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
+    //m_Manager->ExpandParameterToArray( m_Parameters[1] );
+    m_Manager->ConvertToArray( m_Parameters[1] );
 
   for (unsigned int i=2;i<m_Parameters.size();i++)
     {

@@ -414,7 +414,7 @@ bool ScriptParser::AddOption(MString option, MString param)
   if (CheckOption(param))
     {
     m_ScriptActionManager->SetLineNumber(m_LineNumber);
-    m_ScriptActionManager->AddAction(option,GetParams(param));
+    m_ScriptActionManager->AddAction( option, this->GetParams(param));
     return true;
     }
   return false;
@@ -440,7 +440,7 @@ ScriptAction::ParametersType ScriptParser::GetParams(MString param)
   // m_param = m_param.begin(")");
   // m_param = m_param.removeChar(')');
   BMString m_param = BMString(param).rbegin(")").after("(");
-  BMString m_value = "";
+  /*BMString m_value = "";
   bool m_isquote = false;
 
   for( int i = 0; i < m_param.length(); i++ )
@@ -468,6 +468,8 @@ ScriptAction::ParametersType ScriptParser::GetParams(MString param)
       }
     }
   return m_params;
+  */
+  return m_param.extractVariables( true );
 }
 
 

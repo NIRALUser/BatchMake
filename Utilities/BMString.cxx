@@ -29,7 +29,7 @@ BMString::BMString()
 
 BMString::BMString(const BMString& m_string)
 {
-  m_value = m_string.GetValue();
+  m_value = m_string.m_value;
 }
 
 BMString::BMString(const MString& m_string)
@@ -67,7 +67,7 @@ BMString::~BMString()
 {
 }
 
-std::string BMString::GetValue()const
+std::string& BMString::GetValue()
 {
   return m_value;
 }
@@ -677,6 +677,21 @@ bool BMString::isVariable()const
   return true;
 }
 
+bool BMString::isExpandableVariable() const
+{
+  std::size_t dollarOpenBrace = m_value.find( "${" );
+  if( dollarOpenBrace != 0 )
+    {
+    return false;
+    }
+  std::size_t closeBrace = m_value.find( '}' );
+  if( closeBrace != m_value.length() - 1 )
+    {
+    return false;
+    }
+  return true;
+}
+
 // Extract the string that is between two ' characters
 // if value == "'foo'", returns "foo", if value == "foo", returns "foo"
 BMString  BMString::fromVariable()const
@@ -700,9 +715,25 @@ BMString  BMString::toVariable()const
 {
   if ( !this->isVariable() )
     {
-    return std::string("'")+ m_value + std::string("'");
+    return std::string( "'" ) + m_value + std::string( "'" );
     }
   return *this;
+}
+
+BMString BMString::extractExpandableVariable() const
+{
+  std::string res;
+  std::size_t dollarOpenBrace = m_value.find( "${" );
+  if( dollarOpenBrace != 0 )
+    {
+    return res;
+    }
+  std::size_t closeBrace = m_value.find( '}' );
+  if( closeBrace != m_value.length() - 1 )
+    {
+    return res;
+    }
+  return m_value.substr( dollarOpenBrace + 2, closeBrace - 2 );
 }
 
 bool NotQuoteNotSpace( const char& character )
@@ -715,60 +746,58 @@ bool QuoteOrSpace( const char& character )
   return character == '\'' || character == ' ';
 }
 
-std::vector<BMString> BMString::extractVariables()const
+bool NotSpace( const char& character )
+{
+  return character != ' ';
+}
+
+std::vector<BMString> BMString::extractVariables( bool keepQuotes )const
 {
   std::vector<BMString> variableList;
   bool inQuote = false;
-  /*
-  size_t pos;
-  size_t start = 0;
-  size_t end = m_value.size();
-  for( pos = 0; pos != end; ++pos )
-    {
-    if( m_value[pos] == '\'' || 
-        (m_value[pos] == ' ' && !inQuote) )
-      {
-      if( inQuote )
-        {
-        variableList.push_back( m_value.substr( start, pos - start ) );
-        start = std::string::npos;
-        inQuote = false;
-        }
-      else
-        {
-        start = pos + 1;
-        inQuote = true;
-        }
-      }
-    }
-  */
   bool inVariable = false;
   std::string::const_iterator variableStart = m_value.begin();
+  std::string::const_iterator afterQuote = m_value.begin();
   std::string::const_iterator variableEnd = m_value.begin();
   std::string::const_iterator end = m_value.end();
   while( variableEnd != end )
     {
     if( inVariable )
       {
-      if( inQuote) 
+      if( inQuote)
         {
-        variableEnd = std::find( variableStart, end, '\'' );
+        afterQuote = variableStart;
+        ++afterQuote;
+        variableEnd = std::find( afterQuote, end, '\'' );
+        if( keepQuotes )
+          {
+          ++variableEnd;
+          }
+        else
+          {
+          ++variableStart;
+          }
         }
       else
         {
-        variableEnd = std::find( variableStart, end, ' ' );
+        variableEnd = std::find_if( variableStart, end, QuoteOrSpace );
         }
-      std::string variable;
+
+      std::string variable;      
       std::copy( variableStart, variableEnd, std::back_inserter(variable) );
       variableList.push_back( variable );
+      //std::cout << "extracted variable: \"" << variable << "\"" << std::endl;
       inVariable = false;
-      inQuote = false; 
-      ++variableEnd;
+      inQuote = false;
+      if( !keepQuotes )
+        {
+        ++variableEnd;
+        }
       }
     //find the next variable first character
     while( !inVariable )
       {
-      variableEnd = std::find_if( variableEnd, end, QuoteOrSpace );
+      variableEnd = std::find_if( variableEnd, end, NotSpace );
       if( variableEnd == end )
         {
         break;
@@ -776,20 +805,23 @@ std::vector<BMString> BMString::extractVariables()const
       switch( *variableEnd )
         {
         case '\'':
-        variableStart = ++variableEnd;
-        inVariable = true;
-        inQuote = true;
-        break;
-        case ' ':
+          variableStart = variableEnd;
+          inVariable = true;
+          inQuote = true;
+          break;
         default:
+          variableStart = variableEnd++;
+          inVariable = true;
+          break;
+        case ' ':
         // if we found a space we have to make sure the next character is not 
         // a space nor a quote. If spaces are represented by '_', then there
-        // is no variable in the cases:
+        // is no variable starting after the first '_' in the cases:
         // __wfjliwe...
         // _'wfjliwe...
         // but only in the case:
         // _wfjliwe...
-        variableStart = ++variableEnd;
+        variableStart = variableEnd++;
         if( variableEnd != end && !QuoteOrSpace(*(variableEnd) ) )
           {
           inVariable = true;

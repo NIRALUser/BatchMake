@@ -110,7 +110,8 @@ void ScriptForEachAction::CreateLoop()
 
 void ScriptForEachAction::CreateLoop()
 { 
-  m_ForLoop.clear();
+  /*m_ForLoop.clear();
+  
   BMString m_paramlist( m_Manager->Convert(m_Parameters[1]) );
   //BMString m_paramlist2( m_Manager->Convert(m_Parameters[1]) );
   //BMString m_paramlist3( m_Manager->Convert(m_Parameters[1]) );
@@ -143,6 +144,19 @@ void ScriptForEachAction::CreateLoop()
         }
       }
     }
+  */
+  //m_ForLoop = m_Manager->ExpandParameterToArray( m_Parameters[1] );
+  m_ForLoop = m_Manager->ConvertToArray( m_Parameters[1] );
+#ifdef VERBOSE
+  std::cout<< "CreateLoop: ";
+  std::vector<BMString>::const_iterator it;
+  std::vector<BMString>::const_iterator end = m_ForLoop.end();
+  for( it = m_ForLoop.begin(); it != end; ++it )
+    {
+    std::cout << '[' << (*it).GetConstValue() << ']' ;
+    }
+  std::cout << std::endl;
+#endif
 }
 
 void ScriptForEachAction::Execute()

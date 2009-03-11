@@ -73,19 +73,20 @@ void ScriptAppendFileAction::Execute()
     {
       m_insert = true;
       if ((m_text[l] == '\\') && (l!=m_text.length()-1))
+        {
         if (m_text[l+1] == 'n')
-        {
-           m_file << std::endl;
-           l++;
-           m_insert = false;
-        }
+          {
+          m_file << std::endl;
+          l++;
+          m_insert = false;
+          }
         else if(m_text[l+1] == 't')
-        {
-           m_file << '\t';
-           l++;
-           m_insert = false;
-        }    
-             
+          {
+          m_file << '\t';
+          l++;
+          m_insert = false;
+          }
+        }
      
        if (m_insert)
          m_file << m_text[l];

@@ -87,6 +87,7 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
       left = "";
       }
     }
+  left = left.fromVariable();
   
   BMString right = "";
 
@@ -98,7 +99,7 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
       right = m_Manager->GetVariable(m_Parameters[startingParameter+2])[0];
       }
     }
-
+  right = right.fromVariable();
   // if we only have on parameter
   // something like if(${myvar}) we just test if the var exist
   if(conditionSize==1)

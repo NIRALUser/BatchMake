@@ -54,11 +54,14 @@ void ScriptSetAction::Execute()
 {
   BMString m_value;
   BMString param;
-  // We check if the parameter 1 is a defined variable
+  // Check if the parameter 1 is a defined variable
   // This is used by the output application
-  std::vector<BMString> vars = m_Manager->GetVariable(m_Parameters[1]);
-  if(vars.size()>0 && m_Parameters[1][0] != '$' && m_Parameters[1][1] != '{')
+  if( m_Manager->IsTestVariable( m_Parameters[1] ) && 
+      m_Parameters[1][0] != '$' && 
+      m_Parameters[1][1] != '{')
     {
+    // m_Parameters[1] is a variable, but the user forgot to 
+    // write it between ${ and }. We do it for him
     param = "${";
     param += m_Parameters[1];
     param += "}\0";
@@ -70,22 +73,24 @@ void ScriptSetAction::Execute()
 
   m_value = m_Manager->Convert(param);
 
-  for (unsigned int i=2;i<m_Parameters.size();i++)
+  for( unsigned int i = 2; i < m_Parameters.size(); ++i)
     {
     if (m_value != "")
       {
       m_value+= " ";
       }
-    m_value+=m_Manager->Convert(m_Parameters[i]);
+    m_value += m_Manager->Convert(m_Parameters[i]);
     }
-
+#ifdef VERBOSE
+  std::cout<< "Set: " << m_Parameters[0].GetConstValue() << " <- " << m_value.GetConstValue() << std::endl;
+#endif
   m_Manager->SetVariable(m_Parameters[0],m_value);
 
 #ifdef BM_GRID
   // If we are on the grid we use the bmGridStore to store the variable
   if(m_GridModule)
     {
-    this->GenerateGrid(m_Parameters[0].GetValue(),m_value.GetValue());
+    this->GenerateGrid( m_Parameters[0].GetConstValue(), m_value.GetConstValue() );
     return;
     }
 #endif
