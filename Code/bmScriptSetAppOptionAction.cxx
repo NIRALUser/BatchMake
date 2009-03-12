@@ -117,12 +117,13 @@ void ScriptSetAppOptionAction::Execute()
     value += " ";
     }
   ApplicationWrapper * app = NULL;
-  BMString appName = m_Manager->GetVariable(first.c_str())[0];
+  BMString appName = m_Manager->GetVariable(first.c_str())[0].fromVariable();
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator it = 
     m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
+    std::cout << "app: " << (*it)->GetApplicationPath() << std::endl;
     if( appName == (*it)->GetApplicationPath() )
       {
       (*it)->SetParameterValue(second,third,value);
@@ -137,7 +138,7 @@ void ScriptSetAppOptionAction::Execute()
     {
     //std::cout << "Cannot find application : "  << appName.toChar() << std::endl;
     m_ProgressManager->AddError( 
-      BMString("SetAppOption: Cannot find application") + appName );
+      BMString("SetAppOption: Cannot find application: ") + appName );
     return;
     }
 
