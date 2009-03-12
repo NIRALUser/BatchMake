@@ -3,6 +3,11 @@ PROJECT(PixelCounter)
 ADD_EXECUTABLE(PixelCounter main.cxx)
 TARGET_LINK_LIBRARIES(PixelCounter BatchMakeUtilities ${ITK_LIBRARIES})
 
+# Add application to generate spheres to test the Pixel Counter
+ADD_EXECUTABLE(GenerateSpheres generateSpheres.cxx)
+TARGET_LINK_LIBRARIES(GenerateSpheres ${ITK_LIBRARIES})
+
+
 CONFIGURE_FILE(${PixelCounter_SOURCE_DIR}/PixelCounter.bmm
                ${BatchMake_APPLICATIONS_DIR}/PixelCounter.bmm
                COPYONLY)
