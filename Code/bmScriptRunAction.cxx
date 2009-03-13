@@ -203,8 +203,7 @@ void ScriptRunAction::Execute()
     }
 
   m_Offset = 0;
-  n=0;
-  while (m_Offset != -1 && n < 100)
+  for( n = 0; m_Offset != -1 && n < 100 && !m_Error.isEmpty(); ++n )
     {
     m_Offset = m_Error.find("\n");
     m_ProgressManager->AddError( m_Error.beginCopy("\n") );
@@ -212,7 +211,6 @@ void ScriptRunAction::Execute()
       {
       m_Error.after("\n");
       }
-    n++;
     }
 
   m_timer.stop();
