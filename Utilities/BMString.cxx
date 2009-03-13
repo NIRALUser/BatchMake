@@ -761,7 +761,7 @@ std::vector<BMString> BMString::extractVariables( bool keepQuotes )const
   std::string::const_iterator variableEnd = m_value.begin();
   std::string::const_iterator end = m_value.end();
   std::string variable;
-  while( variableEnd != end )
+  while( variableEnd != end || inVariable )
     {
     if( inVariable )
       {
@@ -794,8 +794,8 @@ std::vector<BMString> BMString::extractVariables( bool keepQuotes )const
       if( variableEnd == m_value.end() || *variableEnd == ' ' )
         {
         variableList.push_back( variable );
-        variable.clear();
         //std::cout << "extracted variable: \"" << variable << "\"" << std::endl;
+        variable.clear();
         }
       inVariable = false;
       inQuote = false;
