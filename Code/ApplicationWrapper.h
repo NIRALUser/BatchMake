@@ -62,8 +62,8 @@ public:
   /** Return the current command line arguments */
   std::string         GetCurrentCommandLineArguments( 
     bool relativePath=true, 
-    const std::string& inputDirectory = NULL, 
-    const std::string& outputDirectory = NULL )const ;
+    const std::string& inputDirectory = std::string(), 
+    const std::string& outputDirectory = std::string() )const ;
 
   /** Set the parameter value */
   void SetParameterValue( const std::string& first, 
