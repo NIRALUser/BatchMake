@@ -1,7 +1,7 @@
-ExitOnError( '1' )
+ExitOnError(1)
 # basic inc
-Set( calc '15.3' )
-Set( res ${calc} )
+Set( calc 15.3 )
+Set( res ${calc})
 Inc( ${res} 0.9 )
 Echo( ${calc} ' + 0.9 = ' ${res} )
 # using a variable to inc

@@ -1,7 +1,11 @@
-ExitOnError( '1' )
+ExitOnError( 1 )
 # Run Generate Spheres that generes 15 spheres from 5 to 20
 SetApp(genspheres @GenerateSpheres)
-Run(res ${genspheres})
+set( app ${genspheres} my_first_arg my_second_arg )
+Run(res ${app} error status)
+#Run(res ${genspheres}' my_first_arg my_second_arg' error status)
+echo( GenerateSpheres error: ${error} )
+echo( GenerateSpheres exit status: ${status} )
 # Run Pixel Counter
 sequence( spheres 5 19 1 )
 foreach( sphere ${spheres} )

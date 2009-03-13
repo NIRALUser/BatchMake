@@ -30,7 +30,7 @@ ScriptSetAction::~ScriptSetAction()
 
 bool ScriptSetAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_Parameters.size() <2)
+  if( m_Parameters.size() < 2 )
     {
     error->SetError(MString("No enough parameter for Set"),linenumber);
     return false;
