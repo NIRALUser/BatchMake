@@ -148,24 +148,20 @@ void Launch::RunCommand()
 
   while(int pipeid = itksysProcess_WaitForData(m_Process,&data,&length,&timeout))
     {
-    if(pipeid == itksysProcess_Pipe_STDERR)
+    switch( pipeid )
       {
-      for(int i=0;i<length;i++)
-        {
-        m_Error += data[i];
-        }
+      case itksysProcess_Pipe_STDERR:
+        m_Error += std::string( data, length );
+        break;
+      case itksysProcess_Pipe_STDOUT:
+        // When the timeout was failing, I had duplicate outputs, 
+        // not sure about it
+        m_Output += std::string( data, length );
+        break;
+      default:
+        break;
       }
-    else
-      {
-      for(int i=0;i<length;i++)
-        {
-        if(data)
-          {
-          m_Output += data[i];
-          }
-        }
-      }
-    if(m_KillProcess)
+    if( m_KillProcess )
       {
       itksysProcess_Kill(m_Process);
       break;
