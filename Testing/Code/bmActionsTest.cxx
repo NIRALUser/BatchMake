@@ -27,9 +27,16 @@ int ActionsTest (int argc, char *argv[])
     return EXIT_FAILURE;
     }
 
-  std::string filename(argv[1]);
-  
   bm::ScriptParser m_Parser;
+
+  std::string filename(argv[1]);
+  std::string applicationPath;
+  if( argc > 2 ) 
+    {
+    applicationPath = argv[2];
+    m_Parser.LoadWrappedApplication( applicationPath.c_str() );
+    }
+  
   if( m_Parser.Execute( filename.c_str()) == false )
     {
     return EXIT_FAILURE;

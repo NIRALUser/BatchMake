@@ -22,6 +22,7 @@ IF(DASHBOARD_SUPPORT)
   ADD_TEST(FileActionsTest   ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/FileActionsTest.bms)
   ADD_TEST(StringActionsTest ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/StringActionsTest.bms)
   ADD_TEST(MathActionsTest   ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/MathActionsTest.bms)
+  ADD_TEST(AppActionsTest    ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/AppActionsTest.bms ${BatchMake_APPLICATIONS_DIR})
 
   ADD_EXECUTABLE(BatchMakeTests BatchMakeTests.cxx ${BatchMakeTest_SRCS})
   TARGET_LINK_LIBRARIES(BatchMakeTests ${BatchMake_LIBRARIES})

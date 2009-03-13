@@ -1,0 +1,8 @@
+<BatchMakeApplicationWrapper>
+	<BatchMakeApplicationWrapperVersion>1.0</BatchMakeApplicationWrapperVersion>
+	<Module>
+		<Name>GenerateSpheres</Name>
+		<Version>Not defined</Version>
+		<Path>@GenerateSpheresExec@</Path>
+	</Module>
+</BatchMakeApplicationWrapper>

@@ -25,7 +25,6 @@
 int main(int argc, char* argv[] )
 {
   typedef itk::EllipseSpatialObject<3>   EllipseType;
-  
   for(unsigned int r=5;r<20;r++)
     {
     std::cout << "Generating sphere with r=" << r << std::endl;
@@ -65,5 +64,5 @@ int main(int argc, char* argv[] )
     writer->Update();
     delete [] filename;
     }
-  return 1;
+  return 0;
 }
