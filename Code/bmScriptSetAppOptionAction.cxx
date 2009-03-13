@@ -123,7 +123,6 @@ void ScriptSetAppOptionAction::Execute()
     m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
-    std::cout << "app: " << (*it)->GetApplicationPath() << std::endl;
     if( appName == (*it)->GetApplicationPath() )
       {
       (*it)->SetParameterValue(second,third,value);
