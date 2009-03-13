@@ -760,6 +760,7 @@ std::vector<BMString> BMString::extractVariables( bool keepQuotes )const
   std::string::const_iterator afterQuote = m_value.begin();
   std::string::const_iterator variableEnd = m_value.begin();
   std::string::const_iterator end = m_value.end();
+  std::string variable;
   while( variableEnd != end )
     {
     if( inVariable )
@@ -783,16 +784,21 @@ std::vector<BMString> BMString::extractVariables( bool keepQuotes )const
         variableEnd = std::find_if( variableStart, end, QuoteOrSpace );
         }
 
-      std::string variable;      
       std::copy( variableStart, variableEnd, std::back_inserter(variable) );
-      variableList.push_back( variable );
-      //std::cout << "extracted variable: \"" << variable << "\"" << std::endl;
-      inVariable = false;
-      inQuote = false;
       if( !keepQuotes )
         {
         ++variableEnd;
         }
+      // we only create the variable if the next character is a space,
+      // otherwise we just concatenate
+      if( variableEnd == m_value.end() || *variableEnd == ' ' )
+        {
+        variableList.push_back( variable );
+        variable.clear();
+        //std::cout << "extracted variable: \"" << variable << "\"" << std::endl;
+        }
+      inVariable = false;
+      inQuote = false;
       }
     //find the next variable first character
     while( !inVariable )
