@@ -48,10 +48,17 @@ void ProgressManager::FinishAction(const BMString& output)
 
 void ProgressManager::AddOutput(const BMString& output)
 {
-  if( output.length() )
-    {
-    std::cerr << output.toChar() << std::endl;
-    }
+  // AddOutput is typically called by the Run action.
+  // After an external application is executed, Run() calls
+  // AddOutput with the outputs of the external application
+  // While a GUI Progress Manager would like to display
+  // these outputs, we probably don't want them outputed 
+  // in a standard stream. If the user want them, he should
+  // use Echo( ${output} ) after calling Run( output my_prog )
+  // if( output.length() )
+  //  {
+  //  std::cerr << output.toChar() << std::endl;
+  //  }
 }
 
 void ProgressManager::AddError(const BMString& error)
