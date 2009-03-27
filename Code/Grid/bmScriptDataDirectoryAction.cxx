@@ -33,17 +33,15 @@ ScriptDataDirectoryAction::~ScriptDataDirectoryAction()
 /** */
 bool ScriptDataDirectoryAction::TestParam(ScriptError* error,int linenumber)
 {
-  if (m_Parameters.size() <1)
+  if( m_Parameters.size() < 1 )
     {
     error->SetError(MString("No enough parameter for DataDirectory"),linenumber);
     return false;
     }
 
-  m_Manager->SetTestVariable(m_Parameters[0]);
-
-  for (unsigned int i=1;i<m_Parameters.size();i++)
+  for( unsigned int i = 0; i < m_Parameters.size(); ++i )
     {
-    m_Manager->TestConvert(m_Parameters[i],linenumber);
+    m_Manager->TestConvert( m_Parameters[i], linenumber );
     }
   return true;
 }
@@ -59,7 +57,8 @@ void ScriptDataDirectoryAction::Execute()
 {
   if(m_GridModule)
     {
-    m_GridModule->SetDataDirectory(m_Parameters[0].toChar());
+    m_GridModule->SetDataDirectory(
+      m_Parameters[0].fromVariable().toChar() );
     }
   return;
 }

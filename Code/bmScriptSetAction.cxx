@@ -82,7 +82,7 @@ void ScriptSetAction::Execute()
     m_value += m_Manager->Convert(m_Parameters[i]);
     }
 #ifdef VERBOSE
-  std::cout<< "Set: " << m_Parameters[0].GetConstValue() << " <- " << m_value.GetConstValue() << std::endl;
+  std::cout<< "Set: " << m_Parameters[0].GetConstValue() << " <- " << m_value.GetConstValue() << "(" << param.GetConstValue() << ")" << std::endl;
 #endif
   m_Manager->SetVariable(m_Parameters[0],m_value);
 

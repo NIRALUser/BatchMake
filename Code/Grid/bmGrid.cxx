@@ -883,7 +883,6 @@ void Grid::WriteCondor()
       }
     
     std::string executable = (*it).GetApplicationPath();
-    
     if(m_TransferFiles!=ALL && m_TransferFiles!=EXECUTABLE)
       {
       std::string executableDirectory = m_ExecutableDirectory;
@@ -897,10 +896,10 @@ void Grid::WriteCondor()
     fprintf(fic,"executable    = %s\n",executable.c_str());
 
     // We need to escape double-quotes if any and add the 
-    std::string arguments = (*it).GetCurrentCommandLineArguments(true,
-                                                                 m_DataDirectory.c_str(),
-                                                                 m_OutputDirectory.c_str()
-                                                                 );
+    std::string arguments = 
+      (*it).GetCurrentCommandLineArguments( true,
+                                            m_DataDirectory,
+                                            m_OutputDirectory );
     long int posDQ = arguments.find("\"");
     while(posDQ != -1)
       {
@@ -922,6 +921,15 @@ void Grid::WriteCondor()
       requirements += " && ";
       }
     requirements += "(OpSys == \"WINNT50\") || (OpSys == \"WINNT51\")";
+#else
+    // in linux, multi thread applications size are wrongly estimated
+    // We need to prevent Condor for estimating the size. We give a
+    // a meaningless size here.
+//     if( requirements.find("Memory") == std::string::npos )
+//       {
+//       requirements += !requirements.empty() ? " && " : "";
+//       requirements += "Memory > 512";
+//       }
 #endif
     if( !requirements.empty() )
       {
@@ -1053,9 +1061,10 @@ void Grid::ConsolidateDAG(std::vector<DAGnode>* dag)
         std::cout << "ERROR: don't know how to delete virtual node with multiple parents" << std::endl;
         return;
         }
-
+      
+      // 'it' may not have parents if 'it' is root
       // Find all the nodes that are connected and connect to the parent instead
-      int parent = (*it).parents[0];
+      int parent = (*it).parents.size()? (*it).parents[0] : -1;
 
       std::vector<DAGnode>::iterator itC = dag->begin();
       while(itC != dag->end())  
@@ -1065,7 +1074,17 @@ void Grid::ConsolidateDAG(std::vector<DAGnode>* dag)
           {
           if(*itP == (*it).id)
             {
-            *itP = parent;
+            if( parent != -1 )
+              {
+              // connect the child of 'it' with 'it's parent.
+              *itP = parent;
+              }
+            else
+              {
+              // it has no parent (root), after it get deleted, its children 
+              //won't have parents neither
+              (*itC).parents.erase( itP );
+              }
             break;
             }
           itP++;

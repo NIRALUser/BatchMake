@@ -39,9 +39,7 @@ bool ScriptGridExecutableDirectoryAction::TestParam(ScriptError* error,int linen
     return false;
     }
 
-  m_Manager->SetTestVariable(m_Parameters[0]);
-
-  for (unsigned int i=1;i<m_Parameters.size();i++)
+  for( unsigned int i = 0; i < m_Parameters.size(); ++i )
     {
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
@@ -59,7 +57,8 @@ void ScriptGridExecutableDirectoryAction::Execute()
 {
   if(m_GridModule)
     {
-    m_GridModule->SetGridExecutableDirectory(m_Parameters[0].toChar());
+    m_GridModule->SetGridExecutableDirectory( 
+      m_Manager->Convert(m_Parameters[0]).fromVariable().toChar());
     }
 }
 

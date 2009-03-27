@@ -535,6 +535,9 @@ void ScriptActionManager::SetTestVariable( const BMString& name )
   if( std::find( m_VariableTestList.begin(), m_VariableTestList.end(), name )
         == m_VariableTestList.end() )
     {
+#ifdef VERBOSE
+  std::cout<< "Add " << name.GetConstValue() << " as a test variable" << std::endl;
+#endif
     m_VariableTestList.push_back( name );
     }
 }
@@ -542,14 +545,18 @@ void ScriptActionManager::SetTestVariable( const BMString& name )
 
 bool ScriptActionManager::IsTestVariable( const BMString& name )const
 {
+  bool res = true;
   std::vector<BMString>::const_iterator it = 
     std::find( m_VariableTestList.begin(), m_VariableTestList.end(), name);
   if( it == m_VariableTestList.end() )
     {
     // name has not been found in VariableTestList
-    return false;
+    res = false;
     }
-  return true;
+#ifdef VERBOSE
+  std::cout<< "Is " << name.GetConstValue() << " a test variable? " << res << std::endl;
+#endif
+  return res;
 }
 
 

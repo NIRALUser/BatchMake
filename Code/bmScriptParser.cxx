@@ -237,7 +237,8 @@ void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
   bm::Grid grid;
   if(outputDirectory)
     {
-    grid.SetOutputDirectory(outputDirectory);
+    grid.SetOutputDirectory( 
+      BMString(outputDirectory).fromVariable().toChar() );
     }
   grid.SetFileName(scriptfile.c_str());
   this->SetGridModule(&grid);

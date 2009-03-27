@@ -41,7 +41,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
 
   // second we try to find the current variable in the list of applications
   ApplicationWrapper * application = NULL;
-  BMString appName = m_Manager->GetVariable(appvar)[0];
+  BMString appName = m_Manager->GetVariable(appvar)[0].fromVariable();
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator it = m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())

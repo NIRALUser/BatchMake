@@ -36,10 +36,12 @@ public:
   virtual void IsRunning();
   virtual void AddAction(const BMString& name);
   virtual void FinishAction(const BMString& output);
+  /** Typically called by Run(...) */
   virtual void AddOutput(const BMString& output);
   virtual void AddError(const BMString& output);
   virtual bool IsStop();
   virtual void SetFinished(const BMString& message);
+  /** Typically called by Echo(...) */
   virtual void DisplayOutput(const BMString& message);
   virtual void DisplayError(const BMString& message);
   /** Define the behavior to have when an error is added. If stop is set to 
