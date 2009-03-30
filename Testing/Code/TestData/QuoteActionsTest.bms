@@ -1,0 +1,112 @@
+
+Set(cfg_fruit     'apple')
+Set(hello_fruit   "${cfg_fruit}")
+Echo()
+Echo()
+Echo(1-hello_fruit (dbl quote): [${hello_fruit}])
+Echo(Expected ["apple"])
+
+Echo()
+Set(hello_fruit '${cfg_fruit}')
+Echo(2-hello_fruit (single quote): [${hello_fruit}])
+Echo(Expected ['${cfg_fruit}'])
+
+Echo()
+Set(hello_fruit ${cfg_fruit})
+Echo(3-hello_fruit (no quote): [${hello_fruit}])
+Echo(Expected [apple])
+
+
+
+Set(cfg_vegetable   "kale")
+Set(hello_vegetable "${cfg_vegetable}")
+Echo()
+Echo()
+Echo(1-hello_vegetable (dbl quote): [${hello_vegetable}])
+Echo(Expected [""kale""])
+
+Echo()
+Set(hello_vegetable '${cfg_vegetable}')
+Echo(2-hello_vegetable (single quote): [${hello_vegetable}])
+Echo(Expected ['${cfg_vegetable}'])
+
+Echo()
+Set(hello_vegetable ${cfg_vegetable})
+Echo(3-hello_vegetable (no quote): [${hello_vegetable}])
+Echo(Expected ["kale"])
+
+
+
+Set(cfg_cake      crumble)
+Set(hello_cake    "${cfg_cake}")
+Echo()
+Echo()
+Echo(1-hello_cake (dbl quote): [${hello_cake}])
+Echo(Expected ["crumble"])
+
+Echo()
+Set(hello_cake '${cfg_cake}')
+Echo(2-hello_cake (single quote): [${hello_cake}])
+Echo(Expected ['${cfg_cake}'])
+
+Echo()
+Set(hello_cake ${cfg_cake})
+Echo(3-hello_cake (no quote): [${hello_cake}])
+Echo(Expected [crumble])
+
+
+Set(cfg_flower    '"rose"')
+Set(hello_flower  "${cfg_flower}")
+Echo()
+Echo()
+Echo(1-hello_flower (dbl quote): [${hello_flower}])
+Echo(Expected [""rose""])
+
+Echo()
+Set(hello_flower '${cfg_flower}')
+Echo(2-hello_flower (single quote): [${hello_flower}])
+Echo(Expected ['${cfg_flower}'])
+
+Echo()
+Set(hello_flower ${cfg_flower})
+Echo(3-hello_flower (no quote): [${hello_flower}])
+Echo(Expected ["rose"])
+
+
+
+Set(cfg_icecream   '"green" sorbet')
+Set(hello_icecream "${cfg_icecream}")
+Echo()
+Echo()
+Echo(1-hello_icecream (dbl quote): [${hello_icecream}])
+Echo(Expected [""green" sorbet"])
+
+Echo()
+Set(hello_icecream '${cfg_icecream}')
+Echo(2-hello_icecream (single quote): [${hello_icecream}])
+Echo(Expected ['${cfg_icecream}'])
+
+Echo()
+Set(hello_icecream ${cfg_icecream})
+Echo(3-hello_icecream (no quote): [${hello_icecream}])
+Echo(Expected ["green" sorbet])
+
+
+
+
+Set(cfg_candy   ""red" sweeties")
+Set(hello_candy "${cfg_candy}")
+Echo()
+Echo()
+Echo(1-hello_candy (dbl quote): [${hello_candy}])
+Echo(Expected ["""red" sweeties""])
+
+Echo()
+Set(hello_candy '${cfg_candy}')
+Echo(2-hello_candy (single quote): [${hello_candy}])
+Echo(Expected ['${cfg_candy}'])
+
+Echo()
+Set(hello_candy ${cfg_candy})
+Echo(3-hello_candy (no quote): [${hello_candy}])
+Echo(Expected [""red" sweeties"])
