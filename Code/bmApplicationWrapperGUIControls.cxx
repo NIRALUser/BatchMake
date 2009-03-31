@@ -679,7 +679,7 @@ void ApplicationWrapperGUIControls::DisplayExample()
 {
   Fl_Text_Buffer* m_buffer = new Fl_Text_Buffer();
   g_commandline->buffer(m_buffer);
-  int lenght = m_Applicationwrapper->GetExampleLine().length();
+  //int lenght = m_Applicationwrapper->GetExampleLine().length();
   std::string Lines = m_Applicationwrapper->GetExampleLine().toChar();
 
   /*if(lenght >260)
