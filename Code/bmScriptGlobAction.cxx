@@ -61,7 +61,8 @@ void ScriptGlobAction::Execute()
   if (m_Parameters.size() == 3)
     {
     BMString recurse = m_Manager->Convert(m_Parameters[2]);
-    if(recurse.find("RECURSIVE")!= -1 || recurse.find("recursive")!= -1)
+    if( recurse.find("RECURSIVE") != std::string::npos || 
+        recurse.find("recursive") != std::string::npos )
       {
       glob.RecurseOn();
       }

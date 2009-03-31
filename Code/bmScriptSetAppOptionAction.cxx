@@ -54,9 +54,9 @@ MString ScriptSetAppOptionAction::Help()
 
 void ScriptSetAppOptionAction::Execute()
 {
-  BMString m_value = m_Manager->Convert(m_Parameters[1]);
-
   unsigned int i; 
+/*
+  BMString m_value; = m_Manager->Convert(m_Parameters[1]);
   for (i=2;i<m_Parameters.size();i++)
     {
     if (m_value != "")
@@ -65,89 +65,85 @@ void ScriptSetAppOptionAction::Execute()
       }
     m_value += m_Manager->Convert(m_Parameters[i]);
     }
-
+  */
   // First we search the name of the variable
-  const BMString firstParam = m_Parameters[0];
-  long pos = firstParam.find(".",0);
-  std::string first = firstParam.midCopy(0,pos).GetValue();
+  std::vector<BMString> appOptions = m_Parameters[0].tokenize(".");
+  BMString application = appOptions.size() >= 1 ? appOptions[0] : "";
+  BMString option1 = appOptions.size() >= 2 ? appOptions[1] : "";
+  BMString option2 = appOptions.size() >= 3 ? appOptions[2] : "";
 
-  long pos1 = firstParam.find(".",pos+1);
-
-  std::string second = "";
-  std::string third = "";  
-  if(pos1 !=-1)
+  BMString applicationName = 
+    m_Manager->GetVariable(application)[0].fromVariable();
+  ApplicationWrapper * app = 
+    m_Manager->GetApplicationWrapper( applicationName );
+  if( !app )
     {
-    second = firstParam.midCopy(pos+1,pos1-pos-1).GetValue();
-    }
-  else if(pos>-1)
-    {
-    second = firstParam.midCopy(pos+1,m_Parameters.size()-pos-1).GetValue();
-    }
-
-  if(pos1 > -1)
-    {
-    third = firstParam.midCopy(pos1+1,m_Parameters.size()-pos1-1).GetValue();
-    }
-
-  // Copy the values
-  std::string value = "";
-  for(i=1;i<m_Parameters.size();i++)
-    {
-    std::string param = m_Parameters[i].GetConstValue();
-    long int currentpos = 0;
-    long int posvar = param.find("${");
-
-    while(posvar != -1) // if the second parameters has been defined as a variable
-      {
-      value +=  param.substr(currentpos,posvar-currentpos);
-
-      long int curly = param.find("}",posvar); 
-      if(curly!=-1)
-        {
-        currentpos = curly+1;
-        std::string var = param.substr(posvar,curly-posvar+1);
-        value += m_Manager->GetVariable(var)[0].toChar();
-        }
-       posvar =param.find("$",posvar+1);
-      }
-    if(param.size()-currentpos>0)
-      {
-      value +=  param.substr(currentpos,param.size()-currentpos);
-      }
-    value += " ";
-    }
-  ApplicationWrapper * app = NULL;
-  BMString appName = m_Manager->GetVariable(first.c_str())[0].fromVariable();
-  bool appFound = false;
-  ScriptActionManager::ApplicationWrapperListType::iterator it = 
-    m_Manager->GetApplicationWrapperList()->begin();
-  while (it != m_Manager->GetApplicationWrapperList()->end())
-    {
-    if( appName == (*it)->GetApplicationPath() )
-      {
-      (*it)->SetParameterValue(second,third,value);
-      app = *it;
-      appFound = true;
-      break;
-      }
-    it++;
-  }
-
-  if(!appFound) 
-    {
-    //std::cout << "Cannot find application : "  << appName.toChar() << std::endl;
     m_ProgressManager->AddError( 
-      BMString("SetAppOption: Cannot find application: ") + appName );
+      BMString("SetAppOption: Cannot find application: ") +
+      applicationName );
     return;
     }
 
-  m_value = "'";
-  m_value += app->GetApplicationPath();
-  m_value += "' '";
-  m_value += app->GetCurrentCommandLineArguments(false);
-  m_value += "'";
+  // Copy the values
+  BMString value;
+  for( i = 1; i < m_Parameters.size(); ++i )
+    {/*
+    std::size_t currentpos = 0;
+    std::string param = m_Parameters[i].GetConstValue();
+    std::size_t posvar = param.find("${");
 
-  m_Manager->SetVariable(first,m_value);
+    while( posvar != std::string::npos )
+      {// if the second parameters has been defined as a variable
+      value += param.substr( currentpos, posvar - currentpos );
+
+      std::size_t curly = param.find("}",posvar); 
+      if( curly != std::string::npos )
+        {
+        currentpos = curly + 1;
+        std::string var = param.substr( posvar, curly - posvar + 1);
+        value += m_Manager->GetVariable(var)[0].toChar();
+        }
+       posvar = param.find( "${", posvar + 1 );
+      }
+    if(param.size()-currentpos>0)
+      {
+      value += param.substr(currentpos,param.size()-currentpos);
+      }*/
+    if( i != 1 )
+      {
+      value += " ";
+      }
+    value += m_Manager->Convert( m_Parameters[i] );
+    }
+  if( !app->ParameterExists( option1.toChar() ) )
+    {
+    // maybe the user gave the flag (--xxx) instead of the name
+    const ApplicationWrapperParam* option = 
+      app->GetParamByFlag( option1.toChar() );
+    if( option != NULL )
+      {
+      option2 = option2 == option1 ? option->GetName() : BMString("");
+      option1 = option->GetName();
+      }
+    }
+  bool paramSet = app->SetParameterValue( option1.toChar(), 
+                                          option2.toChar(), 
+                                          value );
+  if(!paramSet)
+    {
+    m_ProgressManager->AddError( 
+      BMString("SetAppOption: Cannot find parameter: ") 
+      + option1 + "." + option2 );
+    return;
+    }
+
+  value = BMString( app->GetApplicationPath() ).toVariable();
+  value += " ";
+  value += BMString( 
+    app->GetCurrentCommandLineArguments( false ) ).toVariable();
+
+  std::cout << applicationName.toChar() << " " << value.toChar() << std::endl;
+  m_Manager->SetVariable( application, value );
 
 }
 

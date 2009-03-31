@@ -916,11 +916,13 @@ void Grid::WriteCondor()
       }
     requirements += it->GetRequirements();
 #ifdef WIN32 
-    if( !requirements.empty() )
+    /*
+      if( !requirements.empty() )
       {
       requirements += " && ";
       }
     requirements += "(OpSys == \"WINNT50\") || (OpSys == \"WINNT51\")";
+    */
 #else
     // in linux, multi thread applications size are wrongly estimated
     // We need to prevent Condor for estimating the size. We give a

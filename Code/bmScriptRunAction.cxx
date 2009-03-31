@@ -153,14 +153,16 @@ void ScriptRunAction::Execute()
   m_ProgressManager->SetStatus( BMString("Start ")
     + m_Manager->Convert(m_Parameters[1]).removeAllChars('\'') );
   BMString m_actioname = m_Manager->ConvertExtra(m_Parameters[1]);
+  m_actioname = m_actioname.fromVariable();
+  m_actioname.begin(" ");
 
-  m_actioname = m_actioname.removeFirstChar(' ');
-  m_actioname = m_actioname.removeFirstChar('\'');
+  //m_actioname = m_actioname.removeFirstChar(' ');
+  //m_actioname = m_actioname.removeFirstChar('\'');
   // not sure here, shall we keep '\' or not ?
-  m_actioname.begin("'").rafter("\\");
+  //m_actioname.begin("'").rafter("\\");
  
   m_ProgressManager->AddAction(m_actioname);
-
+  std::cout << " run: " << m_Manager->Convert(m_Parameters[1]).toChar() << std::endl;
   m_launch.Execute(m_Manager->Convert(m_Parameters[1]).removeAllChars('\''));
   BMString m_Output = m_launch.GetOutput();
   BMString m_Error = m_launch.GetError();

@@ -45,6 +45,7 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
 
   BMString appName = m_Parameters[1];
   appName.removeAllChars('@');
+  appName = appName.fromVariable();
 
   bool appFound = false;
 
@@ -59,6 +60,7 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
     m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
+    std::cout << "App: " << (*it)->GetName() << std::endl;
     if( appName == (*it)->GetName() )
       {
       appFound = true;
@@ -106,6 +108,7 @@ void ScriptSetAppAction::Execute()
 {
   BMString appName = m_Parameters[1];
   appName.removeAllChars('@');
+  appName = appName.fromVariable();
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator it;
   ScriptActionManager::ApplicationWrapperListType::iterator end = 

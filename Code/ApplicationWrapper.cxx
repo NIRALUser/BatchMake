@@ -196,16 +196,18 @@ void ApplicationWrapper::ClearParameterValues()
 }
 
 /** Set the parameter value */
-void ApplicationWrapper
+bool ApplicationWrapper
 ::SetParameterValue( const std::string& first, 
                      const std::string& second, 
                      const std::string& value)
 {
+  bool found = false;
   std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
   while(it != m_params.end())
     {
     if( first == (*it).GetName().toChar() )
       {
+      found = true;
       if((*it).GetType() != ApplicationWrapperParam::Flag)
         {
         (*it).SetValueDefined(true);
@@ -270,6 +272,7 @@ void ApplicationWrapper
       }
     it++;
     }
+  return found;
 }
 
 const std::string& ApplicationWrapper::GetApplicationPath()const
@@ -349,6 +352,24 @@ ApplicationWrapperParam* ApplicationWrapper::GetParam(const std::string& name)
     }
 
   return 0;
+}
+
+const ApplicationWrapperParam* ApplicationWrapper
+::GetParamByFlag( const std::string& flag )const
+{
+  std::vector<ApplicationWrapperParam>::const_iterator it;
+  std::vector<ApplicationWrapperParam>::const_iterator end
+    = m_params.end();
+  for( it = m_params.begin(); it != end; ++ it )
+    {
+    if ( (*it).GetType() == ApplicationWrapperParamSub::Flag && 
+         (*it).GetValue().find( flag.c_str() ) != -1 )
+      {
+      return &(*it);
+      }
+    }
+
+  return NULL;
 }
 
 ApplicationWrapperParam* ApplicationWrapper::GetParam( int index )
@@ -611,7 +632,7 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
 
   if(newVersion)
     {
-    while (m_balise != "/executable")
+    while(m_balise != "/executable" )
       {
       if (m_balise == "Name")      
         {
@@ -634,6 +655,12 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
         ReadParam(m_reader, true);
         }
       m_balise = m_reader.GetBalise(); 
+      if( m_reader.EndOfFile() )
+        {
+        std::cerr << "Application Wrapper ( Read Module ): "
+                  << "Unexpected end of file. "
+                  << "File ends before reaching </executable>" << std::endl;
+        }
       }
     }
   else
@@ -662,6 +689,12 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
         this->ReadParam(m_reader, false);
         }
       m_balise = m_reader.GetBalise(); 
+      if( m_reader.EndOfFile() )
+        {
+        std::cerr << "Application Wrapper ( Read Module ): "
+                  << "Unexpected end of file. "
+                  << "File ends before reaching </Module>" << std::endl;
+        }
       }
     }
 }
@@ -687,7 +720,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
         {
         MString m_balise1 = m_reader.GetBalise();
         ApplicationWrapperParamSub m_subParam;
-    std::vector<MString> m_list1;
+        std::vector<MString> m_list1;
         while (m_balise1 != "/SubParameter")
           {
           if (m_balise1 == "Name")     m_subParam.SetName(m_reader.GetValue());
@@ -699,9 +732,15 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
           m_balise1 = m_reader.GetBalise();
           }
         m_subParam.SetEnum(m_list1);
-    m_param.AddParamSub(m_subParam);
+        m_param.AddParamSub(m_subParam);
         }
       m_balise = m_reader.GetBalise();
+      if( m_reader.EndOfFile() )
+        {
+        std::cerr << "Application Wrapper ( Read Param ): "
+                  << "Unexpected end of file. "
+                  << "File ends before reaching </Parameter>" << std::endl;
+        }
       }
     m_param.SetEnum(m_list);
     AddParam(m_param);
@@ -713,51 +752,57 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
     while (m_balise != "/Param")
       {
       if (m_balise == "Name") 
-      {
-      std::string name = m_reader.GetValue().toChar();
-    std::string newName = "";
-      string::size_type loc = name.find( ".", 0 );
-      if( loc != string::npos )
         {
-      newName += name.substr(loc+1);
+        std::string name = m_reader.GetValue().toChar();
+        std::string newName = "";
+        string::size_type loc = name.find( ".", 0 );
+        if( loc != string::npos )
+          {
+          newName += name.substr(loc+1);
+          }
+        else
+          {
+          newName += name;
+          }
+        m_param.SetName(newName.c_str());
         }
-      else
-        {
-      newName += name;
-        }
-    m_param.SetName(newName.c_str());
-      }
       if (m_balise == "Type")     m_param.SetType(m_reader.GetValue().toInt());
       if (m_balise == "Value")    m_param.SetValue(m_reader.GetValue());
-    if (m_balise == "Parent")  
-      {
-    parent = m_reader.GetValue().toBool();
-      }
+      if (m_balise == "Parent")  
+        {
+        parent = m_reader.GetValue().toBool();
+        }
       if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toInt());
       if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
       if (m_balise == "Enum")     m_list.push_back(m_reader.GetValue());
       m_balise = m_reader.GetBalise();
+      if( m_reader.EndOfFile() )
+        {
+        std::cerr << "Application Wrapper ( Read Param ): "
+                  << "Unexpected end of file. "
+                  << "File ends before reaching </Param>" << std::endl;
+        }
       }
     m_param.SetEnum(m_list);
-  if(parent !=0 )
-    {
-    m_params[GetParams().size()-1].AddParamSub(m_param);
-    }
-  else
-    {
-    bool already_exists = false;
-    for(unsigned int i=0 ; i < m_params.size() ; i++)
+    if(parent !=0 )
       {
-    if(m_param.GetName() == m_params[i].GetName())
-      {
-      already_exists = true;
+      m_params[GetParams().size()-1].AddParamSub(m_param);
       }
-      } 
-    if(!already_exists)
+    else
       {
-      this->AddParam(m_param);
+      bool already_exists = false;
+      for(unsigned int i=0 ; i < m_params.size() ; i++)
+        {
+        if(m_param.GetName() == m_params[i].GetName())
+          {
+          already_exists = true;
+          }
+        } 
+      if(!already_exists)
+        {
+        this->AddParam(m_param);
+        }
       }
-    }
     } 
 }
 

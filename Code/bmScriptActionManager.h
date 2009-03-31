@@ -177,7 +177,8 @@ public:
   void   SetApplicationWrapperList(ApplicationWrapperListType* applicationlist);
   ApplicationWrapperListType* GetApplicationWrapperList() 
          { return m_ApplicationWrapperList; }
-
+  ApplicationWrapper* GetApplicationWrapper( const BMString& applicationPath );
+  
   /** Set/Get the list of application from the editor associating an app 
    *  and a keyword */
   void SetApplicationsList(ApplicationsListType* list) 
@@ -272,6 +273,16 @@ private:
   std::vector<ScriptAction*> m_InternalActionList;
 
 };
+
+struct AppWrapFinder
+{
+  AppWrapFinder( const std::string& applicationPath )
+    :m_AppPath( applicationPath ){}
+  bool operator() ( ApplicationWrapper* obj )
+  { return obj && obj->GetApplicationPath() == m_AppPath;}
+  std::string m_AppPath;
+};
+ 
 
 } // end namespace bm
 

@@ -43,6 +43,7 @@ public:
   const std::string&  GetVersion( )const;
   void                AddParam( ApplicationWrapperParam param );
   ApplicationWrapperParam* GetParam( const std::string& name);
+  const ApplicationWrapperParam* GetParamByFlag( const std::string& flag)const;
   ApplicationWrapperParam* GetParam( int index );
   void                Save( const std::string& filename );
   void                Load( const std::string& filename );
@@ -65,13 +66,15 @@ public:
     const std::string& inputDirectory = std::string(), 
     const std::string& outputDirectory = std::string() )const ;
 
-  /** Set the parameter value */
-  void SetParameterValue( const std::string& first, 
+  /** Set the parameter value 
+   *  Return true if the parameter is set, false otherwise.
+   */
+  bool SetParameterValue( const std::string& first, 
                           const std::string& second, 
                           const std::string& value );
 
   /** Return true if a parameter exists */
-  bool ParameterExists( const std::string& first)const;
+  bool ParameterExists( const std::string& first )const;
 
   /** Set/Get if the application uses sequential arguments */
   void SetSequentialParsing( bool val )

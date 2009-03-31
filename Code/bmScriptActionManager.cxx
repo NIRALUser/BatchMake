@@ -393,9 +393,23 @@ ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
 }
 
 void ScriptActionManager
-::SetApplicationWrapperList( std::vector<ApplicationWrapper*>* applicationlist )
+::SetApplicationWrapperList( ApplicationWrapperListType* applicationlist )
 {
   m_ApplicationWrapperList = applicationlist;
+}
+
+ApplicationWrapper* ScriptActionManager
+::GetApplicationWrapper( const BMString& applicationPath )
+{
+  ApplicationWrapperListType::iterator it =
+    std::find_if( m_ApplicationWrapperList->begin(),
+               m_ApplicationWrapperList->end(),
+               AppWrapFinder( applicationPath.GetConstValue() ) );
+  if( it == m_ApplicationWrapperList->end() )
+    {
+    return NULL;
+    }
+  return *it;
 }
 
 void ScriptActionManager::Reset()
