@@ -16,6 +16,7 @@
 #include "XMLReader.h"
 
 XMLReader::XMLReader()
+  :m_EndOfFile( false ) 
 {
 }
 
@@ -29,7 +30,7 @@ int XMLReader::Open(const char* filename)
   /** Open file for reading */
   networkfile.open(filename,ifstream::binary);
   if (networkfile == NULL) return -1;
-  
+  m_EndOfFile = false;
   return 0;
 } 
 
@@ -42,6 +43,10 @@ MString XMLReader::GetBalise()
 {
   char* data = new char[1000];
   networkfile.getline(data,1000);
+  if( !networkfile.eof() )
+    {
+    m_EndOfFile = true;
+    }
   MString line = data;
   int begin_balise_start = line.find("<");
   int begin_balise_end =  line.find(">",begin_balise_start+1);
@@ -74,4 +79,10 @@ MString XMLReader::GetCurrentBalise()
 void XMLReader::Close()
 {
   networkfile.close();
+  m_EndOfFile = false;
+}
+
+bool XMLReader::EndOfFile()
+{
+  return m_EndOfFile;
 }

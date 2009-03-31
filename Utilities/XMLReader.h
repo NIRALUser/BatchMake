@@ -35,12 +35,13 @@ public:
   MString GetCurrentBalise();
   MString GetValue();
   void Close();
+  bool EndOfFile();
 
 private:
   std::ifstream networkfile;
   MString m_value;
   MString m_balise;
-
+  bool    m_EndOfFile;
 
 };
 
