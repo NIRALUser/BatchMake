@@ -94,15 +94,16 @@ public:
   char& operator[](int);
   const char& operator[](int)const;
     
-  int find(const char*,int offset=0)const;
+  std::size_t find( const char*, std::size_t offset = 0 )const;
   /** if offset == -1, searches from the end of the string
   */
-  int rfind(const char*,int offset=-1)const;
+  std::size_t rfind( const char*, std::size_t offset = std::string::npos )const;
   
   /** truncate the string */
-  BMString& mid(int begin,int nb=-1);
+  BMString& mid( std::size_t begin, std::size_t nb = std::string::npos );
   /** returns a substract of the string. */
-  BMString midCopy(int begin,int nb=-1)const;
+  BMString midCopy( std::size_t begin, 
+                    std::size_t nb = std::string::npos )const;
   
   /** keep only the chain from its begin to the first occurence of key.
    *  In other words, truncate from first occurence of key to end

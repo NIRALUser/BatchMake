@@ -318,37 +318,25 @@ const char& BMString::operator[](int offset)const
   return m_value[offset];
 }
 
-int BMString::find(const char* key,int offset)const
+std::size_t BMString::find( const char* key, std::size_t offset )const
 {
   return m_value.find(key,offset);
 }
 
-int BMString::rfind(const char* key,int offset)const
+std::size_t BMString::rfind( const char* key, std::size_t offset )const
 {
-  if (offset == -1)
-    return m_value.rfind(key);
-
   return m_value.rfind(key,offset);
 }
 
-BMString& BMString::mid(int begin,int nb)
+BMString& BMString::mid( std::size_t begin, std::size_t nb )
 {
-  if (nb == -1)
-    {
-    nb = m_value.length() - begin;
-    }
-  m_value.erase(begin+nb);
-  m_value.erase(0,begin);
+  m_value = m_value.substr( begin, nb );
   return *this;
 }
 
-BMString BMString::midCopy(int begin,int nb)const
+BMString BMString::midCopy( std::size_t begin, std::size_t nb )const
 {
-  if (nb == -1)
-    {
-    nb = m_value.length() - begin;
-    }
-  return m_value.substr(begin,nb);
+  return m_value.substr( begin, nb );
 }
 
 BMString& BMString::begin(const char* key,int offset)
