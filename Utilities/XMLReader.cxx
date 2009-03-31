@@ -43,7 +43,7 @@ MString XMLReader::GetBalise()
 {
   char* data = new char[1000];
   networkfile.getline(data,1000);
-  if( !networkfile.eof() )
+  if( networkfile.eof() )
     {
     m_EndOfFile = true;
     }

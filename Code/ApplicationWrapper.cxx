@@ -660,6 +660,7 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
         std::cerr << "Application Wrapper ( Read Module ): "
                   << "Unexpected end of file. "
                   << "File ends before reaching </executable>" << std::endl;
+        break;
         }
       }
     }
@@ -694,6 +695,7 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
         std::cerr << "Application Wrapper ( Read Module ): "
                   << "Unexpected end of file. "
                   << "File ends before reaching </Module>" << std::endl;
+        break;
         }
       }
     }
@@ -740,6 +742,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
         std::cerr << "Application Wrapper ( Read Param ): "
                   << "Unexpected end of file. "
                   << "File ends before reaching </Parameter>" << std::endl;
+        break;
         }
       }
     m_param.SetEnum(m_list);
@@ -781,6 +784,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
         std::cerr << "Application Wrapper ( Read Param ): "
                   << "Unexpected end of file. "
                   << "File ends before reaching </Param>" << std::endl;
+        break;
         }
       }
     m_param.SetEnum(m_list);
