@@ -17,6 +17,7 @@
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 #include "ApplicationWrapper.h"
+#include <sstream>
 
 namespace bm {
 
@@ -68,15 +69,12 @@ void ScriptRunAction::GenerateGrid(const char* appname)
   else
     {
     // If the application support it. we force the application to write the output out as XML
-    std::string xmloutputname = application->GetName();
-    xmloutputname += ".";
-    char* num = new char[10];
-    sprintf(num,"%zu",m_GridModule->GetNumberOfApplications());
-    xmloutputname += num;
-    xmloutputname += ".out.xml";
+    std::stringstream ss; 
+    ss << application->GetName() << "." 
+       << m_GridModule->GetNumberOfApplications() << ".out.xml";
+    std::string xmloutputname = ss.str();
     application->SetParameterValue("GenerateXMLFile","","1");
     application->SetParameterValue("GenerateXMLFile","GenerateXMLFile",xmloutputname);
-    delete [] num;
 
     m_GridModule->AddApplication(application);
 

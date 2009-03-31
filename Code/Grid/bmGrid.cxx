@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <ctime>
 #include <itksys/SystemTools.hxx>
+#include <sstream>
 
 namespace bm {
 
@@ -60,12 +61,17 @@ bool Grid::HasCurrentScopeFile()
 /** Return the current scope file */
 const char* Grid::GetCurrentScopeFile()
 {
-  if(m_CurrentScopeFile.size() == 0)
+  if( m_CurrentScopeFile.empty() )
     {
+    std::stringstream ss;
+    ss << time(NULL) << ".bms.tmp"; 
+    m_CurrentScopeFile = ss.str();
+    /*
     char* tempchar = new char[25];
-    sprintf(tempchar,"%zu.bms.tmp",time(NULL));
+    sprintf(tempchar,"%zu.bms.tmp",);
     m_CurrentScopeFile = tempchar;
     delete [] tempchar;
+    */
     }
   return m_CurrentScopeFile.c_str();
 }
