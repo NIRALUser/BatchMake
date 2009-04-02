@@ -188,7 +188,7 @@ void ApplicationWrapperGUIControls::OnSelectParameters()
 	ApplicationWrapperParam* m_parentParam;
 	bool is_parent = false;
 	int parent = 0;
-	int parentValue = 0;
+	//int parentValue = 0;
     g_add->label("Change");
     g_delete->show();
 
