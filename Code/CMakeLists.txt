@@ -28,6 +28,7 @@ SET(BatchMakeLib_HDRS
   bmScriptSetAction.h
   bmScriptSetAppAction.h
   bmScriptSetAppOptionAction.h
+  bmScriptSetAppFlagAction.h
   bmScriptListFileInDirAction.h
   bmScriptListDirInDirAction.h
   bmScriptIncAction.h
@@ -97,6 +98,7 @@ SET(BatchMakeLib_SRCS
   bmScriptSetAction.cxx
   bmScriptSetAppAction.cxx
   bmScriptSetAppOptionAction.cxx
+  bmScriptSetAppFlagAction.cxx
   bmScriptListFileInDirAction.cxx
   bmScriptListDirInDirAction.cxx
   bmScriptIncAction.cxx

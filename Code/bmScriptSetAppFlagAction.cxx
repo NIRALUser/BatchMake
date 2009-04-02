@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptSetAppOptionAction.cxx
+  Module:    bmScriptSetAppFlagAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,22 +13,22 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#include "bmScriptSetAppOptionAction.h"
+#include "bmScriptSetAppFlagAction.h"
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 
 namespace bm {
 
-ScriptSetAppOptionAction::ScriptSetAppOptionAction()
+ScriptSetAppFlagAction::ScriptSetAppFlagAction()
 : ScriptAction()
 {
 }
 
-ScriptSetAppOptionAction::~ScriptSetAppOptionAction()
+ScriptSetAppFlagAction::~ScriptSetAppFlagAction()
 {
 }
 
-bool ScriptSetAppOptionAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptSetAppFlagAction::TestParam(ScriptError* error,int linenumber)
 {  
   if (m_Parameters.size() < 2)
     {
@@ -46,26 +46,14 @@ bool ScriptSetAppOptionAction::TestParam(ScriptError* error,int linenumber)
    return true;
 }
 
-MString ScriptSetAppOptionAction::Help()
+MString ScriptSetAppFlagAction::Help()
 {
-  return "SetAppOption(<application.option> <value>)";
+  return "SetAppFlag(<application.flag[.flag]> <value>)";
 }
 
 
-void ScriptSetAppOptionAction::Execute()
+void ScriptSetAppFlagAction::Execute()
 {
-  unsigned int i; 
-/*
-  BMString m_value; = m_Manager->Convert(m_Parameters[1]);
-  for (i=2;i<m_Parameters.size();i++)
-    {
-    if (m_value != "")
-      {
-      m_value+= " ";
-      }
-    m_value += m_Manager->Convert(m_Parameters[i]);
-    }
-  */
   // First we search the name of the variable
   std::vector<BMString> appOptions = m_Parameters[0].tokenize(".");
   BMString application = appOptions.size() >= 1 ? appOptions[0] : "";
@@ -86,29 +74,9 @@ void ScriptSetAppOptionAction::Execute()
 
   // Copy the values
   BMString value;
+  unsigned int i; 
   for( i = 1; i < m_Parameters.size(); ++i )
-    {/*
-    std::size_t currentpos = 0;
-    std::string param = m_Parameters[i].GetConstValue();
-    std::size_t posvar = param.find("${");
-
-    while( posvar != std::string::npos )
-      {// if the second parameters has been defined as a variable
-      value += param.substr( currentpos, posvar - currentpos );
-
-      std::size_t curly = param.find("}",posvar); 
-      if( curly != std::string::npos )
-        {
-        currentpos = curly + 1;
-        std::string var = param.substr( posvar, curly - posvar + 1);
-        value += m_Manager->GetVariable(var)[0].toChar();
-        }
-       posvar = param.find( "${", posvar + 1 );
-      }
-    if(param.size()-currentpos>0)
-      {
-      value += param.substr(currentpos,param.size()-currentpos);
-      }*/
+    {
     if( i != 1 )
       {
       value += " ";
@@ -116,14 +84,27 @@ void ScriptSetAppOptionAction::Execute()
     value += m_Manager->Convert( m_Parameters[i] );
     }
 
-  bool paramSet = app->SetParameterValue( option1.toChar(), 
-                                          option2.toChar(), 
-                                          value );
+  bool paramSet = false;
+  const ApplicationWrapperParam* option = 
+    app->GetParamByFlag( option1.toChar() );
+  if( option != NULL )
+    {
+    option2 = option2 == option1 ? option->GetName() : option2;
+    option1 = option->GetName();
+    paramSet = app->SetParameterValue( option1.toChar(), 
+                                       option2.toChar(), 
+                                       value );
+    }
+
   if(!paramSet)
     {
-    m_ProgressManager->AddError( 
-      BMString("SetAppOption: Cannot find parameter: ") 
-      + option1 + "." + option2 );
+    // we don't want to generate an error as it is usually not important
+    // parameters that can't be found. 
+    // i.e. processinformationaddress, xml, echo, ignore-rest, version, help
+#ifdef VERBOSE
+    std::cout << "SetAppFlag: Cannot find parameter: " << option1 
+              << "." << option2 << std::endl;
+#endif
     return;
     }
 

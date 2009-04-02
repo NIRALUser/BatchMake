@@ -55,12 +55,17 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
       "Calling SetApp() but no applications are defined",linenumber);
     return false;
     }
-
+#ifdef VERBOSE
+  std::cout << "List of wrapped applications found: " << std::endl;
+#endif
+  
   ScriptActionManager::ApplicationWrapperListType::iterator it = 
     m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
-    std::cout << "App: " << (*it)->GetName() << std::endl;
+#ifdef VERBOSE
+    std::cout << (*it)->GetName() << std::endl;
+#endif
     if( appName == (*it)->GetName() )
       {
       appFound = true;
