@@ -199,7 +199,7 @@ void ScriptDashboardSendAction::GenerateGrid()
   app.SetParameterValue("inputFile","","1");
   app.SetParameterValue("inputFile","inputFile",m_GridModule->GetCurrentScopeFile());
 
-  m_GridModule->AddApplication(&app,m_GridModule->GetOutputDirectory());
+  m_GridModule->AddApplication( &app, m_GridModule->GetOutputDirectory().c_str() );
 }
 
 } // end namespace bm
