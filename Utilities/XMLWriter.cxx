@@ -27,23 +27,27 @@ XMLWriter::~XMLWriter()
 {
 }
 
-int XMLWriter::Open(const char* filename)
+int XMLWriter::Open(const std::string& filename)
 {
   /** Open file for writing */
-  networkfile.open(filename,std::ofstream::binary);
-  if (networkfile == NULL) return -1;
+  networkfile.open( filename.c_str(),
+                    std::ofstream::binary );
+  if( networkfile == NULL )
+    {
+    return -1;
+    }
   
   return 0;
 }
 
 
-void XMLWriter::Start(const char* name)
+void XMLWriter::Start(const std::string& name)
 {
   startTab();
   networkfile << "<" << name << ">" << std::endl;
 }
 
-void XMLWriter::End(const char* name)
+void XMLWriter::End(const std::string& name)
 {
   endTab();
   networkfile << "</" << name << ">" << std::endl;
@@ -51,16 +55,20 @@ void XMLWriter::End(const char* name)
 
 void XMLWriter::startTab()
 {
-  for (int i=0;i<treeoffset;i++)
-  networkfile << "\t";
+  for( int i = 0; i < treeoffset; ++i )
+    {
+    networkfile << "\t";
+    }
   treeoffset++;
 }
 
 void XMLWriter::endTab()
 {
   treeoffset--;
-  for (int i=0;i<treeoffset;i++)
+  for( int i = 0; i < treeoffset; ++i )
+    {
     networkfile << "\t";
+    }
 }
 
 void XMLWriter::Write(MString balise,MString value)

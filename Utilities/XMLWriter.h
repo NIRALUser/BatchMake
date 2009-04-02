@@ -16,11 +16,12 @@
 #ifndef _XMLWRITER_H
 #define _XMLWRITER_H
 
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+//#include <iostream>
+//#include <stdlib.h>
+//#include <stdio.h>
 #include <fstream>
-#include <MString.h>
+#include "MString.h"
+#include <string>
 
 //using namespace std;
 
@@ -29,12 +30,12 @@ class XMLWriter
 public:
   XMLWriter();
   ~XMLWriter();
-  void Start(const char *);
-  void End(const char *);
+  void Start( const std::string& );
+  void End( const std::string& );
   void Write(MString balise,MString value);
   void Write(MString balise,int value);
   void Write(MString balise,float value);
-  int Open(const char* filename);
+  int Open( const std::string& filename );
   void Close();
   void startTab();
   void endTab();
@@ -42,10 +43,10 @@ public:
 protected:
 
 private:
-  char filename[300];
-  int moduleid;
+  //char filename[300];
+  int           moduleid;
   std::ofstream networkfile;
-  int treeoffset;
+  int           treeoffset;
 };
 
 #endif
