@@ -17,6 +17,7 @@
 #include <iostream>
 #include "XMLWriter.h"
 #include "XMLReader.h"
+#include "BMString.h"
 
 #include <itksys/Directory.hxx>
 #include <itksys/SystemTools.hxx>
@@ -58,7 +59,8 @@ ApplicationWrapper::~ApplicationWrapper()
 {
 }
 
-void ApplicationWrapper::SetApplicationPath(const std::string& applicationpath)
+void ApplicationWrapper
+::SetApplicationPath( const std::string& applicationpath )
 {
   m_applicationpath = applicationpath;
 }
@@ -95,32 +97,44 @@ std::string ApplicationWrapper
       // remove the absolute path if the relativePath is on
       if(relativePath && (*it).GetExternalData()>0)
         {
-        MString appname;
-        if( itksys::SystemTools::FileIsFullPath( (*it).GetValue().toChar() ) && 
-            (*it).GetExternalData() == 1 &&
-            !inputDirectory.empty() )
+        BMString appname = (*it).GetValue();
+        appname = appname.fromVariable();
+        
+        if( itksys::SystemTools::FileIsFullPath( appname.toChar() ) && 
+            (*it).GetExternalData() == 1)
           {
-          appname = 
-            itksys::SystemTools::RelativePath( inputDirectory.c_str(),
-                                               (*it).GetValue().toChar() );
+          if( !inputDirectory.empty() )
+            {
+            appname = 
+              itksys::SystemTools::RelativePath( inputDirectory.c_str(),
+                                                 appname.toChar() );
+            }
           }
         else if( itksys::SystemTools::FileIsFullPath( 
-                   (*it).GetValue().toChar() ) && 
-                 (*it).GetExternalData() == 2 &&
-                 !outputDirectory.empty() )
+                   appname.toChar() ) && 
+                 (*it).GetExternalData() == 2 )
           {
-          appname = 
-            itksys::SystemTools::RelativePath( outputDirectory.c_str(),
-                                               (*it).GetValue().toChar() );
+          if( !outputDirectory.empty() )
+            {
+            appname = 
+              itksys::SystemTools::RelativePath( outputDirectory.c_str(),
+                                                 appname.toChar() );
+            }
           }
         else
           {
-          appname = (*it).GetValue().rend("/");
-          appname = appname.rend("\\");
-          appname = appname.removeChar('\\');
-          appname = appname.removeChar('/');
-          appname = appname.removeChar('\'');
-          appname = appname.removeChar('\"');
+          if( appname.find("/") != std::string::npos )
+            {
+            appname.rafter("/");
+            }
+          if( appname.find("\\") != std::string::npos )
+            {
+            appname.rafter("\\");
+            }
+          appname.removeAllChars('\\');
+          appname.removeAllChars('/');
+          appname.removeAllChars('\'');
+          appname.removeAllChars('\"');
           }
         std::string sappname = appname.toChar();
         
@@ -232,20 +246,20 @@ bool ApplicationWrapper
       
       // We manage the sequential params here
       if(m_Sequential)
-      {
-      if((m_SequentialParams.size() == 0) || m_SequentialParams[m_SequentialParams.size()-1].GetName()!= (*it).GetName())
+        {
+        if((m_SequentialParams.size() == 0) || m_SequentialParams[m_SequentialParams.size()-1].GetName()!= (*it).GetName())
           {
           // We add all the things
-      (*it).SetParamSubValue(first, second, value, true);
-      m_SequentialParams.push_back(*it);
+          (*it).SetParamSubValue(first, second, value, true);
+          m_SequentialParams.push_back(*it);
           }
         else // we look in the list where is the parameter
           {
           std::vector<ApplicationWrapperParam>::iterator it = m_SequentialParams.end();
           do
-        {
+            {
             it--;
-      (*it).SetParamSubValue(first, second, value, false);
+            (*it).SetParamSubValue(first, second, value, false);
             if(!strcmp((*it).GetName().toChar(),second.c_str()))
               {
               (*it).SetValueDefined(true);
@@ -253,9 +267,9 @@ bool ApplicationWrapper
               break;
               }
             }
-            while(it != m_SequentialParams.begin());
-      }
-      }
+          while(it != m_SequentialParams.begin());
+          }
+        }
       else
         {
         // Look for the child
@@ -264,9 +278,9 @@ bool ApplicationWrapper
           std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
           while(it != m_params.end())
             {
-      (*it).SetParamSubValue(first, second, value, true);
+            (*it).SetParamSubValue(first, second, value, true);
             it++;
-        }
+            }
           }
         }
       }
@@ -569,7 +583,12 @@ void ApplicationWrapper::Save(const std::string& filename)
   std::string parentParameter, parameter;
 
   XMLWriter m_writer;
-  m_writer.Open(filename.c_str());
+  int res = m_writer.Open(filename.c_str());
+  if( res == -1 )
+    {
+    std::cerr << "ApplicationWrapper: Could not open the file \"" 
+              << filename << "\" for saving." << std::endl;
+    }
   m_writer.Start("?xml version=\"1.0\" encoding=\"utf-8\"?");
   m_writer.Start("executable");
   m_writer.Write(MString("Name"),m_name);
@@ -819,7 +838,7 @@ bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const std::string& _p
   std::string path = _path;
   std::string program = path;
   std::string vxmlarg = "--xml";
-  std::cout << "Running = " << program.c_str() << " " << vxmlarg.c_str() << std::endl;
+  std::cout << "Running = " << program << " " << vxmlarg << std::endl;
   std::string output = "";
 
   // Extract the arguments from the command line
@@ -840,7 +859,8 @@ bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const std::string& _p
   int length;
   double timeout = 255;
 
-  while(itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
+  // wait for 1s
+  while( itksysProcess_WaitForData( gp, &data, &length, &timeout)) 
     {
     for(int i=0;i<length;i++)
       {
@@ -881,7 +901,11 @@ bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const std::string& _p
   bm::ModuleDescription moduleDescription;
   bm::ModuleDescriptionParser parser;
 
-  parser.Parse(output.c_str(),moduleDescription);
+  parser.Parse( output.c_str(), moduleDescription );
+  if( moduleDescription.GetLocation().empty() )
+    {
+    moduleDescription.SetLocation( path );
+    }
 
   // Converting the ModuleDescriptionParser to BatchMake
   this->AddSlicerModuleDescription(&moduleDescription);
@@ -926,16 +950,16 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
   // extract the name from the filename
   std::string revname;
  
-  std::string path=module->GetLocation();
+  std::string path = module->GetLocation();
   unsigned int i=0;
-  for(i=0;i<path.size();i++)
+  for( i = 0; i < path.size(); ++i)
     {
-    if(path[path.size()-1-i] == '/'
-      || path[path.size()-1-i] == '\\')
+    if( path[ path.size() - 1 - i ] == '/' ||
+        path[ path.size() - 1 - i ] == '\\' )
       {
       break;
       }
-    revname += path[path.size()-1-i];
+    revname += path[ path.size() - 1 - i ];
     }
 
   std::string name;
@@ -953,7 +977,6 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
 
   this->SetName(module->GetTitle().c_str());
   this->SetApplicationPath(path);
-
   
   std::vector<bm::ModuleParameterGroup>::const_iterator pgbeginit
     = module->GetParameterGroups().begin();
@@ -1177,7 +1200,7 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
   std::string path = _path;
   std::string program = path;
   std::string vxmlarg = "-vxml";
-  std::cout << "Running = " << program.c_str() << " " << vxmlarg.c_str() << std::endl;
+  std::cout << "Running = " << program << " " << vxmlarg << std::endl;
   std::string m_output = "";
   unsigned int i=0;
 
