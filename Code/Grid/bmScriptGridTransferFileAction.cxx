@@ -60,23 +60,25 @@ void ScriptGridTransferFileAction::Execute()
     return;
     }
 
-  if(m_Parameters[0] == "ALL")
+  std::string transfer = 
+    m_Manager->Convert( m_Parameters[0] ).fromVariable().toChar();
+  if( transfer == "ALL")
     {
     m_GridModule->SetTransferFile(Grid::ALL);
     }
-  else if(m_Parameters[0] == "EXECUTABLE")
+  else if( transfer == "EXECUTABLE")
     {
     m_GridModule->SetTransferFile(Grid::EXECUTABLE);
     }
-  else if(m_Parameters[0] == "INPUT_FILES")
+  else if( transfer == "INPUT_FILES")
     {
     m_GridModule->SetTransferFile(Grid::INPUT_FILES);
     }
-  else if(m_Parameters[0] == "OUTPUT_FILES")
+  else if( transfer == "OUTPUT_FILES")
     {
     m_GridModule->SetTransferFile(Grid::OUTPUT_FILES);
     }  
-  else if(m_Parameters[0] == "NONE")
+  else if( transfer == "NONE")
     {
     m_GridModule->SetTransferFile(Grid::NONE);  
     } 

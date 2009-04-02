@@ -58,7 +58,7 @@ void ScriptDataDirectoryAction::Execute()
   if(m_GridModule)
     {
     m_GridModule->SetDataDirectory(
-      m_Parameters[0].fromVariable().toChar() );
+      m_Manager->Convert(m_Parameters[0]).fromVariable().toChar() );
     }
   return;
 }

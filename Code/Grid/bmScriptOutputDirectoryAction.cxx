@@ -61,7 +61,8 @@ void ScriptOutputDirectoryAction::Execute()
     {
     return;
     }
-  m_GridModule->SetOutputDirectory( m_Parameters[0].fromVariable().toChar() );
+  m_GridModule->SetOutputDirectory( 
+    m_Manager->Convert(m_Parameters[0]).fromVariable().toChar() );
 }
 
 } // end namespace bm

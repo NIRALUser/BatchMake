@@ -113,7 +113,7 @@ void ScriptSetAppFlagAction::Execute()
   value += BMString( 
     app->GetCurrentCommandLineArguments( false ) ).toVariable();
 
-  std::cout << applicationName.toChar() << " " << value.toChar() << std::endl;
+  //std::cout << applicationName.toChar() << " " << value.toChar() << std::endl;
   m_Manager->SetVariable( application, value );
 
 }
