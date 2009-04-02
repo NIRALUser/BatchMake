@@ -90,7 +90,8 @@ void ScriptSetAction::Execute()
   // If we are on the grid we use the bmGridStore to store the variable
   if(m_GridModule)
     {
-    this->GenerateGrid( m_Parameters[0].GetConstValue(), m_value.GetConstValue() );
+    this->GenerateGrid( m_Parameters[0].GetConstValue(), 
+                        m_value.GetConstValue() );
     return;
     }
 #endif
