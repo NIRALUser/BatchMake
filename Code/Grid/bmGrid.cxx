@@ -992,7 +992,7 @@ void Grid::WriteCondor()
     
     if( !m_GridOwner.empty() )
       {
-      fprintf( fic, "owner = %s \n", m_GridOwner.c_str() );
+      fprintf( fic, "+Owner=\"%s\"\n", m_GridOwner.c_str() );
       }
     
     // Check if we have external data
