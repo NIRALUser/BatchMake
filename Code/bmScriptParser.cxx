@@ -218,9 +218,11 @@ bool ScriptParser::Execute(MString filename,unsigned long pos)
 
 
 /** Run the given batchmake script (as a buffer) on Condor */
-void ScriptParser::RunCondor( const std::string& buffer )
+int ScriptParser::RunCondor( const std::string& buffer )
 //                              const std::string& outputDirectory )
 {
+  int result = 1;
+
   long int startingLine = 0;
   long int posLine = buffer.find("\n");
   while(posLine != -1)
@@ -295,7 +297,6 @@ void ScriptParser::RunCondor( const std::string& buffer )
 
     std::cout << "Condor submit output: " << output << std::endl;
 
-    int result = 1;
     switch(itksysProcess_GetState(gp))
       {
       case itksysProcess_State_Exited:
@@ -330,15 +331,17 @@ void ScriptParser::RunCondor( const std::string& buffer )
     {
     std::cout << "Cannot parse script!" << std::endl;
     }
+  return result;
 }
 
 
 /** Parse and Execute a buffer */
-void ScriptParser::ParseBuffer(std::string buffer)
+int ScriptParser::ParseBuffer( const std::string& buffer)
 {
-  long int startingLine = 0;
-  long int posLine = buffer.find("\n");
-  while(posLine != -1)
+  int result = EXIT_FAILURE;
+  std::size_t startingLine = 0;
+  std::size_t posLine = buffer.find("\n");
+  while( posLine != std::string::npos )
     {
     MString currentline = buffer.substr(startingLine,posLine+1-startingLine).c_str();
     startingLine = posLine+1;
@@ -349,11 +352,16 @@ void ScriptParser::ParseBuffer(std::string buffer)
   if(this->Parse())
     {
     m_ScriptActionManager->Execute();
+    if( m_ScriptActionManager->GetError()->GetError() == 0 )
+      {
+      result = EXIT_SUCCESS;
+      }
     }
   else
     {
-    std::cout << "Cannot parse script!" << std::endl;
+    std::cerr << "Cannot parse script!" << std::endl;
     }
+  return result;
 }
 
 
@@ -563,7 +571,7 @@ bool ScriptParser::Parse()
       }
     }
 
-  if (m_ScriptActionManager->GetError()->GetError() != 0)
+  if( m_ScriptActionManager->GetError()->GetError() != 0 )
     {
     return false;
     }

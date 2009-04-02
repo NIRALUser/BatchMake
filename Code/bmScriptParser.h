@@ -46,10 +46,10 @@ public:
   
   void Load(MString filename);
   bool Parse(MString Line);
-  void ParseBuffer(std::string buffer);
+  int ParseBuffer( const std::string& buffer);
 
   /** Run the given batchmake script (as a buffer) on Condor */
-  void RunCondor( const std::string& buffer );
+  int  RunCondor( const std::string& buffer );
 //                  const std::string& outputDirectory = "" );
 
   bool CheckOption(MString param);
