@@ -69,7 +69,7 @@ public:
   void SetGridTempDirectory(const char* directory) {m_GridTempDirectory = directory;}
   void SetGridExecutableDirectory(const char* directory) {m_ExecutableDirectory = directory;}
   void SetTransferFile(TransfertType transferType) {m_TransferFiles = transferType;}
-  void SetGridOwner( const std::string owner ) { m_Owner = owner; }
+  void SetGridOwner( const std::string owner ) { m_GridOwner = owner; }
  
   const std::string& GetDataDirectory()const {return m_DataDirectory;}
   const std::string& GetOutputDirectory()const {return m_OutputDirectory;}
