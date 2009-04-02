@@ -49,7 +49,8 @@ public:
   void ParseBuffer(std::string buffer);
 
   /** Run the given batchmake script (as a buffer) on Condor */
-  void RunCondor(std::string buffer,const char* outputDirectory=NULL);
+  void RunCondor( const std::string& buffer );
+//                  const std::string& outputDirectory = "" );
 
   bool CheckOption(MString param);
   bool AddOption(MString option, MString param);

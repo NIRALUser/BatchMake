@@ -139,7 +139,7 @@ bool ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
     return false;
     }
   unsigned long position = pos;
-  char* data = (char*)malloc(1000);
+  char* data = new char[1000];
   strcpy(data,"");
   MString m_currentline;
   while(!m_file.eof())
@@ -218,7 +218,8 @@ bool ScriptParser::Execute(MString filename,unsigned long pos)
 
 
 /** Run the given batchmake script (as a buffer) on Condor */
-void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
+void ScriptParser::RunCondor( const std::string& buffer )
+//                              const std::string& outputDirectory )
 {
   long int startingLine = 0;
   long int posLine = buffer.find("\n");
@@ -229,34 +230,47 @@ void ScriptParser::RunCondor(std::string buffer,const char* outputDirectory)
     this->AddCodeLine(currentline,0);
     posLine = buffer.find("\n",startingLine);
     }
+/*
+#ifdef BM_GRID
+  bm::Grid grid;
+  if( outputDirectory.empty() )
+    {
+    outputDirectory = grid.GetOutputDirectory( );
+    }
+  else
+    {
+    grid.SetOutputDirectory( BMString(outputDirectory).fromVariable().toChar() );
+    }
+#endif
 
   std::string scriptfile = outputDirectory;
   scriptfile += "/bmcondor.bmc.tmp";
-  
+  */
+  std::string scriptfile = "bmcondor.bmc.tmp";
 #ifdef BM_GRID
   bm::Grid grid;
-  if(outputDirectory)
-    {
-    grid.SetOutputDirectory( 
-      BMString(outputDirectory).fromVariable().toChar() );
-    }
-  grid.SetFileName(scriptfile.c_str());
-  this->SetGridModule(&grid);
+  grid.SetFileName( scriptfile );
+  this->SetGridModule( &grid );
 #endif
 
-  if(this->Parse())
+  if( this->Parse() )
     {
     m_ScriptActionManager->Execute();
 
 #ifdef BM_GRID
     grid.WriteCondor();
+    // OutputDirectory is correctly set only after Execute() is called
+    if( !grid.GetOutputDirectory().empty() )
+      {
+      scriptfile = grid.GetOutputDirectory() + "/" + grid.GetFileName();
+      }
 #endif
 
     // Submit the script to condor
     std::vector<const char*> args;
     args.push_back("condor_submit_dag");
     args.push_back("-f");
-    args.push_back(scriptfile.c_str());
+    args.push_back( scriptfile.c_str() );
     args.push_back(0);
 
     // Run the application

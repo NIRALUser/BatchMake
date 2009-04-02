@@ -39,9 +39,9 @@ bool ScriptOutputDirectoryAction::TestParam(ScriptError* error,int linenumber)
     return false;
     }
 
-  m_Manager->SetTestVariable(m_Parameters[0]);
+  //m_Manager->SetTestVariable(m_Parameters[0]);
 
-  for (unsigned int i=1;i<m_Parameters.size();i++)
+  for( unsigned int i = 0; i < m_Parameters.size(); ++i )
     {
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }

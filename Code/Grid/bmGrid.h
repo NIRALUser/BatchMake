@@ -40,7 +40,12 @@ public:
   Grid();
   ~Grid();
 
-  void SetFileName(const char* filename) {m_FileName = filename;}
+  /** The file name shall be a relative path with regards to OutputDirectory
+   *  If you never set OutputDirectory, then the file name can be an absolute
+   *  name.
+   */
+  void SetFileName( const std::string& filename );
+  const std::string& GetFileName( )const;
     
   /** Add an application to the list of applications to generate */
   void AddApplication(ApplicationWrapper* app,
@@ -65,10 +70,10 @@ public:
   void SetGridExecutableDirectory(const char* directory) {m_ExecutableDirectory = directory;}
   void SetTransferFile(TransfertType transferType) {m_TransferFiles = transferType;}
  
-  const char* GetDataDirectory() {return m_DataDirectory.c_str();}
-  const char* GetOutputDirectory() {return m_OutputDirectory.c_str();}
-  const char* GetGridTempDirectory() {return m_GridTempDirectory.c_str();}
-  const char* GetGridExecutableDirectory() {return m_ExecutableDirectory.c_str();}
+  const std::string& GetDataDirectory()const {return m_DataDirectory;}
+  const std::string& GetOutputDirectory()const {return m_OutputDirectory;}
+  const std::string& GetGridTempDirectory()const {return m_GridTempDirectory;}
+  const std::string& GetGridExecutableDirectory()const {return m_ExecutableDirectory;}
  
   void SetDistributed(bool val);
 
