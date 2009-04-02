@@ -990,6 +990,11 @@ void Grid::WriteCondor()
       fprintf( fic, "requirements = %s \n", requirements.c_str() );
       }
     
+    if( !m_GridOwner.empty() )
+      {
+      fprintf( fic, "owner = %s \n", m_GridOwner.c_str() );
+      }
+    
     // Check if we have external data
     const std::vector<ApplicationWrapperParam> & params = (*it).GetParams();
     std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();

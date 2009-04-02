@@ -69,11 +69,18 @@ public:
   void SetGridTempDirectory(const char* directory) {m_GridTempDirectory = directory;}
   void SetGridExecutableDirectory(const char* directory) {m_ExecutableDirectory = directory;}
   void SetTransferFile(TransfertType transferType) {m_TransferFiles = transferType;}
+  void SetGridOwner( const std::string owner ) { m_Owner = owner; }
  
   const std::string& GetDataDirectory()const {return m_DataDirectory;}
   const std::string& GetOutputDirectory()const {return m_OutputDirectory;}
   const std::string& GetGridTempDirectory()const {return m_GridTempDirectory;}
   const std::string& GetGridExecutableDirectory()const {return m_ExecutableDirectory;}
+  const std::string& GetGridOwner()const { return m_GridOwner; }
+  /** Set/Get the requirements of the whole script. Application specific 
+   *  requirements will be concatenated to it.
+  */
+  void SetRequirements( const std::string& requirements );
+  const std::string& GetRequirements( )const;
  
   void SetDistributed(bool val);
 
@@ -97,11 +104,7 @@ public:
   void SetGrouping(bool group) {m_Grouping = group;}
   bool GetGrouping() {return m_Grouping;}
 
-  /** Set/Get the requirements of the whole script. Application specific 
-   *  requirements will be concatenated to it.
-  */
-  void SetRequirements( const std::string& requirements );
-  const std::string& GetRequirements( )const;
+
 protected:
 
   std::string Strip(std::string value);
@@ -120,6 +123,7 @@ protected:
   std::string m_GridTempDirectory;
   std::string m_ExecutableDirectory;
   std::string m_Requirements;
+  std::string m_GridOwner;
 
   bool             m_Distributed;
   bool             m_DistributedTransition;

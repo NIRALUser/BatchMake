@@ -68,6 +68,7 @@
   #include "bmScriptGridExecutableDirectoryAction.h"
   #include "bmScriptGridTransferFileAction.h"
   #include "bmScriptRequirementsAction.h"
+  #include "bmScriptGridOwnerAction.h"
 #endif
 
 #ifdef BM_DASHBOARD
@@ -286,6 +287,7 @@ std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
   BM_NEWKEYWORD(_list, GridExecutableDirectory);
   BM_NEWKEYWORD(_list, GridTransferFile);
   BM_NEWKEYWORD(_list, Requirements);
+  BM_NEWKEYWORD(_list, GridOwner);
 #endif
 
 #ifdef BM_XCEDE
@@ -357,6 +359,7 @@ ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
   BM_NEWACTION(option, GridExecutableDirectory);
   BM_NEWACTION(option, GridTransferFile);
   BM_NEWACTION(option, Requirements);
+  BM_NEWACTION(option, GridOwner);
 #endif
 
 #ifdef BM_DASHBOARD

@@ -165,6 +165,7 @@ IF(GRID_SUPPORT)
     Grid/bmScriptGridExecutableDirectoryAction.cxx  
     Grid/bmScriptGridTransferFileAction.cxx 
     Grid/bmScriptRequirementsAction.cxx
+    Grid/bmScriptGridOwnerAction.cxx
     )
 
   IF(DASHBOARD_SUPPORT)
