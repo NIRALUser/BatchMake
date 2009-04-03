@@ -186,7 +186,7 @@ int main(int argc, char **argv)
       m_Parser.LoadWrappedApplication(m_ApplicationPath);
       m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
      
-      std::cout << "Generating shell script ...";
+      std::cout << "Generating shell script ..." << std::endl;
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
       m_Parser.SetGridModule(&grid);
@@ -207,7 +207,7 @@ int main(int argc, char **argv)
       m_Parser.LoadWrappedApplication(m_ApplicationPath);
       m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
      
-      std::cout << "Generating condor script ...";
+      std::cout << "Generating condor script ..." << std::endl;
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
       m_Parser.SetGridModule(&grid);
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
       m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
      
       std::cout << "Generating kwgrid script ...";
-        
+
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
       m_Parser.SetGridModule(&grid);
