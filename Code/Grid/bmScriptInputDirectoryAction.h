@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptRequirementsAction.h
+  Module:    bmScriptInputDirectoryAction.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,23 +13,23 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#ifndef __ScriptRequirementsAction_h_
-#define __ScriptRequirementsAction_h_
+#ifndef __ScriptInputDirectoryAction_h_
+#define __ScriptInputDirectoryAction_h_
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <string>
+#include "MString.h"
 #include "bmScriptAction.h"
 
 namespace bm {
 
-class ScriptRequirementsAction : public ScriptAction
+class ScriptInputDirectoryAction : public ScriptAction
 {
 public:
-  ScriptRequirementsAction();
-  ~ScriptRequirementsAction();
+  ScriptInputDirectoryAction();
+  ~ScriptInputDirectoryAction();
   void Execute();
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();

@@ -61,13 +61,14 @@
   #include "bmScriptGridDataHostAction.h"
   #include "bmScriptGridOutputHostAction.h"
   #include "bmScriptGridTempDirectoryAction.h"
-  #include "bmScriptDataDirectoryAction.h"
+  #include "bmScriptInputDirectoryAction.h"
   #include "bmScriptOutputDirectoryAction.h"
+  #include "bmScriptExecutableDirectoryAction.h"
+  #include "bmScriptWorkingDirectoryAction.h"
   #include "bmScriptGridMaxNodesAction.h"
   #include "bmScriptGridSetGroupingAction.h"
-  #include "bmScriptGridExecutableDirectoryAction.h"
   #include "bmScriptGridTransferFileAction.h"
-  #include "bmScriptRequirementsAction.h"
+  #include "bmScriptGridRequirementsAction.h"
   #include "bmScriptGridOwnerAction.h"
 #endif
 
@@ -279,14 +280,15 @@ std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
   BM_NEWKEYWORD(_list, GridDataHost);
   BM_NEWKEYWORD(_list, GridOutputHost);
   BM_NEWKEYWORD(_list, GridSingleNode);
+  BM_NEWKEYWORD(_list, InputDirectory);
   BM_NEWKEYWORD(_list, OutputDirectory);
-  BM_NEWKEYWORD(_list, DataDirectory);
+  BM_NEWKEYWORD(_list, ExecutableDirectory);
+  BM_NEWKEYWORD(_list, WorkingDirectory);
   BM_NEWKEYWORD(_list, GridSetGrouping);
   BM_NEWKEYWORD(_list, GridMaxNodes);
   BM_NEWKEYWORD(_list, GridTempDirectory);
-  BM_NEWKEYWORD(_list, GridExecutableDirectory);
   BM_NEWKEYWORD(_list, GridTransferFile);
-  BM_NEWKEYWORD(_list, Requirements);
+  BM_NEWKEYWORD(_list, GridRequirements);
   BM_NEWKEYWORD(_list, GridOwner);
 #endif
 
@@ -351,14 +353,15 @@ ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
   BM_NEWACTION(option, GridDataHost);
   BM_NEWACTION(option, GridOutputHost);
   BM_NEWACTION(option, GridSingleNode);
+  BM_NEWACTION(option, InputDirectory);
   BM_NEWACTION(option, OutputDirectory);
-  BM_NEWACTION(option, DataDirectory);
+  BM_NEWACTION(option, ExecutableDirectory);
+  BM_NEWACTION(option, WorkingDirectory);
   BM_NEWACTION(option, GridSetGrouping);
   BM_NEWACTION(option, GridMaxNodes);
   BM_NEWACTION(option, GridTempDirectory);
-  BM_NEWACTION(option, GridExecutableDirectory);
   BM_NEWACTION(option, GridTransferFile);
-  BM_NEWACTION(option, Requirements);
+  BM_NEWACTION(option, GridRequirements);
   BM_NEWACTION(option, GridOwner);
 #endif
 

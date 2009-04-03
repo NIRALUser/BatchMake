@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptDataDirectoryAction.h
+  Module:    bmScriptExecutableDirectoryAction.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,8 +13,8 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#ifndef __ScriptDataDirectoryAction_h_
-#define __ScriptDataDirectoryAction_h_
+#ifndef __ScriptExecutableDirectoryAction_h_
+#define __ScriptExecutableDirectoryAction_h_
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -27,11 +27,11 @@
 
 namespace bm {
 
-class ScriptDataDirectoryAction : public ScriptAction
+class ScriptExecutableDirectoryAction : public ScriptAction
 {
 public:
-  ScriptDataDirectoryAction();
-  ~ScriptDataDirectoryAction();
+  ScriptExecutableDirectoryAction();
+  ~ScriptExecutableDirectoryAction();
   void Execute();
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();

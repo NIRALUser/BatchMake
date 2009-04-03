@@ -154,17 +154,18 @@ IF(GRID_SUPPORT)
     Grid/bmScriptGridSingleNodeAction.cxx
     Grid/bmScriptGridDataHostAction.cxx
     Grid/bmScriptGridOutputHostAction.cxx
+    Grid/bmScriptInputDirectoryAction.cxx
     Grid/bmScriptOutputDirectoryAction.cxx
-    Grid/bmScriptDataDirectoryAction.cxx
+    Grid/bmScriptWorkingDirectoryAction.cxx
+    Grid/bmScriptExecutableDirectoryAction.cxx  
     Grid/bmScriptExtractSliceActionGrid.cxx
     Grid/bmScriptRunActionGrid.cxx
     Grid/bmScriptSetActionGrid.cxx
     Grid/bmScriptGridSetGroupingAction.cxx
     Grid/bmScriptGridMaxNodesAction.cxx
     Grid/bmScriptGridTempDirectoryAction.cxx
-    Grid/bmScriptGridExecutableDirectoryAction.cxx  
     Grid/bmScriptGridTransferFileAction.cxx 
-    Grid/bmScriptRequirementsAction.cxx
+    Grid/bmScriptGridRequirementsAction.cxx
     Grid/bmScriptGridOwnerAction.cxx
     )
 

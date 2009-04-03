@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptGridExecutableDirectoryAction.cxx
+  Module:    bmScriptExecutableDirectoryAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,29 +13,29 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#include "bmScriptGridExecutableDirectoryAction.h"
+#include "bmScriptExecutableDirectoryAction.h"
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 
 namespace bm {
 
 /** */
-ScriptGridExecutableDirectoryAction::ScriptGridExecutableDirectoryAction()
+ScriptExecutableDirectoryAction::ScriptExecutableDirectoryAction()
 : ScriptAction()
 {
 }
 
 /** */
-ScriptGridExecutableDirectoryAction::~ScriptGridExecutableDirectoryAction()
+ScriptExecutableDirectoryAction::~ScriptExecutableDirectoryAction()
 {
 }
 
 /** */
-bool ScriptGridExecutableDirectoryAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptExecutableDirectoryAction::TestParam(ScriptError* error,int linenumber)
 {
   if (m_Parameters.size() <1)
     {
-    error->SetError(MString("No enough parameter for GridExecutableDirectory"),linenumber);
+    error->SetError(MString("No enough parameter for ExecutableDirectory"),linenumber);
     return false;
     }
 
@@ -47,17 +47,17 @@ bool ScriptGridExecutableDirectoryAction::TestParam(ScriptError* error,int linen
 }
 
 /** */
-MString ScriptGridExecutableDirectoryAction::Help()
+MString ScriptExecutableDirectoryAction::Help()
 {
-  return "GridExecutableDirectory(GridExecutableDirectory)";
+  return "ExecutableDirectory(ExecutableDirectory)";
 }
 
 /** */
-void ScriptGridExecutableDirectoryAction::Execute()
+void ScriptExecutableDirectoryAction::Execute()
 {
   if(m_GridModule)
     {
-    m_GridModule->SetGridExecutableDirectory( 
+    m_GridModule->SetExecutableDirectory( 
       m_Manager->Convert(m_Parameters[0]).fromVariable().toChar());
     }
 }

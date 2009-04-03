@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptGridExecutableDirectoryAction.h
+  Module:    bmScriptGridRequirementsAction.h
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,25 +13,23 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#ifndef __ScriptGridExecutableDirectoryAction_h_
-#define __ScriptGridExecutableDirectoryAction_h_
+#ifndef __ScriptGridRequirementsAction_h_
+#define __ScriptGridRequirementsAction_h_
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <vector>
-#include <iostream>
-#include "MString.h"
+#include <string>
 #include "bmScriptAction.h"
 
 namespace bm {
 
-class ScriptGridExecutableDirectoryAction : public ScriptAction
+class ScriptGridRequirementsAction : public ScriptAction
 {
 public:
-  ScriptGridExecutableDirectoryAction();
-  ~ScriptGridExecutableDirectoryAction();
+  ScriptGridRequirementsAction();
+  ~ScriptGridRequirementsAction();
   void Execute();
   bool TestParam(ScriptError* error,int linenumber);
   MString Help();

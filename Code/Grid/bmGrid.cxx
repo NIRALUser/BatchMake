@@ -28,16 +28,12 @@ Grid::Grid()
   m_CurrentScopeFile = "";
   m_DataHost = "";
   m_OutputHost = "";
-  m_OutputDirectory = "";
-  m_DataDirectory = "";
   m_Distributed = false; // by default everything is sequential
   m_SingleNode = false;
   m_SingleNodeTransition = false;
   m_DistributedTransition = false;
   m_MaxNodes = -1;
   m_Grouping = true;
-  m_GridTempDirectory = "";
-  m_ExecutableDirectory = "";
   m_NextAppIsAfterEndBarrier = false;
   m_CurrentScope = 0;
   m_TransferFiles = ALL;
@@ -182,7 +178,7 @@ void Grid::AddApplication(ApplicationWrapper* app,const char* datadir,const char
     }
   else
     {
-    (*app).SetDataDirectory(m_DataDirectory.c_str());
+    (*app).SetDataDirectory(m_InputDirectory.c_str());
     }
 
    if(outputdir)
@@ -247,9 +243,9 @@ void Grid::WriteGAD()
     return;
     }
   std::string filename;
-  if( !m_OutputDirectory.empty() )
+  if( !m_WorkingDirectory.empty() )
     {
-    filename = m_OutputDirectory + "/" + m_FileName;
+    filename = m_WorkingDirectory + "/" + m_FileName;
     }
   else
     {
@@ -306,18 +302,18 @@ void Grid::WriteGAD()
       }
 
      
-  // If this is not the first application 
-  if(it != m_ApplicationsList.begin()
-    && ((*it).GetSingleNode() == 2)
-    && (applicationComponent>applicationChunckSize)
-    )
-    {
-    applicationComponent=0;
-    fprintf(fic,"</componentActionList>\n");
-    fprintf(fic,"</applicationComponent>\n\n");
-    fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum); 
-    fprintf(fic,"<componentActionList>\n");
-    }
+    // If this is not the first application 
+    if(it != m_ApplicationsList.begin()
+       && ((*it).GetSingleNode() == 2)
+       && (applicationComponent>applicationChunckSize)
+       )
+      {
+      applicationComponent=0;
+      fprintf(fic,"</componentActionList>\n");
+      fprintf(fic,"</applicationComponent>\n\n");
+      fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum); 
+      fprintf(fic,"<componentActionList>\n");
+      }
 
     std::vector<std::string> dependencies;
 
@@ -327,429 +323,429 @@ void Grid::WriteGAD()
     // Check if we have external data
     // For now we skip bmGridStore
     if( strcmp((*it).GetName().c_str(),"bmGridStore")
-       && strcmp((*it).GetName().c_str(),"bmGridSend"))
+        && strcmp((*it).GetName().c_str(),"bmGridSend"))
       {
-     while(itParams != params.end())
-      {
-      if((*itParams).GetExternalData() == 1 
-         && (*itParams).GetValue().length() > 0
-         && !(*it).GetDataHost().empty() ) // DATA_IN
+      while(itParams != params.end())
         {
-        fprintf(fic," <componentAction type=\"DataRelocation\" name=\"InputFile%d\">\n",inFile);
-        fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetDataHost().c_str());
-        fprintf(fic,"  <parameter name=\"Description\" value=\"\"/>\n");
-        fprintf(fic,"  <parameter name=\"Direction\" value=\"In\"/>\n");
-        fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
-        fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s%s\"/>\n",(*it).GetDataDirectory().c_str(),
-                                                                  this->AddQuotes((*itParams).GetValue().toChar()).c_str());
-        fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",m_GridTempDirectory.c_str(),
-                              this->AddQuotes(this->GetFilename((*itParams).GetValue().toChar()).c_str()).c_str());
-     
-        if(dependApp)
+        if((*itParams).GetExternalData() == 1 
+           && (*itParams).GetValue().length() > 0
+           && !(*it).GetDataHost().empty() ) // DATA_IN
           {
-          fprintf(fic,"  <dependency name=\"%s\" status=\"done\"/>\n",dependApp->GetDependencyTag().c_str());
+          fprintf(fic," <componentAction type=\"DataRelocation\" name=\"InputFile%d\">\n",inFile);
+          fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetDataHost().c_str());
+          fprintf(fic,"  <parameter name=\"Description\" value=\"\"/>\n");
+          fprintf(fic,"  <parameter name=\"Direction\" value=\"In\"/>\n");
+          fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
+          fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s%s\"/>\n",(*it).GetDataDirectory().c_str(),
+                  this->AddQuotes((*itParams).GetValue().toChar()).c_str());
+          fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",m_GridTempDirectory.c_str(),
+                  this->AddQuotes(this->GetFilename((*itParams).GetValue().toChar()).c_str()).c_str());
+     
+          if(dependApp)
+            {
+            fprintf(fic,"  <dependency name=\"%s\" status=\"done\"/>\n",dependApp->GetDependencyTag().c_str());
+            }
+          fprintf(fic," </componentAction>\n");
+          char* dep = new char[255];
+          sprintf(dep,"InputFile%d",inFile);
+          (*it).SetDependencyTag(dep);
+          dependencies.push_back(dep);
+          delete [] dep;
+          inFile++;
           }
-        fprintf(fic," </componentAction>\n");
-        char* dep = new char[255];
-        sprintf(dep,"InputFile%d",inFile);
-        (*it).SetDependencyTag(dep);
-        dependencies.push_back(dep);
-        delete [] dep;
-        inFile++;
+        itParams++;
+        }
+
+      } // end bmGridStore
+
+    char* temp = new char[10];
+    sprintf(temp,"app%d",appnum);
+    (*it).SetDependencyTag(temp);
+    delete [] temp;
+
+    fprintf(fic," <componentAction type=\"JobSubmission\" name=\"app%d\">\n",appnum);
+
+    // We assume that the current application is in the path of the node
+    std::string applicationName = (*it).GetApplicationPath();
+    int pos = applicationName.find_last_of("/");
+    int pos2 = applicationName.find_last_of("\\");
+
+    if(pos2 > pos)
+      {
+      pos = pos2;
+      }
+
+    if(pos != -1)
+      {
+      applicationName = applicationName.substr(pos+1,applicationName.size()-pos-1);
+      }
+
+    fprintf(fic,"  <parameter name=\"Executable\" value=\"%s%s\"/>\n",
+            m_ExecutableDirectory.c_str(),applicationName.c_str());
+
+    std::string commandline = "";
+    itParams = params.begin();
+    unsigned int nParams = 0;
+    while(itParams != params.end())
+      {
+      //if((*itParams).IsValueDefined() && (!(*itParams).GetParent() || !m_Grouping))
+      if((*itParams).IsValueDefined() && (!m_Grouping))
+        {
+        if(nParams>0)
+          {
+          commandline += " ";
+          }
+      
+        bool hasChildren = false;
+      
+        if(!m_Grouping)
+          {
+          std::string command = (*itParams).GetName().toChar();
+          command += ".";
+          std::vector<ApplicationWrapperParam>::const_iterator itParamsChildren = params.begin();
+          while(itParamsChildren != params.end())
+            {
+            std::string child = (*itParamsChildren).GetName().toChar();        
+            if(child.find(command)==0)
+              {
+              hasChildren = true;
+              break;
+              }
+            itParamsChildren++;
+            }
+          }
+      
+        if(hasChildren && !(*itParams).GetParamsSubSize())
+          {
+          commandline += " ";
+          commandline += (*itParams).GetValue().toChar(); 
+          commandline += " ";
+          }
+        else
+          {
+          // If this is an input file we use the correct filename
+          // WARNING WORKS ONLY IF ONE INPUT IMAGE
+          if((*itParams).GetExternalData() == 1 
+             && (*itParams).GetValue().length() > 0
+             && !(*it).GetDataHost().empty()
+             && (strcmp((*it).GetName().c_str(),"bmGridStore") 
+                 && strcmp((*it).GetName().c_str(),"bmGridSend"))
+             ) // DATA_IN
+            {
+            char* num = new char[10];
+            sprintf(num,"%d",inFile-1);
+            commandline += "{InputFile";
+            commandline += num;
+            commandline += "}";
+            delete [] num; 
+            }
+          else
+            {
+            commandline += "{";
+            commandline += (*itParams).GetName().replaceChar('.','_').toChar();
+            commandline += "}";
+            }
+          }
+
+        // This is a hack because grouping was not working...
+        if(!m_Grouping && !hasChildren)
+          {
+          std::vector<ApplicationWrapperParam>::const_iterator itChildren = itParams;
+ 
+          std::string value = (*itParams).GetValue().toChar();          
+          // Extract the values
+          std::vector<std::string> values;
+          unsigned int startWord = 0;
+          for(unsigned int i=0;i<value.size();i++)
+            {
+            if(value[i]=='\"')
+              {
+              startWord=i+1;
+              // Go to the next '\"' and increase the nValues
+              long int pos = value.find("\"",i+1);
+              if(pos != -1)
+                {
+                values.push_back(value.substr(startWord,pos-i-1));
+                i=pos+1;
+                }
+              }
+            else if(value[i] == ' ')
+              {
+              values.push_back(value.substr(startWord,i-startWord));
+              startWord =i+1; // WARNING this is not always true!
+              }
+            }
+
+          // ignoring the first value
+          std::vector<std::string>::const_iterator itValues = values.begin();
+          if(values.size()>0)
+            {
+            itValues++;
+            }
+
+          unsigned int numid = 1;
+          while(itValues!=values.end())
+            {
+            char* num = new char[10];
+            sprintf(num,"%d",numid);
+            commandline += " {";
+            commandline += (*itParams).GetName().replaceChar('.','_').toChar();
+            commandline += "_";
+            commandline += num;
+            commandline += "}";
+            delete [] num; 
+            itValues++;
+            numid++;
+            }
+          }
+        nParams++;
         }
       itParams++;
       }
 
-      } // end bmGridStore
+    fprintf(fic,"  <parameter name=\"Arguments\"  value=\"%s\"/>\n",commandline.c_str());
 
-  char* temp = new char[10];
-  sprintf(temp,"app%d",appnum);
-  (*it).SetDependencyTag(temp);
-  delete [] temp;
-
-  fprintf(fic," <componentAction type=\"JobSubmission\" name=\"app%d\">\n",appnum);
-
-  // We assume that the current application is in the path of the node
-  std::string applicationName = (*it).GetApplicationPath();
-  int pos = applicationName.find_last_of("/");
-  int pos2 = applicationName.find_last_of("\\");
-
-  if(pos2 > pos)
-    {
-    pos = pos2;
-    }
-
-  if(pos != -1)
-    {
-    applicationName = applicationName.substr(pos+1,applicationName.size()-pos-1);
-    }
-
-  fprintf(fic,"  <parameter name=\"Executable\" value=\"%s%s\"/>\n",
-                                       m_ExecutableDirectory.c_str(),applicationName.c_str());
-
-  std::string commandline = "";
-  itParams = params.begin();
-  unsigned int nParams = 0;
-  while(itParams != params.end())
-    {
-    //if((*itParams).IsValueDefined() && (!(*itParams).GetParent() || !m_Grouping))
-    if((*itParams).IsValueDefined() && (!m_Grouping))
-	  {
-      if(nParams>0)
-        {
-        commandline += " ";
-        }
-      
-      bool hasChildren = false;
-      
-      if(!m_Grouping)
-        {
-        std::string command = (*itParams).GetName().toChar();
-        command += ".";
-        std::vector<ApplicationWrapperParam>::const_iterator itParamsChildren = params.begin();
-        while(itParamsChildren != params.end())
-          {
-          std::string child = (*itParamsChildren).GetName().toChar();        
-          if(child.find(command)==0)
-            {
-            hasChildren = true;
-            break;
-            }
-          itParamsChildren++;
-          }
-        }
-      
-      if(hasChildren && !(*itParams).GetParamsSubSize())
-        {
-        commandline += " ";
-        commandline += (*itParams).GetValue().toChar(); 
-        commandline += " ";
-        }
-      else
-        {
-        // If this is an input file we use the correct filename
-        // WARNING WORKS ONLY IF ONE INPUT IMAGE
-        if((*itParams).GetExternalData() == 1 
-         && (*itParams).GetValue().length() > 0
-         && !(*it).GetDataHost().empty()
-         && (strcmp((*it).GetName().c_str(),"bmGridStore") 
-         && strcmp((*it).GetName().c_str(),"bmGridSend"))
-         ) // DATA_IN
-          {
-          char* num = new char[10];
-          sprintf(num,"%d",inFile-1);
-          commandline += "{InputFile";
-          commandline += num;
-          commandline += "}";
-          delete [] num; 
-          }
-        else
-          {
-          commandline += "{";
-          commandline += (*itParams).GetName().replaceChar('.','_').toChar();
-          commandline += "}";
-          }
-        }
-
-      // This is a hack because grouping was not working...
-      if(!m_Grouping && !hasChildren)
-        {
-        std::vector<ApplicationWrapperParam>::const_iterator itChildren = itParams;
- 
-        std::string value = (*itParams).GetValue().toChar();          
-        // Extract the values
-        std::vector<std::string> values;
-        unsigned int startWord = 0;
-        for(unsigned int i=0;i<value.size();i++)
-          {
-          if(value[i]=='\"')
-            {
-            startWord=i+1;
-            // Go to the next '\"' and increase the nValues
-            long int pos = value.find("\"",i+1);
-            if(pos != -1)
-              {
-              values.push_back(value.substr(startWord,pos-i-1));
-              i=pos+1;
-              }
-            }
-          else if(value[i] == ' ')
-            {
-            values.push_back(value.substr(startWord,i-startWord));
-            startWord =i+1; // WARNING this is not always true!
-            }
-          }
-
-        // ignoring the first value
-        std::vector<std::string>::const_iterator itValues = values.begin();
-        if(values.size()>0)
-          {
-          itValues++;
-          }
-
-        unsigned int numid = 1;
-        while(itValues!=values.end())
-          {
-          char* num = new char[10];
-          sprintf(num,"%d",numid);
-          commandline += " {";
-          commandline += (*itParams).GetName().replaceChar('.','_').toChar();
-          commandline += "_";
-          commandline += num;
-          commandline += "}";
-          delete [] num; 
-          itValues++;
-          numid++;
-          }
-        }
-      nParams++;
-      }
-    itParams++;
-    }
-
-  fprintf(fic,"  <parameter name=\"Arguments\"  value=\"%s\"/>\n",commandline.c_str());
-
-  // Write each argument out
-  itParams = params.begin();
-  nParams = 1;
-  while(itParams != params.end())
-    {
-    //if((*itParams).IsValueDefined() && !(*itParams).GetParent())
-	if((*itParams).IsValueDefined() && !(*itParams).GetParamsSubSize())
+    // Write each argument out
+    itParams = params.begin();
+    nParams = 1;
+    while(itParams != params.end())
       {
-      if((*itParams).GetType() == ApplicationWrapperParam::Flag)
+      //if((*itParams).IsValueDefined() && !(*itParams).GetParent())
+      if((*itParams).IsValueDefined() && !(*itParams).GetParamsSubSize())
         {
-        std::string optional = "false";
-        if((*itParams).GetOptional())
-         {
-         optional = "true";
-         }
+        if((*itParams).GetType() == ApplicationWrapperParam::Flag)
+          {
+          std::string optional = "false";
+          if((*itParams).GetOptional())
+            {
+            optional = "true";
+            }
 
-        std::string syntax = (*itParams).GetValue().toChar();
+          std::string syntax = (*itParams).GetValue().toChar();
 
-        std::vector<ApplicationWrapperParam>::const_iterator itParent = itParams;
-        itParent++;
+          std::vector<ApplicationWrapperParam>::const_iterator itParent = itParams;
+          itParent++;
 
-        while(itParent!=params.end())
-		  {
-		  const std::vector<ApplicationWrapperParamSub> children = itParent->GetParamsSub();
-		  std::vector<ApplicationWrapperParamSub>::const_iterator itChildren = children.begin();
-		  while(itChildren!=children.end())
-		    {
-            syntax += " {";
-            syntax += (*itChildren).GetName().toChar();
-            syntax += "}";
-
-            // Check if we have only one value
-            std::string value = (*itChildren).GetValue().toChar();
-            unsigned int nValues = 0;
-            for(unsigned int i=0;i<value.size();i++)
+          while(itParent!=params.end())
+            {
+            const std::vector<ApplicationWrapperParamSub> children = itParent->GetParamsSub();
+            std::vector<ApplicationWrapperParamSub>::const_iterator itChildren = children.begin();
+            while(itChildren!=children.end())
               {
-              if(value[i]=='\"')
+              syntax += " {";
+              syntax += (*itChildren).GetName().toChar();
+              syntax += "}";
+
+              // Check if we have only one value
+              std::string value = (*itChildren).GetValue().toChar();
+              unsigned int nValues = 0;
+              for(unsigned int i=0;i<value.size();i++)
                 {
-                // Go to the next '\"' and increase the nValues
-                long int pos = value.find("\"",i+1);
-                if(pos != -1)
+                if(value[i]=='\"')
                   {
-                  i=pos+1;
+                  // Go to the next '\"' and increase the nValues
+                  long int pos = value.find("\"",i+1);
+                  if(pos != -1)
+                    {
+                    i=pos+1;
+                    nValues++;
+                    }
+                  }
+                else if(value[i] == ' ')
+                  {
                   nValues++;
                   }
                 }
-              else if(value[i] == ' ')
+
+              for(unsigned int j=1;j<nValues;j++)
                 {
-                nValues++;
+                syntax += " {";
+                syntax += (*itChildren).GetName().toChar();
+                char* num = new char[10];
+                sprintf(num,"%d",j);
+                syntax += "_";
+                syntax += num;
+                syntax += "}";
+                delete [] num;
                 }
+              itChildren++;
               }
+            itParent++;
+            }
 
-             for(unsigned int j=1;j<nValues;j++)
-               {
-               syntax += " {";
-               syntax += (*itChildren).GetName().toChar();
-               char* num = new char[10];
-               sprintf(num,"%d",j);
-               syntax += "_";
-               syntax += num;
-               syntax += "}";
-               delete [] num;
-               }
-			 itChildren++;
-		    }
+          itParent = itParams;
           itParent++;
-          }
-
-        itParent = itParams;
-        itParent++;
 
        
-        // If the group has no child we plan accordingly
-        if(itParent == params.end())
-          {
-          fprintf(fic,"  <argument name=\"%s\" value=\"%s\"/>\n"
-                         ,(*itParams).GetName().replaceChar('.','_').toChar()
-                         ,this->AddQuotes(syntax).c_str());
-          }
-        else
-          {
-          if(m_Grouping)
-            { 
-            fprintf(fic,"  <group name=\"%s\" syntax=\"%s\" optional=\"%s\" selected=\"true\">\n"
-                                ,(*itParams).GetName().toChar()
-                                ,syntax.c_str()
-                                ,optional.c_str());
+          // If the group has no child we plan accordingly
+          if(itParent == params.end())
+            {
+            fprintf(fic,"  <argument name=\"%s\" value=\"%s\"/>\n"
+                    ,(*itParams).GetName().replaceChar('.','_').toChar()
+                    ,this->AddQuotes(syntax).c_str());
             }
-        while(itParent!=params.end())
-		  {
-		  const std::vector<ApplicationWrapperParamSub> children = itParent->GetParamsSub();
-		  std::vector<ApplicationWrapperParamSub>::const_iterator itChildren = children.begin();
-		  while(itChildren!=children.end())
-		    {
-            std::string value = (*itParent).GetValue().toChar();          
-            // Extract the values
-            std::vector<std::string> values;
-            unsigned int startWord = 0;
-            unsigned int i;
-            for(i=0;i<value.size();i++)
+          else
+            {
+            if(m_Grouping)
+              { 
+              fprintf(fic,"  <group name=\"%s\" syntax=\"%s\" optional=\"%s\" selected=\"true\">\n"
+                      ,(*itParams).GetName().toChar()
+                      ,syntax.c_str()
+                      ,optional.c_str());
+              }
+            while(itParent!=params.end())
               {
-              if(value[i]=='\"')
+              const std::vector<ApplicationWrapperParamSub> children = itParent->GetParamsSub();
+              std::vector<ApplicationWrapperParamSub>::const_iterator itChildren = children.begin();
+              while(itChildren!=children.end())
                 {
-                startWord=i+1;
-                // Go to the next '\"' and increase the nValues
-                long int pos = value.find("\"",i+1);
-                if(pos != -1)
+                std::string value = (*itParent).GetValue().toChar();          
+                // Extract the values
+                std::vector<std::string> values;
+                unsigned int startWord = 0;
+                unsigned int i;
+                for(i=0;i<value.size();i++)
                   {
-                  values.push_back(value.substr(startWord,pos-i-1));
-                  i=pos+1;
+                  if(value[i]=='\"')
+                    {
+                    startWord=i+1;
+                    // Go to the next '\"' and increase the nValues
+                    long int pos = value.find("\"",i+1);
+                    if(pos != -1)
+                      {
+                      values.push_back(value.substr(startWord,pos-i-1));
+                      i=pos+1;
+                      }
+                    }
+                  else if(value[i] == ' ')
+                    {
+                    values.push_back(value.substr(startWord,i-startWord));
+                    startWord =i+1; // WARNING this is not always true!
+                    }
                   }
-                }
-              else if(value[i] == ' ')
-                {
-                values.push_back(value.substr(startWord,i-startWord));
-                startWord =i+1; // WARNING this is not always true!
-                }
-              }
 
-            // If the size of the list is null, something is wrong, well we have only one value
-            if(values.size() == 0)
-              {
-              values.push_back(value);
-              }
+                // If the size of the list is null, something is wrong, well we have only one value
+                if(values.size() == 0)
+                  {
+                  values.push_back(value);
+                  }
 
-
-            std::vector<std::string>::const_iterator itV=values.begin();
-            i=0;
-            while(itV!=values.end())
-              {
-              if(itV==values.begin())
-                {
-                fprintf(fic,"   <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itParent).GetName().replaceChar('.','_').toChar(),this->AddQuotes((*itV)).c_str(),
-                           (*itParent).GetTypeAsChar());
-                }
-              else
-                {
-                fprintf(fic,"   <argument name=\"%s_%d\" value=\"%s\" type=\"%s\"/>\n",
-                             (*itParent).GetName().replaceChar('.','_').toChar(),i,this->AddQuotes((*itV)).c_str(),
-                             (*itParent).GetTypeAsChar());
+ 
+                std::vector<std::string>::const_iterator itV=values.begin();
+                i=0;
+                while(itV!=values.end())
+                  {
+                  if(itV==values.begin())
+                    {
+                    fprintf(fic,"   <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
+                            (*itParent).GetName().replaceChar('.','_').toChar(),this->AddQuotes((*itV)).c_str(),
+                            (*itParent).GetTypeAsChar());
+                    }
+                  else
+                    {
+                    fprintf(fic,"   <argument name=\"%s_%d\" value=\"%s\" type=\"%s\"/>\n",
+                            (*itParent).GetName().replaceChar('.','_').toChar(),i,this->AddQuotes((*itV)).c_str(),
+                            (*itParent).GetTypeAsChar());
            
+                    }
+                  i++;
+                  itV++;
+                  }
+                itChildren++;
                 }
-              i++;
-              itV++;
+              itParent++;
               }
-			itChildren++;
-		    }
-          itParent++;
-          }
-        if(m_Grouping)
-          {    
-          fprintf(fic,"  </group>\n");
-          }
-          }
-        }
-      else
-        {
-        // If this is an input file we use the correct filename
-        // WARNING WORKS ONLY IF ONE INPUT IMAGE
-        if((*itParams).GetExternalData() == 1 
-         && (*itParams).GetValue().length() > 0
-         && !(*it).GetDataHost().empty()
-         && (strcmp((*it).GetName().c_str(),"bmGridStore") 
-         && strcmp((*it).GetName().c_str(),"bmGridSend"))
-         ) // DATA_IN
-          {
-          // Do nothing
+            if(m_Grouping)
+              {    
+              fprintf(fic,"  </group>\n");
+              }
+            }
           }
         else
           {
-        MString value2 = (*itParams).GetValue();
-        value2 = value2.removeChar('\"');
-        std::string value3 = value2.toChar();
-        fprintf(fic,"  <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
-                           (*itParams).GetName().toChar(),this->AddQuotes(value3).c_str(),
-                           (*itParams).GetTypeAsChar());
+          // If this is an input file we use the correct filename
+          // WARNING WORKS ONLY IF ONE INPUT IMAGE
+          if((*itParams).GetExternalData() == 1 
+             && (*itParams).GetValue().length() > 0
+             && !(*it).GetDataHost().empty()
+             && (strcmp((*it).GetName().c_str(),"bmGridStore") 
+                 && strcmp((*it).GetName().c_str(),"bmGridSend"))
+             ) // DATA_IN
+            {
+            // Do nothing
+            }
+          else
+            {
+            MString value2 = (*itParams).GetValue();
+            value2 = value2.removeChar('\"');
+            std::string value3 = value2.toChar();
+            fprintf(fic,"  <argument name=\"%s\" value=\"%s\" type=\"%s\"/>\n",
+                    (*itParams).GetName().toChar(),this->AddQuotes(value3).c_str(),
+                    (*itParams).GetTypeAsChar());
+            }
           }
         }
+      nParams++;
+      itParams++;
       }
-    nParams++;
-    itParams++;
-    }
 
-  std::vector<std::string>::const_iterator itDep = dependencies.begin();
-  while(itDep != dependencies.end())
-    {
-    fprintf(fic,"  <dependency name=\"%s\"/>\n",(*itDep).c_str());
-    itDep++;  
-    }
-
-  if(dependencies.size() == 0 && dependApp)
-    {
-    fprintf(fic,"  <dependency name=\"%s\"/>\n",dependApp->GetDependencyTag().c_str());
-    }
-  
-  fprintf(fic," </componentAction>\n");
-  dependencies.clear();    
-  
-  char* appName = new char[255];
-  sprintf(appName,"app%d",appnum);
-
-  itParams = params.begin();
-
-  if(strcmp((*it).GetName().c_str(),"bmGridStore") 
-    && strcmp((*it).GetName().c_str(),"bmGridSend"))
-    {
-  while(itParams != params.end())
-    {
-    if((*itParams).GetExternalData() == 2 
-      && (*itParams).GetValue().length() > 0
-      && !(*it).GetOutputHost().empty()) // DATA_OUT
+    std::vector<std::string>::const_iterator itDep = dependencies.begin();
+    while(itDep != dependencies.end())
       {
-      fprintf(fic," <componentAction type=\"DataRelocation\" name=\"OutputFile%d\">\n",outFile);
-      fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetOutputHost().c_str());
-      fprintf(fic,"  <parameter name=\"Description\" value=\"\"/>\n");
-      fprintf(fic,"  <parameter name=\"Direction\" value=\"Out\"/>\n");
-      fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
-
-      MString valwithoutquote = (*itParams).GetValue().removeChar('"');
-
-      fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s\"/>\n",valwithoutquote.toChar());
-      fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",(*it).GetOutputDirectory().c_str(),valwithoutquote.toChar());
-      fprintf(fic," <dependency name=\"%s\" status=\"done\"/>\n",appName);
-      fprintf(fic," </componentAction>\n");
-      char* dep = new char[255];
-      sprintf(dep,"OutputFile%d",outFile);
-      (*it).SetDependencyTag(dep);
-      dependencies.push_back(dep);
-      delete [] dep;
-      outFile++;
+      fprintf(fic,"  <dependency name=\"%s\"/>\n",(*itDep).c_str());
+      itDep++;  
       }
-    itParams++;
-    }
-    } // end bmGridStore
 
-  delete [] appName;
-  it++;
-  appnum++;
-  applicationComponent++;
-  }
+    if(dependencies.size() == 0 && dependApp)
+      {
+      fprintf(fic,"  <dependency name=\"%s\"/>\n",dependApp->GetDependencyTag().c_str());
+      }
+  
+    fprintf(fic," </componentAction>\n");
+    dependencies.clear();    
+  
+    char* appName = new char[255];
+    sprintf(appName,"app%d",appnum);
+
+    itParams = params.begin();
+
+    if(strcmp((*it).GetName().c_str(),"bmGridStore") 
+       && strcmp((*it).GetName().c_str(),"bmGridSend"))
+      {
+      while(itParams != params.end())
+        {
+        if((*itParams).GetExternalData() == 2 
+           && (*itParams).GetValue().length() > 0
+           && !(*it).GetOutputHost().empty()) // DATA_OUT
+          {
+          fprintf(fic," <componentAction type=\"DataRelocation\" name=\"OutputFile%d\">\n",outFile);
+          fprintf(fic,"  <parameter name=\"Host\" value=\"%s\"/>\n",(*it).GetOutputHost().c_str());
+          fprintf(fic,"  <parameter name=\"Description\" value=\"\"/>\n");
+          fprintf(fic,"  <parameter name=\"Direction\" value=\"Out\"/>\n");
+          fprintf(fic,"  <parameter name=\"Protocol\" value=\"gsiftp\"/>\n");
+
+          MString valwithoutquote = (*itParams).GetValue().removeChar('"');
+
+          fprintf(fic,"  <parameter name=\"SourceDataPath\" value=\"%s\"/>\n",valwithoutquote.toChar());
+          fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",(*it).GetOutputDirectory().c_str(),valwithoutquote.toChar());
+          fprintf(fic," <dependency name=\"%s\" status=\"done\"/>\n",appName);
+          fprintf(fic," </componentAction>\n");
+          char* dep = new char[255];
+          sprintf(dep,"OutputFile%d",outFile);
+          (*it).SetDependencyTag(dep);
+          dependencies.push_back(dep);
+          delete [] dep;
+          outFile++;
+          }
+        itParams++;
+        }
+      } // end bmGridStore
+
+    delete [] appName;
+    it++;
+    appnum++;
+    applicationComponent++;
+    }
 
   fprintf(fic,"</componentActionList>\n");
   fprintf(fic,"</applicationComponent>\n\n");
@@ -767,9 +763,9 @@ void Grid::WriteShell()
     return;
     }
   std::string filename;
-  if( !m_OutputDirectory.empty() )
+  if( !m_WorkingDirectory.empty() )
     {
-    filename = m_OutputDirectory + "/" + m_FileName;
+    filename = m_WorkingDirectory + "/" + m_FileName;
     }
   else
     {
@@ -785,7 +781,7 @@ void Grid::WriteShell()
 
   // Write the header
   fprintf(fic,"# Script generated by BatchMake (c) Kitware Inc.\n");
-  fprintf(fic,"# (c) Kitware Inc 2007\n");
+  fprintf(fic,"# (c) Kitware Inc 2009\n");
   fprintf(fic,"# More information at: http://www.batchmake.org\n\n");
 
   fprintf(fic,"#!/bin/bash\n\n");
@@ -825,9 +821,9 @@ void Grid::WriteCondor()
     return;
     }
   std::string filename;
-  if( !m_OutputDirectory.empty() )
+  if( !m_WorkingDirectory.empty() )
     {
-    filename = m_OutputDirectory + "/" + m_FileName;
+    filename = m_WorkingDirectory + "/" + m_FileName;
     }
   else
     {
@@ -843,13 +839,13 @@ void Grid::WriteCondor()
   if( !dagfile )
     {
     std::cerr << "Grid::WriteCondor() : Cannot create dagman file "
-              << m_FileName << ". You may have forget to set the "
-              << "OutputDirectory." << std::endl;
+              << m_FileName << ". The dagman file path shall be relative "
+              << "to the Working directory." << std::endl;
     return;
     }
   // Write the header
   fprintf(dagfile,"# Script generated by BatchMake (c) Insight Software Consortium\n");
-  fprintf(dagfile,"# (c) Kitware Inc 2007\n");
+  fprintf(dagfile,"# (c) Kitware Inc 2009\n");
   fprintf(dagfile,"# More information at: http://www.batchmake.org\n\n");
 
   // Add the executables
@@ -857,8 +853,8 @@ void Grid::WriteCondor()
   std::vector<ApplicationWrapper>::iterator it = m_ApplicationsList.begin();
   while(it != m_ApplicationsList.end())
     {
-    char* tmp = new char[10];
-    sprintf(tmp,"%d",id);
+    char* idStr = new char[10];
+    sprintf(idStr,"%d",id);
     std::string jobFileName = itksys::SystemTools::GetFilenamePath( filename );
     if( !jobFileName.empty() )
       {
@@ -866,8 +862,10 @@ void Grid::WriteCondor()
       }
     jobFileName += itksys::SystemTools::GetFilenameWithoutExtension( filename );
     jobFileName += ".";
-    jobFileName += tmp;
+    jobFileName += idStr;
     jobFileName += itksys::SystemTools::GetFilenameExtension( filename );
+
+    delete [] idStr; 
 
     DAGnode dagNode;
     dagNode.id = id;
@@ -906,8 +904,8 @@ void Grid::WriteCondor()
       fprintf(dagfile,"Job job%d %s\n",id, jobFileName.c_str());
       }
 
-    delete [] tmp;
- 
+    std::cout << "Generating Condor File: " << jobFileName.c_str() << std::endl;
+
     FILE* fic = fopen( jobFileName.c_str(),"wb"); 
     if(!fic)
       {
@@ -917,18 +915,18 @@ void Grid::WriteCondor()
     
     // Write the header
     fprintf(fic,"# Script generated by BatchMake (c) Insight Software Consortium\n");
-    fprintf(fic,"# (c) Kitware Inc 2007\n");
-    fprintf(fic,"# More information at: http://www.batchmake.org\n");
+    fprintf(fic,"# (c) Kitware Inc 2009\n");
+    fprintf(fic,"# More information at: http://www.batchmake.org\n\n");
     
-    fprintf(fic,"universe       = vanilla\n");
-    fprintf(fic,"output         = bmGrid.out.txt\n");
-    fprintf(fic,"error          = bmGrid.error.txt\n");
-    fprintf(fic,"log            = bmGrid.log.txt\n");
-    fprintf(fic,"notification   = NEVER\n");
+    fprintf(fic,"Universe       = vanilla\n");
+    fprintf(fic,"Output         = bmGrid.out.txt\n");
+    fprintf(fic,"Error          = bmGrid.error.txt\n");
+    fprintf(fic,"Log            = bmGrid.log.txt\n");
+    fprintf(fic,"Notification   = NEVER\n");
 
-    if(m_OutputDirectory.size()>0)
+    if(m_WorkingDirectory.size()>0)
       {
-      fprintf(fic,"initialdir     = %s\n",m_OutputDirectory.c_str());
+      fprintf(fic,"Initialdir     = %s\n",m_WorkingDirectory.c_str());
       }
     
     std::string executable = (*it).GetApplicationPath();
@@ -945,12 +943,12 @@ void Grid::WriteCondor()
         itksys::SystemTools::GetFilenameName( executable );
       }
       
-    fprintf(fic,"executable    = %s\n",executable.c_str());
+    fprintf(fic,"Executable    = %s\n",executable.c_str());
 
     // We need to escape double-quotes if any and add the 
     std::string arguments = 
       (*it).GetCurrentCommandLineArguments( true,
-                                            m_DataDirectory,
+                                            m_InputDirectory,
                                             m_OutputDirectory );
     std::size_t posDQ = arguments.find("\"");
     while( posDQ != std::string::npos )
@@ -959,7 +957,7 @@ void Grid::WriteCondor()
       posDQ = arguments.find("\"", posDQ + 1);
       }
 
-    fprintf(fic,"arguments     = \"%s\"\n",arguments.c_str());  
+    fprintf(fic,"Arguments     = \"%s\"\n",arguments.c_str());  
     
     std::string requirements = m_Requirements;
     if( !m_Requirements.empty() && !it->GetRequirements().empty() )
@@ -987,12 +985,12 @@ void Grid::WriteCondor()
 #endif
     if( !requirements.empty() )
       {
-      fprintf( fic, "requirements = %s \n", requirements.c_str() );
+      fprintf( fic, "Requirements = %s \n", requirements.c_str() );
       }
     
-    if( !m_GridOwner.empty() )
+    if( !m_Owner.empty() )
       {
-      fprintf( fic, "+Owner=\"%s\"\n", m_GridOwner.c_str() );
+      fprintf( fic, "+Owner=\"%s\"\n", m_Owner.c_str() );
       }
     
     // Check if we have external data
@@ -1047,7 +1045,7 @@ void Grid::WriteCondor()
       fprintf(fic,"when_to_transfer_output = ON_EXIT_OR_EVICT\n");
       }
 
-    fprintf(fic,"queue 1\n");
+    fprintf(fic,"Queue 1\n");
     it++;
 
   fclose(fic);

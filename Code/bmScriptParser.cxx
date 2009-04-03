@@ -261,10 +261,10 @@ int ScriptParser::RunCondor( const std::string& buffer )
 
 #ifdef BM_GRID
     grid.WriteCondor();
-    // OutputDirectory is correctly set only after Execute() is called
-    if( !grid.GetOutputDirectory().empty() )
+    // WorkingDirectory is correctly set only after Execute() is called
+    if( !grid.GetWorkingDirectory().empty() )
       {
-      scriptfile = grid.GetOutputDirectory() + "/" + grid.GetFileName();
+      scriptfile = grid.GetWorkingDirectory() + "/" + grid.GetFileName();
       }
 #endif
 

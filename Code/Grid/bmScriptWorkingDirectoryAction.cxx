@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptGridOwnerAction.cxx
+  Module:    bmScriptWorkingDirectoryAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,53 +13,54 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#include "bmScriptGridOwnerAction.h"
+#include "bmScriptWorkingDirectoryAction.h"
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 
 namespace bm {
 
 /** */
-ScriptGridOwnerAction::ScriptGridOwnerAction()
+ScriptWorkingDirectoryAction::ScriptWorkingDirectoryAction()
 : ScriptAction()
 {
 }
 
 /** */
-ScriptGridOwnerAction::~ScriptGridOwnerAction()
+ScriptWorkingDirectoryAction::~ScriptWorkingDirectoryAction()
 {
 }
 
 /** */
-bool ScriptGridOwnerAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptWorkingDirectoryAction::TestParam(ScriptError* error,int linenumber)
 {
-  if ( m_Parameters.size() < 1 )
+  if( m_Parameters.size() < 1 )
     {
-    error->SetError(MString("No enough parameter for GridOwner"),linenumber);
+    error->SetError(MString("No enough parameter for WorkingDirectory"),linenumber);
     return false;
     }
 
   for( unsigned int i = 0; i < m_Parameters.size(); ++i )
     {
-    m_Manager->TestConvert(m_Parameters[i],linenumber);
+    m_Manager->TestConvert( m_Parameters[i], linenumber );
     }
   return true;
 }
 
 /** */
-MString ScriptGridOwnerAction::Help()
+MString ScriptWorkingDirectoryAction::Help()
 {
-  return "GridOwner( owner_name )";
+  return "WorkingDirectory( <directory> )";
 }
 
 /** */
-void ScriptGridOwnerAction::Execute()
+void ScriptWorkingDirectoryAction::Execute()
 {
   if(m_GridModule)
     {
-    m_GridModule->SetOwner( 
+    m_GridModule->SetWorkingDirectory(
       m_Manager->Convert(m_Parameters[0]).fromVariable().toChar() );
     }
+  return;
 }
 
 } // end namespace bm

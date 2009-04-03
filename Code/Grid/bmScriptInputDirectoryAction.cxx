@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptDataDirectoryAction.cxx
+  Module:    bmScriptInputDirectoryAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,29 +13,29 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#include "bmScriptDataDirectoryAction.h"
+#include "bmScriptInputDirectoryAction.h"
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 
 namespace bm {
 
 /** */
-ScriptDataDirectoryAction::ScriptDataDirectoryAction()
+ScriptInputDirectoryAction::ScriptInputDirectoryAction()
 : ScriptAction()
 {
 }
 
 /** */
-ScriptDataDirectoryAction::~ScriptDataDirectoryAction()
+ScriptInputDirectoryAction::~ScriptInputDirectoryAction()
 {
 }
 
 /** */
-bool ScriptDataDirectoryAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptInputDirectoryAction::TestParam(ScriptError* error,int linenumber)
 {
   if( m_Parameters.size() < 1 )
     {
-    error->SetError(MString("No enough parameter for DataDirectory"),linenumber);
+    error->SetError(MString("No enough parameter for InputDirectory"),linenumber);
     return false;
     }
 
@@ -47,17 +47,17 @@ bool ScriptDataDirectoryAction::TestParam(ScriptError* error,int linenumber)
 }
 
 /** */
-MString ScriptDataDirectoryAction::Help()
+MString ScriptInputDirectoryAction::Help()
 {
-  return "DataDirectory(myhostnamewiththedata.com)";
+  return "InputDirectory( <directory> )";
 }
 
 /** */
-void ScriptDataDirectoryAction::Execute()
+void ScriptInputDirectoryAction::Execute()
 {
   if(m_GridModule)
     {
-    m_GridModule->SetDataDirectory(
+    m_GridModule->SetInputDirectory(
       m_Manager->Convert(m_Parameters[0]).fromVariable().toChar() );
     }
   return;

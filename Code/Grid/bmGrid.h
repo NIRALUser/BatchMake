@@ -62,24 +62,23 @@ public:
   bool HasCurrentScopeFile();
   const char* GetCurrentScopeFile();
 
-  void SetDataHost(const char* hostname) {m_DataHost = hostname;}
-  void SetOutputHost(const char* hostname) {m_OutputHost = hostname;}
-  void SetDataDirectory(const char* directory) {m_DataDirectory = directory;}
-  void SetOutputDirectory(const char* directory) {m_OutputDirectory = directory;}
-  void SetGridTempDirectory(const char* directory) {m_GridTempDirectory = directory;}
-  void SetGridExecutableDirectory(const char* directory) {m_ExecutableDirectory = directory;}
-  void SetTransferFile(TransfertType transferType) {m_TransferFiles = transferType;}
-  void SetGridOwner( const std::string owner ) { m_GridOwner = owner; }
+  void SetDataHost(const std::string& hostname) {m_DataHost = hostname;}
+  void SetOutputHost(const std::string& hostname) {m_OutputHost = hostname;}
+  void SetInputDirectory(const std::string& directory) {m_InputDirectory = directory;}
+  void SetOutputDirectory(const std::string& directory) {m_OutputDirectory = directory;}
+  void SetExecutableDirectory(const std::string& directory) {m_ExecutableDirectory = directory;}
+  void SetWorkingDirectory(const std::string& directory) {m_WorkingDirectory = directory;}
+  void SetGridTempDirectory(const std::string& directory) {m_GridTempDirectory = directory;}
+  void SetTransferFile( TransfertType transferType ) {m_TransferFiles = transferType;}
+  void SetOwner( const std::string owner ) { m_Owner = owner; }
+  void SetRequirements( const std::string& requirements );
  
-  const std::string& GetDataDirectory()const {return m_DataDirectory;}
+  const std::string& GetInputDirectory()const {return m_InputDirectory;}
   const std::string& GetOutputDirectory()const {return m_OutputDirectory;}
   const std::string& GetGridTempDirectory()const {return m_GridTempDirectory;}
-  const std::string& GetGridExecutableDirectory()const {return m_ExecutableDirectory;}
-  const std::string& GetGridOwner()const { return m_GridOwner; }
-  /** Set/Get the requirements of the whole script. Application specific 
-   *  requirements will be concatenated to it.
-  */
-  void SetRequirements( const std::string& requirements );
+  const std::string& GetExecutableDirectory()const {return m_ExecutableDirectory;}
+  const std::string& GetWorkingDirectory()const {return m_WorkingDirectory;}
+  const std::string& GetOwner()const { return m_Owner; }
   const std::string& GetRequirements( )const;
  
   void SetDistributed(bool val);
@@ -118,12 +117,13 @@ protected:
   std::string m_CurrentScopeFile;
   std::string m_DataHost;
   std::string m_OutputHost;
-  std::string m_DataDirectory;
+  std::string m_InputDirectory;
   std::string m_OutputDirectory;
   std::string m_GridTempDirectory;
   std::string m_ExecutableDirectory;
+  std::string m_WorkingDirectory;
   std::string m_Requirements;
-  std::string m_GridOwner;
+  std::string m_Owner;
 
   bool             m_Distributed;
   bool             m_DistributedTransition;
