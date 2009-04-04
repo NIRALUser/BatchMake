@@ -41,7 +41,7 @@ ENDIF(APPLE)
 # BatchMake version number.  An even minor number corresponds to releases.
 
 SET(BatchMake_VERSION_MAJOR "1")
-SET(BatchMake_VERSION_MINOR "2")
+SET(BatchMake_VERSION_MINOR "3")
 SET(BatchMake_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
