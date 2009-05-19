@@ -279,6 +279,11 @@ SET(BATCHMAKE_PACKAGE_SOURCE OFF)
 INSTALL(FILES ${BatchMake_BINARY_DIR}/bmConfigure.h 
   DESTINATION include/BatchMake)
 
+INSTALL(FILES ${BatchMake_BINARY_DIR}/BatchMakeConfig.cmake 
+  ${BatchMake_BINARY_DIR}/BatchMakeBuildSettings.cmake
+  ${BatchMake_SOURCE_DIR}/CMake/ExportConfiguration/UseBatchMake.cmake
+  DESTINATION lib/BatchMake)
+
 IF(BATCHMAKE_PACKAGE_SOURCE)
   INSTALL(FILES CMakeLists.txt Copyright.txt ReadMe.txt DartConfig.cmake
     DESTINATION source/BatchMake)
