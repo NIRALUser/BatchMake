@@ -17,6 +17,7 @@
 #include <iostream>
 #include <cstring>
 #include <itksys/SystemTools.hxx>
+#include <string.h>
 
 ApplicationWrapperParam::ApplicationWrapperParam()
 {

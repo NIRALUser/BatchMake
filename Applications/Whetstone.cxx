@@ -1,6 +1,7 @@
 #include "Whetstone.h"
 
 #include <cmath>
+#include <math.h>
 #include <cstdlib>
 #include <iostream>
 

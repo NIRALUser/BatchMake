@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "BatchMakeUtilities.h"
 
 #include "bmModuleParameterGroup.h"

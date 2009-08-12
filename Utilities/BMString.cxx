@@ -14,6 +14,8 @@
 =========================================================================*/
 
 #include "BMString.h"
+#include <string.h>
+#include <stdlib.h>
 #include <cstring> // strlen
 #include <cstdlib> // really needed ?
 #include <cctype>
@@ -22,6 +24,21 @@
 #include <string>
 #include <algorithm>
 #include <iterator>
+
+struct upper {
+  int operator()(int c)
+  {
+    return std::toupper(c);
+  }
+};
+
+struct lower {
+  int operator()(int c)
+  {
+    return std::tolower(c);
+  }
+};
+
 
 BMString::BMString()
 {
@@ -548,17 +565,23 @@ BMString BMString::replaceCopy(const char* key,const char* key2)const
   return res;
 }
 
+/* ---------------------------------*/
+
+
 BMString& BMString::toLower()
 {
   std::transform( m_value.begin(), m_value.end(), 
-                  m_value.begin(), static_cast<int(*)(int)>(std::tolower) );
+/*                  m_value.begin(), static_cast<int(*)(int)>(std::tolower) );*/
+                  m_value.begin(), lower() );
   return *this;
 }
 
 BMString& BMString::toUpper()
 {
+  std::string res;
   std::transform( m_value.begin(), m_value.end(), 
-                  m_value.begin(), static_cast<int(*)(int)>(std::toupper) );
+/*                  m_value.begin(), static_cast<int(*)(int)>(std::toupper) );*/
+                  m_value.begin(), upper() );
   return *this;
 }
 
@@ -566,8 +589,8 @@ BMString BMString::toLowerCopy()const
 {
   std::string res;
   std::transform( m_value.begin(), m_value.end(), 
-                  std::back_inserter(res), 
-                  static_cast<int(*)(int)>(std::tolower) );
+/*                  static_cast<int(*)(int)>(std::tolower) );*/
+                  std::back_inserter(res), lower() );
   return BMString(res);
 }
 
@@ -575,8 +598,8 @@ BMString BMString::toUpperCopy()const
 {
   std::string res;
   std::transform( m_value.begin(), m_value.end(), 
-                  std::back_inserter(res), 
-                  static_cast<int(*)(int)>(std::toupper) );
+/*                  static_cast<int(*)(int)>(std::toupper) );*/
+                  std::back_inserter(res), upper() );
   return BMString(res);
 }
 

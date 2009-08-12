@@ -18,6 +18,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 #include <iostream>
+#include <string.h>
 #include <cstring>
 #include <itksys/SystemTools.hxx>
 #include <itksys/SystemInformation.hxx>
