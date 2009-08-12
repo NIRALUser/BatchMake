@@ -16,6 +16,7 @@
 #include "bmModuleDescription.h"
 
 #include <iostream>
+#include <string.h>
 #include <string>
 #include <vector>
 #include <stack>

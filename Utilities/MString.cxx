@@ -14,6 +14,10 @@
 =========================================================================*/
 
 #include "MString.h"
+
+#include <string.h>
+#include <stdlib.h>
+
 #include <cstring>
 #include <cstdlib>
 #include <algorithm>
@@ -350,13 +354,19 @@ MString MString::rend(const char* key,int offset)
 bool MString::startWith(const char key)
 {
   for (unsigned int i=0;i<m_value.length();i++)
-  {
-      if ((m_value[i] != ' ') && (m_value[i] != '\t'))
-        if (m_value[i] == key)
-          return true;
-        else
-          return false;
-  }
+    {
+    if ((m_value[i] != ' ') && (m_value[i] != '\t'))
+      {
+      if (m_value[i] == key)
+        {
+        return true;
+        }
+      else
+        {
+        return false;
+        }
+      }
+    }
   return false;
 }
 

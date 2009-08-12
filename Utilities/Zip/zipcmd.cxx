@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #if defined(MSDOS) || defined(OS2) || defined(WIN32)
 #  include <fcntl.h>

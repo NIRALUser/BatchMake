@@ -30,6 +30,9 @@
 #include <algorithm>
 #include <deque>
 
+#include <stdlib.h>
+#include <stdio.h>
+
 #if !defined(WIN32) && defined(HAVE_BFD)
 #include "BinaryFileDescriptor.h"
 #endif
