@@ -1,11 +1,16 @@
 PROJECT(PixelCounter)
 
+FIND_PACKAGE(ITK REQUIRED)
+IF(ITK_FOUND)
+  INCLUDE(${USE_ITK_FILE}) 
+ENDIF(ITK_FOUND)
+
 ADD_EXECUTABLE(PixelCounter main.cxx)
-TARGET_LINK_LIBRARIES(PixelCounter BatchMakeUtilities ${ITK_LIBRARIES})
+TARGET_LINK_LIBRARIES(PixelCounter BatchMakeUtilities ITKCommon ITKIO)
 
 # Add application to generate spheres to test the Pixel Counter
 ADD_EXECUTABLE(GenerateSpheres generateSpheres.cxx)
-TARGET_LINK_LIBRARIES(GenerateSpheres ${ITK_LIBRARIES})
+TARGET_LINK_LIBRARIES(GenerateSpheres ITKCommon ITKIO)
 
 FIND_PROGRAM( PixelCounterExec PixelCounter 
   NAMES PixelCounter PixelCounter.exe
