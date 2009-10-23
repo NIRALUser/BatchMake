@@ -22,6 +22,8 @@
 #include <itkSpatialObjectToImageFilter.h>
 #include <itkImageFileWriter.h>
 
+#include <cstdio>
+
 int main(int argc, char* argv[] )
 {
   typedef itk::EllipseSpatialObject<3>   EllipseType;
