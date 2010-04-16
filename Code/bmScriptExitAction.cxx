@@ -32,7 +32,7 @@ bool ScriptExitAction::TestParam(ScriptError* error,int linenumber)
 {
    if (m_Parameters.size() > 0 && m_Parameters[0].length()!=0)
      {
-     error->SetError(MString("Too much parameters for Exit"),linenumber);
+     error->SetError(MString("Too many parameters for Exit"),linenumber);
      return false;
      }
 
