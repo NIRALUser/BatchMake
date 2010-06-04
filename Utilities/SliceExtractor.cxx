@@ -108,23 +108,21 @@ void SliceExtractor::Update()
   //Create 2D image
   int imagesize[2];
 
-  if (m_orientation == 2)
-  {
+  if(m_orientation == 2)
+    {
     imagesize[0] = m_size[0];
     imagesize[1] = m_size[1];
-  }
-
-  if (m_orientation == 1)
-  {
+    }
+  else if(m_orientation == 1)
+    {
     imagesize[0] = m_size[0];
     imagesize[1] = m_size[2];
-  }
-
-  if (m_orientation == 0)
-  {
+    }
+  else
+    {
     imagesize[0] = m_size[1];
     imagesize[1] = m_size[2];
-  }
+    }
 
 
   m_outputimage = Image2DType::New();
