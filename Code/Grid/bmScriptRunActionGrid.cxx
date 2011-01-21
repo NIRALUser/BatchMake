@@ -62,7 +62,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     return;
     }
 
-  if(!application->ParameterExists("GenerateXMLFile"))
+  if(application->ParameterExists("GenerateXMLFile"))
     {
     m_GridModule->AddApplication(application);
     }
