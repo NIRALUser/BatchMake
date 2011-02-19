@@ -1,0 +1,4 @@
+# Test that the script exits 
+# add an error after the exit command, the error shouldn't be added
+Exit()
+AddError('Should never get here')

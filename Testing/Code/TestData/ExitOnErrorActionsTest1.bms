@@ -1,0 +1,16 @@
+# This combo should not report any errors
+# 
+# This script shouldn't exit if there is an error
+# Test this by adding an error, then clearing the error
+# Then exiting, which should return without an error
+#
+# test 4 combinations
+# combos, first value is ExitOnError val, second val is will return error
+# 0,0 ExitOnErrorActionsTest1.bms
+# 1,0 ExitOnErrorActionsTest2.bms
+# 0,1 ExitOnErrorActionsTest3.bms
+# 1,1 ExitOnErrorActionsTest4.bms
+ExitOnError( 0 )
+AddError('Should not cause an Exit')
+ClearErrors()
+Exit()

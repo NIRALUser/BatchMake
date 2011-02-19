@@ -1,0 +1,25 @@
+# This combo should report errors
+# 
+# This script should exit if there is an error, and there
+# will be errors.  This test also tests flipping the value
+# of ExitOnError back and forth.
+#
+# Test this by creating 2 errors with ExitOnError(0),
+# then change ExitOnError(1), add 2 more errors. But we
+# should have exited after 3 errors.
+#
+# test 4 combinations
+# combos, first value is ExitOnError val, second val is will return error
+# 0,0 ExitOnErrorActionsTest1.bms
+# 1,0 ExitOnErrorActionsTest2.bms
+# 0,1 ExitOnErrorActionsTest3.bms
+# 1,1 ExitOnErrorActionsTest4.bms
+ExitOnError( 1 )
+# test flipping the value
+ExitOnError( 0 )
+AddError('should not exit here after 1 error')
+AddError('should not exit here after 2 errors')
+ExitOnError( 1 )
+AddError('should exit here after 3 errors')
+AddError('should have already exited, before 4 errors')
+Exit()

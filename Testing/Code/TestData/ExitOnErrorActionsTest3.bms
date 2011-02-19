@@ -1,0 +1,21 @@
+# This combo should report errors
+# 
+# This script should not exit if there is an error, but there
+# will be errors. Test this by running a command without
+# error, then add 2 errors, then exit.  At the end it should
+# have exited with 2 errors, but if the ExitOnError(0) would
+# have cause an exit after the first error, then there will
+# only be 1 error after exiting.  This tests ensures that
+# ExitOnError(0) will not exit when there is an error.
+#
+# test 4 combinations
+# combos, first value is ExitOnError val, second val is will return error
+# 0,0 ExitOnErrorActionsTest1.bms
+# 1,0 ExitOnErrorActionsTest2.bms
+# 0,1 ExitOnErrorActionsTest3.bms
+# 1,1 ExitOnErrorActionsTest4.bms
+ExitOnError( 0 )
+Echo('some command without error')
+AddError('error 1 should not exit')
+AddError('error 2 should not exit')
+Exit()

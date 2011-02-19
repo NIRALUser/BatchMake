@@ -1,0 +1,7 @@
+# Test that the script returns an error when it exits
+AddError('This should result in std err being written to 1')
+AddError('This should result in std err being written to 2')
+AddError('This should result in std err being written to 3')
+AddError('This should result in std err being written to 4')
+AddError('This should result in std err being written to 5')
+Exit()

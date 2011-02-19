@@ -1,0 +1,8 @@
+# This script should exit without an error.
+ExitOnError( 0 )
+AddError('error1')
+AddError('error2')
+AddError('error3')
+AddError('error4')
+ClearErrors()
+Exit()
