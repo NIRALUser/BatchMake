@@ -70,6 +70,7 @@
   #include "bmScriptGridTransferFileAction.h"
   #include "bmScriptGridRequirementsAction.h"
   #include "bmScriptGridOwnerAction.h"
+  #include "bmScriptCondorPostScriptAction.h"
 #endif
 
 #ifdef BM_DASHBOARD
@@ -290,6 +291,7 @@ std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
   BM_NEWKEYWORD(_list, GridTransferFile);
   BM_NEWKEYWORD(_list, GridRequirements);
   BM_NEWKEYWORD(_list, GridOwner);
+  BM_NEWKEYWORD(_list, CondorPostScript);
 #endif
 
 #ifdef BM_XCEDE
@@ -363,6 +365,7 @@ ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
   BM_NEWACTION(option, GridTransferFile);
   BM_NEWACTION(option, GridRequirements);
   BM_NEWACTION(option, GridOwner);
+  BM_NEWACTION(option, CondorPostScript);
 #endif
 
 #ifdef BM_DASHBOARD

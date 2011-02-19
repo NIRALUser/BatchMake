@@ -60,6 +60,17 @@ public:
   bool                AutomaticCommandLineParsingSlicer( 
                                                       const std::string& _path );
 
+
+
+#ifdef BM_GRID
+  /** set the value of the Condor Post Script line in the DAG file for this application. */
+  void SetCondorPostScript(const std::string& script) { m_CondorPostScript = script; }
+  /** set the value of the Condor Post Script line in the DAG file for this application. */
+  const std::string& GetCondorPostScript() const { return m_CondorPostScript; }
+#endif // BM_GRID
+
+
+
   /** Return the current command line arguments */
   std::string         GetCurrentCommandLineArguments( 
     bool relativePath=true, 
@@ -173,6 +184,10 @@ private:
   unsigned long                         m_ExecutionBlockNumber;
   std::vector<std::string>              m_InputDataToTransfer;
   std::string                           m_Requirements;
+
+#ifdef BM_GRID
+  std::string                           m_CondorPostScript;
+#endif // BM_GRID
 
   bool AddSlicerModuleDescription(bm::ModuleDescription* moduleDescription);
   
