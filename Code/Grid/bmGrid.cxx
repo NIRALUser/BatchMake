@@ -902,6 +902,11 @@ void Grid::WriteCondor()
     if(!dagNode.isVirtual)
       {
       fprintf(dagfile,"Job job%d %s\n",id, jobFileName.c_str());
+      // if there is a Condor Post Script for this application, add it to the DAG file
+      if((*it).GetCondorPostScript() != "")
+        {
+        fprintf(dagfile,"SCRIPT POST job%d %s\n",id, (*it).GetCondorPostScript().c_str());
+        }
       }
 
     std::cout << "Generating Condor File: " << jobFileName.c_str() << std::endl;
@@ -919,9 +924,9 @@ void Grid::WriteCondor()
     fprintf(fic,"# More information at: http://www.batchmake.org\n\n");
     
     fprintf(fic,"Universe       = vanilla\n");
-    fprintf(fic,"Output         = bmGrid.out.txt\n");
-    fprintf(fic,"Error          = bmGrid.error.txt\n");
-    fprintf(fic,"Log            = bmGrid.log.txt\n");
+    fprintf(fic,"Output         = bmGrid.%d.out.txt\n",id);
+    fprintf(fic,"Error          = bmGrid.%d.error.txt\n",id);
+    fprintf(fic,"Log            = bmGrid.%d.log.txt\n",id);
     fprintf(fic,"Notification   = NEVER\n");
 
     if(m_WorkingDirectory.size()>0)
@@ -1038,6 +1043,7 @@ void Grid::WriteCondor()
         fprintf(fic,"transfer_input_files = %s\n",externalData.c_str());
         }  
       }
+
 
     if(m_TransferFiles!=NONE && gotExternalData)
       {
