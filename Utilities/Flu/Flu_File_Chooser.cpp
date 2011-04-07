@@ -1105,12 +1105,14 @@ void Flu_File_Chooser :: trashCB( bool recycle )
    {
      if( recycle )
        {
-         if( !fl_ask( "Really send '%s' to the Recycle Bin?", first ) )
+         if( !fl_choice( "Really send this file to the Recycle Bin?",
+                         "No", "Yes", NULL ) )
      return;
        }
      else
        {
-         if( !fl_ask( "Really delete '%s'?", first ) )
+       if( !fl_choice( "Really delete this file?",
+                       "No", "Yes", NULL ) )
      return;
        }
    }
@@ -1118,12 +1120,14 @@ void Flu_File_Chooser :: trashCB( bool recycle )
    {
      if( recycle )
        {
-         if( !fl_ask( "Really send these %d files to the Recycle Bin?", selected ) )
+         if( !fl_choice( "Really send these files to the Recycle Bin?", 
+                         "No", "Yes", NULL ) )
      return;
        }
      else
        {
-         if( !fl_ask( "Really delete these %d files?", selected ) )
+         if( !fl_choice( "Really delete these files?",
+                         "No", "Yes", NULL ) )
      return;
        }
    }
