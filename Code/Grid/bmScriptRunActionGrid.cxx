@@ -78,6 +78,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
 
     m_GridModule->AddApplication(application);
 
+#ifdef BM_BATCHBOARD
     // We create the bmGridStore application and send it to condor
     ApplicationWrapper app;
     BMString gsName = "bmGridStore";
@@ -117,6 +118,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     app.SetParameterValue("appname","","1");
     app.SetParameterValue("appname","appname",appn.GetValue());
     m_GridModule->AddApplication(&app);
+#endif
     }
   
 }
