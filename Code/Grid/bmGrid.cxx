@@ -150,67 +150,67 @@ void Grid::AddApplication(ApplicationWrapper* app,const char* datadir,const char
 {
   if(m_DataHost.size()>0)
     {
-    (*app).SetDataHost(m_DataHost.c_str());
+    app->SetDataHost(m_DataHost.c_str());
     }
 
   if(m_OutputHost.size()>0)
     {
-    (*app).SetOutputHost(m_OutputHost.c_str());
+    app->SetOutputHost(m_OutputHost.c_str());
     }
 
   if(m_SingleNodeTransition)
     {
-   (*app).SetSingleNode(2);
+   app->SetSingleNode(2);
     m_SingleNodeTransition = false;
     }
   else if(m_SingleNode)
     {
-    (*app).SetSingleNode(1);
+    app->SetSingleNode(1);
     }
   else
     {
-    (*app).SetSingleNode(0);
+    app->SetSingleNode(0);
     }
 
   if(datadir)
     {
-    (*app).SetDataDirectory(datadir);
+    app->SetDataDirectory(datadir);
     }
   else
     {
-    (*app).SetDataDirectory(m_InputDirectory.c_str());
+    app->SetDataDirectory(m_InputDirectory.c_str());
     }
 
    if(outputdir)
     {
-    (*app).SetOutputDirectory(outputdir);
+    app->SetOutputDirectory(outputdir);
     }
   else
     {
-    (*app).SetOutputDirectory(m_OutputDirectory.c_str());
+    app->SetOutputDirectory(m_OutputDirectory.c_str());
     }
 
   if(m_DistributedTransition && m_Distributed)
     {
     if(m_DistributedSyncBarrier.size()>0)
       {
-      (*app).SetDependsOn(m_DistributedSyncBarrier[m_DistributedSyncBarrier.size()-1]);
+      app->SetDependsOn(m_DistributedSyncBarrier[m_DistributedSyncBarrier.size()-1]);
       }
     else
       {
-      (*app).SetDependsOn(-1);
+      app->SetDependsOn(-1);
       }
     m_DistributedTransition = false;
     }
   else
     {
-    (*app).SetDependsOn(-1);
+    app->SetDependsOn(-1);
     }
-  (*app).SetExecutionBlockNumber(m_CurrentScope);
+  app->SetExecutionBlockNumber(m_CurrentScope);
 
   if(m_NextAppIsAfterEndBarrier)
     {
-    (*app).SetAfterEndBarrier(true);
+    app->SetAfterEndBarrier(true);
     m_NextAppIsAfterEndBarrier = false;
     }
 
@@ -970,24 +970,7 @@ void Grid::WriteCondor()
       requirements += "&& ";
       }
     requirements += it->GetRequirements();
-#ifdef WIN32 
-    /*
-      if( !requirements.empty() )
-      {
-      requirements += " && ";
-      }
-    requirements += "(OpSys == \"WINNT50\") || (OpSys == \"WINNT51\")";
-    */
-#else
-    // in linux, multi thread applications size are wrongly estimated
-    // We need to prevent Condor for estimating the size. We give a
-    // a meaningless size here.
-//     if( requirements.find("Memory") == std::string::npos )
-//       {
-//       requirements += !requirements.empty() ? " && " : "";
-//       requirements += "Memory > 512";
-//       }
-#endif
+
     if( !requirements.empty() )
       {
       fprintf( fic, "Requirements = %s \n", requirements.c_str() );
