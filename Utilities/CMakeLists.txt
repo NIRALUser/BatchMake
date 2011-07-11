@@ -54,7 +54,7 @@ SET(BatchMakeUtilities_SRCS
 #  Build BatchMakeUtilities Library
 
 ADD_LIBRARY(BatchMakeUtilities ${BatchMakeUtilities_SRCS} ${BatchMakeUtilities_HDRS})
-TARGET_LINK_LIBRARIES(BatchMakeUtilities ITKCommon ITKIO itksys)
+TARGET_LINK_LIBRARIES(BatchMakeUtilities ${ITK_LIBRARIES})
 
 IF(USE_FLTK)
   TARGET_LINK_LIBRARIES(BatchMakeUtilities ${FLTK_LIBRARIES} FLU)

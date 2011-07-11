@@ -6,6 +6,7 @@
 #include "itkImageFileWriter.h"
 #include "itkResampleImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
+#include "itkAffineTransform.h"
 
 
 int main(int argc,char * argv[])

@@ -5,7 +5,7 @@ Project(BatchMakeTest)
 SET(BATCHMAKE_TESTS ${CXX_TEST_PATH}/BatchMakeTests)
 
 ADD_EXECUTABLE(BatchMakeMemoryTest BatchMakeMemoryTest.cxx)
-TARGET_LINK_LIBRARIES(BatchMakeMemoryTest itksys ITKIO)
+TARGET_LINK_LIBRARIES(BatchMakeMemoryTest itksys ${ITK_LIBRARIES})
 
 IF(DASHBOARD_SUPPORT)
 
