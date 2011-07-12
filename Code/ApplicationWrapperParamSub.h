@@ -52,6 +52,9 @@ public:
   void SetExternalData(unsigned int external) {m_ExternalData = external;}
   unsigned int GetExternalData() const {return m_ExternalData;}
 
+  void setNoquote() { m_Noquote = true; }
+  bool getNoquote() const { return m_Noquote; }
+
 
 private:
   Type m_type;
@@ -61,6 +64,7 @@ private:
   std::vector<MString> m_enum;
   bool m_ValueDefined;
   unsigned int m_ExternalData;
+  bool m_Noquote;
 };
 
 #endif

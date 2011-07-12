@@ -21,6 +21,7 @@ ApplicationWrapperParamSub::ApplicationWrapperParamSub()
   m_name = "NA";
   m_ValueDefined = false;
   m_ExternalData = 0;
+  m_Noquote = false;
 }
 
 ApplicationWrapperParamSub::~ApplicationWrapperParamSub()
