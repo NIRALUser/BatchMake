@@ -138,18 +138,14 @@ bool ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
     std::cout << "Cannot open file: " << filename.toChar() << std::endl;
     return false;
     }
-  unsigned long position = pos;
-  char* data = new char[1000];
-  strcpy(data,"");
+
   MString m_currentline;
-  while(!m_file.eof())
+  std::string line;
+  unsigned long position = pos;
+  while ( m_file.good() )
     {
-    m_file.getline(data,1000);
-    if (data[strlen(data)-1] == '\r')
-      {
-      data[strlen(data)-1] = '\0';
-      }
-    m_currentline = data;
+    getline (m_file,line);
+    m_currentline = MString(line);
     if(isInclude && position == 0)
       {
       std::vector<MString>::iterator it = m_Code.begin();
@@ -162,7 +158,6 @@ bool ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
     position++;
     }
 
-  delete [] data;
   m_file.close();
 
   if(!isInclude)
@@ -184,25 +179,20 @@ bool ScriptParser::Execute(MString filename,unsigned long pos)
     std::cout << "Cannot open file: " << filename.toChar() << std::endl;
     return false;
     }
-  char* data = new char[1000];
-  strcpy(data,"");
+
   MString m_currentline;
   unsigned long position = pos;
-  while(!m_file.eof())
-    {
-    m_file.getline(data,1000);
-   if (strlen(data)>0 && data[strlen(data)-1] == '\r')
-      {
-      data[strlen(data)-1] = '\0';
-      }
-   m_currentline = data;
-   this->AddCodeLine(m_currentline,position);
+  std::string line;
 
-   position++;
-   }
+  while ( m_file.good() )
+    {
+    getline (m_file,line);
+    m_currentline = MString(line);
+    this->AddCodeLine(m_currentline,position);
+    position++;
+    }
   m_file.close();
 
-  delete [] data;
  
   if(!this->Parse())
     {
