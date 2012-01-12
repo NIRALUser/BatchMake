@@ -33,6 +33,7 @@ IF(DASHBOARD_SUPPORT)
   ADD_TEST(ExitOnErrorActionsTest4  ${BATCHMAKE_TESTS} ErrorActionsTest ${TEST_DATA}/ExitOnErrorActionsTest4.bms 3)
   ADD_TEST(GetErrorCountActionsTest  ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/GetErrorCountActionsTest.bms)
   ADD_TEST(ClearErrorsActionsTest  ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/ClearErrorsActionsTest.bms)
+  ADD_TEST(ParsingLongInputsTest  ${BATCHMAKE_TESTS} ActionsTest ${TEST_DATA}/MoreThan1000CharsParsingTest.bms)
 
   ADD_EXECUTABLE(BatchMakeTests BatchMakeTests.cxx ${BatchMakeTest_SRCS})
   TARGET_LINK_LIBRARIES(BatchMakeTests ${BatchMake_LIBRARIES})
