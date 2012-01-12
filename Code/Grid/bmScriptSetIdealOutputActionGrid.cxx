@@ -23,6 +23,7 @@ namespace bm {
 void ScriptSetIdealOutputAction
 ::GenerateGrid( const BMString& name, const BMString& value)
 {
+#ifdef BM_BATCHBOARD
   // We create the bmGridStore application and send it to condor
   ApplicationWrapper app;
   std::string appName = "bmGridStore";
@@ -52,6 +53,7 @@ void ScriptSetIdealOutputAction
   app.SetParameterValue("value",    "", value.GetConstValue() );
 
   m_GridModule->AddApplication(&app);
+#endif
 }
 
 } // end namespace bm

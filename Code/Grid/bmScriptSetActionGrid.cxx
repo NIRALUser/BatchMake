@@ -21,6 +21,7 @@ namespace bm {
 /** Generate the condor script */
 void ScriptSetAction::GenerateGrid(std::string name,std::string value)
 {
+#ifdef BM_BATCHBOARD
   // We create the bmGridStore application and send it to condor
   ApplicationWrapper app;
   std::string appName = "bmGridStore";
@@ -54,6 +55,7 @@ void ScriptSetAction::GenerateGrid(std::string name,std::string value)
   app.SetParameterValue("value","",value);
 
   m_GridModule->AddApplication(&app);
+#endif
 }
 
 } // end namespace bm

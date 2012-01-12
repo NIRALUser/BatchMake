@@ -541,14 +541,11 @@ void CondorWatcher::Watch()
 /** Launch an application and get the result in a buffer */
 std::string CondorWatcher::Run(const char* program)
 {
-  //std::cout << "Running = " << program << std::endl;
   std::string m_output = "";
-//  std::string m_error = "";
 
 #ifdef WIN32
 
   char buffer[BUFSIZ+1];
-//  char buffer_err[BUFSIZ+1];
 
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
@@ -559,8 +556,6 @@ std::string CondorWatcher::Run(const char* program)
   tmpSec.bInheritHandle = true;
   HANDLE hReadPipe;
   HANDLE hWritePipe;
-//  HANDLE hReadErrorPipe;
-//  HANDLE hWriteErrorPipe;
 
   SECURITY_ATTRIBUTES  sa;
   ZeroMemory( &sa, sizeof(sa) );
@@ -573,18 +568,14 @@ std::string CondorWatcher::Run(const char* program)
   sa2.bInheritHandle = true;
 
   CreatePipe(&hReadPipe,&hWritePipe,&sa,0);
-//  CreatePipe(&hReadErrorPipe,&hWriteErrorPipe,&sa2,0);
-
 
   ZeroMemory( &si, sizeof(si) );
   si.cb = sizeof(si);
   si.dwFlags = STARTF_USESTDHANDLES;
   si.hStdOutput = hWritePipe; //output;
-//  si.hStdError = hWriteErrorPipe; //error;
   ZeroMemory( &pi, sizeof(pi) );
 
   memset(buffer,'\0',sizeof(buffer)); 
-//  memset(buffer_err,'\0',sizeof(buffer_err)); 
   
   // Start the child process. 
   if( !CreateProcess( NULL,       // No module name (use command line). 
@@ -600,12 +591,10 @@ std::string CondorWatcher::Run(const char* program)
   ) 
   {
     std::cout << "CondorWatcher - CreateProcess failed!" << std::endl;
-//    m_error = "CondorWatcher - CreateProcess failed!";
     return "";
   }
 
   CloseHandle(hWritePipe);
-//  CloseHandle(hWriteErrorPipe);
 
    // Wait until child process exits.
   bool m_run = true;
@@ -628,7 +617,6 @@ std::string CondorWatcher::Run(const char* program)
     }
 
   PeekNamedPipe(hReadPipe,buffer,sizeof(buffer),&m_nbtoread,&m_nbread,NULL); 
-//  PeekNamedPipe(hReadErrorPipe,buffer_err,sizeof(buffer_err),&m_nbtoreaderror,&m_nberrorread,NULL);
 
   int val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL); 
   while (m_nbread > 0 && val)
@@ -643,22 +631,6 @@ std::string CondorWatcher::Run(const char* program)
     memset(buffer,'\0',sizeof(buffer));
     val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL);
     }
-
-//   if (m_nberrorread != 0)
-//       ReadFile(hReadErrorPipe, buffer_err,512,&m_nberrorreaded,NULL); 
-  
-
-    /*if (m_nberrorreaded != 0)
-    {
-    
-      for (unsigned int k=0;k<strlen(buffer_err);k++)
-      {
-        if (buffer[k] != '\r') 
-          m_error += buffer_err[k];
-      }
-
-      memset(buffer_err,'\0',sizeof(buffer_err)); 
-    }*/
 
   } 
 
@@ -676,21 +648,14 @@ std::string CondorWatcher::Run(const char* program)
 #else  
   int stdin_pipe[2];
   int stdout_pipe[2];
-//  int stderr_pipe[2];
   char buffer[BUFSIZ+1];
-//  char buffer_err[BUFSIZ+1];
   int fork_result;
   int data_processed;
-//  int data_processed_err;
-  int nchars = 0;
-int status = 0;
 
   memset(buffer,'\0',sizeof(buffer));
- //memset(buffer_err,'\0',sizeof(buffer)); 
 
    if ( (pipe(stdin_pipe)==0)   
         && (pipe(stdout_pipe)==0)
-  //      && (pipe(stderr_pipe)==0)
       )
    {
      fork_result = fork();
@@ -711,29 +676,14 @@ int status = 0;
       dup(stdout_pipe[1]);     
       close(stdout_pipe[0]); 
       close(stdout_pipe[1]);      
-      close(2);
-      //dup(stderr_pipe[1]);     
-      //close(stderr_pipe[0]);      
-      //close(stderr_pipe[1]);   
-      //MString m_prog = m_command.begin(" ");
-      //MString m_param = m_command.end(" ");   
-   
+      close(2);   
 
       fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
-   //   fcntl(stderr_pipe[1], F_SETFL, O_NONBLOCK);
-
-    /* if (m_param == m_prog)
-       m_param = "";
-
-     if (m_param.length() != 0)
-        m_param = m_param + 1;
-*/
 
     if (execlp(program,program,"",NULL) == -1)
     {         
   if (errno == 2)
   {
-      //std::cerr << (MString("Program (") + m_prog + ") not found!").toChar() << std::endl;      
       std::cout << "Program not found : " << program  << std::endl;
    }
     }
@@ -745,26 +695,12 @@ int status = 0;
       // This is the parent
       close(stdin_pipe[0]);
       close(stdin_pipe[1]);
-     // close(stderr_pipe[1]);
       close(stdout_pipe[1]);  
 
       fcntl(stdout_pipe[0], F_SETFL, O_NONBLOCK);
-     // fcntl(stderr_pipe[0], F_SETFL, O_NONBLOCK);
 
       while(1)   
       {       
-       /* data_processed_err = read(stderr_pipe[0],buffer_err,BUFSIZ);
-        if (data_processed_err != -1)
-        {
-          for (unsigned int k=0;k<strlen(buffer_err);k++)
-            m_error += buffer_err[k];
-       
-          if (m_progressmanager)
-            m_progressmanager->DisplayError(MString(buffer_err));
-       
-    memset(buffer_err,'\0',sizeof(buffer));
-        }
-*/
  
        data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
        if (data_processed != -1)
@@ -780,10 +716,10 @@ int status = 0;
        if ((data_processed == 0) ) break;
      }
 
-//     close(stderr_pipe[0]);
      close(stdout_pipe[0]);
     }
   }
+   return m_output;
 #endif
 
 }

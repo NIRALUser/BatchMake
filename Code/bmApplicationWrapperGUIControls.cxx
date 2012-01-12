@@ -551,7 +551,7 @@ void ApplicationWrapperGUIControls::OnSaveModule()
   dirpath += "/";
   if(!directory.Load(dirpath.c_str()))
     {
-    int createdir = fl_ask("The Applications directory doesn't exist. Create it?");
+    int createdir = fl_choice("The Applications directory doesn't exist. Create it?","No","Yes",NULL);
     if(createdir)
       {
       itksys::SystemTools::MakeDirectory(dirpath.c_str());

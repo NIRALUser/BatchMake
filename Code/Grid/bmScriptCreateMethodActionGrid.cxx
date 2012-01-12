@@ -23,6 +23,7 @@ namespace bm {
 /** */
 void ScriptCreateMethodAction::GenerateGrid()
 {
+#ifdef BM_BATCHBOARD
   // We create the bmGridSend application and send it to condor
   ApplicationWrapper app;
   std::string appName = "bmGridSend";
@@ -101,6 +102,7 @@ void ScriptCreateMethodAction::GenerateGrid()
     app.SetParameterValue("createMethod","description",withslash);
     }
   m_GridModule->AddApplication(&app);
+#endif
 }
   
 } // end namespace bm

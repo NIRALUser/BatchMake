@@ -79,9 +79,6 @@ void ScriptCondorPostScriptAction::Execute()
   // second param is the script name
   m_value += m_Manager->Convert(m_Parameters[1]).fromVariable().toChar();
 
-  // follow this with three variable names that Condor will populate
-  m_value += " $JOB $JOBID $RETURN ";
-
   // then add in the remaining params, adding a space in between
   for( unsigned int i = 2; i < m_Parameters.size(); ++i )
     {
@@ -91,6 +88,10 @@ void ScriptCondorPostScriptAction::Execute()
       m_value += " ";
       }
     }
+
+  // follow this with three variable names that Condor will populate
+  m_value += " $JOB $JOBID $RETURN ";
+
   // set the value of the entire POST line in the Application
   app->SetCondorPostScript(m_value.toChar());
   return;

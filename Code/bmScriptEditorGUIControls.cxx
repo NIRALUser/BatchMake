@@ -420,14 +420,14 @@ void ScriptEditorGUIControls::OnGenerateCondor()
   grid.WriteCondor();
  
 #if !defined(__APPLE__)
-  if(fl_ask("Run condor watcher?"))
+  if(fl_choice("Run condor watcher?","No","Yes",NULL))
     {
     m_CondorWatcher->Window->show();
     m_CondorWatcher->Watch();
     }
 #endif
 
-  if(fl_ask("Run current script?"))
+  if(fl_choice("Run current script?","No","Yes",NULL))
     {
     Launch starter;
     std::string run = "condor_submit_dag ";
