@@ -89,6 +89,8 @@ std::string ApplicationWrapper
 
     if(valueDefined)
       {
+
+
       if(line.size()>0)
         {
         line += " ";
@@ -167,7 +169,24 @@ std::string ApplicationWrapper
         }
       else
         {
-        line += (*it).GetValue().toChar();
+        // if NOQUOTE, then strip the quotes
+        if((*it).getNoquote())
+          {
+          std::string chars = (*it).GetValue().toChar();
+          std::string stripped = "";
+          for(unsigned int i=0;i<chars.size();i++)
+            {
+            if(chars[i] != ' ' && chars[i] != '\"' && chars[i] != '\'')
+              {
+              stripped += chars[i];
+              }
+            }
+          line += stripped;
+          }
+        else
+          {
+          line += (*it).GetValue().toChar();
+          }
         }   
       (*it).CheckSubValueDefined( &line, relativePath, 
                                   inputDirectory, outputDirectory );
@@ -735,6 +754,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
       if (m_balise == "Value")    m_param.SetValue(m_reader.GetValue());
 
       if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toInt());
+      if (m_balise == "Noquote") m_param.setNoquote();
       if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
       if (m_balise == "Enum")     m_list.push_back(m_reader.GetValue());
       if (m_balise == "SubParameter")
@@ -748,6 +768,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
           if (m_balise1 == "Type")     m_subParam.SetType(m_reader.GetValue().toInt());
           if (m_balise1 == "Value")    m_subParam.SetValue(m_reader.GetValue());
           if (m_balise1 == "External") m_subParam.SetExternalData(m_reader.GetValue().toInt());
+          if (m_balise1 == "Noquote") m_subParam.setNoquote();
           if (m_balise1 == "Optional") m_subParam.SetOptional(m_reader.GetValue().toBool());   
           if (m_balise1 == "Enum")     m_list1.push_back(m_reader.GetValue());
           m_balise1 = m_reader.GetBalise();
@@ -795,6 +816,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
         parent = m_reader.GetValue().toBool();
         }
       if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toInt());
+      if (m_balise == "Noquote") m_param.setNoquote();
       if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
       if (m_balise == "Enum")     m_list.push_back(m_reader.GetValue());
       m_balise = m_reader.GetBalise();

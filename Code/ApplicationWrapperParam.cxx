@@ -157,7 +157,31 @@ bool ApplicationWrapperParam
         }
       else
         {
-        *line += (*it).GetValue().toChar();
+
+
+        // if NOQUOTE, then strip the quotes
+        if((*it).getNoquote())
+          {
+          std::string chars = (*it).GetValue().toChar();
+          std::string stripped = "";
+          for(unsigned int i=0;i<chars.size();i++)
+            {
+            if(chars[i] != '\"' && chars[i] != '\'')
+              {
+              stripped += chars[i];
+              }
+            }
+          *line += stripped;
+          }
+        else
+          {
+          *line += (*it).GetValue().toChar();
+          } 
+
+
+
+
+
         } 
       }
     else
