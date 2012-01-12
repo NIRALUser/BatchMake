@@ -28,10 +28,6 @@ ADD_EXECUTABLE(ImageRegTool
 INSTALL_TARGETS(/bin ImageRegTool)
 
 TARGET_LINK_LIBRARIES (ImageRegTool
-ITKIO
-ITKMetaIO
-ITKBasicFilters
-ITKStatistics
-ITKNumerics
+${ITK_LIBRARIES}
 )
 

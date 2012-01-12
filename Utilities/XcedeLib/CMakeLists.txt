@@ -21,4 +21,4 @@ SET(XCEDELIB_SRCS
    XnatCatalog.h)
 
 ADD_LIBRARY(XcedeLib ${XCEDELIB_SRCS})
-TARGET_LINK_LIBRARIES(XcedeLib itklibxml2 bmcurl ITKIO)
+TARGET_LINK_LIBRARIES(XcedeLib itklibxml2 bmcurl ${ITK_LIBRARIES})
