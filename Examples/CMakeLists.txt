@@ -1,21 +1,21 @@
-SUBDIRS(
+subdirs(
   PixelCounter
   )
 
-IF(GRID_SUPPORT)
-  SUBDIRS(
+if(GRID_SUPPORT)
+  subdirs(
     CondorTest
     Calculator
     CondorTutorial
     )
-ENDIF(GRID_SUPPORT)
+endif(GRID_SUPPORT)
 
-IF(BATCHMAKE_INSTALL_SOURCE)
-  INSTALL(FILES CMakeLists.txt 
+if(BATCHMAKE_INSTALL_SOURCE)
+  install(FILES CMakeLists.txt
           DESTINATION source/BatchMake/Examples)
-ENDIF(BATCHMAKE_INSTALL_SOURCE)
+endif(BATCHMAKE_INSTALL_SOURCE)
 
 # Install the examples scripts
-FILE(GLOB Scripts Scripts/?*.*)
-INSTALL(FILES ${Scripts} 
+file(GLOB Scripts Scripts/?*.*)
+install(FILES ${Scripts}
         DESTINATION examples/scripts)

@@ -1,23 +1,23 @@
 Project(ModuleDescriptionParserTesting)
 
-SET ( PARSER1TEST_SOURCE Parser1Test )
-ADD_EXECUTABLE ( Parser1Test ${PARSER1TEST_SOURCE})
-TARGET_LINK_LIBRARIES ( Parser1Test bmModuleDescriptionParser )
+set( PARSER1TEST_SOURCE Parser1Test )
+add_executable( Parser1Test ${PARSER1TEST_SOURCE})
+target_link_libraries( Parser1Test bmModuleDescriptionParser )
 
-SET ( ModuleFactoryTest_SOURCE ModuleFactoryTest )
-ADD_EXECUTABLE ( ModuleFactoryTest ${ModuleFactoryTest_SOURCE})
-TARGET_LINK_LIBRARIES ( ModuleFactoryTest bmModuleDescriptionParser )
+set( ModuleFactoryTest_SOURCE ModuleFactoryTest )
+add_executable( ModuleFactoryTest ${ModuleFactoryTest_SOURCE})
+target_link_libraries( ModuleFactoryTest bmModuleDescriptionParser )
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${ModuleDescriptionParser_SOURCE_DIR}
   )
 
-SET (TEST_DATA ${ModuleDescriptionParserTesting_SOURCE_DIR}/TestData)
-ADD_TEST(Parser1Test1 ${EXECUTABLE_OUTPUT_PATH}/Parser1Test ${TEST_DATA}/ParserTest1.xml)
+set(TEST_DATA ${ModuleDescriptionParserTesting_SOURCE_DIR}/TestData)
+add_test(Parser1Test1 ${EXECUTABLE_OUTPUT_PATH}/Parser1Test ${TEST_DATA}/ParserTest1.xml)
 
-ADD_TEST(Parser1Test2 ${EXECUTABLE_OUTPUT_PATH}/Parser1Test ${TEST_DATA}/ParserTest2.xml)
+add_test(Parser1Test2 ${EXECUTABLE_OUTPUT_PATH}/Parser1Test ${TEST_DATA}/ParserTest2.xml)
 
-IF(Slicer3_BINARY_DIR)
-ADD_TEST(ModuleFactoryTest ${EXECUTABLE_OUTPUT_PATH}/ModuleFactoryTest ${Slicer3_BINARY_DIR}/${SLICER_INSTALL_LIBRARIES_DIR}/Plugins/)
-ENDIF(Slicer3_BINARY_DIR)
+if(Slicer3_BINARY_DIR)
+add_test(ModuleFactoryTest ${EXECUTABLE_OUTPUT_PATH}/ModuleFactoryTest ${Slicer3_BINARY_DIR}/${SLICER_INSTALL_LIBRARIES_DIR}/Plugins/)
+endif(Slicer3_BINARY_DIR)
 

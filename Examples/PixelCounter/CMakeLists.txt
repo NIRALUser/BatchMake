@@ -1,34 +1,34 @@
-PROJECT(PixelCounter)
+project(PixelCounter)
 
-FIND_PACKAGE(ITK REQUIRED)
-IF(ITK_FOUND)
-  INCLUDE(${USE_ITK_FILE}) 
-ENDIF(ITK_FOUND)
+find_package(ITK REQUIRED)
+if(ITK_FOUND)
+  include(${USE_ITK_FILE})
+endif(ITK_FOUND)
 
-ADD_EXECUTABLE(PixelCounter main.cxx)
-TARGET_LINK_LIBRARIES(PixelCounter BatchMakeUtilities ${ITK_LIBRARIES})
+add_executable(PixelCounter main.cxx)
+target_link_libraries(PixelCounter BatchMakeUtilities ${ITK_LIBRARIES})
 
 # Add application to generate spheres to test the Pixel Counter
-ADD_EXECUTABLE(GenerateSpheres generateSpheres.cxx)
-TARGET_LINK_LIBRARIES(GenerateSpheres ${ITK_LIBRARIES})
+add_executable(GenerateSpheres generateSpheres.cxx)
+target_link_libraries(GenerateSpheres ${ITK_LIBRARIES})
 
-FIND_PROGRAM( PixelCounterExec PixelCounter 
+find_program( PixelCounterExec PixelCounter
   NAMES PixelCounter PixelCounter.exe
   PATHS ${CMAKE_BINARY_DIR}/bin )
-FIND_PROGRAM( GenerateSpheresExec GenerateSpheres 
+find_program( GenerateSpheresExec GenerateSpheres
   NAMES GenerateSpheres GenerateSpheres.exe
   PATHS ${CMAKE_BINARY_DIR}/bin )
 
-CONFIGURE_FILE(${PixelCounter_SOURCE_DIR}/PixelCounter.bmm.in
+configure_file(${PixelCounter_SOURCE_DIR}/PixelCounter.bmm.in
                ${BatchMake_APPLICATIONS_DIR}/PixelCounter.bmm )
-CONFIGURE_FILE(${PixelCounter_SOURCE_DIR}/GenerateSpheres.bmm.in
+configure_file(${PixelCounter_SOURCE_DIR}/GenerateSpheres.bmm.in
                ${BatchMake_APPLICATIONS_DIR}/GenerateSpheres.bmm)
 
 # Installation file
-INSTALL(TARGETS PixelCounter
+install(TARGETS PixelCounter
         RUNTIME DESTINATION bin)
-#INSTALL(FILES PixelCounter.bmm DESTINATION bin/Applications)
-#INSTALL(FILES GenerateSpheres.bmm DESTINATION bin/Applications)
+#install(FILES PixelCounter.bmm DESTINATION bin/Applications)
+#install(FILES GenerateSpheres.bmm DESTINATION bin/Applications)
 
-#INSTALL(FILES main.cxx DESTINATION source/Examples/PixelCounter)
-#INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/PixelCounter)
+#install(FILES main.cxx DESTINATION source/Examples/PixelCounter)
+#install(FILES CMakeLists.txt DESTINATION source/Examples/PixelCounter)

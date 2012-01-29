@@ -1,14 +1,14 @@
-PROJECT(ImageRegTool)
+project(ImageRegTool)
 
 
-FIND_PACKAGE(ITK)
-IF(ITK_FOUND)
-  INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-  MESSAGE(FATAL_ERROR "Please set ITK_DIR.")
-ENDIF(ITK_FOUND)
+find_package(ITK)
+if(ITK_FOUND)
+  include(${ITK_USE_FILE})
+else(ITK_FOUND)
+  message(FATAL_ERROR "Please set ITK_DIR.")
+endif(ITK_FOUND)
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${ITK_SOURCE_DIR}/Code/Common
   ${ITK_SOURCE_DIR}/Code/BasicFilters
   ${ITK_SOURCE_DIR}/Code/IO
@@ -21,13 +21,13 @@ INCLUDE_DIRECTORIES(
   ${Applications_BINARY_DIR}/ImageRegTool
 )
 
-ADD_EXECUTABLE(ImageRegTool
+add_executable(ImageRegTool
     LandmarkRegistrator.cxx
     main.cxx
     )
-INSTALL_TARGETS(/bin ImageRegTool)
+install_targets(/bin ImageRegTool)
 
-TARGET_LINK_LIBRARIES (ImageRegTool
+target_link_libraries(ImageRegTool
 ${ITK_LIBRARIES}
 )
 

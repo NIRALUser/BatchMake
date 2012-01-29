@@ -1,18 +1,18 @@
-PROJECT(XcedeLib)
+project(XcedeLib)
 
-INCLUDE_DIRECTORIES(
+include_directories(
 ${BatchMake_SOURCE_DIR}/Utilities/bmcurl/curl
 ${ITK_DIR}/Utilities/itklibxml2/include
 ${ITK_DIR}/Utilities/itklibxml2/libxml
 )
 
-SET(XCEDELIB_SRCS
+set(XCEDELIB_SRCS
    Project.cxx
    Resource.cxx
    Subject.cxx
    Xcede.cxx
    XcedeCatalog.cxx
-   XnatCatalog.cxx 
+   XnatCatalog.cxx
    Project.h
    Resource.h
    Subject.h
@@ -20,5 +20,5 @@ SET(XCEDELIB_SRCS
    XcedeCatalog.h
    XnatCatalog.h)
 
-ADD_LIBRARY(XcedeLib ${XCEDELIB_SRCS})
-TARGET_LINK_LIBRARIES(XcedeLib itklibxml2 bmcurl ${ITK_LIBRARIES})
+add_library(XcedeLib ${XCEDELIB_SRCS})
+target_link_libraries(XcedeLib itklibxml2 bmcurl ${ITK_LIBRARIES})

@@ -1,14 +1,14 @@
 # Main CMakeLists.txt to build the FLU project using CMake (www.cmake.org)
 # Written by Matthieu Jomier
 
-PROJECT(FLU)
+project(FLU)
 
-FIND_PACKAGE(FLTK)
-IF(FLTK_FOUND)
-   INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
-ENDIF(FLTK_FOUND)
+find_package(FLTK)
+if(FLTK_FOUND)
+   include_directories(${FLTK_INCLUDE_DIR})
+endif(FLTK_FOUND)
 
-SET(FLU_SRCS
+set(FLU_SRCS
 Flu_Button.cpp
 Flu_Chat_Buffer.cpp
 Flu_Choice_Group.cpp
@@ -41,24 +41,24 @@ Flu_Wrap_Group.cpp
 )
 
 
-LINK_LIBRARIES(FLU
+link_libraries(FLU
  ${FLTK_LIBRARIES}
 )
 
-ADD_LIBRARY(FLU ${FLU_SRCS})
+add_library(FLU ${FLU_SRCS})
 
-FILE(GLOB FLU_HDRS FLU/*.h)
+file(GLOB FLU_HDRS FLU/*.h)
 
 # Installation file
-INSTALL(TARGETS FLU
+install(TARGETS FLU
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib/BatchMake
   ARCHIVE DESTINATION lib/BatchMake)
-INSTALL(FILES ${FLU_HDRS} 
+install(FILES ${FLU_HDRS}
   DESTINATION include/BatchMake/Utilities/Flu/FLU)
-IF(BATCHMAKE_INSTALL_SOURCE)
-  INSTALL(FILES ${FLU_SRCS} ${CondorWatcherGUI_SRCS} 
+if(BATCHMAKE_INSTALL_SOURCE)
+  install(FILES ${FLU_SRCS} ${CondorWatcherGUI_SRCS}
     DESTINATION source/BatchMake/Utilities/Flu)
-  INSTALL(FILES CMakeLists.txt 
+  install(FILES CMakeLists.txt
     DESTINATION source/BatchMake/Utilities/Flu)
-ENDIF(BATCHMAKE_INSTALL_SOURCE)
+endif(BATCHMAKE_INSTALL_SOURCE)

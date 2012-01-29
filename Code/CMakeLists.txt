@@ -1,4 +1,4 @@
-SET(BatchMakeLib_SRCS
+set(BatchMakeLib_SRCS
   ${BatchMakeLib_SRCS}
   bmLaunch.cxx
   bmProgressManager.cxx
@@ -8,7 +8,7 @@ SET(BatchMakeLib_SRCS
   bmScriptParser.cxx
   )
 
-SET(BatchMakeLib_HDRS
+set(BatchMakeLib_HDRS
   bmLaunch.h
   bmProgressManager.h
   bmScriptAction.h
@@ -61,14 +61,14 @@ SET(BatchMakeLib_HDRS
   bmScriptMathAction.h
   )
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ${BatchMake_SOURCE_DIR}/Utilities/bmModuleDescriptionParser
     ${BatchMake_BINARY_DIR}/Utilities/bmModuleDescriptionParser
   )
 
 
-IF(BATCHMAKE_USE_XCEDE)
-  SET(BatchMakeLib_HDRS ${BatchMakeLib_HDRS}
+if(BATCHMAKE_USE_XCEDE)
+  set(BatchMakeLib_HDRS ${BatchMakeLib_HDRS}
   bmScriptGetXnatDataSetsAction.h
   bmScriptGetXnatFilenameAction.h
   bmScriptGetXcedeDataSetsAction.h
@@ -76,15 +76,15 @@ IF(BATCHMAKE_USE_XCEDE)
   bmScriptGetXcedeFilenameAction.h
   )
 
-  INCLUDE_DIRECTORIES(
+  include_directories(
     ${BatchMake_SOURCE_DIR}/Utilities/bmcurl/curl
     ${ITK_DIR}/Utilities/itklibxml2/include
     ${ITK_DIR}/Utilities/itklibxml2/libxml
   )
-ENDIF(BATCHMAKE_USE_XCEDE)
+endif(BATCHMAKE_USE_XCEDE)
 
 #Add Commands
-SET(BatchMakeLib_SRCS
+set(BatchMakeLib_SRCS
   ${BatchMakeLib_SRCS}
   bmScriptEchoAction.cxx
   bmScriptForEachAction.cxx
@@ -132,8 +132,8 @@ SET(BatchMakeLib_SRCS
   )
 
 
-IF(BATCHMAKE_USE_XCEDE)
-  SET(BatchMakeLib_SRCS ${BatchMakeLib_SRCS}
+if(BATCHMAKE_USE_XCEDE)
+  set(BatchMakeLib_SRCS ${BatchMakeLib_SRCS}
   bmScriptDownloadXnatDataSetAction.cxx
   bmScriptGetXnatDataSetsAction.cxx
   bmScriptGetXnatFilenameAction.cxx
@@ -142,13 +142,13 @@ IF(BATCHMAKE_USE_XCEDE)
   bmScriptDownloadXcedeDataSetAction.cxx
   bmScriptGetXcedeFilenameAction.cxx
   )
-ENDIF(BATCHMAKE_USE_XCEDE)
+endif(BATCHMAKE_USE_XCEDE)
 
 #
 # Grid support
 #
-IF(GRID_SUPPORT)
-  SET(BatchMakeLib_SRCS
+if(GRID_SUPPORT)
+  set(BatchMakeLib_SRCS
     ${BatchMakeLib_SRCS}
     Grid/bmGrid.cxx
     Grid/bmScriptGridSingleNodeAction.cxx
@@ -157,21 +157,21 @@ IF(GRID_SUPPORT)
     Grid/bmScriptInputDirectoryAction.cxx
     Grid/bmScriptOutputDirectoryAction.cxx
     Grid/bmScriptWorkingDirectoryAction.cxx
-    Grid/bmScriptExecutableDirectoryAction.cxx  
+    Grid/bmScriptExecutableDirectoryAction.cxx
     Grid/bmScriptExtractSliceActionGrid.cxx
     Grid/bmScriptRunActionGrid.cxx
     Grid/bmScriptSetActionGrid.cxx
     Grid/bmScriptGridSetGroupingAction.cxx
     Grid/bmScriptGridMaxNodesAction.cxx
     Grid/bmScriptGridTempDirectoryAction.cxx
-    Grid/bmScriptGridTransferFileAction.cxx 
+    Grid/bmScriptGridTransferFileAction.cxx
     Grid/bmScriptGridRequirementsAction.cxx
     Grid/bmScriptGridOwnerAction.cxx
     Grid/bmScriptCondorPostScriptAction.cxx
     )
 
-  IF(DASHBOARD_SUPPORT)
-    SET(BatchMakeLib_SRCS
+  if(DASHBOARD_SUPPORT)
+    set(BatchMakeLib_SRCS
       ${BatchMakeLib_SRCS}
       Grid/bmScriptSetIdealOutputActionGrid.cxx
       Grid/bmScriptAddMethodIdealOutputActionGrid.cxx
@@ -181,16 +181,16 @@ IF(GRID_SUPPORT)
       Grid/bmScriptDashboardSendActionGrid.cxx
       Grid/bmScriptCreateMethodActionGrid.cxx
       )
-  ENDIF(DASHBOARD_SUPPORT)
+  endif(DASHBOARD_SUPPORT)
 
-ENDIF(GRID_SUPPORT)
+endif(GRID_SUPPORT)
 
 #
 # Dashboard support
 #
-IF(DASHBOARD_SUPPORT)
-  SET(BatchMakeLib_SRCS
-    ${BatchMakeLib_SRCS}   
+if(DASHBOARD_SUPPORT)
+  set(BatchMakeLib_SRCS
+    ${BatchMakeLib_SRCS}
     Dashboard/bmScriptDbSendValueAction.cxx
     Dashboard/bmScriptDbSendFileAction.cxx
     Dashboard/bmScriptDbClearAction.cxx
@@ -207,18 +207,18 @@ IF(DASHBOARD_SUPPORT)
     Dashboard/bmScriptDashboardNotifyAction.cxx
     Dashboard/bmScriptCreateExperimentAction.cxx
     Dashboard/bmScriptCreateMethodAction.cxx
-    Dashboard/bmScriptCreateDashboardAction.cxx 
+    Dashboard/bmScriptCreateDashboardAction.cxx
     Dashboard/bmScriptCreateGraphAction.cxx
-    Dashboard/bmScriptAddMethodOutputAction.cxx  
+    Dashboard/bmScriptAddMethodOutputAction.cxx
     Dashboard/bmScriptActionManagerDashboard.cxx
     Dashboard/bmScriptAddDashboardLabelAction.cxx
     Dashboard/bmDashboardSend.cxx
     )
-ENDIF(DASHBOARD_SUPPORT)
+endif(DASHBOARD_SUPPORT)
 
-IF(USE_FLTK)
+if(USE_FLTK)
 
-  SET(BatchMakeLib_HDRS
+  set(BatchMakeLib_HDRS
     ${BatchMakeLib_HDRS}
     bmEditor.h
     bmScriptEditorGUIBase.h
@@ -227,14 +227,14 @@ IF(USE_FLTK)
     bmProgressManagerGUI.h
     bmScriptErrorGUI.h
     bmScriptEditorGUIControls.h
-    bmSplashScreenControls.h    
+    bmSplashScreenControls.h
     bmApplicationListGUIBase.h
     bmApplicationListGUIControls.h
     bmApplicationWrapperGUIBase.h
     bmApplicationWrapperGUIControls.h
     )
-    
-  SET(BatchMakeLib_SRCS
+
+  set(BatchMakeLib_SRCS
     ${BatchMakeLib_SRCS}
     bmScriptEditorGUIControls.cxx
     bmSplashScreenControls.cxx
@@ -245,8 +245,8 @@ IF(USE_FLTK)
     bmApplicationWrapperGUIControls.cxx
     bmEditor.cxx
     )
-  
-  SET(BatchMakeLib_GUI_SRCS
+
+  set(BatchMakeLib_GUI_SRCS
     bmProgressGUI.fl
     bmScriptEditorGUI.fl
     bmSplashScreen.fl
@@ -254,72 +254,72 @@ IF(USE_FLTK)
     bmApplicationWrapperGUI.fl
     )
 
-  SET(FLTK_WRAP_UI 1)
-  FLTK_WRAP_UI( BatchMakeLib ${BatchMakeLib_GUI_SRCS} )
+  set(FLTK_WRAP_UI 1)
+  fltk_wrap_ui( BatchMakeLib ${BatchMakeLib_GUI_SRCS} )
 
-  ADD_LIBRARY(BatchMakeLib ${BatchMakeLib_SRCS} ${BatchMakeLib_FLTK_UI_SRCS} ${BatchMakeLib_HDRS} ${BatchMakeLib_GUI_SRCS})
+  add_library(BatchMakeLib ${BatchMakeLib_SRCS} ${BatchMakeLib_FLTK_UI_SRCS} ${BatchMakeLib_HDRS} ${BatchMakeLib_GUI_SRCS})
 
   # Following is needed to ensure the existence of CondorWatcherGUI
   #  generated by fluid when BatchMakeUtilities is built
-  ADD_DEPENDENCIES(BatchMakeLib BatchMakeUtilities)
+  add_dependencies(BatchMakeLib BatchMakeUtilities)
 
-  IF(FLTK_FOUND)
-    IF(CYGWIN)
-      TARGET_LINK_LIBRARIES(BatchMakeLib 
+  if(FLTK_FOUND)
+    if(CYGWIN)
+      target_link_libraries(BatchMakeLib
         ole32 uuid comctl32 wsock32 supc++ -lm -lgdi32)
-    ENDIF(CYGWIN)
-  ENDIF(FLTK_FOUND)
+    endif(CYGWIN)
+  endif(FLTK_FOUND)
 
-ELSE(USE_FLTK)
+else(USE_FLTK)
 
-  ADD_LIBRARY(BatchMakeLib ${BatchMakeLib_SRCS} ${BatchMakeLib_HDRS})
+  add_library(BatchMakeLib ${BatchMakeLib_SRCS} ${BatchMakeLib_HDRS})
 
-ENDIF(USE_FLTK)
- 
-TARGET_LINK_LIBRARIES(BatchMakeLib BatchMakeUtilities bmModuleDescriptionParser)
+endif(USE_FLTK)
 
-IF(DASHBOARD_SUPPORT)
+target_link_libraries(BatchMakeLib BatchMakeUtilities bmModuleDescriptionParser)
 
-  IF(WIN32)
+if(DASHBOARD_SUPPORT)
 
-    SET(BatchMakeDashboard_LIBS ws2_32)
+  if(WIN32)
 
-  ELSE(WIN32)
+    set(BatchMakeDashboard_LIBS ws2_32)
 
-    INCLUDE(${CMAKE_ROOT}/Modules/CheckLibraryExists.cmake)
+  else(WIN32)
+
+    include(${CMAKE_ROOT}/Modules/CheckLibraryExists.cmake)
     CHECK_LIBRARY_EXISTS("c" gethostbyname "" NOT_NEED_LIBNSL)
-    IF(NOT NOT_NEED_LIBNSL)
+    if(NOT NOT_NEED_LIBNSL)
       CHECK_LIBRARY_EXISTS("nsl" gethostbyname "" HAVE_LIBNSL)
-    ENDIF(NOT NOT_NEED_LIBNSL)
-    IF(HAVE_LIBNSL)
-      SET(BatchMakeDashboard_LIBS
+    endif(NOT NOT_NEED_LIBNSL)
+    if(HAVE_LIBNSL)
+      set(BatchMakeDashboard_LIBS
           #socket
           nsl
           )
-    ENDIF(HAVE_LIBNSL)
+    endif(HAVE_LIBNSL)
 
-  ENDIF(WIN32)
+  endif(WIN32)
 
-  TARGET_LINK_LIBRARIES(BatchMakeLib ${BatchMakeDashboard_LIBS})
+  target_link_libraries(BatchMakeLib ${BatchMakeDashboard_LIBS})
 
-ENDIF(DASHBOARD_SUPPORT)
+endif(DASHBOARD_SUPPORT)
 
 # If we use XCEDE
-IF(BATCHMAKE_USE_XCEDE)
-  TARGET_LINK_LIBRARIES(BatchMakeLib XcedeLib bmcurl)
-ENDIF(BATCHMAKE_USE_XCEDE)
+if(BATCHMAKE_USE_XCEDE)
+  target_link_libraries(BatchMakeLib XcedeLib bmcurl)
+endif(BATCHMAKE_USE_XCEDE)
 
 # Installation file
-INSTALL(TARGETS BatchMakeLib
+install(TARGETS BatchMakeLib
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib/BatchMake
   ARCHIVE DESTINATION lib/BatchMake)
-INSTALL(FILES ${BatchMake_HDRS}  ${BatchMakeLib_HDRS}  
+install(FILES ${BatchMake_HDRS}  ${BatchMakeLib_HDRS}
   DESTINATION include/BatchMake)
-IF(BATCHMAKE_INSTALL_SOURCE)
-  INSTALL(FILES CMakeLists.txt DESTINATION source/Code)
-  INSTALL(FILES ${BatchMakeLib_SRCS} DESTINATION source/Code)
-  IF(USE_FLTK)
-    INSTALL(FILES ${BatchMakeLib_GUI_SRCS} DESTINATION source/Code)
-  ENDIF(USE_FLTK)
-ENDIF(BATCHMAKE_INSTALL_SOURCE)
+if(BATCHMAKE_INSTALL_SOURCE)
+  install(FILES CMakeLists.txt DESTINATION source/Code)
+  install(FILES ${BatchMakeLib_SRCS} DESTINATION source/Code)
+  if(USE_FLTK)
+    install(FILES ${BatchMakeLib_GUI_SRCS} DESTINATION source/Code)
+  endif(USE_FLTK)
+endif(BATCHMAKE_INSTALL_SOURCE)

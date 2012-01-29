@@ -4,50 +4,50 @@
 # VARIABLE - variable to store the result to
 #
 
-MACRO(BatchMake_GET_CPU_SPEED CPU_MIPS_VAR CPU_MFLOPS_VAR)
+macro(BatchMake_GET_CPU_SPEED CPU_MIPS_VAR CPU_MFLOPS_VAR)
 
-  IF(NOT DEFINED HAVE_${CPU_MIPS_VAR})
+  if(NOT DEFINED HAVE_${CPU_MIPS_VAR})
 
-    IF(NOT BatchMake_GET_CPU_SPEED_EXE)
-	  MESSAGE(FATAL_ERROR "BatchMake_GET_CPU_SPEED_EXE is not defined!")
-    ELSE(NOT BatchMake_GET_CPU_SPEED_EXE)
+    if(NOT BatchMake_GET_CPU_SPEED_EXE)
+	  message(FATAL_ERROR "BatchMake_GET_CPU_SPEED_EXE is not defined!")
+    else(NOT BatchMake_GET_CPU_SPEED_EXE)
 
-      MESSAGE(STATUS "Check the speed of the main CPU...")
-      
-      EXECUTE_PROCESS(COMMAND ${BatchMake_GET_CPU_SPEED_EXE}
+      message(STATUS "Check the speed of the main CPU...")
+
+      execute_process(COMMAND ${BatchMake_GET_CPU_SPEED_EXE}
         OUTPUT_VARIABLE OUTPUT
         RESULT_VARIABLE RESULT)
-      
-      SET(HAVE_${CPU_MIPS_VAR} ${RESULT} CACHE INTERNAL "")
 
-      IF(NOT OUTPUT OR NOT RESULT)
-	    MESSAGE(FATAL_ERROR "GET_CPU_SPEED ERROR:\n${OUTPUT}")
-      ELSE(NOT OUTPUT OR NOT RESULT)
+      set(HAVE_${CPU_MIPS_VAR} ${RESULT} CACHE INTERNAL "")
+
+      if(NOT OUTPUT OR NOT RESULT)
+	    message(FATAL_ERROR "GET_CPU_SPEED ERROR:\n${OUTPUT}")
+      else(NOT OUTPUT OR NOT RESULT)
 
         # MIPS
-        STRING(REGEX MATCH "CPU_MIPS=[A-Z0-9]+" OUTPUT_CPU ${OUTPUT})
-        IF(OUTPUT_CPU)
-          STRING(LENGTH  ${OUTPUT_CPU} OUTPUT_CPU_LENGTH)
-          MATH(EXPR CPU_SIZE "${OUTPUT_CPU_LENGTH}-9")
-          STRING(SUBSTRING ${OUTPUT_CPU} 9 ${CPU_SIZE} ${CPU_MIPS_VAR})
-        ELSE(OUTPUT_CPU)
-          SET(${CPU_MIPS_VAR} 0)
-        ENDIF(OUTPUT_CPU)
-        
+        string(REGEX MATCH "CPU_MIPS=[A-Z0-9]+" OUTPUT_CPU ${OUTPUT})
+        if(OUTPUT_CPU)
+          string(LENGTH  ${OUTPUT_CPU} OUTPUT_CPU_LENGTH)
+          math(EXPR CPU_SIZE "${OUTPUT_CPU_LENGTH}-9")
+          string(SUBSTRING ${OUTPUT_CPU} 9 ${CPU_SIZE} ${CPU_MIPS_VAR})
+        else(OUTPUT_CPU)
+          set(${CPU_MIPS_VAR} 0)
+        endif(OUTPUT_CPU)
+
         # MFLOPS
-        STRING(REGEX MATCH "CPU_MFLOPS=[A-Z0-9]+" OUTPUT_CPU ${OUTPUT})
-        IF(OUTPUT_CPU)
-          STRING(LENGTH  ${OUTPUT_CPU} OUTPUT_CPU_LENGTH)
-          MATH(EXPR CPU_SIZE "${OUTPUT_CPU_LENGTH}-11")
-          STRING(SUBSTRING ${OUTPUT_CPU} 11 ${CPU_SIZE} ${CPU_MFLOPS_VAR})
-        ELSE(OUTPUT_CPU)
-          SET(${CPU_MFLOPS_VAR} 0)
-        ENDIF(OUTPUT_CPU)
+        string(REGEX MATCH "CPU_MFLOPS=[A-Z0-9]+" OUTPUT_CPU ${OUTPUT})
+        if(OUTPUT_CPU)
+          string(LENGTH  ${OUTPUT_CPU} OUTPUT_CPU_LENGTH)
+          math(EXPR CPU_SIZE "${OUTPUT_CPU_LENGTH}-11")
+          string(SUBSTRING ${OUTPUT_CPU} 11 ${CPU_SIZE} ${CPU_MFLOPS_VAR})
+        else(OUTPUT_CPU)
+          set(${CPU_MFLOPS_VAR} 0)
+        endif(OUTPUT_CPU)
 
-      ENDIF(NOT OUTPUT OR NOT RESULT)
-      
-    ENDIF(NOT BatchMake_GET_CPU_SPEED_EXE)
+      endif(NOT OUTPUT OR NOT RESULT)
 
-  ENDIF(NOT DEFINED HAVE_${CPU_MIPS_VAR})
+    endif(NOT BatchMake_GET_CPU_SPEED_EXE)
 
-ENDMACRO(BatchMake_GET_CPU_SPEED)
+  endif(NOT DEFINED HAVE_${CPU_MIPS_VAR})
+
+endmacro(BatchMake_GET_CPU_SPEED)

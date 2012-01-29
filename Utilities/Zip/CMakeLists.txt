@@ -1,19 +1,19 @@
-PROJECT(Zip)
+project(Zip)
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${Zip_SOURCE_DIR}
   ${Zip_BINARY_DIR}
 )
 
-SET(ZLib_HDRS   
-  inftrees.h 
-  infblock.h  
-  infutil.h   
-  zutil.h    
-  infcodes.h 
-  deflate.h  
-  inffast.h   
-  trees.h 
+set(ZLib_HDRS
+  inftrees.h
+  infblock.h
+  infutil.h
+  zutil.h
+  infcodes.h
+  deflate.h
+  inffast.h
+  trees.h
   zip.h
   unzip.h
   zconf.h
@@ -22,55 +22,55 @@ SET(ZLib_HDRS
   inffixed.h
 )
 
-SET(ZLib_SRCS
-  adler32.c   
-  gzio.c      
-  inftrees.c  
+set(ZLib_SRCS
+  adler32.c
+  gzio.c
+  inftrees.c
   uncompr.c
-  compress.c  
-  infblock.c  
-  infutil.c   
+  compress.c
+  infblock.c
+  infutil.c
   zutil.c
-  crc32.c     
-  infcodes.c  
-  deflate.c   
-  inffast.c   
-  inflate.c   
-  trees.c 
+  crc32.c
+  infcodes.c
+  deflate.c
+  inffast.c
+  inflate.c
+  trees.c
 )
 
-SET(Zip_SRCS
+set(Zip_SRCS
   zip.c
   zipcmd.cxx
 )
 
-SET(Unzip_SRCS
+set(Unzip_SRCS
   unzip.c
   unzipcmd.cxx
 )
 
 
-CONFIGURE_FILE(${Zip_SOURCE_DIR}/zlibDllConfig.h.in
+configure_file(${Zip_SOURCE_DIR}/zlibDllConfig.h.in
                ${Zip_BINARY_DIR}/zlibDllConfig.h)
 
-ADD_LIBRARY(BatchMakeZLib ${ZLib_SRCS} ${ZLib_HDRS})
+add_library(BatchMakeZLib ${ZLib_SRCS} ${ZLib_HDRS})
 
-ADD_EXECUTABLE(Zip ${Zip_SRCS})
-TARGET_LINK_LIBRARIES(Zip BatchMakeZLib)
+add_executable(Zip ${Zip_SRCS})
+target_link_libraries(Zip BatchMakeZLib)
 
-ADD_EXECUTABLE(Unzip ${Unzip_SRCS})
-TARGET_LINK_LIBRARIES(Unzip BatchMakeZLib)
+add_executable(Unzip ${Unzip_SRCS})
+target_link_libraries(Unzip BatchMakeZLib)
 
 # Installation file
-INSTALL(TARGETS BatchMakeZLib
+install(TARGETS BatchMakeZLib
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib/BatchMake
   ARCHIVE DESTINATION lib/BatchMake)
-INSTALL(FILES ${ZLib_HDRS} 
+install(FILES ${ZLib_HDRS}
   DESTINATION include/BatchMake/Utilities/Zip)
-IF(BATCHMAKE_INSTALL_SOURCE)
-  INSTALL(FILES ${ZLib_SRCS} ${Zip_SRCS} ${Unzip_SRCS} 
+if(BATCHMAKE_INSTALL_SOURCE)
+  install(FILES ${ZLib_SRCS} ${Zip_SRCS} ${Unzip_SRCS}
     DESTINATION source/BatchMake/Utilities/Zip)
-  INSTALL(FILES CMakeLists.txt zlibDllConfig.h.in 
+  install(FILES CMakeLists.txt zlibDllConfig.h.in
     DESTINATION source/BatchMake/Utilities/Zip)
-ENDIF(BATCHMAKE_INSTALL_SOURCE)
+endif(BATCHMAKE_INSTALL_SOURCE)

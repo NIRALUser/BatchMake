@@ -1,7 +1,7 @@
-CONFIGURE_FILE(
+configure_file(
   ${BatchMake_SOURCE_DIR}/Documentation/Doxygen/doxygen.config.in
   ${BatchMake_BINARY_DIR}/doxygen.config
   )
 
-#FILE(GLOB Doxygen ${BatchMake_SOURCE_DIR}/Documentation/Doxygen/?*.*)
-#INSTALL(FILES ${Doxygen} DESTINATION source/Documentation/Doxygen)
+#file(GLOB Doxygen ${BatchMake_SOURCE_DIR}/Documentation/Doxygen/?*.*)
+#install(FILES ${Doxygen} DESTINATION source/Documentation/Doxygen)

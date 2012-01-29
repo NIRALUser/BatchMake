@@ -1,113 +1,113 @@
 
 #------------------------------------------------------------------------
 # Create BatchMake application
-INCLUDE_DIRECTORIES(
+include_directories(
     ${BatchMake_SOURCE_DIR}/Utilities/bmModuleDescriptionParser
     ${BatchMake_BINARY_DIR}/Utilities/bmModuleDescriptionParser
   )
 
-SET(BatchMake_SRCS BatchMake.cxx)
-IF(WIN32)
-  IF(NOT CYGWIN)
-    IF(NOT MINGW)
-      SET(BatchMake_SRCS ${BatchMake_SRCS} BatchMake.rc)
-    ENDIF(NOT MINGW)
-  ENDIF(NOT CYGWIN)
+set(BatchMake_SRCS BatchMake.cxx)
+if(WIN32)
+  if(NOT CYGWIN)
+    if(NOT MINGW)
+      set(BatchMake_SRCS ${BatchMake_SRCS} BatchMake.rc)
+    endif(NOT MINGW)
+  endif(NOT CYGWIN)
 
- OPTION(HIDE_CONSOLE "Hide the console" OFF)
- IF(HIDE_CONSOLE)
-   SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows")
- ENDIF(HIDE_CONSOLE)
-ENDIF(WIN32)
+ option(HIDE_CONSOLE "Hide the console" OFF)
+ if(HIDE_CONSOLE)
+   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /subsystem:windows")
+ endif(HIDE_CONSOLE)
+endif(WIN32)
 
 
-ADD_EXECUTABLE(BatchMake BatchMake.cxx)
+add_executable(BatchMake BatchMake.cxx)
 
-TARGET_LINK_LIBRARIES(BatchMake ${BatchMake_LIBRARIES})
+target_link_libraries(BatchMake ${BatchMake_LIBRARIES})
 
-ADD_DEPENDENCIES(BatchMake ${BatchMake_LIBRARIES})
-
-#------------------------------------------------------------------------
-# Create the dashboard send application
-
-ADD_EXECUTABLE(bmGridSend bmGridSend.cxx)
-TARGET_LINK_LIBRARIES(bmGridSend ${BatchMake_LIBRARIES})
-UTILITY_SOURCE(BatchMake_GRID_SEND_EXE bmGridSend "" bmGridSend.cxx)
-MARK_AS_ADVANCED(BatchMake_GRID_SEND_EXE)
+add_dependencies(BatchMake ${BatchMake_LIBRARIES})
 
 #------------------------------------------------------------------------
 # Create the dashboard send application
 
-ADD_EXECUTABLE(bmGridStore bmGridStore.cxx)
-TARGET_LINK_LIBRARIES(bmGridStore ${BatchMake_LIBRARIES})
-UTILITY_SOURCE(BatchMake_GRID_STORE_EXE bmGridStore "" bmGridStore.cxx)
-MARK_AS_ADVANCED(BatchMake_GRID_STORE_EXE)
+add_executable(bmGridSend bmGridSend.cxx)
+target_link_libraries(bmGridSend ${BatchMake_LIBRARIES})
+utility_source(BatchMake_GRID_SEND_EXE bmGridSend "" bmGridSend.cxx)
+mark_as_advanced(BatchMake_GRID_SEND_EXE)
 
 #------------------------------------------------------------------------
 # Create the dashboard send application
 
-ADD_EXECUTABLE(bmSliceExtractor bmSliceExtractor.cxx)
-TARGET_LINK_LIBRARIES(bmSliceExtractor ${BatchMake_LIBRARIES})
-UTILITY_SOURCE(BatchMake_SLICE_EXTRACTOR_EXE bmSliceExtractor
+add_executable(bmGridStore bmGridStore.cxx)
+target_link_libraries(bmGridStore ${BatchMake_LIBRARIES})
+utility_source(BatchMake_GRID_STORE_EXE bmGridStore "" bmGridStore.cxx)
+mark_as_advanced(BatchMake_GRID_STORE_EXE)
+
+#------------------------------------------------------------------------
+# Create the dashboard send application
+
+add_executable(bmSliceExtractor bmSliceExtractor.cxx)
+target_link_libraries(bmSliceExtractor ${BatchMake_LIBRARIES})
+utility_source(BatchMake_SLICE_EXTRACTOR_EXE bmSliceExtractor
                "" bmSliceExtractor.cxx)
-MARK_AS_ADVANCED(BatchMake_SLICE_EXTRACTOR_EXE)
+mark_as_advanced(BatchMake_SLICE_EXTRACTOR_EXE)
 
 #------------------------------------------------------------------------
 #  Check Memory
 
-ADD_EXECUTABLE(bmCheckMemory CheckMemory.cxx)
-TARGET_LINK_LIBRARIES(bmCheckMemory ${BatchMake_LIBRARIES})
+add_executable(bmCheckMemory CheckMemory.cxx)
+target_link_libraries(bmCheckMemory ${BatchMake_LIBRARIES})
 
 #------------------------------------------------------------------------
 #  Get CPU Info
 
-ADD_EXECUTABLE(bmGetCPUInfo GetCPUInfo.cxx)
-TARGET_LINK_LIBRARIES(bmGetCPUInfo ${BatchMake_LIBRARIES})
-UTILITY_SOURCE(BatchMake_GET_CPU_INFO_EXE bmGetCPUInfo
+add_executable(bmGetCPUInfo GetCPUInfo.cxx)
+target_link_libraries(bmGetCPUInfo ${BatchMake_LIBRARIES})
+utility_source(BatchMake_GET_CPU_INFO_EXE bmGetCPUInfo
                "" GetCPUInfo.cxx)
-               MARK_AS_ADVANCED(BatchMake_GET_CPU_INFO_EXE)
+               mark_as_advanced(BatchMake_GET_CPU_INFO_EXE)
 
 #------------------------------------------------------------------------
 #  Get Memory Info
 
-ADD_EXECUTABLE(bmGetMemoryInfo GetMemoryInfo.cxx)
-TARGET_LINK_LIBRARIES(bmGetMemoryInfo ${BatchMake_LIBRARIES})
-UTILITY_SOURCE(BatchMake_GET_MEMORY_INFO_EXE bmGetMemoryInfo
+add_executable(bmGetMemoryInfo GetMemoryInfo.cxx)
+target_link_libraries(bmGetMemoryInfo ${BatchMake_LIBRARIES})
+utility_source(BatchMake_GET_MEMORY_INFO_EXE bmGetMemoryInfo
                "" GetMemoryInfo.cxx)
-               MARK_AS_ADVANCED(BatchMake_GET_MEMORY_INFO_EXE)
+               mark_as_advanced(BatchMake_GET_MEMORY_INFO_EXE)
 
 #------------------------------------------------------------------------
 #  Get CPU Speed
 
-ADD_EXECUTABLE(bmGetCPUSpeed GetCPUSpeed.cxx Whetstone.cxx)
-TARGET_LINK_LIBRARIES(bmGetCPUSpeed ${BatchMake_LIBRARIES})
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(Whetstone.cxx PROPERTIES COMPILE_FLAGS -O0)
-ELSE(CMAKE_COMPILER_IS_GNUCXX)
-  IF(WIN32)
-    SET_SOURCE_FILES_PROPERTIES(Whetstone.cxx PROPERTIES COMPILE_FLAGS -Od)
-  ENDIF(WIN32)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-UTILITY_SOURCE(BatchMake_GET_CPU_SPEED_EXE bmGetCPUSpeed
+add_executable(bmGetCPUSpeed GetCPUSpeed.cxx Whetstone.cxx)
+target_link_libraries(bmGetCPUSpeed ${BatchMake_LIBRARIES})
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(Whetstone.cxx PROPERTIES COMPILE_FLAGS -O0)
+else(CMAKE_COMPILER_IS_GNUCXX)
+  if(WIN32)
+    set_source_files_properties(Whetstone.cxx PROPERTIES COMPILE_FLAGS -Od)
+  endif(WIN32)
+endif(CMAKE_COMPILER_IS_GNUCXX)
+utility_source(BatchMake_GET_CPU_SPEED_EXE bmGetCPUSpeed
                "" GetCPUSpeed.cxx)
-               MARK_AS_ADVANCED(BatchMake_GET_CPU_SPEED_EXE)
+               mark_as_advanced(BatchMake_GET_CPU_SPEED_EXE)
 
 #------------------------------------------------------------------------
 # Move apps to where CMake can find them
 
-MACRO(MOVE_EXECUTABLE_TOP_BINARY NAME CACHE_VAR)
-  GET_TARGET_PROPERTY(EXECUTABLE_PATH ${NAME} LOCATION)
-  GET_FILENAME_COMPONENT(EXECUTABLE_NAME ${EXECUTABLE_PATH} NAME)
+macro(MOVE_EXECUTABLE_TOP_BINARY NAME CACHE_VAR)
+  get_target_property(EXECUTABLE_PATH ${NAME} LOCATION)
+  get_filename_component(EXECUTABLE_NAME ${EXECUTABLE_PATH} NAME)
 
-  ADD_CUSTOM_COMMAND(
+  add_custom_command(
     TARGET ${NAME}
     POST_BUILD
     COMMAND ${CMAKE_COMMAND}
        -E copy ${EXECUTABLE_PATH} ${BatchMake_BINARY_DIR}/bin/${EXECUTABLE_NAME}    )
-  SET(${CACHE_VAR} ${BatchMake_BINARY_DIR}/bin/${EXECUTABLE_NAME}
+  set(${CACHE_VAR} ${BatchMake_BINARY_DIR}/bin/${EXECUTABLE_NAME}
     CACHE FILEPATH "" FORCE
     )
-ENDMACRO(MOVE_EXECUTABLE_TOP_BINARY NAME)
+endmacro(MOVE_EXECUTABLE_TOP_BINARY NAME)
 
 MOVE_EXECUTABLE_TOP_BINARY(bmGridSend BatchMake_GRID_SEND_EXE )
 MOVE_EXECUTABLE_TOP_BINARY(bmGridStore BatchMake_GRID_STORE_EXE )
@@ -119,20 +119,20 @@ MOVE_EXECUTABLE_TOP_BINARY(bmGetCPUInfo BatchMake_GET_CPU_INFO_EXE )
 #------------------------------------------------------------------------
 # Installation file
 
-INSTALL(TARGETS BatchMake bmGetCPUInfo bmGetMemoryInfo bmGetCPUSpeed
+install(TARGETS BatchMake bmGetCPUInfo bmGetMemoryInfo bmGetCPUSpeed
         bmSliceExtractor bmGridStore bmGridSend bmCheckMemory
         LIBRARY DESTINATION lib/BatchMake
         ARCHIVE DESTINATION lib/BatchMake
         RUNTIME DESTINATION bin
         )
 
-IF(BATCHMAKE_INSTALL_SOURCE)
-  INSTALL(FILES BatchMake.cxx BatchMake.ico BatchMake.rc Whetstone.h
+if(BATCHMAKE_INSTALL_SOURCE)
+  install(FILES BatchMake.cxx BatchMake.ico BatchMake.rc Whetstone.h
           GetCPUInfo.cxx GetMemoryInfo.cxx GetCPUSpeed.cxx Whetstone.cxx
           bmGridSend.cxx bmGridStore.cxx bmSliceExtractor.cxx CheckMemory.cxx
           DESTINATION source/BatchMake/Applications
           )
-  INSTALL(FILES CMakeLists.txt 
+  install(FILES CMakeLists.txt
           DESTINATION source/BatchMake/Applications
          )
-ENDIF(BATCHMAKE_INSTALL_SOURCE)
+endif(BATCHMAKE_INSTALL_SOURCE)
