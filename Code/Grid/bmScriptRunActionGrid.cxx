@@ -65,6 +65,8 @@ void ScriptRunAction::GenerateGrid(const char* appname)
   if(application->ParameterExists("GenerateXMLFile"))
     {
     m_GridModule->AddApplication(application);
+    // blank out the condor post script
+    application->SetCondorPostScript("");
     }
   else
     {
@@ -77,6 +79,8 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     application->SetParameterValue("GenerateXMLFile","GenerateXMLFile",xmloutputname);
 
     m_GridModule->AddApplication(application);
+    // blank out the condor post script
+    application->SetCondorPostScript("");
 
 #ifdef BM_BATCHBOARD
     // We create the bmGridStore application and send it to condor
