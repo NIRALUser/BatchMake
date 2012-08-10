@@ -1250,7 +1250,7 @@ std::vector<BMString> ScriptActionManager
 }
 */
 
-bool ScriptActionManager::TestExpand( const BMString& param, int linenumber )const
+bool ScriptActionManager::TestExpand( const BMString& param, int )const
 {
 #ifdef VERBOSE
   std::cout << "Test Expand: " << param.GetConstValue() << std::endl;
@@ -1315,7 +1315,7 @@ bool ScriptActionManager::TestConvert(const BMString& param, int linenumber)
 */
 
 bool ScriptActionManager
-::TestConvert(const BMString& parameter, int linenumber)const
+::TestConvert(const BMString& parameter, int )const
 {
 #ifdef VERBOSE
   std::cout << "Test param: "<< parameter.GetConstValue() << std::endl;

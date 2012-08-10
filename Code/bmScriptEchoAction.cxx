@@ -28,7 +28,7 @@ ScriptEchoAction::~ScriptEchoAction()
 {
 }
 
-bool ScriptEchoAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptEchoAction::TestParam(ScriptError* ,int linenumber)
 {
   for( unsigned int i = 0; i < m_Parameters.size() ; ++i )
     {

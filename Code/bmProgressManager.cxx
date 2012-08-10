@@ -38,15 +38,15 @@ void ProgressManager::IsRunning()
 {
 }
 
-void ProgressManager::AddAction(const BMString& name)
+void ProgressManager::AddAction(const BMString& )
 {
 }
 
-void ProgressManager::FinishAction(const BMString& output)
+void ProgressManager::FinishAction(const BMString& )
 {
 }
 
-void ProgressManager::AddOutput(const BMString& output)
+void ProgressManager::AddOutput(const BMString& )
 {
   // AddOutput is typically called by the Run action.
   // After an external application is executed, Run() calls
@@ -93,7 +93,7 @@ void ProgressManager::Start(bool reset)
     }
 }
 
-void ProgressManager::SetFinished(const BMString& message)
+void ProgressManager::SetFinished(const BMString& )
 {
 }
 

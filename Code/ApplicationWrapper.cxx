@@ -274,19 +274,19 @@ bool ApplicationWrapper
           }
         else // we look in the list where is the parameter
           {
-          std::vector<ApplicationWrapperParam>::iterator it = m_SequentialParams.end();
+          std::vector<ApplicationWrapperParam>::iterator it_local = m_SequentialParams.end();
           do
             {
-            it--;
-            (*it).SetParamSubValue(first, second, value, false);
-            if(!strcmp((*it).GetName().toChar(),second.c_str()))
+            it_local--;
+            (*it_local).SetParamSubValue(first, second, value, false);
+            if(!strcmp((*it_local).GetName().toChar(),second.c_str()))
               {
-              (*it).SetValueDefined(true);
-              (*it).SetValue(value.c_str());
+              (*it_local).SetValueDefined(true);
+              (*it_local).SetValue(value.c_str());
               break;
               }
             }
-          while(it != m_SequentialParams.begin());
+          while(it_local != m_SequentialParams.begin());
           }
         }
       else
@@ -294,11 +294,11 @@ bool ApplicationWrapper
         // Look for the child
         if(second.size() > 0)
           {        
-          std::vector<ApplicationWrapperParam>::iterator it = m_params.begin();
-          while(it != m_params.end())
+          std::vector<ApplicationWrapperParam>::iterator it_local = m_params.begin();
+          while(it_local != m_params.end())
             {
-            (*it).SetParamSubValue(first, second, value, true);
-            it++;
+            (*it_local).SetParamSubValue(first, second, value, true);
+            it_local++;
             }
           }
         }
@@ -1248,9 +1248,9 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
 
   while(itksysProcess_WaitForData(gp,&data,&length,&timeout)) // wait for 1s
     {
-    for(int i=0;i<length;i++)
+    for(int i_local=0;i_local<length;i_local++)
       {
-      m_output += data[i];
+      m_output += data[i_local];
       }
     }
   itksysProcess_WaitForExit(gp, 0);
@@ -1410,9 +1410,9 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
     else
       {
     bool already_exists=false;
-    for(int i=0 ; i<parentParam.GetParamsSubSize() ; i++)
+    for(int i_local=0 ; i_local<parentParam.GetParamsSubSize() ; i_local++)
       {
-      if(param.GetName() == parentParam.GetParamsSub()[i].GetName())
+      if(param.GetName() == parentParam.GetParamsSub()[i_local].GetName())
           {
           already_exists = true;
           }
@@ -1426,9 +1426,9 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
     }
 
   bool already_exists=false;
-  for(unsigned int i=0 ; i<this->GetParams().size() ; i++)
+  for(unsigned int i_local=0 ; i_local<this->GetParams().size() ; i_local++)
     {
-    if(parentParam.GetName() == this->GetParams()[i].GetName())
+    if(parentParam.GetName() == this->GetParams()[i_local].GetName())
       {
       already_exists = true;
       }

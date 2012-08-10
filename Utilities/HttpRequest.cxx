@@ -124,16 +124,11 @@ std::string HttpRequest::GetHostIp()
 
 int HttpRequest::GetHostAddress(char* host)
 {
-    struct hostent *phe;
-    char *p;
-
-    phe = gethostbyname( host );
-            
+    const struct hostent * const phe = gethostbyname( host );
     if(phe==NULL)
         return 0;
-    
-    p = *phe->h_addr_list;
-    return *((int*)p);
+    const int *const p = (int *)(*phe->h_addr_list);
+    return *(p);
 }
 
 void HttpRequest::SendString(int sock,std::string str)

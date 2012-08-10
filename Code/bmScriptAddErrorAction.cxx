@@ -29,7 +29,7 @@ ScriptAddErrorAction::~ScriptAddErrorAction()
 {
 }
 
-bool ScriptAddErrorAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptAddErrorAction::TestParam(ScriptError* ,int )
 {
   return true;
 }

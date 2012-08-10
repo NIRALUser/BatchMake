@@ -28,7 +28,7 @@ ScriptGridRequirementsAction::~ScriptGridRequirementsAction()
 {
 }
 
-bool ScriptGridRequirementsAction::TestParam( ScriptError* error, int linenumber )
+bool ScriptGridRequirementsAction::TestParam( ScriptError* , int linenumber )
 {
   for (unsigned int i=1;i<m_Parameters.size();i++)
     {

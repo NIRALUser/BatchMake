@@ -1,7 +1,7 @@
 #include <iostream>
 // This file is located in BatchMake_SOURCE_DIR/Utilities
 #include "Whetstone.h"
-int main(int argc, char * argv[]) 
+int main(int , char * [])
 { 
   Whetstone info;
   info.SetDesiredDurations(5, 20);

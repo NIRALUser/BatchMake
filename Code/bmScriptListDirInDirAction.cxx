@@ -141,9 +141,9 @@ void ScriptListDirInDirAction::Execute()
       if(checkOverwrite)
         {
         std::vector<BMString> values = m_Manager->GetVariable(m_Parameters[0]);
-        for(unsigned int i=0;i<values.size();i++)
+        for(unsigned int i_local=0;i_local<values.size();i_local++)
           {
-          if(!strcmp(values[i].toChar(),dname.c_str()))
+          if(!strcmp(values[i_local].toChar(),dname.c_str()))
             {
             exists = true;
             break;

@@ -131,7 +131,7 @@ void XMLBufferReader::StartElement(const char * name,const char **atts)
 
 /** Callback function -- called from XML parser when ending tag
  * encountered */
-void XMLBufferReader::EndElement(const char *name)
+void XMLBufferReader::EndElement(const char *)
     {
     }
 

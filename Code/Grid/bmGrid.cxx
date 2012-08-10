@@ -450,8 +450,6 @@ void Grid::WriteGAD()
         // This is a hack because grouping was not working...
         if(!m_Grouping && !hasChildren)
           {
-          std::vector<ApplicationWrapperParam>::const_iterator itChildren = itParams;
- 
           std::string value = (*itParams).GetValue().toChar();          
           // Extract the values
           std::vector<std::string> values;
@@ -462,11 +460,11 @@ void Grid::WriteGAD()
               {
               startWord=i+1;
               // Go to the next '\"' and increase the nValues
-              long int pos = value.find("\"",i+1);
-              if(pos != -1)
+              long int local_position = value.find("\"",i+1);
+              if(local_position != -1)
                 {
-                values.push_back(value.substr(startWord,pos-i-1));
-                i=pos+1;
+                values.push_back(value.substr(startWord,local_position-i-1));
+                i=local_position+1;
                 }
               }
             else if(value[i] == ' ')
@@ -544,10 +542,10 @@ void Grid::WriteGAD()
                 if(value[i]=='\"')
                   {
                   // Go to the next '\"' and increase the nValues
-                  long int pos = value.find("\"",i+1);
-                  if(pos != -1)
+                  long int local_position = value.find("\"",i+1);
+                  if(local_position != -1)
                     {
-                    i=pos+1;
+                    i=local_position+1;
                     nValues++;
                     }
                   }
@@ -610,11 +608,11 @@ void Grid::WriteGAD()
                     {
                     startWord=i+1;
                     // Go to the next '\"' and increase the nValues
-                    long int pos = value.find("\"",i+1);
-                    if(pos != -1)
+                    long int local_position = value.find("\"",i+1);
+                    if(local_position != -1)
                       {
-                      values.push_back(value.substr(startWord,pos-i-1));
-                      i=pos+1;
+                      values.push_back(value.substr(startWord,local_position-i-1));
+                      i=local_position+1;
                       }
                     }
                   else if(value[i] == ' ')

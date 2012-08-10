@@ -194,7 +194,7 @@ bool ApplicationWrapperParam
 }
 
 
-void ApplicationWrapperParam::SetParamSubValue(std::string first, std::string second, std::string value, bool boolean)
+void ApplicationWrapperParam::SetParamSubValue(std::string , std::string second, std::string value, bool boolean)
 {
   if(boolean)
 	{

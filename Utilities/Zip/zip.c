@@ -278,10 +278,11 @@ local void ziplocal_putValue_inmemory (dest, x, nbByte)
 /****************************************************************************/
 
 
-local uLong ziplocal_TmzDateToDosDate(ptm,dosDate)
-    tm_zip* ptm;
-    uLong dosDate;
+local uLong ziplocal_TmzDateToDosDate(
+    const tm_zip* const ptm,
+    const uLong dosDate)
 {
+    (void)dosDate;
     uLong year = (uLong)ptm->tm_year;
     if (year>1980)
         year-=1980;
@@ -381,9 +382,9 @@ extern int ZEXPORT zipOpenNewFileInZip (file, filename, zipfi,
     zi->ci.flag = 0;
     if ((level==8) || (level==9))
       zi->ci.flag |= 2;
-    if ((level==2))
+    if (level==2)
       zi->ci.flag |= 4;
-    if ((level==1))
+    if (level==1)
       zi->ci.flag |= 6;
 
     zi->ci.crc32 = 0;

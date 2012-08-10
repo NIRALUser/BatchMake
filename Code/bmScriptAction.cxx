@@ -67,7 +67,7 @@ ScriptAction* ScriptAction::GetParent()
   return m_Parent;
 }
 
-void  ScriptAction::AddAction(ScriptAction* action)
+void  ScriptAction::AddAction(ScriptAction* )
 {
 
 }
@@ -83,7 +83,7 @@ void ScriptAction::SetProgressManager(ProgressManager* progressmanager)
 }
 
 
-bool ScriptAction::TestParam(ScriptError* error, int linenumber)
+bool ScriptAction::TestParam(ScriptError* , int )
 {
   return true;
 }
