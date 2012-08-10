@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -64,7 +64,7 @@ ITK_THREAD_RETURN_TYPE Launch::ThreaderCallback( void * arg )
   ThreadStruct *threadStruct;
   int threadId;
 
-  threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;  
+  threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
   threadStruct = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
 
   Launch* launcher = threadStruct->launcher;
@@ -103,7 +103,7 @@ void Launch::RunCommand()
       b0 = command.find('"',b1+1);
       b1 = command.find('"',b0+1);
       }
-    
+
     if(!inQuotes)
       {
       std::string arg = command.substr(start+1,pos-start-1);
@@ -115,7 +115,7 @@ void Launch::RunCommand()
         arg.erase(quotes,1);
         quotes = arg.find('"');
         }
-      arglist.push_back(arg);  
+      arglist.push_back(arg);
       start = pos;
       }
     pos = command.find(' ',pos+1);
@@ -141,7 +141,7 @@ void Launch::RunCommand()
   itksysProcess_SetOption(m_Process,itksysProcess_Option_HideWindow,1);
 
   itksysProcess_Execute(m_Process);
-  
+
   double timeout = 0.5;
   char* data = NULL;
   int length;
@@ -154,7 +154,7 @@ void Launch::RunCommand()
         m_Error += std::string( data, length );
         break;
       case itksysProcess_Pipe_STDOUT:
-        // When the timeout was failing, I had duplicate outputs, 
+        // When the timeout was failing, I had duplicate outputs,
         // not sure about it
         m_Output += std::string( data, length );
         break;
@@ -198,7 +198,7 @@ void Launch::RunCommand()
                 << std::endl;
       } break;
     }
-  itksysProcess_Delete(m_Process); 
+  itksysProcess_Delete(m_Process);
 }
 
 void Launch::Execute( const BMString& command)
@@ -214,7 +214,7 @@ void Launch::Execute( const BMString& command)
   ThreadStruct str;
   str.launcher = this;
   int threadid = threader->SpawnThread(this->ThreaderCallback, &str);
-  
+
   while(this->GetExecutionState() != 2)
     {
     if(m_ProgressManager)
@@ -228,7 +228,7 @@ void Launch::Execute( const BMString& command)
        }
      itksys::SystemTools::Delay(300); //refresh rate
      }
-  
+
   threader->TerminateThread(threadid);
   // Restore the states
   m_ExecutionState = 0;

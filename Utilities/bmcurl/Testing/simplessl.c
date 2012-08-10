@@ -1,8 +1,8 @@
 /*****************************************************************************
- *                                  _   _ ____  _     
- *  Project                     ___| | | |  _ \| |    
- *                             / __| | | | |_) | |    
- *                            | (__| |_| |  _ <| |___ 
+ *                                  _   _ ____  _
+ *  Project                     ___| | | |  _ \| |
+ *                             / __| | | | |_) | |
+ *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
  * Id
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
        curl_easy_setopt(curl,CURLOPT_CAINFO,pCACertFile);
                                 /* disconnect if we can't validate server's cert */
        curl_easy_setopt(curl,CURLOPT_SSL_VERIFYPEER,1);
-       
+
        res = curl_easy_perform(curl);
        break;                   /* we are done... */
     }

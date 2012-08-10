@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 
@@ -399,7 +399,7 @@ int Flu_Wrap_Group :: layout( bool sbVisible, bool doScrollTo, int *measure )
 
 void Flu_Wrap_Group :: draw()
 {
-  // we first try to fit all children assuming no scrollbar. if they do not all fit, 
+  // we first try to fit all children assuming no scrollbar. if they do not all fit,
   // we have to turn the scrollbar on and try again
   if( layout( false, false ) )
     {

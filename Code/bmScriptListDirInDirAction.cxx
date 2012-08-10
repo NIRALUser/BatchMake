@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -77,7 +77,7 @@ void ScriptListDirInDirAction::Execute()
   BMString value = "";
 
   bool checkOverwrite = false;
- 
+
   // We do not overwrite the variable if specified
   if( (m_Parameters.size() == 4 && !strcmp(m_Parameters[3].toChar(),"NOOVERWRITE"))
     || (m_Parameters.size() == 3 && !strcmp(m_Parameters[2].toChar(),"NOOVERWRITE"))
@@ -96,14 +96,14 @@ void ScriptListDirInDirAction::Execute()
       value += "'";
       }
     }
- 
+
   std::string dir = m_initdir.toChar();
 
   if( (dir[dir.length()-1] != '/') && (dir[dir.length()-1] != '\\') )
     {
     dir += '/';
     }
- 
+
   itksys::Directory directory;
 
   if(!directory.Load(dir.c_str()))
@@ -115,12 +115,12 @@ void ScriptListDirInDirAction::Execute()
     return;
     }
 
-  std::string regexFromWildcard = 
+  std::string regexFromWildcard =
     m_filter.ConvertWildcardToRegEx( ).GetValue();
   itksys::RegularExpression regex(regexFromWildcard.c_str());
 
   for(unsigned int i=0;i<directory.GetNumberOfFiles();i++)
-    {    
+    {
     std::string dname = directory.GetFile(i);
 
     // Check if this is actually a directory

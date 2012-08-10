@@ -38,7 +38,7 @@ class ImageRegistrationAppViewer
 
     itkNewMacro( ImageRegistrationAppViewer );
     itkTypeMacro( ImageRegistrationAppViewer, itk::Command );
-    
+
     typedef itk::SingleValuedNonLinearOptimizer  OptimizerType;
 
     itkSetMacro(DontShowParameters, bool);
@@ -111,7 +111,7 @@ ImageRegistrationApp< TImage >
   m_MomentAffineTransform->SetIdentity();
   m_MomentRegValid = false;
 
-  m_LandmarkScales.set_size(6) ; 
+  m_LandmarkScales.set_size(6) ;
   m_LandmarkScales[0] = 200;
   m_LandmarkScales[1] = 200;
   m_LandmarkScales[2] = 200;
@@ -124,7 +124,7 @@ ImageRegistrationApp< TImage >
   m_LandmarkAffineTransform = AffineTransformType::New() ;
   m_LandmarkAffineTransform->SetIdentity() ;
   m_LandmarkRegValid = false;
-  
+
   m_LoadedRegTransform = LoadedRegTransformType::New();
   m_LoadedRegTransform->SetIdentity();
   m_LoadedAffineTransform = AffineTransformType::New();
@@ -180,7 +180,7 @@ ImageRegistrationApp< TImage >
   m_DeformableRegTransform = DeformableTransformType::New();
   m_DeformableRegValid = false;
   m_DeformableMetricValue = 0;
-  
+
   m_FixedImage = NULL;
   m_MovingImage = NULL;
 
@@ -402,7 +402,7 @@ void
 ImageRegistrationApp< TImage >
 ::RegisterUsingCenters()
   {
-  typename CenterRegistratorType::Pointer registrator = 
+  typename CenterRegistratorType::Pointer registrator =
                                             CenterRegistratorType::New();
 
   registrator->SetMovingImage ( m_MovingImage ) ; // Unlike Rigid and Affine
@@ -423,7 +423,7 @@ ImageRegistrationApp< TImage >
     {
     this->PrintUncaughtError() ;
     }
-  
+
   m_CenterRegValid = true;
   m_CenterRegTransform->SetParameters( registrator->GetTypedTransform()
                                                       ->GetParameters() ) ;
@@ -446,7 +446,7 @@ void
 ImageRegistrationApp< TImage >
 ::RegisterUsingMass()
   {
-  typename MassRegistratorType::Pointer registrator = 
+  typename MassRegistratorType::Pointer registrator =
                                             MassRegistratorType::New();
 
   registrator->SetMovingImage( m_MovingImage ) ; // Unlike Rigid and Affine
@@ -467,7 +467,7 @@ ImageRegistrationApp< TImage >
     {
     this->PrintUncaughtError() ;
     }
-  
+
   m_MassRegValid = true;
   m_MassRegTransform->SetParameters( registrator->GetTypedTransform()
                                                       ->GetParameters() ) ;
@@ -490,7 +490,7 @@ void
 ImageRegistrationApp< TImage >
 ::RegisterUsingMoments()
   {
-  typename MomentRegistratorType::Pointer registrator = 
+  typename MomentRegistratorType::Pointer registrator =
                                             MomentRegistratorType::New();
 
   registrator->SetMovingImage( m_MovingImage ) ; // Unlike Rigid & Affine
@@ -511,7 +511,7 @@ ImageRegistrationApp< TImage >
     {
     this->PrintUncaughtError() ;
     }
-  
+
   m_MomentRegValid = true;
   m_MomentRegTransform->SetParameters( registrator->GetTypedTransform()
                                                       ->GetParameters() ) ;
@@ -537,7 +537,7 @@ ImageRegistrationApp< TImage >
 ::RegisterUsingLandmarks(LandmarkSetType* fixedImageLandmarks,
                          LandmarkSetType* movingImageLandmarks)
   {
-  typename LandmarkRegistratorType::Pointer registrator = 
+  typename LandmarkRegistratorType::Pointer registrator =
                                             LandmarkRegistratorType::New();
 
   registrator->SetFixedLandmarkSet( fixedImageLandmarks );
@@ -560,7 +560,7 @@ ImageRegistrationApp< TImage >
     {
       this->PrintUncaughtError() ;
     }
-  
+
   m_LandmarkRegValid = true;
   m_LandmarkRegTransform->SetParameters( registrator->GetTypedTransform()
                                                       ->GetParameters() ) ;
@@ -607,11 +607,11 @@ ImageRegistrationApp< TImage >
   m_LoadedDeformableTransform->SetGridSpacing( tfm.GetGridSpacing() );
   m_LoadedDeformableTransform->SetGridOrigin( tfm.GetGridOrigin() );
   m_LoadedDeformableTransform->SetParameters(tfm.GetParameters());
-  
+
   m_FinalParameters = tfm.GetParameters();
   m_LoadedDefValid = true;
   }
-  
+
 template< class TImage >
 void
 ImageRegistrationApp< TImage >
@@ -639,15 +639,15 @@ ImageRegistrationApp< TImage >
   {
   m_LoadedRegValid = true;
   m_FinalTransform = m_LoadedAffineTransform;
-  
+
   m_PriorRegistrationMethod = LOADED;
-  
+
   if(m_LoadedDefValid == true)
     {
     m_FinalDeformableTransform = m_LoadedDeformableTransform;
     m_PriorRegistrationMethod = DEFLOADED;
     }
-    
+
 
   //std::cout << "DEBUG: Loaded: FINAL affine transform: " << std::endl
             //<< m_FinalTransform->GetParameters() << std::endl
@@ -660,10 +660,10 @@ void
 ImageRegistrationApp< TImage >
 ::RegisterUsingRigid()
   {
-  typename RigidRegistratorType::Pointer registrator = 
+  typename RigidRegistratorType::Pointer registrator =
                                          RigidRegistratorType::New();
 
-  registrator->SetMovingImage( m_MovingImage ) ;   // ITK transforms the fixed 
+  registrator->SetMovingImage( m_MovingImage ) ;   // ITK transforms the fixed
   registrator->SetFixedImage( m_FixedImage ) ; //   image into the moving image
   registrator->SetFixedImageRegion( m_FixedImageRegion ) ;
   registrator->SetOptimizerScales( m_RigidScales );
@@ -688,7 +688,7 @@ ImageRegistrationApp< TImage >
     case LBFGS:
       {
       std::cout << "LBFGS not supported" << std::endl;
-      return; 
+      return;
       }
     }
 
@@ -707,7 +707,7 @@ ImageRegistrationApp< TImage >
             //<< registrator->GetInitialTransformParameters() << std::endl ;
 
   try
-    {   
+    {
     registrator->StartRegistration();
     }
   catch(ExceptionObject &e)
@@ -745,7 +745,7 @@ void
 ImageRegistrationApp< TImage >
 ::RegisterUsingAffine()
   {
-  typename AffineRegistratorType::Pointer registrator = 
+  typename AffineRegistratorType::Pointer registrator =
                                          AffineRegistratorType::New();
 
   registrator->SetMovingImage( m_MovingImage ) ; // ITK transforms fixed image
@@ -774,7 +774,7 @@ ImageRegistrationApp< TImage >
     case LBFGS:
       {
       std::cout << "LBFGS not supported" << std::endl;
-      return; 
+      return;
       }
     }
 
@@ -792,11 +792,11 @@ ImageRegistrationApp< TImage >
   registrator->SetObserver( viewer );
 
   //std::cout << "DEBUG: Affine: INITIAL versor/offset/scale/skew transform: "
-            //<< std::endl 
+            //<< std::endl
             //<< registrator->GetInitialTransformParameters() << std::endl ;
 
   try
-    {   
+    {
     registrator->StartRegistration();
     }
   catch(ExceptionObject &e)
@@ -828,11 +828,11 @@ ImageRegistrationApp< TImage >
   }
 
 template< class TImage >
-void 
+void
 ImageRegistrationApp< TImage >
 ::RegisterUsingDeformable()
 {
-  typename DeformableRegistratorType::Pointer registrator = 
+  typename DeformableRegistratorType::Pointer registrator =
                                          DeformableRegistratorType::New();
 
   registrator->SetFixedImage( m_FixedImage ) ;
@@ -840,10 +840,10 @@ ImageRegistrationApp< TImage >
 
   //Update the ROI
   typename TImage::RegionType region;
-  
-  typename TImage::RegionType::SizeType movingSize = 
+
+  typename TImage::RegionType::SizeType movingSize =
                             m_MovingImage->GetLargestPossibleRegion().GetSize();
-  typename TImage::RegionType::SizeType fixedSize = 
+  typename TImage::RegionType::SizeType fixedSize =
                             m_FixedImage->GetLargestPossibleRegion().GetSize();
 
   registrator->SetFixedImageRegion( m_FixedImageRegion );
@@ -851,20 +851,20 @@ ImageRegistrationApp< TImage >
   registrator->SetNumberOfControlPoints( m_DeformableNumberOfControlPoints );
 
   registrator->GetTypedTransform()->SetBulkTransform( m_FinalTransform );
-  
+
   registrator->SetOptimizerToLBFGS();
-  
+
   ImageRegistrationAppViewer::Pointer viewer =
     ImageRegistrationAppViewer::New();
   viewer->SetDontShowParameters(true);
   registrator->SetObserver( viewer );
 
   //std::cout << "DEBUG: Deformable: "
-            //<< std::endl 
+            //<< std::endl
             //<< registrator->GetInitialTransformParameters() << std::endl ;
 
   try
-    {   
+    {
     registrator->StartRegistration();
     }
   catch(ExceptionObject &e)
@@ -885,7 +885,7 @@ ImageRegistrationApp< TImage >
 
   m_DeformableMetricValue = registrator->GetTypedMetric()->GetValue(
                                     m_DeformableRegTransform->GetParameters());
-                                      
+
   m_FinalParameters = registrator->GetLastTransformParameters();
 
   m_FinalDeformableTransform = m_DeformableRegTransform;
@@ -973,7 +973,7 @@ ImageRegistrationApp< TImage >
   if ((m_PriorRegistrationMethod == DEFORMABLE)
       || (m_PriorRegistrationMethod == DEFLOADED))
     {
-    return m_ResampleUsingDeformableTransform( 
+    return m_ResampleUsingDeformableTransform(
                                   this->GetFinalDeformableTransform(),
                                   m_MovingImage, m_FixedImage);
     }
@@ -989,11 +989,11 @@ void
 ImageRegistrationApp< TImage >
 ::PrintUncaughtError()
   {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in ImageRegistrationApp:" << std::endl;
   std::cout << "unknown exception caught !!!" << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   }
 
@@ -1002,11 +1002,11 @@ void
 ImageRegistrationApp< TImage >
 ::PrintError(ExceptionObject &e)
   {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in ImageRegistrationApp:" << std::endl;
   std::cout << e << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   }
 
@@ -1021,13 +1021,13 @@ ImageRegistrationApp< TImage >
   typedef itk::LinearInterpolateImageFunction<ImageType, double>
           InterpolatorType;
 
-  typename InterpolatorType::Pointer interpolator = 
+  typename InterpolatorType::Pointer interpolator =
       InterpolatorType::New();
   interpolator->SetInputImage(moving);
-  
-  typename ResampleImageFilterType::Pointer resample = 
+
+  typename ResampleImageFilterType::Pointer resample =
     ResampleImageFilterType::New();
-    
+
   resample->SetInput(moving);
   resample->SetInterpolator(interpolator.GetPointer());
   resample->SetSize(fixed->GetLargestPossibleRegion().GetSize());
@@ -1051,13 +1051,13 @@ ImageRegistrationApp< TImage >
   typedef itk::LinearInterpolateImageFunction<ImageType, double>
           InterpolatorType;
 
-  typename InterpolatorType::Pointer interpolator = 
+  typename InterpolatorType::Pointer interpolator =
       InterpolatorType::New();
-  
-  
+
+
   interpolator->SetInputImage(moving);
-  
-  typename ResampleImageFilterType::Pointer resample = 
+
+  typename ResampleImageFilterType::Pointer resample =
            ResampleImageFilterType::New();
 
   resample->SetTransform( transform );
@@ -1081,11 +1081,11 @@ ImageRegistrationApp< TImage >
     {
     this->PrintUncaughtError() ;
     }
-    
-  
+
+
   return resample->GetOutput();
   }
 
 } // end namespace ITK
-    
+
 #endif //__ImageRegistrationApp_txx

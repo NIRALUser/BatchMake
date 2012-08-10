@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -35,7 +35,7 @@ XMLBufferReader : public LightProcessObject
 {
 public:
 
-  /** Standard typedefs */ 
+  /** Standard typedefs */
   typedef XMLBufferReader                    Self;
   typedef LightProcessObject                 Superclass;
   typedef SmartPointer<Self>                 Pointer;
@@ -66,7 +66,7 @@ public:
    * for an XML element
    */
   virtual void CharacterDataHandler(const char *inData, int inLength);
-  
+
   /** Instantiates and invokes the XML parser for the file named by
    * m_Filename.  The parser will throw an exception in the case of XML
    * syntax errors, missing filenames, unreadable input file, etc.
@@ -77,7 +77,7 @@ public:
 
 protected:
 
-  XMLBufferReader() 
+  XMLBufferReader()
     {
     }
   ~XMLBufferReader() {};

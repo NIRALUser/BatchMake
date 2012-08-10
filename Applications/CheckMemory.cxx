@@ -21,7 +21,7 @@ struct ThreadStruct
 ITK_THREAD_RETURN_TYPE RunProgramCallback(void * arg)
 {
   //unsigned int ThreadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
-  ThreadStruct* str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);  
+  ThreadStruct* str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
   //std::cout << "Running program" << str->program.c_str() << std::endl;
 
   // Extract the arguments from the command line
@@ -108,7 +108,7 @@ ITK_THREAD_RETURN_TYPE CheckMemoryCallback(void * arg)
     float p = info.GetTotalPhysicalMemory()-info.GetAvailablePhysicalMemory();
     virtualMemUsed += v;
     physicalMemUsed += p;
-    
+
     if(v>maxVirtualMemUsed)
       {
       maxVirtualMemUsed = v;
@@ -132,10 +132,10 @@ ITK_THREAD_RETURN_TYPE CheckMemoryCallback(void * arg)
 }
 
 
-int main(int argc, char * argv[]) 
-{ 
+int main(int argc, char * argv[])
+{
   MetaCommand command;
-  
+
   command.SetName("bmCheckMemory");
   command.SetVersion("1.0");
   command.SetAuthor("Kitware Inc");
@@ -160,7 +160,7 @@ int main(int argc, char * argv[])
   str.virtualMemUsed = 0;
   str.physicalMemUsed = 0;
   str.program = "";
-   
+
   multithreader->SetMultipleMethod(1,RunProgramCallback, &str);
   multithreader->SetMultipleMethod(0,CheckMemoryCallback, &str);
 
@@ -168,24 +168,24 @@ int main(int argc, char * argv[])
   // We run the single shot first
   multithreader->MultipleMethodExecute();
   float maxVirtualMemUsedBeg = str.maxVirtualMemUsed;
-  float maxPhysicalMemUsedBeg = str.maxPhysicalMemUsed;  
+  float maxPhysicalMemUsedBeg = str.maxPhysicalMemUsed;
 
   // multithread the execution
   str.done = 0;
   str.program = executable;
   str.virtualMemUsed = 0;
-  str.physicalMemUsed = 0; 
+  str.physicalMemUsed = 0;
   multithreader->MultipleMethodExecute();
 
   //std::cout << "Mean Virtual Memory Used = " << str.virtualMemUsed-virtualMemUsedBeg  << "MB" << std::endl;
   //std::cout << "Mean Physical Memory Used = " << str.physicalMemUsed-physicalMemUsedBeg << "MB" << std::endl;
   std::cout << "Max Virtual Memory Used = " << str.maxVirtualMemUsed-maxVirtualMemUsedBeg  << "MB" << std::endl;
   std::cout << "Max Physical Memory Used = " << str.maxPhysicalMemUsed-maxPhysicalMemUsedBeg << "MB" << std::endl;
-  
+
   if(str.iterations < 10)
     {
     std::cout << "Computed only over " << str.iterations << " iterations" << std::endl;
     }
 
-  return 1; 
+  return 1;
 }

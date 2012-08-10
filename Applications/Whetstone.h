@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -51,7 +51,7 @@
  *     number of subroutine calls and divides which may be
  *     changed by optimisation. For comparison purposes the
  *     compiler and level of optimisation should be identified.
- *       
+ *
  ************************************************************
  *
  *     The original benchmark had a single variable I which
@@ -102,7 +102,7 @@
  *     particular run. This information is appended to file
  *     whets.res along with the results. The input section can
  *     be avoided using a command line parameter N (for example
- *     Whets.exe N).  
+ *     Whets.exe N).
  *
  *     Roy Longbottom  101323.2241@compuserve.com
  *
@@ -144,7 +144,7 @@
  * statements are then supplied to type in the run details.
  *
  ************************************************************
- * 
+ *
  * Examples of results from file whets.res
  *
  * Whetstone Single  Precision Benchmark in C/C++
@@ -196,7 +196,7 @@
  *
  * Whetstone Double  Precision Benchmark in C/C++
  *
- * Compiler          Watcom C/C++ 10.5 Win32NT 
+ * Compiler          Watcom C/C++ 10.5 Win32NT
  * Options           -otexan -zp4 -om -fp5 -5r
  *
  * Loop content                 Result           MFLOPS      MOPS   Seconds
@@ -213,27 +213,27 @@
  * MWIPS                                         67.156             100.066
  *
  *  Note different numeric results to single precision. Slight variations
- *  are normal with different compilers and sometimes optimisation levels. 
+ *  are normal with different compilers and sometimes optimisation levels.
  *
  *
  *             Example Single Precision Optimised Results
  *
  *     MWIPS   MFLOPS  MFLOPS  MFLOPS  COS     EXP     FIXPT    IF    EQUAL
  * PC            1       2       3     MOPS    MOPS    MOPS    MOPS    MOPS
- *                                                                                                                                                
+ *
  * P3  5.68    0.928   0.884   0.673   0.461   0.275   2.36    2.16   0.638
  * P4  16.4    5.09    4.03    2.66    0.526   0.342   6.36    6.00    5.28
  * P5  66.3    26.8    17.1    10.1    2.66    1.51    16.0    19.9    22.9
  * P6  161     50.3    45.2    31.5    4.46    2.77    102     20.6    119
  *
  *            Example Single Precision Non-optimised Results
- *                                                                        
+ *
  * P3  3.07    0.860   0.815   0.328   0.355   0.160   1.70    1.32   0.264
  * P4  10.0    4.68    3.51    1.27    0.482   0.298   5.73    5.20    1.18
  * P5  28.5    20.0    11.8    3.36    2.10    1.21    14.0    11.7    2.42
  * P6  81.7    47.5    37.8    10.9    3.91    2.43    51.2    42.8    7.85
  *
- *        Summary results as in whets.tbl at ftp.nosc.mil/pub/aburto 
+ *        Summary results as in whets.tbl at ftp.nosc.mil/pub/aburto
  *
  *           MFLOPS   = Geometric Mean of three MFLOPS loops
  *           VAX MIPS = 5 * Geometric Mean of last three items above
@@ -244,7 +244,7 @@
  * P3 Clone   AM80386DX with 387        128K    40    5.68    0.820   7.40
  * P4 Escom   80486DX2 CIS chipset      128K    66    16.4    3.79    29.3
  * P5 Escom   Pentium Neptune chipset   256K   100    66.3    16.7    96.9
- * P6 Dell    PentiumPro 440FX PCIset   256K   200    161     41.5    315 
+ * P6 Dell    PentiumPro 440FX PCIset   256K   200    161     41.5    315
  *
  * P3 Clone   AM80386DX with 387        128K    40    3.07    0.613   4.20
  * P4 Escom   80486DX2 CIS chipset      128K    66    10.0    2.75    16.4
@@ -252,7 +252,7 @@
  * P6 Dell    PentiumPro 440FX PCIset   256K   200    81.7    26.9    129
  *
  */
- 
+
 #ifndef WHETSTONES_H
 #define WHETSTONES_H
 
@@ -323,13 +323,13 @@ class Whetstone
     double m_DesiredCalibrationSeconds;
     double m_DesiredBenchmarkSeconds;
 
-    void RunWhetstone(long xtra, double desiredTime, bool calibrate);  
+    void RunWhetstone(long xtra, double desiredTime, bool calibrate);
 
     void Pa(RealType e[4], RealType t, RealType t2);
     void Po(RealType e1[4], long j, long k, long l);
     void P3(RealType *x, RealType *y, RealType *z,
             RealType t, RealType t1, RealType t2);
-  
+
     double m_LoopTime[9];
     double m_LoopMOPS[9];
     double m_LoopMFLOPS[9];

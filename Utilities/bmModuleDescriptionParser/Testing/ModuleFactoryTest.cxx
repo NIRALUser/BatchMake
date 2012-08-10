@@ -55,7 +55,7 @@ int main (int argc, char *argv[])
 
     // Get the module names
     std::vector<std::string> moduleNames = moduleFactory.GetModuleNames();
-    
+
     std::vector<std::string>::const_iterator mit;
     mit = moduleNames.begin();
     while (mit != moduleNames.end())

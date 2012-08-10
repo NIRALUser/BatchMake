@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -54,13 +54,13 @@ MString ScriptGridTransferFileAction::Help()
 
 /** */
 void ScriptGridTransferFileAction::Execute()
-{   
+{
   if(!m_GridModule)
     {
     return;
     }
 
-  std::string transfer = 
+  std::string transfer =
     m_Manager->Convert( m_Parameters[0] ).fromVariable().toChar();
   if( transfer == "ALL")
     {
@@ -77,11 +77,11 @@ void ScriptGridTransferFileAction::Execute()
   else if( transfer == "OUTPUT_FILES")
     {
     m_GridModule->SetTransferFile(Grid::OUTPUT_FILES);
-    }  
+    }
   else if( transfer == "NONE")
     {
-    m_GridModule->SetTransferFile(Grid::NONE);  
-    } 
+    m_GridModule->SetTransferFile(Grid::NONE);
+    }
 }
 
 } // end namespace bm

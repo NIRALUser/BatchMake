@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -71,7 +71,7 @@ void ScriptDashboardSendAction::Execute()
   typedef ScriptActionManager::DashboardExperiment DashboardExperimentType;
   typedef ScriptActionManager::DashboardMethod DashboardMethodType;
   typedef ScriptActionManager::DashboardMethodParameter DashboardMethodParameterType;
-  
+
   // Create the experiment on the dashboard
   std::string url = m_Manager->GetDashboardURL();
   m_ProgressManager->AddAction("BMDashboard: Creating Parameter");
@@ -125,7 +125,7 @@ void ScriptDashboardSendAction::Execute()
   url += "/dashboard.php";
 
   // Check that the experiment exist
-  std::vector<DashboardExperimentType>::const_iterator itE 
+  std::vector<DashboardExperimentType>::const_iterator itE
                                               = dashboard->experiments.begin();
   while(itE != dashboard->experiments.end())
     {
@@ -134,12 +134,12 @@ void ScriptDashboardSendAction::Execute()
       {
       if((!strcmp((*itMeth).variable.c_str(),m_Parameters[0].toChar())))
         {
-        std::vector<DashboardMethodParameterType>::const_iterator itParam 
+        std::vector<DashboardMethodParameterType>::const_iterator itParam
                                                     = (*itMeth).parameters.begin();
         while(itParam != (*itMeth).parameters.end())
           {
           MString param = "${";
-          param += (*itParam).variable.c_str(); 
+          param += (*itParam).variable.c_str();
           // if this is an ideal output
           if((*itParam).ideal == true)
             {
@@ -168,7 +168,7 @@ void ScriptDashboardSendAction::Execute()
             {
             m_request.AddParam((*itParam).name.c_str(),value.c_str());
             }
-           
+
           itParam++;
           }
         }
@@ -176,7 +176,7 @@ void ScriptDashboardSendAction::Execute()
       }
     itE++;
     }
-  
+
 
   MString m_Output = m_request.Send(url.c_str());
 
@@ -185,7 +185,7 @@ void ScriptDashboardSendAction::Execute()
     m_ProgressManager->AddError("Bad Host or connexion problem");
     return;
     }
-  
+
   if (m_Output.toInt() != 0)
     {
     m_ProgressManager->FinishAction("Dashboard problem when sending data");
@@ -200,7 +200,7 @@ void ScriptDashboardSendAction::Execute()
       }
     return;
     }
-  
+
   m_ProgressManager->FinishAction("Data sent");
   return;
 }

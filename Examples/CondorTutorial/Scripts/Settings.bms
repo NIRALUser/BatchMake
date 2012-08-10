@@ -45,7 +45,7 @@ ForEach(i ${image})
 
   include('ImageResample.bms')
 
-  ForEach(j ${seq}) 
+  ForEach(j ${seq})
     include('ImageMath.bms')
     include('RegTool.bms')
     include('Dashboard.bms')

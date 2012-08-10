@@ -9,8 +9,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@ static std::list<BMString> m_keywords;
 const char *code_types[] = {  // List of known C/C++ types...
     "else",
     "endforeach",
-    "endif",  
+    "endif",
     "foreach",
     "if",
     "null"};
@@ -50,8 +50,8 @@ Editor::Editor(int X, int Y, int W, int H, const char* l)
 :Fl_Text_Editor(X, Y, W, H, l)
 {
   m_Parser = NULL;
-   
-  // Specification for the word completion browser (for actions)  
+
+  // Specification for the word completion browser (for actions)
   m_DrawBrowser = false;
   m_Browser = new Flu_Tree_Browser(0, 0,200,80);
   m_Browser->box( FL_DOWN_BOX );
@@ -172,15 +172,15 @@ void Editor::SetParser(ScriptParser* parser)
 
 /** Update the list of wrapped applications */
 void Editor::UpdateApplicationsList()
-{ 
+{
   if(!m_Manager->GetApplicationWrapperList())
     {
     return;
     }
 
   m_ApplicationBrowser->clear();
-  
-  ScriptActionManager::ApplicationWrapperListType::const_iterator it = 
+
+  ScriptActionManager::ApplicationWrapperListType::const_iterator it =
                               m_Manager->GetApplicationWrapperList()->begin();
   if(m_Manager->GetApplicationWrapperList()->size() == 0)
     {
@@ -188,7 +188,7 @@ void Editor::UpdateApplicationsList()
     }
 
   while (it != m_Manager->GetApplicationWrapperList()->end())
-    { 
+    {
     m_ApplicationBrowser->add( (*it)->GetName().c_str() );
     it++;
     }
@@ -201,17 +201,17 @@ void Editor::UpdateApplicationsList()
 
 /** Update the list of keywords */
 void Editor::UpdateKeyword()
-{ 
+{
   m_Browser->clear();
 
   std::vector<BMString> m_list = m_Manager->GenerateKeywordList();
   m_keywords = std::list<BMString>( m_list.begin(), m_list.end() );
-     
+
   m_keywords.sort();
   std::list<BMString>::iterator it;
   std::list<BMString>::iterator end = m_keywords.end();
   for( it = m_keywords.begin(); it != end; ++it)
-    { 
+    {
     m_Browser->add((*it).toChar());
     }
   m_Browser->resize(13,15,200,80);
@@ -219,7 +219,7 @@ void Editor::UpdateKeyword()
 }
 
 void Editor::UpdateVariable()
-{ 
+{
 }
 
 void Editor::SetParentWindow(Fl_Window* parentwindow)
@@ -256,7 +256,7 @@ bool Editor::Find(/*std::list<MString> array,*/const BMString& key)
 }
 
 
-int Editor::compare_keywords(const void *a,const void *b) 
+int Editor::compare_keywords(const void *a,const void *b)
 {
   return (strcmp(*((const char **)a), *((const char **)b)));
 }
@@ -271,7 +271,7 @@ void Editor::style_update(int        pos,          // I - Position of update
                           int        nRestyled,    // I - Number of restyled chars
                           const char *deletedText, // I - Text that was deleted
                           void       *cbArg)       // I - Callback data
-{  
+{
   int  start,                         // Start of text
        end;                           // End of text
   char last;                          // Last style on line
@@ -283,14 +283,14 @@ void Editor::style_update(int        pos,          // I - Position of update
   Fl_Text_Buffer* textbuf = ((Editor *)cbArg)->m_Buffer;
 
   // If this is just a selection change, just unselect the style buffer...
-  if (nInserted == 0 && nDeleted == 0) 
+  if (nInserted == 0 && nDeleted == 0)
     {
     stylebuf->unselect();
     return;
     }
-    
+
   // Track changes in the text buffer...
-  if (nInserted > 0) 
+  if (nInserted > 0)
     {
     // Insert characters into the style buffer...
     style = new char[nInserted + 1];
@@ -300,8 +300,8 @@ void Editor::style_update(int        pos,          // I - Position of update
     stylebuf->replace(pos, pos + nDeleted, style);
     delete [] style;
     style = NULL;
-    } 
-  else 
+    }
+  else
     {
     // Just delete characters in the style buffer...
     stylebuf->remove(pos, pos + nDeleted);
@@ -357,14 +357,14 @@ void Editor::style_update(int        pos,          // I - Position of update
 
   delete [] text;
   text = NULL;
-   
+
   int m_x;
   int m_y;
   ((Editor *)cbArg)->position_to_xy(pos,&m_x,&m_y);
   ((Editor *)cbArg)->ShowOptionFinder(m_x,m_y);
 }
 
-void Editor:: style_parse(const char *text,char *style,int length) 
+void Editor:: style_parse(const char *text,char *style,int length)
 {
   char  current;
   int   col;
@@ -372,21 +372,21 @@ void Editor:: style_parse(const char *text,char *style,int length)
   char  buf[255],*bufptr;
   const char *temp;
 
-  if ((style[0] != 'C') && (style[0] != 'D')) 
+  if ((style[0] != 'C') && (style[0] != 'D'))
     {
     style[0] = 'A';
     }
 
-  for (current = *style, col = 0, last = 0; length > 0; length --, text ++) 
+  for (current = *style, col = 0, last = 0; length > 0; length --, text ++)
     {
-    if (current == 'B') 
+    if (current == 'B')
       {
       current = 'A';
       }
-    if (current == 'A') 
+    if (current == 'A')
       {
       // Check for directives, comments, strings, and keywords...
-      if (strncmp(text, "#", 1) == 0) 
+      if (strncmp(text, "#", 1) == 0)
         {
         current = 'B';
         for (; length > 0 && *text != '\n'; length --, text ++)
@@ -395,11 +395,11 @@ void Editor:: style_parse(const char *text,char *style,int length)
           }
         if (length == 0) break;
         }
-      else if (strncmp(text, "$", 1) == 0) 
+      else if (strncmp(text, "$", 1) == 0)
         {
         current = 'C';
         }
-      else if (strncmp(text, "\\'", 2) == 0) 
+      else if (strncmp(text, "\\'", 2) == 0)
         {
         // Quoted quote...
         *style++ = current;
@@ -408,19 +408,19 @@ void Editor:: style_parse(const char *text,char *style,int length)
         length --;
         col += 2;
         continue;
-        } 
-      else if (*text == '\'') 
+        }
+      else if (*text == '\'')
         {
         current = 'D';
-        } 
-      else 
+        }
+      else
         {
-        temp = text;  
+        temp = text;
         bufptr = buf;
 
         unsigned int offset =0;
-        while ((text[offset] != ' ') 
-               && (offset<strlen(text)) && (text[offset] != '\n') 
+        while ((text[offset] != ' ')
+               && (offset<strlen(text)) && (text[offset] != '\n')
                && (text[offset] != '('))
           {
            *bufptr++ = tolower(*temp++);
@@ -433,9 +433,9 @@ void Editor:: style_parse(const char *text,char *style,int length)
 
         if (bsearch(&bufptr, code_types,
             sizeof(code_types) / sizeof(code_types[0]),
-            sizeof(code_types[0]), compare_keywords)) 
+            sizeof(code_types[0]), compare_keywords))
           {
-          while (text < temp) 
+          while (text < temp)
             {
             *style++ = 'F';
             text ++;
@@ -450,7 +450,7 @@ void Editor:: style_parse(const char *text,char *style,int length)
           }
         else if (Find(/*m_keywords,*/bufptr))
           {
-          while (text < temp) 
+          while (text < temp)
             {
             *style++ = 'G';
             text ++;
@@ -465,8 +465,8 @@ void Editor:: style_parse(const char *text,char *style,int length)
           }
         }
       }
-    //} 
-    else if (current == 'C' && ((strncmp(text+1, ")", 1) == 0) 
+    //}
+    else if (current == 'C' && ((strncmp(text+1, ")", 1) == 0)
                || (strncmp(text, " ", 1) == 0) || (strncmp(text, "}", 1) == 0)) )
       {
       // Close a C comment...
@@ -475,14 +475,14 @@ void Editor:: style_parse(const char *text,char *style,int length)
       col += 1;
       continue;
       }
-    else if (current == 'D') 
+    else if (current == 'D')
       {
       // Continuing in string...
-      if (strncmp(text, "$", 1) == 0) 
+      if (strncmp(text, "$", 1) == 0)
         {
         current = 'H';
         }
-      if (*text == '\'') 
+      if (*text == '\'')
         {
         // End quote...
         *style++ = current;
@@ -491,7 +491,7 @@ void Editor:: style_parse(const char *text,char *style,int length)
         continue;
         }
       }
-    else if (current == 'H' && ((strncmp(text+1, ")", 1) == 0) 
+    else if (current == 'H' && ((strncmp(text+1, ")", 1) == 0)
             || (strncmp(text, " ", 1) == 0) || (strncmp(text, "}", 1) == 0)) )
       {
       // Close a C comment...
@@ -530,9 +530,9 @@ void Editor::AddApplicationsToBrowse()
         if(pos2 != -1)
           {
           long posspace = line.find(" ",pos1);
-          std::string name = line.substr(pos1+1,posspace-pos1-1);  
+          std::string name = line.substr(pos1+1,posspace-pos1-1);
           std::string app = line.substr(posspace+2,pos2-posspace-2); // there should be a @
-              
+
           long pos3 = app.find(" ");
           if(pos3 != -1)
             {
@@ -542,10 +542,10 @@ void Editor::AddApplicationsToBrowse()
           // Search the correct app corresponding to the name
           if(m_Manager->GetApplicationWrapperList())
             {
-            ScriptActionManager::ApplicationWrapperListType::const_iterator it = 
+            ScriptActionManager::ApplicationWrapperListType::const_iterator it =
                                                   m_Manager->GetApplicationWrapperList()->begin();
             while (it != m_Manager->GetApplicationWrapperList()->end())
-              { 
+              {
               if( (*it)->GetName() == app.c_str() )
                 {
                 ApplicationNameType newapp;
@@ -572,7 +572,7 @@ void Editor::Load(const char* filename)
   int m_foundPos = 0;
   while(m_Buffer->findchars_forward(m_foundPos,"\r",&m_foundPos))
     m_Buffer->remove(m_foundPos,m_foundPos+1);
-  
+
   m_Buffer->call_modify_callbacks();
 
   this->AddApplicationsToBrowse();
@@ -640,7 +640,7 @@ void Editor::draw()
     {
     m_ApplicationOptionBrowser->hide();
     }
-    
+
   m_ApplicationBrowser->redraw();
   m_ApplicationOptionBrowser->redraw();
   m_Browser->redraw();
@@ -675,7 +675,7 @@ void Editor::SelectOption(Flu_Tree_Browser* browser, void* widget)
       ((Editor*)widget)->m_CurrentWord = "";
 
       ScriptActionManager m_Manager;
-      ScriptAction* m_help = 
+      ScriptAction* m_help =
                   m_Manager.CreateAction(MString(browser->get_selected(1)->label()).toLower());
       if (m_help)
         {
@@ -699,7 +699,7 @@ void Editor::SelectOption(Flu_Tree_Browser* browser, void* widget)
         }
       }
     }
-} 
+}
 
 /** Callback when a tab completion is done for an action */
 void Editor::SelectApplication(Flu_Tree_Browser* browser, void* widget)
@@ -728,7 +728,7 @@ void Editor::SelectApplication(Flu_Tree_Browser* browser, void* widget)
       ((Editor*)widget)->m_CurrentWord = "";
       }
     }
-} 
+}
 
 /** Callback when a tab completion is done for an action */
 void Editor::SelectApplicationOption(Flu_Tree_Browser* browser, void* widget)
@@ -764,7 +764,7 @@ bool Editor::ShowApplicationOptions(const char* appVarName)
     }
 
   m_ApplicationOptionBrowser->clear();
-  
+
   std::vector<ApplicationNameType>::const_iterator it = m_ApplicationsList.begin();
   ApplicationWrapper* app = NULL;
   while (it != m_ApplicationsList.end())
@@ -847,7 +847,7 @@ int Editor::handle( int event )
         {
         m_ApplicationBrowser->handle(event);
         }
-      take_focus();   
+      take_focus();
       }
 
     // if CTRL+S is pressed we save the script
@@ -856,7 +856,7 @@ int Editor::handle( int event )
       static_cast<ScriptEditorGUIControls*>(m_ScriptEditorGUI)->OnSaveScript();
       return 1;
       }
-    
+
     if ( Fl::event_key() == FL_Escape)
       {
       m_DrawBrowser = false;
@@ -881,7 +881,7 @@ int Editor::handle( int event )
       else if(m_DrawApplicationBrowser)
         {
         m_ApplicationBrowser->handle(event);
-        } 
+        }
       else if(m_DrawApplicationOptionBrowser)
         {
         m_ApplicationOptionBrowser->handle(event);
@@ -902,7 +902,7 @@ int Editor::handle( int event )
         m_ApplicationBrowser->handle(event);
         take_focus();
         return 1;
-        } 
+        }
       else if(m_DrawApplicationOptionBrowser)
         {
         m_ApplicationOptionBrowser->handle(event);
@@ -911,7 +911,7 @@ int Editor::handle( int event )
         }
       else // we check if the current line contains the word SetApp()
         {
-        // get the current line   
+        // get the current line
         std::string line = buffer()->line_text(insert_position());
         std::size_t pos = 0;
         MString lowercaseLine = line;
@@ -927,7 +927,7 @@ int Editor::handle( int event )
             if(pos2 != -1)
               {
               long posspace = line.find(" ",pos1);
-              std::string name = line.substr(pos1+1,posspace-pos1-1);  
+              std::string name = line.substr(pos1+1,posspace-pos1-1);
               std::string app = line.substr(posspace+2,pos2-posspace-2); // there should be a @
               long pos3 = app.find(" ");
               if(pos3 != -1)
@@ -936,24 +936,24 @@ int Editor::handle( int event )
                 }
 
               // Search the correct app corresponding to the name
-              ScriptActionManager::ApplicationWrapperListType::const_iterator it = 
+              ScriptActionManager::ApplicationWrapperListType::const_iterator it =
                                                 m_Manager->GetApplicationWrapperList()->begin();
               while (it != m_Manager->GetApplicationWrapperList()->end())
-                { 
+                {
                 if( (*it)->GetName() == app )
                   {
                   ApplicationNameType newapp;
                   newapp.first = name;
                   newapp.second = (*it);
-                  std::cout << "Added " << name << " = " 
+                  std::cout << "Added " << name << " = "
                             << (*it)->GetName() << std::endl;
                   // Check if the variable is already assigned to a specific application
                   int apppos = -1;
                   bool appexists = false;
-                  std::vector<ApplicationNameType>::const_iterator 
+                  std::vector<ApplicationNameType>::const_iterator
                                                it2 = m_ApplicationsList.begin();
                   while (it2 != m_ApplicationsList.end())
-                    {  
+                    {
                     apppos++;
                     if(!strcmp((*it2).first.c_str(),name.c_str()))
                       {
@@ -986,19 +986,19 @@ int Editor::handle( int event )
         {
         m_Browser->handle(event);
         take_focus();
-        return 1;  
+        return 1;
         }
       else if(m_DrawApplicationBrowser)
         {
         m_ApplicationBrowser->handle(event);
         take_focus();
-        return 1;  
+        return 1;
         }
       else if(m_DrawApplicationOptionBrowser)
         {
         m_ApplicationOptionBrowser->handle(event);
         take_focus();
-        return 1;  
+        return 1;
         }
       }
     else if( Fl::event_key() == FL_Up)
@@ -1007,28 +1007,28 @@ int Editor::handle( int event )
         {
         m_Browser->handle(event);
         take_focus();
-        return 1;  
+        return 1;
         }
       else if(m_DrawApplicationBrowser)
         {
         m_ApplicationBrowser->handle(event);
         take_focus();
-        return 1;  
+        return 1;
         }
       else if(m_DrawApplicationOptionBrowser)
         {
         m_ApplicationOptionBrowser->handle(event);
         take_focus();
-        return 1;  
+        return 1;
         }
       }
     else
-      { 
+      {
       if ((Fl::event_key() == ' ') || (Fl::event_key() == FL_Enter))
         {
         m_CurrentWord = "";
         }
-      else if((Fl::event_key() == '.') || (Fl::event_key() == 65454)) 
+      else if((Fl::event_key() == '.') || (Fl::event_key() == 65454))
       // if it's a dot and the previous word is in the list of known apps/name
         {
         if (!m_DrawApplicationOptionBrowser)
@@ -1051,7 +1051,7 @@ int Editor::handle( int event )
             reword += buffer()->character(i);
             i--;
             }
-         
+
           // reverse the string
           std::string word = "";
           for(i=0;i<(int)reword.size();i++)
@@ -1087,7 +1087,7 @@ int Editor::handle( int event )
             }
           }
         }
-      
+
       ScriptActionManager m_Manager;
       ScriptAction* m_help = m_Manager.CreateAction(m_CurrentWord.toLower());
       if (m_help)
@@ -1118,10 +1118,10 @@ int Editor::handle( int event )
       std::list<BMString>::const_iterator it = m_keywords.begin();
       int i =0;
       while (it != m_keywords.end())
-        { 
+        {
         int m_rating = 0;
         int m_correctword = true;
-       
+
         for (int j=0;j<m_CurrentWord.length();j++)
           {
           if ((*it).length() > j)
@@ -1140,7 +1140,7 @@ int Editor::handle( int event )
             m_correctword = false;
             }
           }
-        
+
         if ((m_rating != 0) && (m_rating > currentrating) && (m_correctword))
           {
           m_Offset = i;
@@ -1157,7 +1157,7 @@ int Editor::handle( int event )
           {
           m_DrawBrowser = true;
           }
-        
+
         Flu_Tree_Browser::Node* m_node = m_Browser->first();
         for (int k=0;k<=m_Offset;k++)
           {
@@ -1173,7 +1173,7 @@ int Editor::handle( int event )
 
         Fl_Text_Editor::handle( event );
         draw();
-        
+
         return 1;
         }
       else

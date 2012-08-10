@@ -4,17 +4,17 @@
 #include "Subject.h"
 
 #include <cctype>
-#include <algorithm> 
+#include <algorithm>
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
 
-struct my_tolower { 
-  char operator()(char c) const 
+struct my_tolower {
+  char operator()(char c) const
     {
     return std::tolower(static_cast<unsigned char>(c));
-    } 
+    }
   };
 
 class Project
@@ -55,7 +55,7 @@ public:
 
 
 private:
-  
+
   std::string m_ProjectName;
   std::string m_GroupName;
   std::vector<Subject*> m_Patients;

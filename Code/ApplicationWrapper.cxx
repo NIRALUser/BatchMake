@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -76,7 +76,7 @@ std::string ApplicationWrapper
 
   std::vector<ApplicationWrapperParam>::const_iterator it = m_params.begin();
   std::vector<ApplicationWrapperParam>::const_iterator end = m_params.end();
-  
+
   if(m_Sequential)
     {
     it  = m_SequentialParams.begin();
@@ -95,30 +95,30 @@ std::string ApplicationWrapper
         {
         line += " ";
         }
-      
+
       // remove the absolute path if the relativePath is on
       if(relativePath && (*it).GetExternalData()>0)
         {
         BMString appname = (*it).GetValue();
         appname = appname.fromVariable();
-        
-        if( itksys::SystemTools::FileIsFullPath( appname.toChar() ) && 
+
+        if( itksys::SystemTools::FileIsFullPath( appname.toChar() ) &&
             (*it).GetExternalData() == 1)
           {
           if( !inputDirectory.empty() )
             {
-            appname = 
+            appname =
               itksys::SystemTools::RelativePath( inputDirectory.c_str(),
                                                  appname.toChar() );
             }
           }
-        else if( itksys::SystemTools::FileIsFullPath( 
-                   appname.toChar() ) && 
+        else if( itksys::SystemTools::FileIsFullPath(
+                   appname.toChar() ) &&
                  (*it).GetExternalData() == 2 )
           {
           if( !outputDirectory.empty() )
             {
-            appname = 
+            appname =
               itksys::SystemTools::RelativePath( outputDirectory.c_str(),
                                                  appname.toChar() );
             }
@@ -139,12 +139,12 @@ std::string ApplicationWrapper
           appname.removeAllChars('\"');
           }
         std::string sappname = appname.toChar();
-        
+
         while(sappname[sappname.size()-1]==' ')
           {
           sappname = sappname.substr(0,sappname.size()-1);
           }
-        
+
         // Preappend the directories
         if( !inputDirectory.empty() && (*it).GetExternalData()==1)
           {
@@ -164,7 +164,7 @@ std::string ApplicationWrapper
             }
           sappname = outputDirectory+slash+sappname;
           }
-          
+
         line += "\""+sappname+"\"";
         }
       else
@@ -187,13 +187,13 @@ std::string ApplicationWrapper
           {
           line += (*it).GetValue().toChar();
           }
-        }   
-      (*it).CheckSubValueDefined( &line, relativePath, 
+        }
+      (*it).CheckSubValueDefined( &line, relativePath,
                                   inputDirectory, outputDirectory );
       }
     it++;
     }
-  
+
   return line;
 }
 
@@ -230,8 +230,8 @@ void ApplicationWrapper::ClearParameterValues()
 
 /** Set the parameter value */
 bool ApplicationWrapper
-::SetParameterValue( const std::string& first, 
-                     const std::string& second, 
+::SetParameterValue( const std::string& first,
+                     const std::string& second,
                      const std::string& value)
 {
   bool found = false;
@@ -262,7 +262,7 @@ bool ApplicationWrapper
           }
       }
 
-      
+
       // We manage the sequential params here
       if(m_Sequential)
         {
@@ -293,7 +293,7 @@ bool ApplicationWrapper
         {
         // Look for the child
         if(second.size() > 0)
-          {        
+          {
           std::vector<ApplicationWrapperParam>::iterator it_local = m_params.begin();
           while(it_local != m_params.end())
             {
@@ -395,7 +395,7 @@ const ApplicationWrapperParam* ApplicationWrapper
     = m_params.end();
   for( it = m_params.begin(); it != end; ++ it )
     {
-    if ( (*it).GetType() == ApplicationWrapperParamSub::Flag && 
+    if ( (*it).GetType() == ApplicationWrapperParamSub::Flag &&
          (*it).GetValue().find( flag.c_str() ) != -1 )
       {
       return &(*it);
@@ -458,14 +458,14 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)const
 
   switch(m_params[offset].GetType())
     {
-    case 0: 
+    case 0:
       m_line += m_params[offset].GetName();
       break;
 
     case 1:
       m_line += m_params[offset].GetValue();
       break;
-      
+
     case 2:
       m_line += "int";
       break;
@@ -493,7 +493,7 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)const
           {
           m_line += "|";
           }
-        }  
+        }
       break;
     }
 
@@ -511,23 +511,23 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)const
 
     switch(m_params[offset].GetParamsSub()[k].GetType())
     {
-    case 0: 
+    case 0:
       m_line += m_params[offset].GetParamsSub()[k].GetName();
           break;
 
-    case 1: 
+    case 1:
       m_line += m_params[offset].GetParamsSub()[k].GetValue();
             break;
-      
-    case 2: 
+
+    case 2:
       m_line += "int";
             break;
 
-    case 3: 
+    case 3:
       m_line += "float";
             break;
 
-    case 4: 
+    case 4:
       if(m_params[offset].GetParamsSub()[k].GetName().length()>0)
               {
         m_line += m_params[offset].GetParamsSub()[k].GetName();
@@ -538,7 +538,7 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)const
             }
             break;
 
-        case 5: 
+        case 5:
       for (unsigned j=0 ; j<m_params[offset].GetParamsSub()[k].GetEnum().size() ; j++)
               {
               m_line += m_params[offset].GetParamsSub()[k].GetEnum()[j];
@@ -546,7 +546,7 @@ void ApplicationWrapper::DisplayParam(MString& m_line,int offset)const
           {
                  m_line += "|";
           }
-              }  
+              }
               break;
       }
 
@@ -583,10 +583,10 @@ MString ApplicationWrapper::GetExampleLine()const
       }
     else
       {
-      m_line = m_applicationpath;  
-      }  
+      m_line = m_applicationpath;
+      }
     }
-  
+
   for (unsigned int i=0 ; i<m_params.size() ; i++)
     {
     DisplayParam(m_line,i);
@@ -605,7 +605,7 @@ void ApplicationWrapper::Save(const std::string& filename)
   int res = m_writer.Open(filename.c_str());
   if( res == -1 )
     {
-    std::cerr << "ApplicationWrapper: Could not open the file \"" 
+    std::cerr << "ApplicationWrapper: Could not open the file \""
               << filename << "\" for saving." << std::endl;
     }
   m_writer.Start("?xml version=\"1.0\" encoding=\"utf-8\"?");
@@ -672,7 +672,7 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
     {
     while(m_balise != "/executable" )
       {
-      if (m_balise == "Name")      
+      if (m_balise == "Name")
         {
         m_name = m_reader.GetValue().GetConstRefValue();
         }
@@ -692,7 +692,7 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
         {
         ReadParam(m_reader, true);
         }
-      m_balise = m_reader.GetBalise(); 
+      m_balise = m_reader.GetBalise();
       if( m_reader.EndOfFile() )
         {
         std::cerr << "Application Wrapper ( Read Module ): "
@@ -727,7 +727,7 @@ void ApplicationWrapper::ReadModule(XMLReader& m_reader, bool newVersion)
         {
         this->ReadParam(m_reader, false);
         }
-      m_balise = m_reader.GetBalise(); 
+      m_balise = m_reader.GetBalise();
       if( m_reader.EndOfFile() )
         {
         std::cerr << "Application Wrapper ( Read Module ): "
@@ -755,7 +755,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
 
       if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toInt());
       if (m_balise == "Noquote") m_param.setNoquote();
-      if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
+      if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());
       if (m_balise == "Enum")     m_list.push_back(m_reader.GetValue());
       if (m_balise == "SubParameter")
         {
@@ -769,7 +769,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
           if (m_balise1 == "Value")    m_subParam.SetValue(m_reader.GetValue());
           if (m_balise1 == "External") m_subParam.SetExternalData(m_reader.GetValue().toInt());
           if (m_balise1 == "Noquote") m_subParam.setNoquote();
-          if (m_balise1 == "Optional") m_subParam.SetOptional(m_reader.GetValue().toBool());   
+          if (m_balise1 == "Optional") m_subParam.SetOptional(m_reader.GetValue().toBool());
           if (m_balise1 == "Enum")     m_list1.push_back(m_reader.GetValue());
           m_balise1 = m_reader.GetBalise();
           }
@@ -794,7 +794,7 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
   int parent = 0;
     while (m_balise != "/Param")
       {
-      if (m_balise == "Name") 
+      if (m_balise == "Name")
         {
         std::string name = m_reader.GetValue().toChar();
         std::string newName = "";
@@ -811,13 +811,13 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
         }
       if (m_balise == "Type")     m_param.SetType(m_reader.GetValue().toInt());
       if (m_balise == "Value")    m_param.SetValue(m_reader.GetValue());
-      if (m_balise == "Parent")  
+      if (m_balise == "Parent")
         {
         parent = m_reader.GetValue().toBool();
         }
       if (m_balise == "External") m_param.SetExternalData(m_reader.GetValue().toInt());
       if (m_balise == "Noquote") m_param.setNoquote();
-      if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());   
+      if (m_balise == "Optional") m_param.SetOptional(m_reader.GetValue().toBool());
       if (m_balise == "Enum")     m_list.push_back(m_reader.GetValue());
       m_balise = m_reader.GetBalise();
       if( m_reader.EndOfFile() )
@@ -842,17 +842,17 @@ void ApplicationWrapper::ReadParam(XMLReader& m_reader, bool newVersion)
           {
           already_exists = true;
           }
-        } 
+        }
       if(!already_exists)
         {
         this->AddParam(m_param);
         }
       }
-    } 
+    }
 }
 
 
-/** Automatic command line parsing. If the current pointed program 
+/** Automatic command line parsing. If the current pointed program
  *  supports --xml option */
 bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const std::string& _path)
 {
@@ -882,7 +882,7 @@ bool ApplicationWrapper::AutomaticCommandLineParsingSlicer(const std::string& _p
   double timeout = 255;
 
   // wait for 1s
-  while( itksysProcess_WaitForData( gp, &data, &length, &timeout)) 
+  while( itksysProcess_WaitForData( gp, &data, &length, &timeout))
     {
     for(int i=0;i<length;i++)
       {
@@ -971,7 +971,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
 
   // extract the name from the filename
   std::string revname;
- 
+
   std::string path = module->GetLocation();
   unsigned int i=0;
   for( i = 0; i < path.size(); ++i)
@@ -985,7 +985,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
     }
 
   std::string name;
-  
+
   int end=0;
   if((int)revname.find("exe.") != -1)
     {
@@ -999,7 +999,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
 
   this->SetName(module->GetTitle().c_str());
   this->SetApplicationPath(path);
-  
+
   std::vector<bm::ModuleParameterGroup>::const_iterator pgbeginit
     = module->GetParameterGroups().begin();
   std::vector<bm::ModuleParameterGroup>::const_iterator pgendit
@@ -1012,7 +1012,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
   // Loop over all parameters that have a flag then loop over the
   // parameters that are index parameters
   //
-  
+
   // Loop over executables with flags
   for (pgit = pgbeginit; pgit != pgendit; ++pgit)
     {
@@ -1028,7 +1028,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
       std::string prefix;
       std::string flag;
       bool hasFlag = false;
-      
+
       if ((*pit).GetLongFlag() != "")
         {
         prefix = "--";
@@ -1049,7 +1049,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
         // second is the value.  THe Parent tag is used to ling flags
         // to values.
         ApplicationWrapperParam param;
-    
+
         // Batchmake uses two parameters to represent non-boolean
         // options.  THe first of the parameters is the "flag", the
         // second is the value.  THe Parent tag is used to ling flags
@@ -1057,7 +1057,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
         // first parameter in the pair is ALWAYS a bool. If there is
         // not a pair, then the parameter is bool anyway.
         param.SetType(1);
-        
+
         // if we are going to be creating a paired set of parameters,
         // then name the first one the <parameter name>.flag and the
         // second one just <parameter name> for the value.
@@ -1080,10 +1080,10 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
         //
         // The flag itself is always external = 0
         param.SetExternalData(0);
-        
+
         // Any module parameter that has a flag is optional.
         param.SetOptional(1);
-                
+
         // Is a child BatchMake parameter needed for the parameter?
     ApplicationWrapperParamSub paramSub;
         if ((*pit).GetTag() != "boolean")
@@ -1102,7 +1102,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
 
           // The name of the BatchMake paired parameter is just the
           // original parameter name
-          paramSub.SetName((*pit).GetName());         
+          paramSub.SetName((*pit).GetName());
           paramSub.SetValue((*pit).GetDefault());
 
 
@@ -1128,7 +1128,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
             {
             paramSub.SetExternalData(0);
             }
-          
+
           // If the flag was specified, then the parameter for the
           // value cannot be option
           paramSub.SetOptional(0);
@@ -1137,7 +1137,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
     this->AddParam(param);
       }
       }
-    }  
+    }
 
   // now tack on any parameters that are based on indices
   //
@@ -1151,7 +1151,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
     std::vector<bm::ModuleParameter>::const_iterator pendit
       = (*pgit).GetParameters().end();
     std::vector<bm::ModuleParameter>::const_iterator pit;
-  
+
     for (pit = pbeginit; pit != pendit; ++pit)
       {
       if ((*pit).GetIndex() != "")
@@ -1166,7 +1166,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
   for (iit = indexmap.begin(); iit != indexmap.end(); ++iit)
     {
     ApplicationWrapperParam param;
-    
+
     // find the module parameter type in the map to BatchMake types
     mp2bmIt = mp2bm.find((*iit).second.GetTag());
     if (mp2bmIt != mp2bm.end())
@@ -1178,7 +1178,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
       // unsupported type. map to string
        param.SetType(4);
       }
-   
+
     param.SetName((*iit).second.GetName());
     param.SetValue((*iit).second.GetDefault());
 
@@ -1205,7 +1205,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
       {
       param.SetExternalData(0);
       }
-   
+
     param.SetOptional(0);
     this->AddParam(param);
     }
@@ -1214,7 +1214,7 @@ AddSlicerModuleDescription(bm::ModuleDescription* module)
 }
 
 
-/** Automatic command line parsing. If the current pointed program 
+/** Automatic command line parsing. If the current pointed program
  *  supports -vxml option */
 bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
 {
@@ -1301,7 +1301,7 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
 
   // extract the name from the filename
   std::string revname;
- 
+
   for(i=0;i<path.size();i++)
     {
     if(path[path.size()-1-i] == '/'
@@ -1313,7 +1313,7 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
     }
 
   std::string name;
-  
+
   int end=0;
   if((int)revname.find("exe.") != -1)
     {
@@ -1374,7 +1374,7 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
       if((*itField).externaldata == MetaCommand::DATA_IN)
         {
         param.SetExternalData(1);
-        }      
+        }
       else if((*itField).externaldata == MetaCommand::DATA_OUT)
         {
         param.SetExternalData(2);
@@ -1422,7 +1422,7 @@ bool ApplicationWrapper::AutomaticCommandLineParsing(const std::string& _path)
         parentParam.AddParamSub(param);
       }
       }
-      itField++; 
+      itField++;
     }
 
   bool already_exists=false;

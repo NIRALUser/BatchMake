@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -29,7 +29,7 @@ ScriptSetAppOptionAction::~ScriptSetAppOptionAction()
 }
 
 bool ScriptSetAppOptionAction::TestParam(ScriptError* error,int linenumber)
-{  
+{
   if (m_Parameters.size() < 2)
     {
      error->SetError(MString("SetAppOption() takes at least two arguments"),linenumber);
@@ -54,7 +54,7 @@ MString ScriptSetAppOptionAction::Help()
 
 void ScriptSetAppOptionAction::Execute()
 {
-  unsigned int i; 
+  unsigned int i;
 /*
   BMString m_value; = m_Manager->Convert(m_Parameters[1]);
   for (i=2;i<m_Parameters.size();i++)
@@ -72,13 +72,13 @@ void ScriptSetAppOptionAction::Execute()
   BMString option1 = appOptions.size() >= 2 ? appOptions[1] : "";
   BMString option2 = appOptions.size() >= 3 ? appOptions[2] : "";
 
-  BMString applicationName = 
+  BMString applicationName =
     m_Manager->GetVariable(application)[0].fromVariable();
-  ApplicationWrapper * app = 
+  ApplicationWrapper * app =
     m_Manager->GetApplicationWrapper( applicationName );
   if( !app )
     {
-    m_ProgressManager->AddError( 
+    m_ProgressManager->AddError(
       BMString("SetAppOption: Cannot find application: ") +
       applicationName );
     return;
@@ -96,7 +96,7 @@ void ScriptSetAppOptionAction::Execute()
       {// if the second parameters has been defined as a variable
       value += param.substr( currentpos, posvar - currentpos );
 
-      std::size_t curly = param.find("}",posvar); 
+      std::size_t curly = param.find("}",posvar);
       if( curly != std::string::npos )
         {
         currentpos = curly + 1;
@@ -116,20 +116,20 @@ void ScriptSetAppOptionAction::Execute()
     value += m_Manager->Convert( m_Parameters[i] );
     }
 
-  bool paramSet = app->SetParameterValue( option1.toChar(), 
-                                          option2.toChar(), 
+  bool paramSet = app->SetParameterValue( option1.toChar(),
+                                          option2.toChar(),
                                           value );
   if(!paramSet)
     {
-    m_ProgressManager->AddError( 
-      BMString("SetAppOption: Cannot find parameter: ") 
+    m_ProgressManager->AddError(
+      BMString("SetAppOption: Cannot find parameter: ")
       + option1 + "." + option2 );
     return;
     }
 
   value = BMString( app->GetApplicationPath() ).toVariable();
   value += " ";
-  value += BMString( 
+  value += BMString(
     app->GetCurrentCommandLineArguments( false ) ).toVariable();
 
   //std::cout << applicationName.toChar() << " " << value.toChar() << std::endl;

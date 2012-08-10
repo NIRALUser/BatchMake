@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 
@@ -116,7 +116,7 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
     };
 
   //! File entry type
-  enum { 
+  enum {
     ENTRY_NONE = 1,         /*!< An empty (or non-existant) entry */
     ENTRY_DIR = 2,          /*!< A directory entry */
     ENTRY_FILE = 4,         /*!< A file entry */
@@ -127,7 +127,7 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
   };
 
   //! Chooser type
-  enum { 
+  enum {
     SINGLE = 0,            /*!< Choose a single file or directory */
     MULTI = 1,             /*!< Choose multiple files or directories */
     DIRECTORY = 4,         /*!< Choose directories (choosing files is implicit if this bit is clear) */
@@ -144,7 +144,7 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
     FluSimpleString type, shortType;
   };
 
-  //! Constructor opening a file chooser with title \b title visiting directory \b path with files filtered according to \b pattern. \b type is a logical OR of Flu_File_Chooser::SINGLE, Flu_File_Chooser::MULTI, and Flu_File_Chooser::DIRECTORY 
+  //! Constructor opening a file chooser with title \b title visiting directory \b path with files filtered according to \b pattern. \b type is a logical OR of Flu_File_Chooser::SINGLE, Flu_File_Chooser::MULTI, and Flu_File_Chooser::DIRECTORY
   Flu_File_Chooser( const char *path, const char *pattern, int type, const char *title );
 
   //! Destructor
@@ -278,7 +278,7 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
 
   // apparently there is a bug in VC6 that prevents friend classes from accessing
   // non-public members. stupid windows
-  // several other compilers were reported to have a problem with this too, so 
+  // several other compilers were reported to have a problem with this too, so
   // i'm just making the whole class public to eliminate potential problems.
   // bad c++ - i know...
   //#ifndef WIN32
@@ -399,7 +399,7 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
     SORT_SIZE = 2,
     SORT_TYPE = 4,
     SORT_DATE = 8,
-    SORT_REVERSE = 16 
+    SORT_REVERSE = 16
   };
   static void _qSort( int how, bool caseSort, Fl_Widget **array, int low, int high );
 
@@ -416,7 +416,7 @@ class FLU_EXPORT Flu_File_Chooser : public Fl_Double_Window
       void updateSize();
       void updateIcon();
 
-      FluSimpleString filename, date, filesize, shortname, 
+      FluSimpleString filename, date, filesize, shortname,
   description, shortDescription, toolTip, altname;
       //FluSimpleString permissions;
       //unsigned char pU, pG, pO; // 3-bit unix style permissions

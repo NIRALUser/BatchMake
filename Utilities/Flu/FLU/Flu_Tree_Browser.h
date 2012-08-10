@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 
@@ -155,15 +155,15 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
   inline bool auto_branches() const
     { return rdata.autoBranches; }
 
-  //! Get the default branch text color 
+  //! Get the default branch text color
   inline Fl_Color branch_color() const
     { return rdata.defBranchColor; }
 
-  //! Get the default branch text font 
+  //! Get the default branch text font
   inline Fl_Font branch_font() const
     { return rdata.defBranchFont; }
 
-  //! Get the default branch text size 
+  //! Get the default branch text size
   inline int branch_size() const
     { return rdata.defBranchSize; }
 
@@ -247,7 +247,7 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
     { return rdata.doubleClickToOpen; }
 
   //! Get the color to use for shading even entries
-  inline Fl_Color even_shaded_entry_color() const 
+  inline Fl_Color even_shaded_entry_color() const
     { return rdata.shadedColors[0]; }
 
   //! Find the entry identified by \b fullpath
@@ -365,15 +365,15 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
   //! \return the last leaf encountered in a depth-first traversal of the tree. NULL means there are no leaves
   inline Node* last_leaf() { return root.last_leaf(); }
 
-  //! Get the default leaf text color 
+  //! Get the default leaf text color
   inline Fl_Color leaf_color() const
     { return rdata.defLeafColor; }
 
-  //! Get the default leaf text font 
+  //! Get the default leaf text font
   inline Fl_Font leaf_font() const
     { return rdata.defLeafFont; }
 
-  //! Get the default leaf text size 
+  //! Get the default leaf text size
   inline int leaf_size() const
     { return rdata.defLeafSize; }
 
@@ -396,7 +396,7 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
   int num_selected();
 
   //! Get the color to use for shading odd entries
-  inline Fl_Color odd_shaded_entry_color() const 
+  inline Fl_Color odd_shaded_entry_color() const
     { return rdata.shadedColors[1]; }
 
   //! Set whether only a single branch (except the root branch) is allowed open at a time. Default is \c false
@@ -609,7 +609,7 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
   inline void widget_gap( int g )
     { rdata.wGap = g; rdata.forceResize = true; }
 
-  //! Get the gap between the widget and the icon that precedes it 
+  //! Get the gap between the widget and the icon that precedes it
   inline int widget_gap() const
     { return rdata.wGap; }
 
@@ -742,7 +742,7 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
       enum { SELECTED = 0x0001, COLLAPSED = 0x0002, LEAF = 0x0004, SHOW_LABEL = 0x0008,
        ACTIVE = 0x0010, EXPAND_TO_WIDTH = 0x0020, ALWAYS_OPEN = 0x0040,
        SOME_VISIBLE_CHILDREN = 0x0080, MOVABLE = 0x0100, DROPPABLE = 0x0200,
-       AUTO_LABEL_COLOR = 0x0400, AUTO_COLOR = 0x0800, AUTO_LABEL = 0x1000, 
+       AUTO_LABEL_COLOR = 0x0400, AUTO_COLOR = 0x0800, AUTO_LABEL = 0x1000,
        SWAP_LABEL_AND_WIDGET = 0x2000, ICON_AT_END = 0x4000 };
 
       // flag manipulator functions
@@ -909,7 +909,7 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
 
       //! Get whether this node draws the label to the left of the widget (\c false, default) or to the right of the widget (\c true)
       inline bool swap_label_and_widget()
-  { return CHECK(SWAP_LABEL_AND_WIDGET); }      
+  { return CHECK(SWAP_LABEL_AND_WIDGET); }
 
       //! \return the selected Node that is at \b index among all selected nodes, or \c NULL if no Node is selected
       /*! For example, \c get_selected(1) will return the first selected node. */
@@ -956,7 +956,7 @@ class FLU_EXPORT Flu_Tree_Browser : public Fl_Group
       inline bool is_root() const
   { return( _parent == 0 ); }
 
-      //! Set the label for this node. Note that setting the label may invalidate a sorted tree. Fix by calling Flu_Tree_Browser::sort() 
+      //! Set the label for this node. Note that setting the label may invalidate a sorted tree. Fix by calling Flu_Tree_Browser::sort()
       inline void label( const char *l )
   { text = l; tree->redraw(); }
 

@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "metaCommand.h"
@@ -22,10 +22,10 @@ int main(int argc, char* argv[])
     {
     std::cout << i << " : " << argv[i] << std::endl;
     }
-  
+
   MetaCommand command;
   command.DisableDeprecatedWarnings();
-  
+
   command.SetName("bmGridSend");
   command.SetVersion("1.0");
   command.SetAuthor("Kitware Inc");
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
   command.AddField("hostname","Hostname of the dashboard",MetaCommand::STRING);
   command.AddField("user","Username to connect to the dashboard",MetaCommand::STRING);
   command.AddField("project","Name of the project",MetaCommand::STRING);
-  
+
   // User key if any
   command.SetOption("key","key",false,"User key");
   command.AddOptionField("key","key",MetaCommand::STRING,true);
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
   command.SetOption("createExperiment","ce",false,"Create an Experiment");
   command.AddOptionField("createExperiment","name",MetaCommand::STRING,true);
   command.AddOptionField("createExperiment","description",MetaCommand::STRING,false);
-  
+
   // Create a method
   command.SetOption("createMethod","cm",false,"Create an Method for an experiment");
   command.AddOptionField("createMethod","experimentName",MetaCommand::STRING,true);
@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
 
   std::string createExperimentName = command.GetValueAsString("createExperiment","name");
   std::string createExperimentDescription = command.GetValueAsString("createExperiment","description");
-    
+
   std::string createMethodName = command.GetValueAsString("createMethod","name");
   std::string createMethodDescription = command.GetValueAsString("createMethod","description");
   std::string createMethodExperiment = command.GetValueAsString("createMethod","experimentName");
@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
 
       char* buf = new char[fileSize+1];
       file.read(buf,fileSize);
-      buf[fileSize] = 0; 
+      buf[fileSize] = 0;
       buffer = buf;
       buffer.resize(fileSize);
       delete [] buf;
@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
       it++;
       std::string value = *it;
       it++;
-     
+
 
       std::string val = value+":";
       int pos = buffer.find(val);
@@ -237,7 +237,7 @@ int main(int argc, char* argv[])
         case 4 :  std::cout << "Over quota: please use DbClear function first" << std::endl; break;
         case 5 :  std::cout << "Host Database error" << std::endl; break;
         case -1 : std::cout << "Connexion problem" << std::endl; break;
-        }  
+        }
       }
     }
 

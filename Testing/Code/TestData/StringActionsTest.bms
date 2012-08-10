@@ -1,6 +1,6 @@
 ExitOnError( '1' )
 # variable expansion
-echo ( '*** Test echo ***'  ) 
+echo ( '*** Test echo ***'  )
 Set( foo toto )
 #echo( 'foo <- toto')
 #echo( '$foo: ' $foo )
@@ -26,7 +26,7 @@ Set( foo3 tonton )
 echo( 'foo3: ' $foo3 )
 
 #for
-echo ( '*** Test for loop ***'  ) 
+echo ( '*** Test for loop ***'  )
 sequence(seq 0 10 0.5)
 echo(${seq})
 ForEach(letter ${seq})

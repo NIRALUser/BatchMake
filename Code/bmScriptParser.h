@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -43,7 +43,7 @@ public:
 
   /** Destructor */
   virtual ~ScriptParser();
-  
+
   void Load(MString filename);
   bool Parse(MString Line);
   int ParseBuffer( const std::string& buffer);
@@ -88,7 +88,7 @@ public:
     }
 
 protected:
-  
+
   int m_LineNumber;
   ScriptActionManager* m_ScriptActionManager;
   std::vector<MString> m_Code;

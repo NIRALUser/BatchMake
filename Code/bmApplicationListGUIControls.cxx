@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "bmScriptEditorGUIControls.h" // should be first
@@ -35,7 +35,7 @@ ApplicationListGUIControls::ApplicationListGUIControls()
   g_list->insertion_mode(FLU_INSERT_BACK);
   g_list->selection_color(97);
   m_WrappedApplicationsPath = "/Applications";
-  m_EditorGUI = NULL;  
+  m_EditorGUI = NULL;
 }
 
 ApplicationListGUIControls::~ApplicationListGUIControls()
@@ -152,7 +152,7 @@ void ApplicationListGUIControls::OnRemove()
     {
     it++;
     }
-  
+
   ApplicationWrapper* wrapper = *it;
   std::string app = m_WrappedApplicationsPath.toChar();
   app += "/";

@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -29,7 +29,7 @@ ScriptSetAppFlagAction::~ScriptSetAppFlagAction()
 }
 
 bool ScriptSetAppFlagAction::TestParam(ScriptError* error,int linenumber)
-{  
+{
   if (m_Parameters.size() < 2)
     {
      error->SetError(MString("SetAppOption() takes at least two arguments"),linenumber);
@@ -60,13 +60,13 @@ void ScriptSetAppFlagAction::Execute()
   BMString option1 = appOptions.size() >= 2 ? appOptions[1] : "";
   BMString option2 = appOptions.size() >= 3 ? appOptions[2] : "";
 
-  BMString applicationName = 
+  BMString applicationName =
     m_Manager->GetVariable(application)[0].fromVariable();
-  ApplicationWrapper * app = 
+  ApplicationWrapper * app =
     m_Manager->GetApplicationWrapper( applicationName );
   if( !app )
     {
-    m_ProgressManager->AddError( 
+    m_ProgressManager->AddError(
       BMString("SetAppOption: Cannot find application: ") +
       applicationName );
     return;
@@ -74,7 +74,7 @@ void ScriptSetAppFlagAction::Execute()
 
   // Copy the values
   BMString value;
-  unsigned int i; 
+  unsigned int i;
   for( i = 1; i < m_Parameters.size(); ++i )
     {
     if( i != 1 )
@@ -85,24 +85,24 @@ void ScriptSetAppFlagAction::Execute()
     }
 
   bool paramSet = false;
-  const ApplicationWrapperParam* option = 
+  const ApplicationWrapperParam* option =
     app->GetParamByFlag( option1.toChar() );
   if( option != NULL )
     {
     option2 = option2 == option1 ? option->GetName() : option2;
     option1 = option->GetName();
-    paramSet = app->SetParameterValue( option1.toChar(), 
-                                       option2.toChar(), 
+    paramSet = app->SetParameterValue( option1.toChar(),
+                                       option2.toChar(),
                                        value );
     }
 
   if(!paramSet)
     {
     // we don't want to generate an error as it is usually not important
-    // parameters that can't be found. 
+    // parameters that can't be found.
     // i.e. processinformationaddress, xml, echo, ignore-rest, version, help
 #ifdef VERBOSE
-    std::cout << "SetAppFlag: Cannot find parameter: " << option1 
+    std::cout << "SetAppFlag: Cannot find parameter: " << option1
               << "." << option2 << std::endl;
 #endif
     return;
@@ -110,7 +110,7 @@ void ScriptSetAppFlagAction::Execute()
 
   value = BMString( app->GetApplicationPath() ).toVariable();
   value += " ";
-  value += BMString( 
+  value += BMString(
     app->GetCurrentCommandLineArguments( false ) ).toVariable();
 
   //std::cout << applicationName.toChar() << " " << value.toChar() << std::endl;

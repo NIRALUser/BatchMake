@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -56,11 +56,11 @@ void ScriptSetAction::Execute()
   BMString param;
   // Check if the parameter 1 is a defined variable
   // This is used by the output application
-  if( m_Manager->IsTestVariable( m_Parameters[1] ) && 
-      m_Parameters[1][0] != '$' && 
+  if( m_Manager->IsTestVariable( m_Parameters[1] ) &&
+      m_Parameters[1][0] != '$' &&
       m_Parameters[1][1] != '{')
     {
-    // m_Parameters[1] is a variable, but the user forgot to 
+    // m_Parameters[1] is a variable, but the user forgot to
     // write it between ${ and }. We do it for him
     param = "${";
     param += m_Parameters[1];
@@ -90,7 +90,7 @@ void ScriptSetAction::Execute()
   // If we are on the grid we use the bmGridStore to store the variable
   if(m_GridModule)
     {
-    this->GenerateGrid( m_Parameters[0].GetConstValue(), 
+    this->GenerateGrid( m_Parameters[0].GetConstValue(),
                         m_value.GetConstValue() );
     return;
     }

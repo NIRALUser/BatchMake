@@ -62,7 +62,7 @@ MomentRegistrator< TImage >
 ::StartRegistration()
   {
   try
-    {   
+    {
     // Don't call superclass startRegistration since optimizer, etc isn't used
     //Superclass::StartRegistration();
     typename MomentsCalculatorType::AffineTransformType::Pointer newTransform;
@@ -96,38 +96,38 @@ MomentRegistrator< TImage >
       newTransform->SetCenter(movingCenterPoint);
       newTransform->SetOffset(offset);
       }
-    else 
+    else
       {
       typename MomentsCalculatorType::Pointer momCalc;
       momCalc = MomentsCalculatorType::New();
-  
+
       momCalc->SetImage(this->GetFixedImage());
       momCalc->Compute();
-      typename MomentsCalculatorType::AffineTransformType::Pointer 
+      typename MomentsCalculatorType::AffineTransformType::Pointer
             fixedImageAxesTransform;
-      fixedImageAxesTransform = 
+      fixedImageAxesTransform =
             momCalc->GetPhysicalAxesToPrincipalAxesTransform();
       typename TransformType::InputPointType fixedImageCenterOfMass;
       for(unsigned int i=0; i<ImageDimension; i++)
         {
         fixedImageCenterOfMass[i] = momCalc->GetCenterOfGravity()[i];
         }
-  
+
       momCalc->SetImage(this->GetMovingImage());
       momCalc->Compute();
-      typename MomentsCalculatorType::AffineTransformType::Pointer 
+      typename MomentsCalculatorType::AffineTransformType::Pointer
             movingImageAxesTransform;
-      movingImageAxesTransform = 
+      movingImageAxesTransform =
             momCalc->GetPrincipalAxesToPhysicalAxesTransform();
       typename TransformType::InputPointType movingImageCenterOfMass;
       for(unsigned int i=0; i<ImageDimension; i++)
         {
         movingImageCenterOfMass[i] = momCalc->GetCenterOfGravity()[i];
         }
-  
+
       typename TransformType::OffsetType offset;
       offset = movingImageCenterOfMass - fixedImageCenterOfMass;
-      
+
       if(m_NumberOfMoments == 1) // Centers of mass
         {
         newTransform->SetCenter(movingImageCenterOfMass);
@@ -160,11 +160,11 @@ void
 MomentRegistrator< TImage >
 ::PrintUncaughtError()
 {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in MomentRegistrator:" << std::endl;
   std::cout << "unknown exception caught !!!" << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
 }
 
@@ -173,11 +173,11 @@ void
 MomentRegistrator< TImage >
 ::PrintError(ExceptionObject &e)
 {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in MomentRegistrator:" << std::endl;
   std::cout << e << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
 }
 

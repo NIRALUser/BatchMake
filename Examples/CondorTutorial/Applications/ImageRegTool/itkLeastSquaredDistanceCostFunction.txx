@@ -53,7 +53,7 @@ LeastSquaredDistanceCostFunction<TTransform>
 /**
  *
  * Set the fixed point set.
- * If the point set passed as argument is empty, an exception 
+ * If the point set passed as argument is empty, an exception
  * is generated.
  *
  */
@@ -72,10 +72,10 @@ LeastSquaredDistanceCostFunction<TTransform>
     }
 
   m_FixedPointSet = fixedPointSet;
-  
+
   if( m_MovingPointSet->GetNumberOfPoints() )
     {
-    if( m_FixedPointSet->GetNumberOfPoints() 
+    if( m_FixedPointSet->GetNumberOfPoints()
         == m_MovingPointSet->GetNumberOfPoints() )
       {
       m_Valid = true;
@@ -98,7 +98,7 @@ LeastSquaredDistanceCostFunction<TTransform>
   unsigned int movingPointSetSize = m_MovingPointSet->GetNumberOfPoints();
 
   Superclass::PrintSelf(os,indent);
-  
+
   os<<"Fixed Pointset Size: "<<fixedPointSetSize<<std::endl;
   os<<"Fixed Pointset: "<<std::endl;
   for( unsigned int i=0; i<fixedPointSetSize; i++)
@@ -108,7 +108,7 @@ LeastSquaredDistanceCostFunction<TTransform>
     os<<"   ["<<m_FixedPointSet->GetPoint(i)->GetPosition()[2]<<"]";
     os<<std::endl;
     }
-  
+
   os<<"Moving Pointset Size: "<<movingPointSetSize<<std::endl;
   os<<"Moving Pointset: "<<std::endl;
   for( unsigned int i=0; i<movingPointSetSize; i++)
@@ -124,7 +124,7 @@ LeastSquaredDistanceCostFunction<TTransform>
  *
  * Set the moving point set.
  * If the moving point set size is not the same as
- * the fixed image point set, an exception will be 
+ * the fixed image point set, an exception will be
  * generated, and the moving point set will not be
  * set.
  *
@@ -142,12 +142,12 @@ LeastSquaredDistanceCostFunction<TTransform>
     e.SetDescription("the point set passed as argument is of size 0...");
     throw(e);
     }
-  
+
   m_MovingPointSet = movingPointSet;
 
   if( m_FixedPointSet->GetNumberOfPoints() )
     {
-    if( m_MovingPointSet->GetNumberOfPoints() 
+    if( m_MovingPointSet->GetNumberOfPoints()
         == m_FixedPointSet->GetNumberOfPoints() )
       {
       m_Valid = true;
@@ -165,7 +165,7 @@ LeastSquaredDistanceCostFunction<TTransform>
 
 /**
  *
- * Return the sum of the square distances between 
+ * Return the sum of the square distances between
  * each point of the fixed point set, and its corresponding
  * point in the moving point set.
  *
@@ -185,7 +185,7 @@ LeastSquaredDistanceCostFunction<TTransform>
     unsigned int  pointSetSize = m_FixedPointSet->GetNumberOfPoints();
 
     m_Transform->SetParameters(parameters);
-    
+
     for( unsigned int i=0; i<pointSetSize; i++)
       {
       transformedPoint.SetPosition(m_Transform->TransformPoint(
@@ -219,7 +219,7 @@ LeastSquaredDistanceCostFunction<TTransform>
 /**
  *
  * No need to return a derivative for that class.
- * This function is just declared to fit into the API 
+ * This function is just declared to fit into the API
  * declared by the upper class.
  *
  */
@@ -239,7 +239,7 @@ LeastSquaredDistanceCostFunction<TTransform>
  */
 
 template< class TTransform >
-unsigned int 
+unsigned int
 LeastSquaredDistanceCostFunction<TTransform>
 ::GetNumberOfParameters(void) const
   {

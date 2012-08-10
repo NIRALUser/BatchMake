@@ -1,8 +1,8 @@
 /***************************************************************************
- *                                  _   _ ____  _     
- *  Project                     ___| | | |  _ \| |    
- *                             / __| | | | |_) | |    
- *                            | (__| |_| |  _ <| |___ 
+ *                                  _   _ ____  _
+ *  Project                     ___| | | |  _ \| |
+ *                             / __| | | | |_) | |
+ *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
  * Copyright (C) 1998 - 2004, Daniel Stenberg, <daniel@haxx.se>, et al.
@@ -10,7 +10,7 @@
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
  * are also available at http://curl.haxx.se/docs/copyright.html.
- * 
+ *
  * You may opt to use, copy, modify, merge, publish, distribute and/or sell
  * copies of the Software, and permit persons to whom the Software is
  * furnished to do so, under the terms of the COPYING file.
@@ -163,17 +163,17 @@ static void MD5_Update (struct md5_ctx *context, /* context */
       < ((UINT4)inputLen << 3))
     context->count[1]++;
   context->count[1] += ((UINT4)inputLen >> 29);
-  
+
   partLen = 64 - bufindex;
 
   /* Transform as many times as possible. */
   if (inputLen >= partLen) {
     memcpy((void *)&context->buffer[bufindex], (void *)input, partLen);
     MD5Transform(context->state, context->buffer);
-    
+
     for (i = partLen; i + 63 < inputLen; i += 64)
       MD5Transform(context->state, &input[i]);
-    
+
     bufindex = 0;
   }
   else

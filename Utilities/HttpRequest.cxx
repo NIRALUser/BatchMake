@@ -9,8 +9,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -59,7 +59,7 @@ void HttpRequest::MemBufferGrow(MemBuffer *b)
 void HttpRequest::MemBufferAddByte(MemBuffer *b,unsigned char byt)
 {
   if( (size_t)(b->position-b->buffer) >= b->size )
-    { 
+    {
     MemBufferGrow(b);
     }
   *(b->position++) = byt;
@@ -97,9 +97,9 @@ std::string HttpRequest::GetHostIp()
     if(err!=0)
         return "";
   #endif
- 
+
   struct hostent *phe = gethostbyname(GetHostName().c_str());
-  if (phe == 0) 
+  if (phe == 0)
       return "";
 
   struct in_addr addr;
@@ -170,7 +170,7 @@ void HttpRequest::ParseURL(const char* url,char* protocol,int lprotocol,
         ptr = work;
     }
 
-    if( (*ptr=='/') && (*(ptr+1)=='/') )      // skip past opening /'s 
+    if( (*ptr=='/') && (*(ptr+1)=='/') )      // skip past opening /'s
         ptr+=2;
 
     ptr2 = ptr;                    // find host
@@ -203,10 +203,10 @@ int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char
     MemBuffer    headersBuffer,messageBuffer;
     char      headerSend[1024];
     bool      done;
-    
+
     ParseURL(url,protocol,sizeof(protocol),host,sizeof(host),    // Parse the URL
         request,sizeof(request),&port);
-    
+
     if(strcmp(protocol,"HTTP"))
         return 1;
 
@@ -223,8 +223,8 @@ int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char
     if (sock < 0)
         return 1;
 
-    
-  sin.sin_family = AF_INET;  
+
+  sin.sin_family = AF_INET;
   sin.sin_port = htons( (unsigned short)port );
   sin.sin_addr.s_addr = GetHostAddress(host);
 
@@ -242,7 +242,7 @@ int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char
     SendString(sock,"GET ");
     strcpy(headerSend, "GET ");
   }
-    else 
+    else
     {
     SendString(sock,"POST ");
     strcpy(headerSend, "POST ");
@@ -291,7 +291,7 @@ int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char
       SendString(sock,headerReceive);
       strcat(headerSend, headerReceive);
       }
-    
+
     SendString(sock,"\r\n");                // Send a blank line to signal end of HTTP headerReceive
     strcat(headerSend, "\r\n");
 
@@ -315,7 +315,7 @@ int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char
   std::cout << test.size()-prev << std::endl;
   prev = test.size();
   test += "\r\n";
-  std::cout << test.size()-prev << std::endl; 
+  std::cout << test.size()-prev << std::endl;
   prev = test.size();
   std::string test2 = "--123456789123456789\r\n";
   test2 += "Content-Disposition: form-data; name=\"gender\"\r\n";
@@ -327,25 +327,25 @@ int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char
   test2 += "1964\r\n";
   test += test2;
   test += "--123456789123456789\r\n";
-  std::cout << test.size()-prev << std::endl; 
+  std::cout << test.size()-prev << std::endl;
   prev = test.size();
   test += "Content-Disposition: form-data; name=\"init\"; filename=\".profile\"\r\n";
-  std::cout << test.size()-prev << std::endl; 
+  std::cout << test.size()-prev << std::endl;
   prev = test.size();
   test += "Content-Type: text/plain\r\n";
-  std::cout << test.size()-prev << std::endl; 
+  std::cout << test.size()-prev << std::endl;
   prev = test.size();
   test += "\r\n";
-  std::cout << test.size()-prev << std::endl; 
+  std::cout << test.size()-prev << std::endl;
   prev = test.size();
   test += "PATH=/local/perl/bin:$PATH\r\n";
-  std::cout << test.size()-prev << std::endl; 
+  std::cout << test.size()-prev << std::endl;
   prev = test.size();
   test += "\r\n";
-  std::cout << test.size()-prev << std::endl; 
+  std::cout << test.size()-prev << std::endl;
   prev = test.size();
   test += "--123456789123456789--\r\n";
-  std::cout << test.size()-prev << std::endl; 
+  std::cout << test.size()-prev << std::endl;
   prev = test.size();
 
   char* testl = new char[100];
@@ -391,7 +391,7 @@ int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char
     req->headerReceive  = (char*) headersBuffer.buffer;
     *(headersBuffer.position) = 0;
 
-    
+
 
     MemBufferCreate(&messageBuffer);              // Now read the HTTP body
 
@@ -404,16 +404,16 @@ int HttpRequest::SendHTTP(const char*  url,const char*  headerReceive,const char
         MemBufferAddBuffer(&messageBuffer, (unsigned char*)&buffer, l);
     } while(l>0);
     *messageBuffer.position = 0;
-    
+
     req->message = (const char*) messageBuffer.buffer;
- 
+
     shutdown(sock,2);
 #ifdef WIN32
     closesocket(sock);
 #else
-    close(sock);  
+    close(sock);
 #endif
-  
+
   // Deleting memory
   delete [] headersBuffer.buffer;
   delete [] messageBuffer.buffer;
@@ -438,11 +438,11 @@ std::string HttpRequest::CreateFile(std::string name,std::string filename)
   m_text += "Content-Disposition: form-data; name=\"";
   m_text += name;
   m_text += "\"; filename=\"";
- 
+
   if ((int)filename.rfind("/") != -1)
     {
     m_text += filename.substr(filename.rfind("/")+1);
-    } 
+    }
   else
     {
     if ((int)filename.rfind("\\") != -1)
@@ -463,7 +463,7 @@ std::string HttpRequest::CreateFile(std::string name,std::string filename)
     {
     fread(&m_val,1,1,m_file);
     m_text += m_val;
-    }  
+    }
   m_text += "\r\n";
 
   fclose(m_file);
@@ -532,7 +532,7 @@ std::string HttpRequest::Send(std::string url)
       }
     }
 
-  
+
   m_text += "--29772313742745--\r\n";
 
   if (SendHTTP(  url.c_str(),
@@ -543,15 +543,15 @@ std::string HttpRequest::Send(std::string url)
     {
     return "-1";
     }
- 
+
   std::vector<Paramstruct>::iterator it =  m_ParamList.begin();
   while(it != m_ParamList.end())
     {
     Paramstruct ps = *it;
     delete [] ps.value;
     it = m_ParamList.erase(it);
-    } 
- 
+    }
+
   m_ParamList.clear();
   m_Filenames.clear();
 

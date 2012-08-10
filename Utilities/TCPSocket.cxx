@@ -23,11 +23,11 @@ int TCPSocket::OpenSocket(const char* IPadress, int port)
     {
     return -1;
     }
-    
-  m_Sin.sin_family = AF_INET;  
+
+  m_Sin.sin_family = AF_INET;
   m_Sin.sin_port = htons( (unsigned short)port );
   m_Sin.sin_addr.s_addr = inet_addr(IPadress);
-  
+
   if( connect (m_Sock,(struct sockaddr* )&m_Sin, sizeof(m_Sin) ) )
   {
      //std::cerr << "ERROR: Connexion problem " << std::endl;
@@ -41,7 +41,7 @@ void TCPSocket::CloseSocket()
   #ifdef WIN32
     closesocket(m_Sock);
   #else
-    close(m_Sock);  
+    close(m_Sock);
   #endif
 }
 

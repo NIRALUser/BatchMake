@@ -26,17 +26,17 @@ DeformableRegistrator< TImage >
 :ImageRegistrationMethod<TImage, TImage>()
   {
   this->SetTransform(TransformType::New());
-  
+
   this->SetInterpolator(InterpolatorType::New());
-  
+
   m_OptimizerMethod = LBFGS;
   m_OptimizerNumberOfIterations = 1000 ;
-  
+
   this->SetMetric(MetricType::New());
   m_MetricNumberOfSpatialSamples = 80000 ;
 
   m_NumberOfControlPoints = 8 ;
-  
+
   m_Observer = 0;
   }
 
@@ -49,7 +49,7 @@ DeformableRegistrator< TImage >
 template< class TImage >
 void
 DeformableRegistrator< TImage >
-::SetOptimizerToOnePlusOne() 
+::SetOptimizerToOnePlusOne()
   {
   m_OptimizerMethod = ONEPLUSONE;
   }
@@ -57,7 +57,7 @@ DeformableRegistrator< TImage >
 template< class TImage >
 void
 DeformableRegistrator< TImage >
-::SetOptimizerToLBFGS() 
+::SetOptimizerToLBFGS()
   {
   m_OptimizerMethod = LBFGS;
   }
@@ -68,16 +68,16 @@ DeformableRegistrator< TImage >
 ::Initialize() throw(ExceptionObject)
   {
   this->GetInterpolator()->SetInputImage( this->GetMovingImage() ) ;
-  this->GetTypedMetric()->SetNumberOfSpatialSamples( 
+  this->GetTypedMetric()->SetNumberOfSpatialSamples(
                           m_MetricNumberOfSpatialSamples );
-  
+
     // Definition of the differents objects used by the B Spline Transform
   TransformType::RegionType bsplineRegion;
   TransformType::RegionType::SizeType gridSizeOnImage;
   TransformType::RegionType::SizeType gridBorderSize;
   TransformType::RegionType::SizeType totalGridSize;
 
-  gridSizeOnImage.Fill( m_NumberOfControlPoints - 3 );  
+  gridSizeOnImage.Fill( m_NumberOfControlPoints - 3 );
   gridBorderSize.Fill( 3 );  // Border for spline order = 3 ( 1 lower, 2 upper )
 
   totalGridSize = gridSizeOnImage + gridBorderSize;
@@ -86,14 +86,14 @@ DeformableRegistrator< TImage >
 
   TransformType::SpacingType spacing   = this->GetFixedImage()->GetSpacing();
   TransformType::OriginType  origin    = this->GetFixedImage()->GetOrigin();
-  
+
   typename TImage::SizeType fixedImageSize = this->GetFixedImageRegion().GetSize();
 
   for(unsigned int r=0; r<3; r++)
     {
-    spacing[r] *= floor( static_cast<double>(fixedImageSize[r] - 1)  / 
+    spacing[r] *= floor( static_cast<double>(fixedImageSize[r] - 1)  /
                          static_cast<double>(gridSizeOnImage[r] - 1) );
-    origin[r]  -=  spacing[r]; 
+    origin[r]  -=  spacing[r];
     }
 
   this->GetTypedTransform()->SetGridSpacing( spacing );
@@ -102,13 +102,13 @@ DeformableRegistrator< TImage >
 
   const unsigned int numberOfParameters =
                this->GetTypedTransform()->GetNumberOfParameters();
-  
+
   ParametersType params( numberOfParameters );
   params.Fill( 0.0 );
   this->GetTypedTransform()->SetParameters( params );
 
   this->SetInitialTransformParameters( params );
-    
+
   switch(m_OptimizerMethod)
     {
     case ONEPLUSONE:
@@ -169,7 +169,7 @@ DeformableRegistrator< TImage >
 ::StartRegistration()
   {
   try
-    {   
+    {
     Superclass::StartRegistration();
     }
   catch(ExceptionObject &e)
@@ -187,11 +187,11 @@ void
 DeformableRegistrator< TImage >
 ::PrintUncaughtError()
 {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in DeformableRegistrator:" << std::endl;
   std::cout << "unknown exception caught !!!" << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
 }
 
@@ -200,11 +200,11 @@ void
 DeformableRegistrator< TImage >
 ::PrintError(ExceptionObject &e)
 {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in DeformableRegistrator:" << std::endl;
   std::cout << e << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
 }
 

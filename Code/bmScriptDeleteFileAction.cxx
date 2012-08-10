@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -36,17 +36,17 @@ bool ScriptDeleteFileAction::TestParam(ScriptError* error,int linenumber)
     {
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
-    
+
   if (m_Parameters.size() > 1)
   {
     error->SetError(MString("too many parameters for DeleteFile"),linenumber);
     return false;
-  } 
+  }
   if (m_Parameters.size() < 1)
   {
     error->SetError(MString("No enough parameter for DeleteFile"),linenumber);
     return false;
-  }   
+  }
 
   return true;
 }
@@ -59,7 +59,7 @@ MString ScriptDeleteFileAction::Help()
 
 void ScriptDeleteFileAction::Execute()
 {
-  MString location = 
+  MString location =
     (m_Manager->Convert(m_Parameters[0]).rbegin("'")+1).latin1();
   bool res;
   if( !itksys::SystemTools::FileIsDirectory( location.toChar() ) )

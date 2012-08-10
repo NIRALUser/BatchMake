@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -71,13 +71,13 @@ void ScriptDashboardNotifyAction::Execute()
 
   url += "/notify.php";
   MString m_Output = m_request.Send(url.c_str());
- 
+
  if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
     return;
     }
-  
+
   if (m_Output.toInt() != 0)
     {
     m_ProgressManager->FinishAction("Dashboard problem when sending data");
@@ -92,7 +92,7 @@ void ScriptDashboardNotifyAction::Execute()
       }
     return;
     }
-  
+
   m_ProgressManager->FinishAction("Data sent");
 }
 

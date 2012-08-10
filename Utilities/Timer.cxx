@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -33,7 +33,7 @@ Timer
     {
       _ftime(_lastStartTime);
       _isRunning  = true;
-    }  
+    }
 }
 
 void
@@ -44,12 +44,12 @@ Timer
     {
       timeb stopTime;
       _ftime(stopTime);
-      
-      _totalStartToStopSeconds += 
+
+      _totalStartToStopSeconds +=
   static_cast<unsigned long>(stopTime.time - _lastStartTime.time);
 
-      _additionalTotalStartToStopMilliseconds += 
-  static_cast<long>(stopTime.millitm) - 
+      _additionalTotalStartToStopMilliseconds +=
+  static_cast<long>(stopTime.millitm) -
   static_cast<long>(_lastStartTime.millitm);
 
       _isRunning = false;
@@ -71,9 +71,9 @@ Timer
 {
   if (_isRunning)
     {
-      timeb now; 
+      timeb now;
       _ftime(now);
-      return _totalStartToStopSeconds + 
+      return _totalStartToStopSeconds +
   static_cast<unsigned long>(now.time - _lastStartTime.time);
     }
   else
@@ -90,16 +90,16 @@ Timer
     {
       timeb now;
       _ftime(now);
-      unsigned long seconds = _totalStartToStopSeconds + 
+      unsigned long seconds = _totalStartToStopSeconds +
   static_cast<unsigned long>(now.time - _lastStartTime.time);
-      
+
       return seconds * 1000 + _additionalTotalStartToStopMilliseconds
   + static_cast<long>(now.millitm)
-  - static_cast<long>(_lastStartTime.millitm);       
+  - static_cast<long>(_lastStartTime.millitm);
     }
   else
     {
-      return _totalStartToStopSeconds * 1000 
+      return _totalStartToStopSeconds * 1000
   + _additionalTotalStartToStopMilliseconds;
     }
 }

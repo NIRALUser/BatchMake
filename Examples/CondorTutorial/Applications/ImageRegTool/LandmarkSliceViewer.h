@@ -32,35 +32,35 @@ class LandmarkSliceViewer : public GLSliceView< TImagePixel,
   {
   public:
 
-    LandmarkSliceViewer(unsigned int x, unsigned int y, 
+    LandmarkSliceViewer(unsigned int x, unsigned int y,
                         unsigned int w, unsigned int h, const char * label=0);
-  
+
     ~LandmarkSliceViewer();
-  
+
     typedef LandmarkSliceViewer< TImagePixel >          Self;
     typedef GLSliceView< TImagePixel, unsigned char >   Superclass;
-  
+
     typedef unsigned char  ViewerColorType;
 
     typedef typename Superclass::SizeType     SizeType;
     typedef typename Superclass::RegionType   RegionType;
     typedef typename Superclass::ImageType    ImageType;
-  
+
     typedef itk::ExceptionObject              ExceptionType;
-  
+
     typedef unsigned char                          OverlayPixelType;
     typedef itk::Image< OverlayPixelType, 3 >      OverlayImageType;
-  
+
     typedef typename ImageType::IndexType          IndexType;
     typedef itk::ContinuousIndex< double, 3 >      ContinuousIndexType;
     typedef itk::Point< double, 3 >                PointType;
-    
+
     typedef itk::LandmarkSpatialObject< 3 >         LandmarkSpatialObjectType;
     typedef LandmarkSpatialObjectType::PointListType  LandmarkPointListType;
     typedef LandmarkSpatialObjectType::LandmarkPointType LandmarkPointType;
-    
+
     void SetInputImage(ImageType* image);
-  
+
     // Landmark functions
     unsigned int GetNumberOfLandmarks();
     //itkSetObjectMacro(LandmarkSpatialObject, LandmarkSpatialObjectType);
@@ -81,37 +81,37 @@ class LandmarkSliceViewer : public GLSliceView< TImagePixel,
     typedef void (*LandmarkChangeCallBack)(void* ptrObject);
     void RegisterLandmarkChangeCallBack(void* ptrObject,
                                         LandmarkChangeCallBack callBack);
-  
-  
+
+
     virtual int handle(int event);
-  
+
     // Region of interest related functions
     void ShowRegionOfInterest();
-  
+
     RegionType ComputeLandmarkRegion(float scale );
-  
+
     void InitializeRegionOfInterestWithLandmarks(float scale);
-  
+
     void InitializeRegionOfInterestWithLargestPossibleRegion();
-  
+
     void ResizeRegionOfInterest(unsigned int axis, int step);
-  
+
     void MoveRegionOfInterest(unsigned int axis, int step);
-  
+
     RegionType ComputeIntersectionRegion(RegionType& A, RegionType& B);
-  
-    void DrawExclusiveRegion(RegionType& target, 
-                             RegionType& exclusion, 
+
+    void DrawExclusiveRegion(RegionType& target,
+                             RegionType& exclusion,
                              ViewerColorType& color);
-  
+
     void DrawRegionOfInterest();
-  
+
     void HideRegionOfInterest();
-  
+
     void FitRegion(RegionType& region);
-  
+
     void ApplyRegionOfInterest();
-    
+
     bool IsRegionOfInterestAvailable()
       {
       for ( unsigned int i = 0; i < 3; ++i )
@@ -123,39 +123,39 @@ class LandmarkSliceViewer : public GLSliceView< TImagePixel,
         }
       return false;
       }
-  
-    RegionType& GetRegionOfInterest() 
+
+    RegionType& GetRegionOfInterest()
       { return m_RegionOfInterest; }
-  
+
   protected:
-  
+
     void DrawLandmark(LandmarkPointType & landmark);
-  
+
     LandmarkSpatialObjectType::Pointer     m_LandmarkSpatialObject;
     LandmarkPointListType *                m_LandmarkPointList;
-  
+
     enum Action{ None, Add };
-  
+
     enum Mode{ Normal, Selection };
-  
-    Mode                   m_Mode; 
+
+    Mode                   m_Mode;
     Action                 m_Action;
-  
+
     unsigned int           m_LandmarkCandidateId;
     LandmarkPointType      m_LandmarkCandidate;
-  
+
     void *                 m_LandmarkChangeCallBackObject;
     LandmarkChangeCallBack m_LandmarkChangeCallBack;
-  
+
     RegionType             m_RegionOfInterest;
     RegionType             m_TempRegionOfInterest;
     RegionType             m_TempPreviousRegionOfInterest;
-    
+
     typedef std::list< IndexType >      IndexListType;
     IndexListType          m_TempRemovalIndexes;
     IndexListType          m_TempAdditionIndexes;
   };
-  
+
 #include "LandmarkSliceViewer.txx"
-  
+
 #endif //__LandmarkSliceViewer_h

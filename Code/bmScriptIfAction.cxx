@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -76,7 +76,7 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
   BMString left = m_Parameters[startingParameter];
   if(left[0] == '$')
     {
-    std::vector<BMString> variables = 
+    std::vector<BMString> variables =
       m_Manager->GetVariable(m_Parameters[startingParameter]);
     if ( variables.size() )
       {
@@ -88,7 +88,7 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
       }
     }
   left = left.fromVariable();
-  
+
   BMString right = "";
 
   if(conditionSize>2)
@@ -129,7 +129,7 @@ bool ScriptIfAction::TestCurrentCondition(unsigned int startingParameter,unsigne
       {
       return true;
       }
-    } 
+    }
   else if (m_Parameters[startingParameter+1].toLowerCopy() == "<")
     {
     if (left.toFloat() < right.toFloat())
@@ -176,7 +176,7 @@ void ScriptIfAction::Execute()
         break;
         }
       }
-   
+
     bool currentCondition = this->TestCurrentCondition(currentPosition,endPosition-currentPosition);
 
     // If we have already the condition we stop

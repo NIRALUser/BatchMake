@@ -1,8 +1,8 @@
 /*****************************************************************************
- *                                  _   _ ____  _     
- *  Project                     ___| | | |  _ \| |    
- *                             / __| | | | |_) | |    
- *                            | (__| |_| |  _ <| |___ 
+ *                                  _   _ ____  _
+ *  Project                     ___| | | |  _ \| |
+ *                             / __| | | | |_) | |
+ *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
  * Id
@@ -30,7 +30,7 @@ WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *data)
 {
   register int realsize = size * nmemb;
   struct MemoryStruct *mem = (struct MemoryStruct *)data;
-  
+
   mem->memory = (char *)realloc(mem->memory, mem->size + realsize + 1);
   if (mem->memory) {
     memcpy(&(mem->memory[mem->size]), ptr, realsize);

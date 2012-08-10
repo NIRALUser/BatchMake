@@ -28,9 +28,9 @@ void Resource::SetProcessStep(std::string program, std::string programArguments)
 
 void Resource::GenerateProcessStepInfo()
 {
-  //int nRet; 
-  //WSADATA wsaData; 
-  //WORD version = MAKEWORD(1,1); 
+  //int nRet;
+  //WSADATA wsaData;
+  //WORD version = MAKEWORD(1,1);
 
   m_ProcessStep.timeStamp = itksys::SystemTools::GetCurrentDateTime("%Y-%m-%dT%X").c_str();
 
@@ -38,7 +38,7 @@ void Resource::GenerateProcessStepInfo()
     {
     m_ProcessStep.user = itksys::SystemTools::GetEnv("USER");
     }
-  else 
+  else
     {
     m_ProcessStep.user = "(unknown)";
     }

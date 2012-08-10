@@ -3,14 +3,14 @@
 #include <itksys/SystemInformation.hxx>
 
 int main(int , char * [])
-{ 
+{
   itksys::SystemInformation info;
   info.RunCPUCheck();
-  std::cout << "CPU_SPEED_MHZ=" << (int) info.GetProcessorClockFrequency() 
+  std::cout << "CPU_SPEED_MHZ=" << (int) info.GetProcessorClockFrequency()
             << std::endl;
-  std::cout << "CPU_PHYSICAL_CPUS=" << (int) info.GetNumberOfPhysicalCPU() 
+  std::cout << "CPU_PHYSICAL_CPUS=" << (int) info.GetNumberOfPhysicalCPU()
             << std::endl;
-  std::cout << "CPU_LOGICAL_CPUS=" << (int) info.GetNumberOfLogicalCPU() 
+  std::cout << "CPU_LOGICAL_CPUS=" << (int) info.GetNumberOfLogicalCPU()
             << std::endl;
-  return 1; 
+  return 1;
 }

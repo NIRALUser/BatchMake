@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -43,7 +43,7 @@ bool ScriptRandomizeAction::TestParam(ScriptError* error,int linenumber)
       && (m_Parameters[1].toLowerCopy() != "uniform")\
       && (m_Parameters[1].toLowerCopy() != "categorical"))
     {
-    error->SetError( BMString("No valid parameters for Randomize [") 
+    error->SetError( BMString("No valid parameters for Randomize [")
                       + m_Parameters[1] + "]",linenumber);
     return false;
     }
@@ -73,7 +73,7 @@ bool ScriptRandomizeAction::TestParam(ScriptError* error,int linenumber)
     }
 
   return true;
-} 
+}
 
 MString ScriptRandomizeAction::Help()
 {
@@ -90,10 +90,10 @@ void ScriptRandomizeAction::Execute()
     float m_min = m_Parameters[2].toFloat();
     float m_max = m_Parameters[3].toFloat();
     //sprintf(m_text,"'%f'",(((float)rand()*(m_max-m_min))/(float)RAND_MAX)+m_min);
-    m_value = BMString( ( ( (float)rand() * ( m_max - m_min ) ) / 
+    m_value = BMString( ( ( (float)rand() * ( m_max - m_min ) ) /
                            (float)RAND_MAX ) + m_min ).toVariable();
     }
-  
+
   m_Manager->SetVariable(m_Parameters[0],m_value);
 }
 

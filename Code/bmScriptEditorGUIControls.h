@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -28,7 +28,7 @@
 #include "XMLIniIO.h"
 
 #ifdef BM_GRID
-  #if !defined(__APPLE__) 
+  #if !defined(__APPLE__)
     #include "CondorWatcher.h"
   #endif
 #endif
@@ -44,7 +44,7 @@ public:
   void SetBatchMakeBinaryPath(MString applicationpath);
 
   void Show();
- 
+
   void OnOpenScript();
   void OnSaveScript();
   void OnCompile();
@@ -78,7 +78,7 @@ protected:
   MString m_Title;
 
 #ifdef BM_GRID
-  #if !defined(__APPLE__) 
+  #if !defined(__APPLE__)
   CondorWatcher* m_CondorWatcher;
   #endif
 #endif

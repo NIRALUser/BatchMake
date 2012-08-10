@@ -42,7 +42,7 @@ ModuleDescription::ModuleDescription(const ModuleDescription &md)
   this->AlternativeLocation = md.AlternativeLocation;
   this->ParameterGroups = md.ParameterGroups;
   this->Logo = md.Logo;
-  
+
   this->ProcessInformation.Initialize();
 }
 
@@ -88,7 +88,7 @@ std::ostream & operator<<(std::ostream &os, const ModuleDescription &module)
 
   os << "ProcessInformation: " << std::endl
      << *(module.GetProcessInformation());
-  
+
   os << "ParameterGroups: " << std::endl;
   std::vector<ModuleParameterGroup>::const_iterator it = module.GetParameterGroups().begin();
   while (it != module.GetParameterGroups().end())
@@ -110,7 +110,7 @@ ModuleDescription
   std::vector<ModuleParameterGroup>::const_iterator pgendit
     = this->ParameterGroups.end();
   std::vector<ModuleParameterGroup>::const_iterator pgit;
-  
+
   for (pgit = pgbeginit; pgit != pgendit; ++pgit)
     {
     // iterate over each parameter in this group
@@ -126,7 +126,7 @@ ModuleDescription
         {
         return true;
         }
-      }    
+      }
     }
 
   return false;
@@ -142,7 +142,7 @@ ModuleDescription
   std::vector<ModuleParameterGroup>::iterator pgendit
     = this->ParameterGroups.end();
   std::vector<ModuleParameterGroup>::iterator pgit;
-  
+
   for (pgit = pgbeginit; pgit != pgendit; ++pgit)
     {
     // iterate over each parameter in this group
@@ -159,7 +159,7 @@ ModuleDescription
         (*pit).SetDefault(value);
         return true;
         }
-      }    
+      }
     }
 
   return false;
@@ -176,7 +176,7 @@ ModuleDescription
   std::vector<ModuleParameterGroup>::const_iterator pgendit
     = this->ParameterGroups.end();
   std::vector<ModuleParameterGroup>::const_iterator pgit;
-  
+
   for (pgit = pgbeginit; pgit != pgendit; ++pgit)
     {
     // iterate over each parameter in this group
@@ -192,7 +192,7 @@ ModuleDescription
         {
         return (*pit).GetDefault();
         }
-      }    
+      }
     }
 
   return "";

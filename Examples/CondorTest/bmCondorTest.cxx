@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
       {
       fprintf(outFic,"%d",n1+n2);
       }
-    
+
     fclose(outFic);
     }
 
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
    WSADATA wsaData;
    WSAStartup(MAKEWORD(2,0), &wsaData);
 #endif
-    
+
   char localhost[256];
   memset(localhost,0,sizeof(localhost));
   gethostname(localhost, sizeof(localhost));

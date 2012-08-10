@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -36,7 +36,7 @@ MString::MString(std::string m_string)
 {
   m_value = m_string;
 }
-  
+
 
 MString::MString(int value)
 {
@@ -62,7 +62,7 @@ MString::MString(double value)
 MString::~MString()
 {
 }
-  
+
 MString MString::arg(int value)
 {
   std::string arg;
@@ -205,7 +205,7 @@ void MString::operator=(const MString & value)
 void MString::operator=(const char* value)
 {
   if(strlen(value)>0)
-    {  
+    {
     m_value = value;
     }
   else
@@ -288,7 +288,7 @@ bool MString::toBool()
 }
 
 int MString::length()const
-{ 
+{
   return strlen(m_value.c_str());
 }
 
@@ -466,7 +466,7 @@ int MString::count(const char key)
 {
   int m_nbchar = 0;
   for (unsigned int i=0;i<m_value.length();i++)
-    if (m_value[i] == key) 
+    if (m_value[i] == key)
       m_nbchar++;
 
   return m_nbchar;
@@ -586,7 +586,7 @@ std::string MString::ConvertWildcardToRegEx(const char* wildcard)
 {
   std::string s;
   s += '^';
-  for (unsigned int i = 0; i< strlen(wildcard); i++) 
+  for (unsigned int i = 0; i< strlen(wildcard); i++)
     {
     char c = wildcard[i];
     switch(c)

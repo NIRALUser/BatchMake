@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -33,12 +33,12 @@ bool ScriptDbSendValueAction::TestParam(ScriptError* error,int linenumber)
 {
   for (unsigned int i=0;i<m_Parameters.size();i++)
       m_Manager->TestConvert(m_Parameters[i],linenumber);
-     
+
   if (m_Parameters.size() != 6)
   {
     error->SetError(MString("No enough parameter for DbSendValue"),linenumber);
     return false;
-  }   
+  }
 
   return true;
 }
@@ -57,7 +57,7 @@ void ScriptDbSendValueAction::Execute()
 
   BMString m_host = m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
   BMString m_account = m_Manager->Convert(m_Parameters[1]).removeAllChars('\'');
-  BMString m_password = m_Manager->Convert(m_Parameters[2]).removeAllChars('\''); 
+  BMString m_password = m_Manager->Convert(m_Parameters[2]).removeAllChars('\'');
   BMString m_project = m_Manager->Convert(m_Parameters[3]).removeAllChars('\'');
   BMString m_caption = m_Manager->Convert(m_Parameters[4]).removeAllChars('\'');
   BMString m_value = m_Manager->Convert(m_Parameters[5]).removeAllChars('\'');
@@ -69,19 +69,19 @@ void ScriptDbSendValueAction::Execute()
   m_request.AddParam("password",m_password.toChar());
   m_request.AddParam("caption",m_caption.toChar());
   m_request.AddParam("value",m_value.toChar());
-  
+
   //m_request.AddParam("clear","1");
   //m_request.AddParam("type","1");
   //m_request.SetFile("main.htm");
   //"www.ia.unc.edu/dev/batchmake/transfert.php"
   MString m_Output = m_request.Send(m_host.toChar());
- 
+
   if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
     return;
     }
-  
+
   if (m_Output.toInt() != 0)
     {
     m_ProgressManager->FinishAction("Dashboard problem when sending data");
@@ -96,7 +96,7 @@ void ScriptDbSendValueAction::Execute()
       }
     return;
     }
-  
+
   m_ProgressManager->FinishAction("Data sent");
   return;
 }

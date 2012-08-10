@@ -73,7 +73,7 @@ int main(int argc, char **argv)
                       "Perform Rigid and then Affine registration");
     command.SetOption("TfmDeformable", "TfmDeformable", false,
                       "Perform Deformable registration");
-    
+
     command.SetOption("OptOnePlusOne", "OptOnePlusOne", false,
                       "Use One plus One optimizer");
     command.SetOption("OptGradient", "OptGradient", false,
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
                      MetaCommand::STRING, true);
 
     output.SetMetaCommand(&command);
-    
+
     if(!command.Parse(argc, argv))
       {
       if(command.GotXMLFlag())
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
     typedef itk::AffineTransform<double, 3> TransformType;
     typedef itk::BSplineDeformableTransform<double, 3, 3> DeformableTransformType ;
     typedef itk::TransformFileReader::TransformListType * TransformListType;
-    
+
     /** Read the fixed image **/
     ImageReaderType::Pointer fixedReader = ImageReaderType::New();
     fixedReader->SetFileName(command.GetValueAsString("FixedImage").c_str());
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
       }
     imageRegistrationApp->SetMovingImage( movingReader->GetOutput() );
 
-    imageRegistrationApp->SetFixedImageRegion( 
+    imageRegistrationApp->SetFixedImageRegion(
                                 fixedReader->GetOutput()
                                             ->GetLargestPossibleRegion() );
 
@@ -210,10 +210,10 @@ int main(int argc, char **argv)
         TransformReaderType::Pointer transformReader = TransformReaderType::New();
         std::cout << "Loading Transform: " << it->c_str() << std::endl;
         transformReader->SetFileName( it->c_str() );
-        
+
         //Register the transform into the TransformFactory, required for the BSplineTransform
         itk::TransformFactory<LoadedDefTType>::RegisterTransform();
-        
+
         try
           {
           transformReader->Update();
@@ -225,7 +225,7 @@ int main(int argc, char **argv)
           std::cerr << "[FAILED]" << std::endl;
           return EXIT_FAILURE;
           }
-        
+
         TransformListType transforms = transformReader->GetTransformList();
 
         itk::TransformFileReader::TransformListType::const_iterator TransformIt = transforms->begin();
@@ -275,10 +275,10 @@ int main(int argc, char **argv)
         TransformReaderType::Pointer transformReader = TransformReaderType::New();
         std::cout << "Loading Transform: " << it->c_str() << std::endl;
         transformReader->SetFileName( it->c_str() );
-        
+
         //Register the transform into the TransformFactory, required for the BSplineTransform
         itk::TransformFactory<LoadedDefTType>::RegisterTransform();
-        
+
         try
           {
           transformReader->Update();
@@ -290,11 +290,11 @@ int main(int argc, char **argv)
           std::cerr << "[FAILED]" << std::endl;
           return EXIT_FAILURE;
           }
-          
+
         LoadedTType::Pointer invertedTransform = LoadedTType::New();
-        
+
         TransformListType transforms = transformReader->GetTransformList();
-        
+
         itk::TransformFileReader::TransformListType::const_iterator TransformIt = transforms->begin();
         for (unsigned int i = 0 ; i < transforms->size() ; i++)
           {
@@ -326,7 +326,7 @@ int main(int argc, char **argv)
                                     *m_bspline.GetPointer());
             }
           ++TransformIt;
-          }        
+          }
         ++it;
         }
 
@@ -346,7 +346,7 @@ int main(int argc, char **argv)
       GroupType::ChildrenListType * children = group->GetChildren();
       fixedLandmarks = dynamic_cast< LandmarkType * >
                                       ((*(children->begin())).GetPointer());
-  
+
       LandmarkReaderType::Pointer movingLandmarkReader =
                                     LandmarkReaderType::New();
       movingLandmarkReader->SetFileName(command.GetValueAsString(
@@ -358,7 +358,7 @@ int main(int argc, char **argv)
       movingLandmarks = dynamic_cast< LandmarkType * >
                                       ((*(children->begin())).GetPointer());
 
-      imageRegistrationApp->RegisterUsingLandmarks( 
+      imageRegistrationApp->RegisterUsingLandmarks(
                                     fixedLandmarks.GetPointer(),
                                     movingLandmarks.GetPointer());
       }
@@ -404,7 +404,7 @@ int main(int argc, char **argv)
       imageRegistrationApp->RegisterUsingAffine();
       finalMetricValue = imageRegistrationApp->GetAffineMetricValue();
       }
-    
+
     if ( command.GetOptionWasSet("TfmDeformable") )
       {
       imageRegistrationApp->RegisterUsingDeformable();
@@ -433,7 +433,7 @@ int main(int argc, char **argv)
     output.AddFloatField("finalMetricValue","Final Metric Value",finalMetricValue);
     output.Write();
 
-    
+
     if( command.GetOptionWasSet("SaveMovingImage") )
       {
       std::cout << "Writing registered moving image to "
@@ -443,7 +443,7 @@ int main(int argc, char **argv)
       imageWriter->SetFileName(  command.GetValueAsString("SaveMovingImage",
                                                           "Filename").c_str() );
       imageWriter->SetUseCompression(true);
-      imageWriter->SetInput( 
+      imageWriter->SetInput(
                    imageRegistrationApp->GetFinalRegisteredMovingImage() );
       try
         {
@@ -461,7 +461,7 @@ int main(int argc, char **argv)
       transformWriter->SetFileName(command.GetValueAsString(
                                                 "SaveTransform",
                                                 "Filename").c_str());
-      
+
       if (!imageRegistrationApp->GetFinalDeformableTransform())
         {
         transformWriter->SetInput(imageRegistrationApp->GetFinalTransform());

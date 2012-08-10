@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -61,7 +61,7 @@ void ScriptSendTCPAction::Execute()
 
   TCPSocket* socket = m_Manager->GetVariableSocket(m_Parameters[0]);
   int err = socket->SendMessage(m_value.toChar());
-  
+
   if( err != 0 )
     {
     //std::cout<<"error sending the message"<<std::endl;

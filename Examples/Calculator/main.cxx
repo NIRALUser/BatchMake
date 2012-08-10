@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -21,13 +21,13 @@
 class BatchMakeStream : public MetaOutputStream
 {
 public:
-  BatchMakeStream(MetaCommand* metaCommand) 
+  BatchMakeStream(MetaCommand* metaCommand)
     {
     // Define the command line arguments
     m_MetaCommand = metaCommand;
     m_MetaCommand->SetOption("SendDashboard","",
                              false,"Send output to Batchmake Validation Dashboard");
-    m_MetaCommand->SetOptionLongTag("SendDashboard","sendDashboard");                       
+    m_MetaCommand->SetOptionLongTag("SendDashboard","sendDashboard");
     m_MetaCommand->AddOptionField("SendDashboard","hostname",MetaCommand::STRING,true);
     m_MetaCommand->AddOptionField("SendDashboard","experimentid",MetaCommand::STRING,true);
     m_MetaCommand->AddOptionField("SendDashboard","methodid",MetaCommand::STRING,true);
@@ -56,7 +56,7 @@ public:
     XMLParserType::Pointer xmlReader = XMLParserType::New();
     std::string Buffer = buffer;
     xmlReader->Parse(Buffer.c_str(),Buffer.size());
-   
+
     XMLParserType::TagVectorType tags = xmlReader->GetTags();
 
     XMLParserType::TagVectorType::const_iterator it = tags.begin();
@@ -82,7 +82,7 @@ public:
           }
         m_Request.AddParam(name,value.c_str());
         }
-      
+
       it++;
       }
     return true;
@@ -94,7 +94,7 @@ public:
     std::string url = m_RemoteHostname;
     url += "/upload.php";
     std::string output = m_Request.Send(url.c_str());
- 
+
     if (output.length()>3)
       {
       std::cout << "Bad Host or connexion problem" << std::endl;
@@ -115,7 +115,7 @@ public:
         case '5' :  std::cout << "Host Database error" << std::endl; break;
         default:
           std::cout << "Connexion problem" << std::endl; break;
-        }  
+        }
       }
     return true;
     }
@@ -135,7 +135,7 @@ private:
 int main(int argc, char* argv[])
 {
   MetaCommand command;
-  
+
   command.SetName("Calculator");
   command.SetVersion("1.0");
   command.SetAuthor("Kitware Inc");

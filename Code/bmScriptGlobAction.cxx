@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -40,7 +40,7 @@ bool ScriptGlobAction::TestParam(ScriptError* error,int linenumber)
   return true;
 }
 
- 
+
 MString ScriptGlobAction::Help()
 {
   return "Glob(<var> 'globexpression' '[RECURSIVE]')";
@@ -61,7 +61,7 @@ void ScriptGlobAction::Execute()
   if (m_Parameters.size() == 3)
     {
     BMString recurse = m_Manager->Convert(m_Parameters[2]);
-    if( recurse.find("RECURSIVE") != std::string::npos || 
+    if( recurse.find("RECURSIVE") != std::string::npos ||
         recurse.find("recursive") != std::string::npos )
       {
       glob.RecurseOn();
@@ -74,7 +74,7 @@ void ScriptGlobAction::Execute()
     }
 
   BMString value="";
- 
+
   std::string convertedGlobExpression = globexpression.GetValue();
   itksys::SystemTools::ConvertToUnixSlashes(convertedGlobExpression);
 

@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -50,7 +50,7 @@ bool ScriptSequenceAction::TestParam(ScriptError* error,int linenumber)
     if (!m_Parameters[j].isFloat())
       {
       error->SetError(
-        BMString("Parameter %1 should be a float for Sequence ").arg(j) 
+        BMString("Parameter %1 should be a float for Sequence ").arg(j)
         + m_Parameters[j], linenumber);
       return false;
       }
@@ -79,7 +79,7 @@ void ScriptSequenceAction::Execute()
     {
     int j=(int)i;
     if(j-i == 0) // if the given number is an int then we write an int
-      {  
+      {
       m_value+= MString("'%1' ").arg(j);
       }
     else

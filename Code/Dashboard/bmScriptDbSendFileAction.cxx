@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -33,12 +33,12 @@ bool ScriptDbSendFileAction::TestParam(ScriptError* error,int linenumber)
 {
   for (unsigned int i=0;i<m_Parameters.size();i++)
       m_Manager->TestConvert(m_Parameters[i],linenumber);
-     
+
   if (m_Parameters.size() != 6)
   {
     error->SetError(MString("No enough parameter for DbSendFile"),linenumber);
     return false;
-  }   
+  }
 
   return true;
 }
@@ -57,7 +57,7 @@ void ScriptDbSendFileAction::Execute()
 
   BMString m_host = m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
   BMString m_account = m_Manager->Convert(m_Parameters[1]).removeAllChars('\'');
-  BMString m_password = m_Manager->Convert(m_Parameters[2]).removeAllChars('\''); 
+  BMString m_password = m_Manager->Convert(m_Parameters[2]).removeAllChars('\'');
   BMString m_project = m_Manager->Convert(m_Parameters[3]).removeAllChars('\'');
   BMString m_caption = m_Manager->Convert(m_Parameters[4]).removeAllChars('\'');
   BMString m_Filename = m_Manager->Convert(m_Parameters[5]).removeAllChars('\'');
@@ -75,7 +75,7 @@ void ScriptDbSendFileAction::Execute()
     }
 
   //m_request.SetFile(m_Filename.toChar());
-   
+
 
   //m_request.AddParam("clear","1");
   //m_request.AddParam("type","1");
@@ -87,7 +87,7 @@ void ScriptDbSendFileAction::Execute()
     m_ProgressManager->AddError("Bad Host or connexion problem");
     return;
     }
-  
+
   if (m_Output.toInt() != 0)
     {
     m_ProgressManager->FinishAction("Dashboard problem when sending data");
@@ -103,7 +103,7 @@ void ScriptDbSendFileAction::Execute()
       }
     return;
     }
-  
+
   m_ProgressManager->FinishAction("Data sent");
   return;
 }

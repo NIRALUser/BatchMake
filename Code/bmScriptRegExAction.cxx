@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -39,7 +39,7 @@ bool ScriptRegExAction::TestParam(ScriptError* error,int linenumber)
      error->SetError(MString("Not enough parameter for RegEx function !"),linenumber);
      return false;
      }
-   
+
   std::string mode = (m_Manager->Convert(m_Parameters[3])).toChar();
   if (mode == "'REPLACE'")
     {
@@ -61,7 +61,7 @@ bool ScriptRegExAction::TestParam(ScriptError* error,int linenumber)
   return true;
 }
 
- 
+
 MString ScriptRegExAction::Help()
 {
   return "RegEx(<newvar> <var> <RegularExpression> <MATCH or REPLACE> [replacevar])";
@@ -152,9 +152,9 @@ void ScriptRegExAction::Execute()
           }
         l = r;
         }
-      
+
       std::string input = word.GetValue();
-      
+
       // Scan through the input for all matches.
       std::string output;
       std::string::size_type base = 0;
@@ -162,10 +162,10 @@ void ScriptRegExAction::Execute()
         {
         std::string::size_type l2 = regEx.start();
         std::string::size_type r = regEx.end();
-        
+
         // Concatenate the part of the input that was not matched.
         output += input.substr(base, l2);
-        
+
         // Make sure the match had some text.
         if(r-l2 == 0)
           {
@@ -177,7 +177,7 @@ void ScriptRegExAction::Execute()
           this->m_ProgressManager->AddError(e.c_str());
           return ;
           }
-        
+
         // Concatenate the replacement for the match.
         for(unsigned int i=0; i < replacement.size(); ++i)
           {
@@ -212,11 +212,11 @@ void ScriptRegExAction::Execute()
               }
             }
           }
-        
+
         // Move past the match.
         base += r;
         }
-      
+
       // Concatenate the text after the last match.
       output += input.substr(base, input.length()-base);
 
@@ -226,7 +226,7 @@ void ScriptRegExAction::Execute()
       m_Manager->SetVariable(m_Parameters[0],value.c_str());
       }
     }
-  
+
 }
 
 } // end namespace bm

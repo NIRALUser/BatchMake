@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -33,12 +33,12 @@ bool ScriptConvertImageAction::TestParam(ScriptError* error,int linenumber)
 {
   for (unsigned int i=0;i<m_Parameters.size();i++)
       m_Manager->TestConvert(m_Parameters[i],linenumber);
-    
+
   if (m_Parameters.size() < 2)
   {
     error->SetError(MString("No enough parameter for ConvertImage"),linenumber);
     return false;
-  }   
+  }
 
   return true;
 }
@@ -49,7 +49,7 @@ MString ScriptConvertImageAction::Help()
 }
 
 /** Convert the image */
-template<class T> int ScriptConvertImageActionConvertImage(const char* inputImage, 
+template<class T> int ScriptConvertImageActionConvertImage(const char* inputImage,
                                                          const char* outputImage,
                                                          T)
 {
@@ -92,11 +92,11 @@ void ScriptConvertImageAction::Execute()
     }
 #endif
 */
-  BMString inputImage = 
+  BMString inputImage =
     m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
-  BMString outputImage = 
+  BMString outputImage =
     m_Manager->Convert(m_Parameters[1]).removeAllChars('\'');
-   
+
   itk::ImageIOBase::IOPixelType pixelType;
   itk::ImageIOBase::IOComponentType componentType;
 
@@ -124,7 +124,7 @@ void ScriptConvertImageAction::Execute()
         break;
       case itk::ImageIOBase::USHORT:
         ScriptConvertImageActionConvertImage( inputImage.toChar(), outputImage.toChar(), static_cast<unsigned short>(0));
-        break;     
+        break;
       case itk::ImageIOBase::SHORT:
         ScriptConvertImageActionConvertImage( inputImage.toChar(), outputImage.toChar(), static_cast<short>(0));
         break;

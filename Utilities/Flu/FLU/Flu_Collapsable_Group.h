@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 
@@ -36,7 +36,7 @@
   internal group. This means that casual use of a descendent instance will be almost exactly the same
   as for a regular \b Fl_Group, with any additional access provided directly through member \b group.
 
-  The goal of this class is to provide a dynamically collapsable group similar to those available in 
+  The goal of this class is to provide a dynamically collapsable group similar to those available in
   other GUI toolkits.
 
   The callback is invoked whenever the button is pressed to open/close the group.
@@ -134,7 +134,7 @@ class FLU_EXPORT Flu_Collapsable_Group : public Fl_Group
   inline void resizable(Fl_Widget *box)
     { group.resizable(box); }
 
-  inline void resizable(Fl_Widget &box) 
+  inline void resizable(Fl_Widget &box)
     { group.resizable(box); }
 
   inline Fl_Widget *resizable() const

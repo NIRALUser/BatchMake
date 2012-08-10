@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -55,7 +55,7 @@ MString ScriptGetListSizeAction::Help()
 
 void ScriptGetListSizeAction::Execute()
 {
-  const std::vector<BMString> list = 
+  const std::vector<BMString> list =
     //m_Manager->GetParamsFromVariable( m_Manager->Convert(m_Parameters[1]) );
     //m_Manager->ExpandParameterToArray( m_Parameters[1] );
     m_Manager->ConvertToArray( m_Parameters[1] );
@@ -66,7 +66,7 @@ void ScriptGetListSizeAction::Execute()
     m_ProgressManager->AddError("Cannot convert list size into variable value");
     return;
     }
-  
+
   m_Manager->SetVariable( m_Parameters[0], size.str() );
 }
 

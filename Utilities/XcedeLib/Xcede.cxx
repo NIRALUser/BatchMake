@@ -244,7 +244,7 @@ std::string Xcede::GetResourceID(xmlDocPtr doc, std::string subjectID,
   Request += "\"]/@ID";
 
   std::string resourceId;
-   
+
   xmlChar *xpathRequest =(xmlChar*) Request.c_str();
   result = this->GetNodeSet(doc, xpathRequest, nameSpace, nameSpaceUrl);
   if (result)
@@ -256,7 +256,7 @@ std::string Xcede::GetResourceID(xmlDocPtr doc, std::string subjectID,
     xmlXPathFreeObject (result);
     return resourceId;
     }
-  else 
+  else
     {
     return "";
     }
@@ -265,7 +265,7 @@ std::string Xcede::GetResourceID(xmlDocPtr doc, std::string subjectID,
 
 void Xcede::XpathSubjectInfo(xmlDocPtr doc, int patient, Subject* sub,
                              std::string nameSpace, std::string nameSpaceUrl)
-{  
+{
   xmlXPathObjectPtr result;
   xmlNodeSetPtr nodeset;
 
@@ -291,7 +291,7 @@ void Xcede::XpathSubjectInfo(xmlDocPtr doc, int patient, Subject* sub,
         m_Project.GetPatient(patient)->SetTagName((char*) nodeset->nodeTab[i]->name);
         m_Project.GetPatient(patient)->SetTagValue((char*) value,i);
         }
-      else 
+      else
         {
         m_Project.GetPatient(patient)->SetTagName((char*) nodeset->nodeTab[i]->name);
         m_Project.GetPatient(patient)->SetTagValue("",i);
@@ -407,7 +407,7 @@ xmlXPathObjectPtr Xcede::GetNodeSet (xmlDocPtr doc, xmlChar *xpath,
     std::cerr<<"Error in xmlXPathEvalExpression"<<std::endl;
     return NULL;
     }
- 
+
   if(xmlXPathNodeSetIsEmpty(result->nodesetval))
     {
     xmlXPathFreeObject(result);
@@ -493,12 +493,12 @@ void Xcede::WriteNewFile(std::string filename, xmlDocPtr doc, Project project,
             std::string buffer = project.GetPatient(i)->GetResource(j)->GetTagNameValue(l);
             std::string::size_type loc = buffer.find_last_of ("/", buffer.length());
             if( loc != std::string::npos )
-              {     
+              {
               xcedeResource += buffer.erase(0, loc+1);
               }
-            else 
-              {    
-              xcedeResource += buffer;    
+            else
+              {
+              xcedeResource += buffer;
               }
             }
           }
@@ -532,7 +532,7 @@ void Xcede::WriteNewResourceFile(std::string filename, xmlDocPtr doc, Resource* 
       xmlNewProp (resourceNode, BAD_CAST "subjectID", BAD_CAST res->GetResourceInfo().subjectID.c_str());
       xmlNewProp (resourceNode, BAD_CAST "projectID", BAD_CAST res->GetResourceInfo().projectID.c_str());
       xmlNewProp (resourceNode, BAD_CAST "xsi:type", BAD_CAST "moreresource_t");
-      
+
       xmlNewTextChild (resourceNode, NULL, BAD_CAST res->GetTagName(0).c_str(),
                        BAD_CAST res->GetTagNameValue(0).c_str());
       AddProcessStep(doc, resourceNode, res);

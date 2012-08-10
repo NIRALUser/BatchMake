@@ -67,7 +67,7 @@ public:
   std::vector<ModuleParameter>& GetParameters() {
     return this->Parameters;
   }
-  
+
 private:
   std::string Label;
   std::string Description;

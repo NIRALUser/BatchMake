@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 
@@ -23,7 +23,7 @@
 #include "FLU/Flu_Enumerations.h"
 
 //! This class just provides an easier interface to making labels in FLTK
-/*! All this class does is copy the label string to internal storage 
+/*! All this class does is copy the label string to internal storage
   since FLTK needs non-transient memory for labels. */
 class FLU_EXPORT Flu_Label : public Fl_Box
 {

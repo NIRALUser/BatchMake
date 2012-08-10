@@ -21,7 +21,7 @@ int XMLIniIO::Read()
 {
   if (m_reader->Open(m_filename.toChar()) == -1)
      return -1;
-  
+
   bool m_continue = true;
   while(m_continue)
   {

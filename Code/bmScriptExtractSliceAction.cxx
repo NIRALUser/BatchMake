@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -35,12 +35,12 @@ bool ScriptExtractSliceAction::TestParam(ScriptError* error,int linenumber)
     {
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
-    
+
   if (m_Parameters.size() < 2)
   {
     error->SetError(MString("No enough parameter for ExtractSlice"),linenumber);
     return false;
-  }   
+  }
 
   return true;
 }
@@ -62,16 +62,16 @@ void ScriptExtractSliceAction::Execute()
 
   BMString m_input = m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
   BMString m_Output = m_Manager->Convert(m_Parameters[1]).removeAllChars('\'');
-   
+
   SliceExtractor m_sliceextractor;
- 
+
   if(m_Parameters.size()>2)
     {
-    BMString m_orientation = 
+    BMString m_orientation =
       m_Manager->Convert(m_Parameters[2]).removeAllChars('\'');
     m_sliceextractor.SetOrientation(m_orientation.toInt());
     }
-  
+
   if(m_Parameters.size()>3)
     {
     BMString m_slice = m_Manager->Convert(m_Parameters[3]).removeAllChars('\'');

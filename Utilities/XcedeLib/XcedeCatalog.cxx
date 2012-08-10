@@ -39,7 +39,7 @@ void XcedeCatalog::Login(std::string login, std::string password)
 
   curl_global_init(CURL_GLOBAL_ALL);
   xcedeCurl = curl_easy_init();
-  if(!xcedeCurl) 
+  if(!xcedeCurl)
     {
     std::cout << "Cannot Initialize Curl!" << std::endl;
     }
@@ -58,7 +58,7 @@ void XcedeCatalog::Login(std::string login, std::string password)
   curl_easy_setopt(xcedeCurl, CURLOPT_WRITEDATA, NULL);
   curl_easy_setopt(xcedeCurl, CURLOPT_POSTFIELDS, log.c_str());
   curl_easy_setopt(xcedeCurl, CURLOPT_URL, loginUrl.c_str());
-  curl_easy_perform(xcedeCurl); 
+  curl_easy_perform(xcedeCurl);
 }
 
 
@@ -195,7 +195,7 @@ xmlXPathObjectPtr XcedeCatalog::GetNodeSet (xmlDocPtr doc, xmlChar *xpath,
     std::cerr<<"Error in xmlXPathEvalExpression"<<std::endl;
     return NULL;
     }
- 
+
   if(xmlXPathNodeSetIsEmpty(result->nodesetval))
     {
     xmlXPathFreeObject(result);
@@ -205,7 +205,7 @@ xmlXPathObjectPtr XcedeCatalog::GetNodeSet (xmlDocPtr doc, xmlChar *xpath,
 }
 
 
-std::vector<std::string> XcedeCatalog::GetXcedeDataSets(xmlDocPtr doc, std::string CataloID, 
+std::vector<std::string> XcedeCatalog::GetXcedeDataSets(xmlDocPtr doc, std::string CataloID,
                                                         std::string login, std::string password)
 {
   if(!(login == "" && password == ""))
@@ -249,7 +249,7 @@ bool XcedeCatalog::DownloadXcedeDatasets(std::string xcedeDataSet, std::string d
     {
     curl_global_init(CURL_GLOBAL_ALL);
     xcedeCurl = curl_easy_init();
-    if(!xcedeCurl) 
+    if(!xcedeCurl)
       {
       std::cout << "Cannot Initialize Curl!" << std::endl;
       }
@@ -286,7 +286,7 @@ bool XcedeCatalog::DownloadXcedeDatasets(std::string xcedeDataSet, std::string d
   CURLcode res = curl_easy_perform(xcedeCurl);
   curl_easy_cleanup(xcedeCurl);
 
-  if (res != CURLE_OK) 
+  if (res != CURLE_OK)
     {
     fprintf(stderr, "Curl perform failed: %s\n", curl_easy_strerror(res));
     xcedeOutputFile->close();
@@ -303,7 +303,7 @@ std::string XcedeCatalog::GetXcedeFilename(std::string xcedeDataSet)
 {
   std::string::size_type loc = xcedeDataSet.rfind(";", xcedeDataSet.size());
   std::string filename = xcedeDataSet.substr(loc+1);
-  
+
   return filename;
 }
 
@@ -311,7 +311,7 @@ std::string XcedeCatalog::GetXcedeUrl(std::string xcedeDataSet)
 {
   std::string::size_type loc = xcedeDataSet.rfind(";", xcedeDataSet.size());
   std::string url = xcedeDataSet.substr(0,loc);
-  
+
   return url;
 }
 

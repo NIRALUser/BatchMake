@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
   =========================================================================*/
 
@@ -67,7 +67,7 @@ void ApplicationWrapperParam::ClearParamSubValues()
 }
 
 
-bool ApplicationWrapperParam::ParamSubExists( const std::string& first)const 
+bool ApplicationWrapperParam::ParamSubExists( const std::string& first)const
 {
   std::vector<ApplicationWrapperParamSub>::const_iterator it = m_Params.begin();
   while(it != m_Params.end())
@@ -83,7 +83,7 @@ bool ApplicationWrapperParam::ParamSubExists( const std::string& first)const
 
 
 bool ApplicationWrapperParam
-::CheckSubValueDefined( std::string* line, bool relativePath, 
+::CheckSubValueDefined( std::string* line, bool relativePath,
                         const std::string& inputDirectory,
                         const std::string& outputDirectory )const
 {
@@ -96,25 +96,25 @@ bool ApplicationWrapperParam
         {
         *line += " ";
         }
-      
+
       // remove the absolute path if the relativePath is on
       if(relativePath && (*it).GetExternalData()>0)
         {
         MString appname;
-        if( itksys::SystemTools::FileIsFullPath( (*it).GetValue().toChar() ) && 
+        if( itksys::SystemTools::FileIsFullPath( (*it).GetValue().toChar() ) &&
             (*it).GetExternalData() == 1 &&
             !inputDirectory.empty() )
           {
-          appname = 
+          appname =
             itksys::SystemTools::RelativePath( inputDirectory.c_str(),
                                                (*it).GetValue().toChar() );
           }
-        else if( itksys::SystemTools::FileIsFullPath( 
-                   (*it).GetValue().toChar() ) && 
+        else if( itksys::SystemTools::FileIsFullPath(
+                   (*it).GetValue().toChar() ) &&
                  (*it).GetExternalData() == 2 &&
                  !outputDirectory.empty() )
           {
-          appname = 
+          appname =
             itksys::SystemTools::RelativePath( outputDirectory.c_str(),
                                                (*it).GetValue().toChar() );
           }
@@ -128,12 +128,12 @@ bool ApplicationWrapperParam
           appname = appname.removeChar('\"');
           }
         std::string sappname = appname.toChar();
-        
+
         while( sappname[sappname.size()-1] == ' ' )
           {
           sappname = sappname.substr(0,sappname.size()-1);
           }
-        
+
         // Preappend the directories
         if( !inputDirectory.empty() && (*it).GetExternalData()==1)
           {
@@ -176,13 +176,13 @@ bool ApplicationWrapperParam
         else
           {
           *line += (*it).GetValue().toChar();
-          } 
+          }
 
 
 
 
 
-        } 
+        }
       }
     else
       {

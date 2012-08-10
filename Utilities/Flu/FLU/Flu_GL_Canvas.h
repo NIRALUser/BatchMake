@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 
@@ -65,7 +65,7 @@ class FLU_EXPORT  Flu_GL_Canvas : public Flu_GL_Window
   virtual void mouse_move( int x, int y ) {}
 
   //! Called when the mouse enters the canvas
-  virtual void mouse_enter() {} 
+  virtual void mouse_enter() {}
 
   //! Called when the mouse leaves the canvas
   virtual void mouse_exit() {}

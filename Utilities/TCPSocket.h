@@ -15,7 +15,7 @@
 #include <netdb.h>
 #endif
 
-class TCPSocket  
+class TCPSocket
 {
 public:
   TCPSocket();
@@ -29,7 +29,7 @@ private:
 
   int       m_Sock;
   struct    sockaddr_in  m_Sin;
-  
+
 };
 
 #endif

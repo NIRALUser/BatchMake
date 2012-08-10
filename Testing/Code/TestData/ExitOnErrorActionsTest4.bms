@@ -1,5 +1,5 @@
 # This combo should report errors
-# 
+#
 # This script should exit if there is an error, and there
 # will be errors.  This test also tests flipping the value
 # of ExitOnError back and forth.

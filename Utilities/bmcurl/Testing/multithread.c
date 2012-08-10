@@ -1,8 +1,8 @@
 /*****************************************************************************
- *                                  _   _ ____  _     
- *  Project                     ___| | | |  _ \| |    
- *                             / __| | | | |_) | |    
- *                            | (__| |_| |  _ <| |___ 
+ *                                  _   _ ____  _
+ *  Project                     ___| | | |  _ \| |
+ *                             / __| | | | |_) | |
+ *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
  * Id
@@ -38,7 +38,7 @@ void *pull_one_url(void *url)
 }
 
 
-/* 
+/*
    int pthread_create(pthread_t *new_thread_ID,
    const pthread_attr_t *attr,
    void * (*start_func)(void *), void *arg);
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
                            urls[i]);
     if(0 != error)
       fprintf(stderr, "Couldn't run thread number %d, errno %d\n", i, error);
-    else 
+    else
       fprintf(stderr, "Thread %d, gets %s\n", i, urls[i]);
   }
 

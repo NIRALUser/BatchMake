@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -42,7 +42,7 @@ bool ScriptRunAction::TestParam(ScriptError* error,int linenumber)
      error->SetWarning(MString("Too much parameter for Run"),linenumber);
      return false;
      }
-  
+
   m_Manager->SetTestVariable(m_Parameters[0]);
 
   if (m_Parameters.size() > 2)
@@ -75,7 +75,7 @@ void ScriptRunAction::ParseXMLOutput(const char* output)
 
   if(begin == -1 || end == -1)
     {
-    //std::cout << "ScriptRunAction::ParseXMLOutput cannot find XML description" 
+    //std::cout << "ScriptRunAction::ParseXMLOutput cannot find XML description"
     //          << std::endl;
     return;
     }
@@ -160,7 +160,7 @@ void ScriptRunAction::Execute()
   //m_actioname = m_actioname.removeFirstChar('\'');
   // not sure here, shall we keep '\' or not ?
   //m_actioname.begin("'").rafter("\\");
- 
+
   m_ProgressManager->AddAction(m_actioname);
   std::cout << " run: " << m_Manager->Convert(m_Parameters[1]).toChar() << std::endl;
   m_launch.Execute(m_Manager->Convert(m_Parameters[1]).removeAllChars('\''));
@@ -171,7 +171,7 @@ void ScriptRunAction::Execute()
   this->ParseXMLOutput(m_Output.toChar());
 
   m_Manager->SetVariable(m_Parameters[0],BMString("'") + m_Output + "'");
-  
+
   if (m_Parameters.size() > 2)
     {
     m_Manager->SetVariable(m_Parameters[2],BMString("'") + m_Error + "'");
@@ -188,7 +188,7 @@ void ScriptRunAction::Execute()
     BMString("Finish: Execution time %1ms").arg(m_timer.getMilliseconds()) );
   m_ProgressManager->FinishAction(
     BMString("Execution time: %1ms").arg(m_timer.getMilliseconds()) );
-  
+
   // Display only the first 1000 errors in the manager
   int n=0;
 

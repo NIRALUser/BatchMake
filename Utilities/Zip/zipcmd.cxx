@@ -71,7 +71,7 @@ void gz_compress(FILE* in,gzFile out)
         }
         if (len == 0) break;
 
-        if (gzwrite(out, buf, (unsigned)len) != len) 
+        if (gzwrite(out, buf, (unsigned)len) != len)
           std::cerr << gzerror(out, &err) << std::endl;
     }
     fclose(in);
@@ -121,12 +121,12 @@ int main(int argc, char **argv)
 
    char outmode[20];
    sprintf(outmode,"wb%i ",6);
-   int m_result = 0; 
+   int m_result = 0;
    for (int i=1;i<argc;i++)
      if (gz_compressfile(argv[i],outmode) != 0)
   m_result = -1;
 
-  return m_result; 
+  return m_result;
 }
 
 

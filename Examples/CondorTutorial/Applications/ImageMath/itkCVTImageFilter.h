@@ -10,12 +10,12 @@
   Copyright (c) 2002 CADDLab @ UNC. All rights reserved.
   See itkUNCCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-        
+
 #ifndef _itkCVTImageFilter_h
 #define _itkCVTImageFilter_h
 
@@ -31,9 +31,9 @@
 namespace itk
 {
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT CVTImageFilter :   
+class ITK_EXPORT CVTImageFilter :
   public ImageToImageFilter< TInputImage, TOutputImage >
-{  
+{
 public:
     /** Standard class typedefs. **/
   typedef CVTImageFilter                                  Self;
@@ -42,30 +42,30 @@ public:
   typedef SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. **/
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   itkTypeMacro(CVTImageFilter, ImageToImageFilter);
 
   itkStaticConstMacro(ImageDimension, unsigned int,
                                       TInputImage::ImageDimension);
-  
+
   typedef TInputImage                                     InputImageType;
   typedef typename InputImageType::PixelType              InputPixelType;
 
   typedef typename InputImageType::IndexType              IndexType;
   typedef ContinuousIndex<double, itkGetStaticConstMacro(ImageDimension)>
                                                           ContinuousIndexType;
-  
+
   typedef TOutputImage                                    OutputImageType;
   typedef typename OutputImageType::PixelType             OutputPixelType;
-  
+
   typedef typename InputImageType::RegionType             RegionType;
   typedef typename RegionType::SizeType                   SizeType;
 
   typedef std::vector<ContinuousIndexType>                PointArrayType;
 
   typedef enum {CVT_GRID, CVT_RANDOM, CVT_USER}           SamplingMethodEnum;
-    
+
   /** */
   itkGetMacro(NumberOfCentroids, unsigned int);
   itkSetMacro(NumberOfCentroids, unsigned int);
@@ -122,7 +122,7 @@ protected:
 private:
   CVTImageFilter(const Self&);
   void operator=(const Self&);
-  
+
   void PrintSelf(std::ostream & os, Indent indent) const;
 
   typename OutputImageType::Pointer            m_OutputImage;
@@ -147,7 +147,7 @@ private:
   unsigned int          m_NumberOfIterationsPerBatch;
   unsigned int          m_NumberOfSamplesPerBatch;
 
-}; // end of class 
+}; // end of class
 
 }// end namespace itk
 

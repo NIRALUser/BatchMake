@@ -9,8 +9,8 @@
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -89,7 +89,7 @@ public:
   bool isInBetweenChar(char val,long int pos);
 
   static std::string ConvertWildcardToRegEx(const char* wildcard);
-  
+
   /** Returns true if the content of the string is a variable
    *  if value == "'foo'", returns true, if value == "foo", returns false
   */

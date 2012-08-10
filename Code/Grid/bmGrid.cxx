@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -70,7 +70,7 @@ const char* Grid::GetCurrentScopeFile()
   if( m_CurrentScopeFile.empty() )
     {
     std::stringstream ss;
-    ss << time(NULL) << ".bms.tmp"; 
+    ss << time(NULL) << ".bms.tmp";
     m_CurrentScopeFile = ss.str();
     /*
     char* tempchar = new char[25];
@@ -124,7 +124,7 @@ const std::string& Grid::GetRequirements()const
 }
 
 /** Remove a grid barrier */
-void Grid::SetDistributed(bool val) 
+void Grid::SetDistributed(bool val)
 {
   m_DistributedTransition = true;
   m_Distributed = val;
@@ -252,7 +252,7 @@ void Grid::WriteGAD()
     filename = m_FileName;
     }
   FILE* fic = fopen( filename.c_str(), "wb" );
-  
+
   if(!fic)
     {
     std::cout << "Grid::WriteGAD() : Cannot create GAD script" << std::endl;
@@ -280,7 +280,7 @@ void Grid::WriteGAD()
     applicationChunckSize = (int)chunckSize;
     }
 
-  fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum); 
+  fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum);
   fprintf(fic,"<componentActionList>\n");
 
   // Add the applicationComponent
@@ -301,8 +301,8 @@ void Grid::WriteGAD()
       dependApp = &(m_ApplicationsList[(*it).GetDependsOn()]);
       }
 
-     
-    // If this is not the first application 
+
+    // If this is not the first application
     if(it != m_ApplicationsList.begin()
        && ((*it).GetSingleNode() == 2)
        && (applicationComponent>applicationChunckSize)
@@ -311,7 +311,7 @@ void Grid::WriteGAD()
       applicationComponent=0;
       fprintf(fic,"</componentActionList>\n");
       fprintf(fic,"</applicationComponent>\n\n");
-      fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum); 
+      fprintf(fic,"<applicationComponent name=\"task%d\" remoteExecution=\"true\">\n",appnum);
       fprintf(fic,"<componentActionList>\n");
       }
 
@@ -319,7 +319,7 @@ void Grid::WriteGAD()
 
     const std::vector<ApplicationWrapperParam> & params = (*it).GetParams();
     std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();
-  
+
     // Check if we have external data
     // For now we skip bmGridStore
     if( strcmp((*it).GetName().c_str(),"bmGridStore")
@@ -327,7 +327,7 @@ void Grid::WriteGAD()
       {
       while(itParams != params.end())
         {
-        if((*itParams).GetExternalData() == 1 
+        if((*itParams).GetExternalData() == 1
            && (*itParams).GetValue().length() > 0
            && !(*it).GetDataHost().empty() ) // DATA_IN
           {
@@ -340,7 +340,7 @@ void Grid::WriteGAD()
                   this->AddQuotes((*itParams).GetValue().toChar()).c_str());
           fprintf(fic,"  <parameter name=\"DestDataPath\" value=\"%s%s\"/>\n",m_GridTempDirectory.c_str(),
                   this->AddQuotes(this->GetFilename((*itParams).GetValue().toChar()).c_str()).c_str());
-     
+
           if(dependApp)
             {
             fprintf(fic,"  <dependency name=\"%s\" status=\"done\"/>\n",dependApp->GetDependencyTag().c_str());
@@ -395,9 +395,9 @@ void Grid::WriteGAD()
           {
           commandline += " ";
           }
-      
+
         bool hasChildren = false;
-      
+
         if(!m_Grouping)
           {
           std::string command = (*itParams).GetName().toChar();
@@ -405,7 +405,7 @@ void Grid::WriteGAD()
           std::vector<ApplicationWrapperParam>::const_iterator itParamsChildren = params.begin();
           while(itParamsChildren != params.end())
             {
-            std::string child = (*itParamsChildren).GetName().toChar();        
+            std::string child = (*itParamsChildren).GetName().toChar();
             if(child.find(command)==0)
               {
               hasChildren = true;
@@ -414,21 +414,21 @@ void Grid::WriteGAD()
             itParamsChildren++;
             }
           }
-      
+
         if(hasChildren && !(*itParams).GetParamsSubSize())
           {
           commandline += " ";
-          commandline += (*itParams).GetValue().toChar(); 
+          commandline += (*itParams).GetValue().toChar();
           commandline += " ";
           }
         else
           {
           // If this is an input file we use the correct filename
           // WARNING WORKS ONLY IF ONE INPUT IMAGE
-          if((*itParams).GetExternalData() == 1 
+          if((*itParams).GetExternalData() == 1
              && (*itParams).GetValue().length() > 0
              && !(*it).GetDataHost().empty()
-             && (strcmp((*it).GetName().c_str(),"bmGridStore") 
+             && (strcmp((*it).GetName().c_str(),"bmGridStore")
                  && strcmp((*it).GetName().c_str(),"bmGridSend"))
              ) // DATA_IN
             {
@@ -437,7 +437,7 @@ void Grid::WriteGAD()
             commandline += "{InputFile";
             commandline += num;
             commandline += "}";
-            delete [] num; 
+            delete [] num;
             }
           else
             {
@@ -450,7 +450,7 @@ void Grid::WriteGAD()
         // This is a hack because grouping was not working...
         if(!m_Grouping && !hasChildren)
           {
-          std::string value = (*itParams).GetValue().toChar();          
+          std::string value = (*itParams).GetValue().toChar();
           // Extract the values
           std::vector<std::string> values;
           unsigned int startWord = 0;
@@ -491,7 +491,7 @@ void Grid::WriteGAD()
             commandline += "_";
             commandline += num;
             commandline += "}";
-            delete [] num; 
+            delete [] num;
             itValues++;
             numid++;
             }
@@ -574,7 +574,7 @@ void Grid::WriteGAD()
           itParent = itParams;
           itParent++;
 
-       
+
           // If the group has no child we plan accordingly
           if(itParent == params.end())
             {
@@ -585,7 +585,7 @@ void Grid::WriteGAD()
           else
             {
             if(m_Grouping)
-              { 
+              {
               fprintf(fic,"  <group name=\"%s\" syntax=\"%s\" optional=\"%s\" selected=\"true\">\n"
                       ,(*itParams).GetName().toChar()
                       ,syntax.c_str()
@@ -597,7 +597,7 @@ void Grid::WriteGAD()
               std::vector<ApplicationWrapperParamSub>::const_iterator itChildren = children.begin();
               while(itChildren!=children.end())
                 {
-                std::string value = (*itParent).GetValue().toChar();          
+                std::string value = (*itParent).GetValue().toChar();
                 // Extract the values
                 std::vector<std::string> values;
                 unsigned int startWord = 0;
@@ -628,7 +628,7 @@ void Grid::WriteGAD()
                   values.push_back(value);
                   }
 
- 
+
                 std::vector<std::string>::const_iterator itV=values.begin();
                 i=0;
                 while(itV!=values.end())
@@ -644,7 +644,7 @@ void Grid::WriteGAD()
                     fprintf(fic,"   <argument name=\"%s_%d\" value=\"%s\" type=\"%s\"/>\n",
                             (*itParent).GetName().replaceChar('.','_').toChar(),i,this->AddQuotes((*itV)).c_str(),
                             (*itParent).GetTypeAsChar());
-           
+
                     }
                   i++;
                   itV++;
@@ -654,7 +654,7 @@ void Grid::WriteGAD()
               itParent++;
               }
             if(m_Grouping)
-              {    
+              {
               fprintf(fic,"  </group>\n");
               }
             }
@@ -663,10 +663,10 @@ void Grid::WriteGAD()
           {
           // If this is an input file we use the correct filename
           // WARNING WORKS ONLY IF ONE INPUT IMAGE
-          if((*itParams).GetExternalData() == 1 
+          if((*itParams).GetExternalData() == 1
              && (*itParams).GetValue().length() > 0
              && !(*it).GetDataHost().empty()
-             && (strcmp((*it).GetName().c_str(),"bmGridStore") 
+             && (strcmp((*it).GetName().c_str(),"bmGridStore")
                  && strcmp((*it).GetName().c_str(),"bmGridSend"))
              ) // DATA_IN
             {
@@ -691,28 +691,28 @@ void Grid::WriteGAD()
     while(itDep != dependencies.end())
       {
       fprintf(fic,"  <dependency name=\"%s\"/>\n",(*itDep).c_str());
-      itDep++;  
+      itDep++;
       }
 
     if(dependencies.size() == 0 && dependApp)
       {
       fprintf(fic,"  <dependency name=\"%s\"/>\n",dependApp->GetDependencyTag().c_str());
       }
-  
+
     fprintf(fic," </componentAction>\n");
-    dependencies.clear();    
-  
+    dependencies.clear();
+
     char* appName = new char[255];
     sprintf(appName,"app%d",appnum);
 
     itParams = params.begin();
 
-    if(strcmp((*it).GetName().c_str(),"bmGridStore") 
+    if(strcmp((*it).GetName().c_str(),"bmGridStore")
        && strcmp((*it).GetName().c_str(),"bmGridSend"))
       {
       while(itParams != params.end())
         {
-        if((*itParams).GetExternalData() == 2 
+        if((*itParams).GetExternalData() == 2
            && (*itParams).GetValue().length() > 0
            && !(*it).GetOutputHost().empty()) // DATA_OUT
           {
@@ -792,7 +792,7 @@ void Grid::WriteShell()
                           (*it).GetCurrentCommandLineArguments(false).c_str());
     it++;
     }
- 
+
   fclose(fic);
 }
 
@@ -863,11 +863,11 @@ void Grid::WriteCondor()
     jobFileName += idStr;
     jobFileName += itksys::SystemTools::GetFilenameExtension( filename );
 
-    delete [] idStr; 
+    delete [] idStr;
 
     DAGnode dagNode;
     dagNode.id = id;
-    
+
     // We have a barrier node
     if((*it).GetDependsOn()!=-1)
       {
@@ -909,18 +909,18 @@ void Grid::WriteCondor()
 
     std::cout << "Generating Condor File: " << jobFileName.c_str() << std::endl;
 
-    FILE* fic = fopen( jobFileName.c_str(),"wb"); 
+    FILE* fic = fopen( jobFileName.c_str(),"wb");
     if(!fic)
       {
       std::cout << "Grid::WriteCondor() : Cannot create Condor script: " << jobFileName << std::endl;
       return;
       }
-    
+
     // Write the header
     fprintf(fic,"# Script generated by BatchMake (c) Insight Software Consortium\n");
     fprintf(fic,"# (c) Kitware Inc 2009\n");
     fprintf(fic,"# More information at: http://www.batchmake.org\n\n");
-    
+
     fprintf(fic,"Universe       = vanilla\n");
     fprintf(fic,"Output         = bmGrid.%d.out.txt\n",id);
     fprintf(fic,"Error          = bmGrid.%d.error.txt\n",id);
@@ -931,9 +931,9 @@ void Grid::WriteCondor()
       {
       fprintf(fic,"Initialdir     = %s\n",m_WorkingDirectory.c_str());
       }
-    
+
     std::string executable = (*it).GetApplicationPath();
-    if( m_TransferFiles != ALL && 
+    if( m_TransferFiles != ALL &&
         m_TransferFiles != EXECUTABLE &&
         !m_ExecutableDirectory.empty() )
       {
@@ -942,14 +942,14 @@ void Grid::WriteCondor()
         {
         executableDirectory = m_ExecutableDirectory + "/";
         }
-      executable = executableDirectory + 
+      executable = executableDirectory +
         itksys::SystemTools::GetFilenameName( executable );
       }
-      
+
     fprintf(fic,"Executable    = %s\n",executable.c_str());
 
-    // We need to escape double-quotes if any and add the 
-    std::string arguments = 
+    // We need to escape double-quotes if any and add the
+    std::string arguments =
       (*it).GetCurrentCommandLineArguments( true,
                                             m_InputDirectory,
                                             m_OutputDirectory );
@@ -960,8 +960,8 @@ void Grid::WriteCondor()
       posDQ = arguments.find("\"", posDQ + 1);
       }
 
-    fprintf(fic,"Arguments     = \"%s\"\n",arguments.c_str());  
-    
+    fprintf(fic,"Arguments     = \"%s\"\n",arguments.c_str());
+
     std::string requirements = m_Requirements;
     if( !m_Requirements.empty() && !it->GetRequirements().empty() )
       {
@@ -973,12 +973,12 @@ void Grid::WriteCondor()
       {
       fprintf( fic, "Requirements = %s \n", requirements.c_str() );
       }
-    
+
     if( !m_Owner.empty() )
       {
       fprintf( fic, "+Owner=\"%s\"\n", m_Owner.c_str() );
       }
-    
+
     // Check if we have external data
     const std::vector<ApplicationWrapperParam> & params = (*it).GetParams();
     std::vector<ApplicationWrapperParam>::const_iterator itParams = params.begin();
@@ -1003,10 +1003,10 @@ void Grid::WriteCondor()
       itParams++;
       }
 
-    
+
     std::vector<std::string> otherinputdata = (*it).GetInputDataToTransfer();
     if(externalData.size() > 0 || otherinputdata.size()>0)
-      {   
+      {
       std::vector<std::string>::const_iterator itExternalData = otherinputdata.begin();
       while(itExternalData != otherinputdata.end())
         {
@@ -1018,11 +1018,11 @@ void Grid::WriteCondor()
         externalData += datavalue;
         itExternalData++;
         }
-      
+
       if(m_TransferFiles != NONE)
-        {  
+        {
         fprintf(fic,"transfer_input_files = %s\n",externalData.c_str());
-        }  
+        }
       }
 
 
@@ -1060,12 +1060,12 @@ void Grid::WriteCondor()
   fclose(dagfile);
 }
 
-/** Consolidtae the Directed Acycle graph 
+/** Consolidtae the Directed Acycle graph
  *  by connecting the nodes when wer are an after barrier node */
 void Grid::ConsolidateDAG(std::vector<DAGnode>* dag)
 {
   std::vector<DAGnode>::iterator it = dag->begin();
-  while(it != dag->end())  
+  while(it != dag->end())
     {
     // if this is an after barrier
     if((*it).isAfterbarrier)
@@ -1077,7 +1077,7 @@ void Grid::ConsolidateDAG(std::vector<DAGnode>* dag)
         {
         if((*itStartBarrier).isBarrier && (*itStartBarrier).scope == (*it).scope)
           {
-          startBarrier = (*itStartBarrier).id;    
+          startBarrier = (*itStartBarrier).id;
           break;
           }
         itStartBarrier--;
@@ -1096,7 +1096,7 @@ void Grid::ConsolidateDAG(std::vector<DAGnode>* dag)
 
   // We remove the virtual nodes
   it = dag->begin();
-  while(it != dag->end())  
+  while(it != dag->end())
     {
     if((*it).isVirtual)
       {
@@ -1105,16 +1105,16 @@ void Grid::ConsolidateDAG(std::vector<DAGnode>* dag)
         std::cout << "ERROR: don't know how to delete virtual node with multiple parents" << std::endl;
         return;
         }
-      
+
       // 'it' may not have parents if 'it' is root
       // Find all the nodes that are connected and connect to the parent instead
       int parent = (*it).parents.size()? (*it).parents[0] : -1;
 
       std::vector<DAGnode>::iterator itC = dag->begin();
-      while(itC != dag->end())  
+      while(itC != dag->end())
         {
-        std::vector<int>::iterator itP = (*itC).parents.begin(); 
-        while(itP != (*itC).parents.end()) 
+        std::vector<int>::iterator itP = (*itC).parents.begin();
+        while(itP != (*itC).parents.end())
           {
           if(*itP == (*it).id)
             {
@@ -1125,7 +1125,7 @@ void Grid::ConsolidateDAG(std::vector<DAGnode>* dag)
               }
             else
               {
-              // it has no parent (root), after it get deleted, its children 
+              // it has no parent (root), after it get deleted, its children
               //won't have parents neither
               (*itC).parents.erase( itP );
               }
@@ -1164,10 +1164,10 @@ void Grid::AddLeavesAsParent(std::vector<DAGnode>* dag,int node,DAGnode* nodeToA
   std::vector<int> childlist;
 
   std::vector<DAGnode>::const_iterator it = dag->begin();
-  while(it != dag->end())  
+  while(it != dag->end())
     {
-    std::vector<int>::const_iterator itP = (*it).parents.begin(); 
-    while(itP != (*it).parents.end()) 
+    std::vector<int>::const_iterator itP = (*it).parents.begin();
+    while(itP != (*it).parents.end())
       {
       if(*itP == node)
         {
@@ -1180,7 +1180,7 @@ void Grid::AddLeavesAsParent(std::vector<DAGnode>* dag,int node,DAGnode* nodeToA
     }
 
   if(childlist.size() == 0)
-    {        
+    {
     nodeToAdd->parents.push_back(node);
     return;
     }
@@ -1201,7 +1201,7 @@ void Grid::AddDAGParent(FILE* fic,std::vector<DAGnode>* dag,int parentid)
   // Write out the children
   std::vector<int> childrenlist;
   std::vector<DAGnode>::const_iterator it = dag->begin();
-  while(it != dag->end())  
+  while(it != dag->end())
     {
     std::vector<int>::const_iterator itParent = (*it).parents.begin();
     while(itParent != (*it).parents.end())
@@ -1242,7 +1242,7 @@ void Grid::AddDAGParent(FILE* fic,std::vector<DAGnode>* dag,int parentid)
         pc.second = *itChild;
         m_ParentChildList.push_back(pc);
         }
-      
+
       itChild++;
       }
     }

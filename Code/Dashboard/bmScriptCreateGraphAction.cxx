@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -62,7 +62,7 @@ void ScriptCreateGraphAction::Execute()
   m_Manager->AddDashboardExperiment(m_Parameters[0].toChar(),
                                     m_Parameters[1].toChar(),
                                     m_Parameters[2].toChar());
- 
+
 /*#ifdef BM_GRID
   if(m_GridModule)
     {
@@ -93,7 +93,7 @@ void ScriptCreateGraphAction::Execute()
   url += "/dashboard.php";
   std::string m_Output = m_request.Send(url.c_str());
 
-/* 
+/*
   if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
@@ -115,7 +115,7 @@ void ScriptCreateGraphAction::Execute()
         case 4 :  m_ProgressManager->AddError("Over quota: please use DbClear function first"); break;
         case 5 :  m_ProgressManager->AddError("Host Database error"); break;
         case -1 : m_ProgressManager->AddError("Connexion problem"); break;
-        }  
+        }
       }
     }
 */

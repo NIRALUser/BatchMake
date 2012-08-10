@@ -40,14 +40,14 @@ class MomentRegistrator : public ImageRegistrationMethod < TImage, TImage >
 
     itkNewMacro(Self);
 
-    itkStaticConstMacro(ImageDimension, unsigned int, 
+    itkStaticConstMacro(ImageDimension, unsigned int,
                         TImage::ImageDimension);
-  
+
     typedef typename TImage::PixelType PixelType ;
     typedef typename TImage::RegionType RegionType ;
 
     /** preprocessing related typedefs */
-    typedef AffineTransform<double, itkGetStaticConstMacro(ImageDimension)> 
+    typedef AffineTransform<double, itkGetStaticConstMacro(ImageDimension)>
                                                    TransformType ;
     typedef typename TransformType::ParametersType ParametersType ;
     typedef typename TransformType::ParametersType ScalesType ;

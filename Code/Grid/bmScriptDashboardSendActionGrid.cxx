@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -43,7 +43,7 @@ void ScriptDashboardSendAction::GenerateGrid()
 
   if(!appFound)
     {
-    std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend " 
+    std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridSend "
               << appName << std::endl;
     return;
     }
@@ -113,14 +113,14 @@ void ScriptDashboardSendAction::GenerateGrid()
   withslash += "\"";
   app.SetParameterValue("send","method",withslash);
   app.SetParameterValue("data","","1");
- 
+
   // Check that the experiment exist
   std::string data = "";
   unsigned int num = 0;
   std::string imagedata = "";
   unsigned int imagenum = 0;
 
-  std::vector<DashboardExperimentType>::const_iterator itE 
+  std::vector<DashboardExperimentType>::const_iterator itE
                                               = dashboard->experiments.begin();
   while(itE != dashboard->experiments.end())
     {
@@ -129,7 +129,7 @@ void ScriptDashboardSendAction::GenerateGrid()
       {
       if((!strcmp((*itMeth).variable.c_str(),m_Parameters[0].toChar())))
         {
-        std::vector<DashboardMethodParameterType>::const_iterator itParam 
+        std::vector<DashboardMethodParameterType>::const_iterator itParam
                                                     = (*itMeth).parameters.begin();
         while(itParam != (*itMeth).parameters.end())
           {
@@ -145,8 +145,8 @@ void ScriptDashboardSendAction::GenerateGrid()
             imagedata += " ";
             imagedata += "\"";
             MString value = m_Manager->Convert(param).toChar();
-            value = value.removeChar('\'');          
-            std::string imagefile = itksys::SystemTools::GetFilenameName(value.toChar());     
+            value = value.removeChar('\'');
+            std::string imagefile = itksys::SystemTools::GetFilenameName(value.toChar());
             imagedata += imagefile.c_str();
             imagedata += "\" ";
             app.AddInputDataToTransfer(imagefile.c_str());

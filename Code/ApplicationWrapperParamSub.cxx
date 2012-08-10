@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -64,12 +64,12 @@ MString ApplicationWrapperParamSub::GetValue() const
 }
 
 void ApplicationWrapperParamSub::SetEnum(std::vector<MString> enumlist)
-{ 
+{
   m_enum.clear();
   for (unsigned int i=0;i<enumlist.size();i++)
     m_enum.push_back(enumlist[i]);
 }
-  
+
 std::vector<MString> ApplicationWrapperParamSub::GetEnum() const
 {
   return m_enum;
@@ -85,7 +85,7 @@ bool ApplicationWrapperParamSub::GetOptional() const
 {
   return m_optional;
 }
-  
+
 const char* ApplicationWrapperParamSub::GetTypeAsChar() const
 {
   switch(m_type)

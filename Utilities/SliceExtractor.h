@@ -12,7 +12,7 @@ class SliceExtractor
 public:
   SliceExtractor();
   ~SliceExtractor();
-  
+
   typedef unsigned short                        ImagePixelType;
   typedef itk::Image<ImagePixelType,3>          Image3DType;
   typedef Image3DType::Pointer                  Image3DTypePointer;

@@ -31,10 +31,10 @@ AffineRegistrator< TImage >
                   this->GetTypedTransform()->GetParameters());
 
   this->SetInterpolator(InterpolatorType::New());
-  
+
   m_OptimizerMethod = ONEPLUSONEPLUSGRADIENT;
   m_OptimizerNumberOfIterations = 500 ;
-  m_OptimizerScales.set_size(15) ; 
+  m_OptimizerScales.set_size(15) ;
   m_OptimizerScales[0] = 100; // rotations
   m_OptimizerScales[1] = 100;
   m_OptimizerScales[2] = 100;
@@ -50,7 +50,7 @@ AffineRegistrator< TImage >
   m_OptimizerScales[12] = 200;
   m_OptimizerScales[13] = 200;
   m_OptimizerScales[14] = 200;
-  
+
   this->SetMetric(MetricType::New());
   m_MetricNumberOfSpatialSamples = 40000 ;
 
@@ -66,7 +66,7 @@ AffineRegistrator< TImage >
 template< class TImage >
 void
 AffineRegistrator< TImage >
-::SetOptimizerToOnePlusOne() 
+::SetOptimizerToOnePlusOne()
   {
   m_OptimizerMethod = ONEPLUSONE;
   }
@@ -74,7 +74,7 @@ AffineRegistrator< TImage >
 template< class TImage >
 void
 AffineRegistrator< TImage >
-::SetOptimizerToGradient() 
+::SetOptimizerToGradient()
   {
   m_OptimizerMethod = GRADIENT;
   }
@@ -82,7 +82,7 @@ AffineRegistrator< TImage >
 template< class TImage >
 void
 AffineRegistrator< TImage >
-::SetOptimizerToOnePlusOnePlusGradient() 
+::SetOptimizerToOnePlusOnePlusGradient()
   {
   m_OptimizerMethod = ONEPLUSONEPLUSGRADIENT;
   }
@@ -94,7 +94,7 @@ AffineRegistrator< TImage >
   {
   this->GetInterpolator()->SetInputImage( this->GetMovingImage() ) ;
 
-  this->GetTypedMetric()->SetNumberOfSpatialSamples( 
+  this->GetTypedMetric()->SetNumberOfSpatialSamples(
                           m_MetricNumberOfSpatialSamples );
 
   switch(m_OptimizerMethod)
@@ -174,7 +174,7 @@ AffineRegistrator< TImage >
 ::StartRegistration()
   {
   try
-    {   
+    {
     Superclass::StartRegistration();
     }
   catch(ExceptionObject &e)
@@ -196,17 +196,17 @@ AffineRegistrator< TImage >
       }
     catch(ExceptionObject &e)
       {
-      this->SetLastTransformParameters( 
+      this->SetLastTransformParameters(
                      m_SecondaryOptimizer->GetCurrentPosition() );
-      this->GetTypedTransform()->SetParameters( 
+      this->GetTypedTransform()->SetParameters(
                      this->GetLastTransformParameters() );
 
       this->PrintError(e) ;
       }
 
-    this->SetLastTransformParameters( 
+    this->SetLastTransformParameters(
                    m_SecondaryOptimizer->GetCurrentPosition() );
-    this->GetTypedTransform()->SetParameters( 
+    this->GetTypedTransform()->SetParameters(
                    this->GetLastTransformParameters() );
 
     }
@@ -217,11 +217,11 @@ void
 AffineRegistrator< TImage >
 ::PrintUncaughtError()
 {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in AffineRegistrator:" << std::endl;
   std::cout << "unknown exception caught !!!" << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
 }
 
@@ -230,11 +230,11 @@ void
 AffineRegistrator< TImage >
 ::PrintError(ExceptionObject &e)
 {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in AffineRegistrator:" << std::endl;
   std::cout << e << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
 }
 
