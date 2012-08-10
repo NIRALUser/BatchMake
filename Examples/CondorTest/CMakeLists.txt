@@ -1,24 +1,24 @@
-PROJECT(bmCondorTest)
+project(bmCondorTest)
 
-SET(bmCondorTest_SRCS
+set(bmCondorTest_SRCS
   bmCondorTest.cxx
   )
 
-ADD_EXECUTABLE(bmCondorTest ${bmCondorTest_SRCS})
-TARGET_LINK_LIBRARIES(bmCondorTest ${ITK_LIBRARIES})
+add_executable(bmCondorTest ${bmCondorTest_SRCS})
+target_link_libraries(bmCondorTest ${ITK_LIBRARIES})
 
-IF(WIN32)
-  TARGET_LINK_LIBRARIES(bmCondorTest
+if(WIN32)
+  target_link_libraries(bmCondorTest
     wsock32
   )
-ENDIF(WIN32)
+endif(WIN32)
 
 
 #----------------------------------------------------------------------
 # Installation file
 
-INSTALL(TARGETS bmCondorTest 
+install(TARGETS bmCondorTest
         RUNTIME DESTINATION bin)
-#INSTALL(FILES bmCondorTest.cxx DESTINATION source/Examples/CondorTest)
-#INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/CondorTest)
+#install(FILES bmCondorTest.cxx DESTINATION source/Examples/CondorTest)
+#install(FILES CMakeLists.txt DESTINATION source/Examples/CondorTest)
 

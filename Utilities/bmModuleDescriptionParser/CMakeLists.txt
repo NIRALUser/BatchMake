@@ -17,13 +17,13 @@ endif(bmModuleDescriptionParser_USE_PYTHON)
 if(NOT DEFINED BUILD_SHARED_LIBS)
   option(BUILD_SHARED_LIBS "Build with shared libraries." ON)
 endif(NOT DEFINED BUILD_SHARED_LIBS)
- 
+
 # --------------------------------------------------------------------------
 # Include dirs
 
 set(include_dirs
   ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR} 
+  ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
 if(bmModuleDescriptionParser_USE_PYTHON)
@@ -33,13 +33,13 @@ endif(bmModuleDescriptionParser_USE_PYTHON)
 include_directories(${include_dirs})
 
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/bmModuleDescriptionParserConfigure.h.in 
+  ${CMAKE_CURRENT_SOURCE_DIR}/bmModuleDescriptionParserConfigure.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/bmModuleDescriptionParserConfigure.h
   )
 
 file(GLOB headers "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-install(FILES 
-  ${headers} 
+install(FILES
+  ${headers}
   "${CMAKE_CURRENT_BINARY_DIR}/bmModuleDescriptionParserConfigure.h"
   DESTINATION include/${PROJECT_NAME} COMPONENT Development
   )
@@ -81,7 +81,7 @@ if(USE_BFD)
         ${CMAKE_CURRENT_BINARY_DIR}/CMake
         ${CMAKE_CURRENT_SOURCE_DIR}/CMake
         TestBFD
-        CMAKE_FLAGS 
+        CMAKE_FLAGS
         -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS}
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
         OUTPUT_VARIABLE OUTPUT)
@@ -94,8 +94,8 @@ if(USE_BFD)
     endif(HAVE_BFD_HEADER)
 
     if(HAVE_BFD)
-      set(bmModuleDescriptionParser_SRCS 
-        ${bmModuleDescriptionParser_SRCS} 
+      set(bmModuleDescriptionParser_SRCS
+        ${bmModuleDescriptionParser_SRCS}
         BinaryFileDescriptor.cxx)
     endif(HAVE_BFD)
   endif(NOT WIN32)
@@ -105,7 +105,7 @@ endif(USE_BFD)
 # Build and install the library
 
 set(lib_name bmModuleDescriptionParser)
-add_library(${lib_name} 
+add_library(${lib_name}
   ${bmModuleDescriptionParser_SRCS}
   ${bmModuleDescriptionParser_HDRS}
 )
@@ -129,7 +129,7 @@ endif(NOT WIN32 AND HAVE_BFD)
 
 target_link_libraries(${lib_name} ${link_libs})
 
-install(TARGETS ${lib_name} 
+install(TARGETS ${lib_name}
   RUNTIME DESTINATION bin COMPONENT RuntimeLibraries
   LIBRARY DESTINATION lib/${PROJECT_NAME} COMPONENT RuntimeLibraries
   ARCHIVE DESTINATION lib/${PROJECT_NAME} COMPONENT Development
@@ -145,13 +145,13 @@ endif(BUILD_TESTING)
 # --------------------------------------------------------------------------
 # Install support files
 
-include(GenerateModuleDescriptionParserConfig.cmake) 
+include(GenerateModuleDescriptionParserConfig.cmake)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/UseModuleDescriptionParser.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/UseModuleDescriptionParser.cmake COPYONLY IMMEDIATE)
 
-install(FILES 
-  ${CMAKE_CURRENT_BINARY_DIR}/UseModuleDescriptionParser.cmake 
-  ${CMAKE_CURRENT_BINARY_DIR}/install/bmModuleDescriptionParserConfig.cmake 
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/UseModuleDescriptionParser.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/install/bmModuleDescriptionParserConfig.cmake
   DESTINATION lib/${PROJECT_NAME} COMPONENT Development
   )

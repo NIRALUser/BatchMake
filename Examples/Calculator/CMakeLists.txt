@@ -1,11 +1,11 @@
-PROJECT(Calculator)
+project(Calculator)
 
-ADD_EXECUTABLE(Calculator main.cxx)
+add_executable(Calculator main.cxx)
 
-TARGET_LINK_LIBRARIES(Calculator ${BatchMake_LIBRARIES})
+target_link_libraries(Calculator ${BatchMake_LIBRARIES})
 
 # Installation file
-INSTALL(TARGETS Calculator 
+install(TARGETS Calculator
         RUNTIME DESTINATION bin)
-#INSTALL(FILES main.cxx DESTINATION source/Examples/Calculator)
-#INSTALL(FILES CMakeLists.txt DESTINATION source/Examples/Calculator)
+#install(FILES main.cxx DESTINATION source/Examples/Calculator)
+#install(FILES CMakeLists.txt DESTINATION source/Examples/Calculator)

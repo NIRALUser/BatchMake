@@ -1,2 +1,2 @@
-FILE(GLOB CMakeFiles "*.cmake")
-INSTALL(FILES ${CMakeFiles} DESTINATION lib/BatchMake/CMake)
+file(GLOB CMakeFiles "*.cmake")
+install(FILES ${CMakeFiles} DESTINATION lib/BatchMake/CMake)

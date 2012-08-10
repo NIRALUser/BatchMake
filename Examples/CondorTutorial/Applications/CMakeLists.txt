@@ -1,4 +1,4 @@
-PROJECT(Applications)
+project(Applications)
 
 
-SUBDIRS(ImageMath ImageResample ImageRegTool)
+subdirs(ImageMath ImageResample ImageRegTool)

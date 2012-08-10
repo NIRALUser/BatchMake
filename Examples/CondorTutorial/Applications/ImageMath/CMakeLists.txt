@@ -1,24 +1,24 @@
-PROJECT(ImageMath)
+project(ImageMath)
 
 
-INCLUDE_DIRECTORIES(
+include_directories(
   ${ITK_SOURCE_DIR}/Utilities/zlib
   ${ITK_DIR}/Utilities/zlib
 )
 
-LINK_DIRECTORIES (
+link_directories(
   ${ITK_LIBRARY_PATH}
 )
 
-LINK_LIBRARIES (
+link_libraries(
   ${ITK_LIBRARIES}
 )
 
-SET ( MAIN_SRCS
+set( MAIN_SRCS
 itkNJetImageFunction.h
 itkCVTImageFilter.h
 itkNJetImageFunction.txx
 itkCVTImageFilter.txx
 main.cxx
 )
-ADD_EXECUTABLE(ImageMath ${MAIN_SRCS})
+add_executable(ImageMath ${MAIN_SRCS})
