@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -54,7 +54,7 @@ MString ScriptFileExistsAction::Help()
 
 void ScriptFileExistsAction::Execute()
 {
-  BMString filename = m_Manager->Convert(m_Parameters[1]);  
+  BMString filename = m_Manager->Convert(m_Parameters[1]);
   filename = filename.removeAllChars('\'');
 
   MString value = "0";
@@ -63,7 +63,7 @@ void ScriptFileExistsAction::Execute()
     {
     value = "1";
     }
- 
+
   BMString param = m_Parameters[0];
   // if we have the $ we want to set the var not the value
   if(m_Parameters[0][0] == '$')

@@ -23,10 +23,10 @@
 #define MEM_BUFFER_SIZE 10
 
 typedef struct
-{ 
-  char* headerSend;            
+{
+  char* headerSend;
   char* headerReceive;
-  std::string message;              
+  std::string message;
 } MessageStruct;
 
 typedef struct
@@ -43,7 +43,7 @@ typedef struct
   unsigned long size;
 } Paramstruct;
 
-class HttpRequest  
+class HttpRequest
 {
 public:
   HttpRequest();

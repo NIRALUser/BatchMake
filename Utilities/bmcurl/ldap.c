@@ -74,7 +74,7 @@
 #define LDAP_SIZELIMIT_EXCEEDED 4
 #endif
 
-#define DLOPEN_MODE   RTLD_LAZY  /*! assume all dlopen() implementations have 
+#define DLOPEN_MODE   RTLD_LAZY  /*! assume all dlopen() implementations have
                                    this */
 
 #if defined(RTLD_LAZY_GLOBAL)    /* It turns out some systems use this: */

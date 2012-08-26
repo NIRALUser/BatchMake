@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 
@@ -97,7 +97,7 @@ void Flu_Collapsable_Group :: updateCB()
   _currentHeight += _deltaHeight;
 
   // see if we're done with the animation
-  if( ( _deltaHeight == 0.0f ) || 
+  if( ( _deltaHeight == 0.0f ) ||
       ( ( _deltaHeight > 0.0f ) && ( _currentHeight >= float(_newHeight) ) ) ||
       ( ( _deltaHeight < 0.0f ) && ( _currentHeight <= float(_newHeight) ) ) )
     {

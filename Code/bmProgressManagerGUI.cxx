@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -53,7 +53,7 @@ void ProgressManagerGUI::IsRunning()
     {
     m_Progress->value(m_Progress->value()+1);
     if (m_Progress->value() == m_Progress->maximum()+1)
-      { 
+      {
       m_Progress->value(0);
       }
     }
@@ -87,7 +87,7 @@ void ProgressManagerGUI::AddAction(const BMString& name)
 
   char* title2 = new char[title.size()+1];
   strcpy(title2,title.c_str());
-  
+
   Fl_Box *m_label = new Fl_Box(0, 0, 150, 20);
   m_label->label(title2);
   m_label->labelsize(12);
@@ -131,7 +131,7 @@ void ProgressManagerGUI::AddAction(const BMString& name)
 }
 
 void ProgressManagerGUI::FinishAction(const BMString& output)
-{ 
+{
   m_Progress->value(m_Progress->maximum()+1);
   if (m_CurrentNode)
     {
@@ -140,13 +140,13 @@ void ProgressManagerGUI::FinishAction(const BMString& output)
     // Go up in the tree
     m_CurrentNode = m_CurrentNode->parent();
     m_ErrorNode = m_CurrentNode->first();
-    while( m_ErrorNode && m_ErrorNode->is_branch() && 
+    while( m_ErrorNode && m_ErrorNode->is_branch() &&
            BMString(m_ErrorNode->label()) != "Error" )
       {
       m_ErrorNode = m_ErrorNode->next_sibling();
       }
     m_OutputNode = m_CurrentNode->first();
-    while( m_OutputNode && m_OutputNode->is_branch() && 
+    while( m_OutputNode && m_OutputNode->is_branch() &&
            BMString(m_OutputNode->label()) != "Output" )
       {
       m_OutputNode = m_OutputNode->next_sibling();
@@ -157,7 +157,7 @@ void ProgressManagerGUI::FinishAction(const BMString& output)
     //@todo make sure it never happens
     m_ErrorNode = NULL;
     m_OutputNode = NULL;
-    std::cerr << "Debug: An action has been finished but never created ?!?!" 
+    std::cerr << "Debug: An action has been finished but never created ?!?!"
               << std::endl;
     }
 
@@ -166,7 +166,7 @@ void ProgressManagerGUI::FinishAction(const BMString& output)
 }
 
 void ProgressManagerGUI::AddOutput(const BMString& output)
-{ 
+{
   if (output == "")
     {
     return;
@@ -191,12 +191,12 @@ void ProgressManagerGUI::AddOutput(const BMString& output)
     }
   m_ProgressGUI->g_Progressgui->redraw();
   Fl::check();
-  m_ProgressGUI->g_progress->set_hilighted( 
+  m_ProgressGUI->g_progress->set_hilighted(
     m_CurrentNode ? m_CurrentNode : m_OutputNode );
 }
 
 void ProgressManagerGUI::AddError(const BMString& error)
-{ 
+{
   if (error == "")
     {
     this->ProgressManager::AddError(error);
@@ -223,11 +223,11 @@ void ProgressManagerGUI::AddError(const BMString& error)
     {
     m_ErrorNode->add_leaf(BMString(error).replaceAllChars('/','\\').toChar());
     }
- 
+
   m_ProgressGUI->g_Progressgui->redraw();
 
   Fl::check();
-  
+
   this->ProgressManager::AddError(error);
 }
 

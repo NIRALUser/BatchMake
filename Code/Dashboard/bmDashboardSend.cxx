@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "bmDashboardSend.h"
@@ -38,14 +38,14 @@ void DashboardSend::Init()
   m_Url = "";
   m_UserKey = "";
   m_HostKey = "";
-  m_ValueList.clear(); 
-  m_DataList.clear(); 
+  m_ValueList.clear();
+  m_DataList.clear();
 }
-  
+
 /** Clear the value list */
 void DashboardSend::ClearValueList()
 {
-  m_ValueList.clear(); 
+  m_ValueList.clear();
 }
 
 /** Clear the data list */
@@ -99,11 +99,11 @@ bool DashboardSend::CreateExperiment(const char* description)
   request.AddParam("hostname",request.GetHostName().c_str());
   request.AddParam("hostip",request.GetHostIp().c_str());
   request.AddParam("hostkey",m_HostKey.c_str());
-    
+
   request.AddParam("method","CreateExperiment");
   request.AddParam("name",m_ExperimentName.c_str());
   request.AddParam("description",description);
-  
+
   return this->SendRequest(request);
 }
 
@@ -140,7 +140,7 @@ bool DashboardSend::CreateMethod(const char* description)
   request.AddParam("name",m_MethodName.c_str());
   request.AddParam("experiment",m_ExperimentName.c_str());
   request.AddParam("description",description);
-  
+
   return this->SendRequest(request);
 }
 
@@ -192,7 +192,7 @@ bool DashboardSend::CreateMethodParameter(const char* name,ParameterType paramTy
     default:
       request.AddParam("type","0");
     }
-  
+
   if(type)
     {
     request.AddParam("paramtype",type);

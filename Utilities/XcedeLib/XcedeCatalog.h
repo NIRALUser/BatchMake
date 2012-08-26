@@ -32,7 +32,7 @@ public:
   std::vector<std::string> GetUrls(xmlDocPtr doc, std::string catalogID="");
   std::vector<std::string> GetNames(xmlDocPtr doc, std::string catalogID="");
 
-  std::vector<std::string> GetXcedeDataSets(xmlDocPtr doc, std::string catalogID="", 
+  std::vector<std::string> GetXcedeDataSets(xmlDocPtr doc, std::string catalogID="",
                                             std::string login="", std::string password="");
   bool DownloadXcedeDatasets(std::string xcedeDataSet, std::string directory,
                              std::string login="", std::string password="");

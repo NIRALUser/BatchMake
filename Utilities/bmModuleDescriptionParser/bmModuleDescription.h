@@ -45,7 +45,7 @@ public:
   {
     return this->Category;
   }
-  
+
   void SetTitle(const std::string &title)
   {
     this->Title = title;
@@ -75,7 +75,7 @@ public:
   {
     return this->Version;
   }
-  
+
   void SetRequirements(const std::string &requirements)
   {
     this->Requirements = requirements;
@@ -129,7 +129,7 @@ public:
   // Set the type of module: Unknown, SharedObjectModule, CommandLineModule
   void SetType(const std::string &type)
   {
-    if (type == "SharedObjectModule" 
+    if (type == "SharedObjectModule"
         || type == "CommandLineModule"
         || type == "PythonModule")
       {
@@ -141,7 +141,7 @@ public:
       }
   }
 
-  
+
   // Get the type of the module: Unknown, SharedObjectModule, CommandLineModule
   const std::string& GetType() const
   {
@@ -153,7 +153,7 @@ public:
   // usually a different type than the primary version.
   void SetAlternativeType(const std::string &type)
   {
-    if (type == "SharedObjectModule" 
+    if (type == "SharedObjectModule"
         || type == "CommandLineModule"
         || type == "PythonModule")
       {
@@ -165,7 +165,7 @@ public:
       }
   }
 
-  
+
   // Get the type of an alternative version of the module: Unknown,
   // SharedObjectModule, CommandLineModule. The alternative version is
   // usually a different type than the primary version.
@@ -173,7 +173,7 @@ public:
   {
     return this->AlternativeType;
   }
-  
+
   // Set the target for the module.  This is the entry point for a
   // shared object module and the full command (with path) for an executable.
   void SetTarget(const std::string &target)
@@ -237,10 +237,10 @@ public:
   {
     return this->AlternativeLocation;
   }
-  
+
   void SetLogo(const ModuleLogo& logo);
   const ModuleLogo& GetLogo() const;
-  
+
   void AddParameterGroup(const ModuleParameterGroup &group)
   {
     this->ParameterGroups.push_back(group);
@@ -255,7 +255,7 @@ public:
   {
     return this->ParameterGroups;
   }
-  
+
   void SetParameterGroups(const std::vector<ModuleParameterGroup>& groups)
   {
       this->ParameterGroups = groups;
@@ -270,11 +270,11 @@ public:
 
   const ModuleProcessInformation* GetProcessInformation() const
     {return &ProcessInformation;}
-  
+
   ModuleProcessInformation* GetProcessInformation()
     {return &ProcessInformation;}
-  
-  
+
+
 private:
   std::string Title;
   std::string Category;
@@ -291,7 +291,7 @@ private:
   std::string AlternativeType;
   std::string AlternativeTarget;
   std::string AlternativeLocation;
-  std::vector<ModuleParameterGroup> ParameterGroups;  
+  std::vector<ModuleParameterGroup> ParameterGroups;
 
   ModuleProcessInformation ProcessInformation;
   ModuleLogo Logo;

@@ -48,7 +48,7 @@ class RigidRegistrator : public ImageRegistrationMethod < TImage, TImage >
     itkTypeMacro(RigidRegistrator, ImageRegistrationMethod);
 
     itkNewMacro(Self);
-  
+
     typedef typename TImage::PixelType PixelType ;
     typedef typename TImage::RegionType RegionType ;
 
@@ -63,7 +63,7 @@ class RigidRegistrator : public ImageRegistrationMethod < TImage, TImage >
     typedef Statistics::NormalVariateGenerator  OptimizerNormalGeneratorType;
     typedef TransformType::ParametersType       ParametersType ;
     typedef TransformType::ParametersType       ScalesType ;
-    typedef LinearInterpolateImageFunction< TImage, double > 
+    typedef LinearInterpolateImageFunction< TImage, double >
                                                 InterpolatorType ;
     typedef MattesMutualInformationImageToImageMetric< TImage, TImage >
                                                 MetricType ;

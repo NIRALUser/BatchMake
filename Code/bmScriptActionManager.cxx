@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -101,7 +101,7 @@
   #include "bmScriptGetXnatDataSetsAction.h"
   #include "bmScriptDownloadXnatDataSetAction.h"
   #include "bmScriptGetXnatFilenameAction.h"
-  #include "bmScriptGetXnatURIAction.h" 
+  #include "bmScriptGetXnatURIAction.h"
   #include "bmScriptGetXcedeDataSetsAction.h"
   #include "bmScriptDownloadXcedeDataSetAction.h"
   #include "bmScriptGetXcedeFilenameAction.h"
@@ -276,7 +276,7 @@ std::vector<BMString> ScriptActionManager::GenerateKeywordList()const
   BM_NEWKEYWORD(_list, GetErrorCount);
   BM_NEWKEYWORD(_list, ClearErrors);
   BM_NEWKEYWORD(_list, Math);
-  
+
 #ifdef BM_GRID
   BM_NEWKEYWORD(_list, GridDataHost);
   BM_NEWKEYWORD(_list, GridOutputHost);
@@ -350,7 +350,7 @@ ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
   BM_NEWACTION(option, GetErrorCount);
   BM_NEWACTION(option, ClearErrors);
   BM_NEWACTION(option, Math);
-  
+
 #ifdef BM_GRID
   BM_NEWACTION(option, GridDataHost);
   BM_NEWACTION(option, GridOutputHost);
@@ -395,7 +395,7 @@ ScriptAction* ScriptActionManager::CreateAction(const BMString& option)
   BM_NEWACTION(option, GetXnatDataSets);
   BM_NEWACTION(option, DownloadXnatDataSet);
   BM_NEWACTION(option, GetXnatFilename);
-  BM_NEWACTION(option, GetXnatURI);  
+  BM_NEWACTION(option, GetXnatURI);
   BM_NEWACTION(option, GetXcedeDataSets);
   BM_NEWACTION(option, DownloadXcedeDataSet);
   BM_NEWACTION(option, GetXcedeFilename);
@@ -429,7 +429,7 @@ void ScriptActionManager::Reset()
   m_VariableTestList.clear();
   m_VariableList.clear();
   this->SetVariable( "applicationpath", m_ApplicationPath.toVariable() );
-  
+
   if (m_ScriptPath.length() == 0)
     {
     this->SetVariable( "scriptpath", m_ApplicationPath.toVariable() );
@@ -438,18 +438,18 @@ void ScriptActionManager::Reset()
     {
     this->SetVariable( "scriptpath", m_ScriptPath.toVariable() );
     }
-   
+
   this->SetTestVariable("applicationpath");
   this->SetTestVariable("scriptpath");
 
   if (m_ApplicationWrapperList)
     {
     for( unsigned int k=0; k < m_ApplicationWrapperList->size(); k++ )
-      { 
+      {
       this->SetVariable( (*m_ApplicationWrapperList)[k]->GetName(),
                          BMString((*m_ApplicationWrapperList)[k]
                           ->GetApplicationPath()).toVariable() );
-      this->SetTestVariable((*m_ApplicationWrapperList)[k]->GetName()); 
+      this->SetTestVariable((*m_ApplicationWrapperList)[k]->GetName());
       }
     }
 
@@ -458,7 +458,7 @@ void ScriptActionManager::Reset()
     {
     m_ActionList[i]->Delete();
     }
-  
+
   m_ActionList.clear();
 
 #ifdef BM_DASHBOARD
@@ -472,7 +472,7 @@ void ScriptActionManager::Reset()
 void ScriptActionManager
 ::AddAction( const BMString& option, const std::vector<BMString>& param )
 {
-  if( (option == "endforeach") || 
+  if( (option == "endforeach") ||
       (option == "endif") ||
       (option == "endfornfold") )
     {
@@ -482,7 +482,7 @@ void ScriptActionManager
       }
     return;
     }
-  
+
   if( option == "else" )
     {
     dynamic_cast<ScriptIfAction*>(m_ParentAction)->SetMode(1);
@@ -497,7 +497,7 @@ void ScriptActionManager
                       m_LineNumber);
    return;
    }
-     
+
   m_InternalActionList.push_back(_action);
   _action->SetName(option);
   _action->SetParameters(param);
@@ -515,12 +515,12 @@ void ScriptActionManager
       m_Error->SetStatus( BMString("\tCommand: ") + _action->Help() );
       }
     }
-   
+
   if( option == "include" )
     {
     return;
     }
-   
+
   if( m_ParentAction == 0 )
     {
     this->AddAction( _action );
@@ -530,7 +530,7 @@ void ScriptActionManager
     m_ParentAction->AddAction( _action );
     }
 
-  if( (option == "foreach")  || 
+  if( (option == "foreach")  ||
       (option == "if") ||
       (option == "fornfold") )
     {
@@ -549,7 +549,7 @@ void ScriptActionManager::Execute()
     if (m_ProgressManager->IsStop())
       {
       break;
-      } 
+      }
     }
   m_ProgressManager->SetFinished(
     BMString("Total Execution time: %1ms")
@@ -572,7 +572,7 @@ void ScriptActionManager::SetTestVariable( const BMString& name )
 bool ScriptActionManager::IsTestVariable( const BMString& name )const
 {
   bool res = true;
-  std::vector<BMString>::const_iterator it = 
+  std::vector<BMString>::const_iterator it =
     std::find( m_VariableTestList.begin(), m_VariableTestList.end(), name);
   if( it == m_VariableTestList.end() )
     {
@@ -616,7 +616,7 @@ void ScriptActionManager
 
 
 /** Return the value of a given variable. The variable (name) can
- *  be ${i} $i or i 
+ *  be ${i} $i or i
 std::vector<MString> ScriptActionManager::GetVariable(MString name)const
 {
   // We strip any ${} or $ as a variable name
@@ -662,7 +662,7 @@ std::vector<BMString> ScriptActionManager
   varname.removeAllChars('}');
 
   std::vector<BMString> _list;
-  std::map<BMString,BMString>::const_iterator it = 
+  std::map<BMString,BMString>::const_iterator it =
     m_VariableList.find( varname );
   if( it != m_VariableList.end() )
     {
@@ -743,7 +743,7 @@ BMString ScriptActionManager
 {
   /*
   BMString var;
-  
+
   unsigned int size = params.size();
   for( unsigned int i = 0; i < size; ++i)
     {
@@ -771,7 +771,7 @@ void ScriptActionManager::DisplayVariableList()const
   unsigned int size = m_VariableList.size();
   for( unsigned int i = 0; i < size; ++i)
     {
-    std::cout << m_VariableList[i]->name.toChar() 
+    std::cout << m_VariableList[i]->name.toChar()
               << "\t" << m_VariableList[i]->value.toChar() << std::endl;
     }
   */
@@ -779,7 +779,7 @@ void ScriptActionManager::DisplayVariableList()const
   std::map<BMString,BMString>::const_iterator end = m_VariableList.end();
   for( it = m_VariableList.begin(); it != end; ++it)
     {
-    std::cout << it->first.toChar() << "\t" 
+    std::cout << it->first.toChar() << "\t"
               << it->second.toChar() << std::endl;
     }
 }
@@ -803,7 +803,7 @@ MString ScriptActionManager::Convert(MString param)
         {
         _var = "";
         }
-      else if ((param[i] == ' ') || (param[i] == '}') || 
+      else if ((param[i] == ' ') || (param[i] == '}') ||
                (param[i] == '\'')  || (i==param.length()-1))
         {
         if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\''))
@@ -898,7 +898,7 @@ BMString ScriptActionManager::Convert(const BMString& parameter)const
             ( endBrace = param.find( '}', i + 2 ) ) != std::string::npos )
           {//found variable
           //extract variable name
-          std::vector<BMString> _variable = this->GetVariable( 
+          std::vector<BMString> _variable = this->GetVariable(
             param.substr( i + 2, endBrace - i - 2 ) );
           std::vector<BMString>::const_iterator it2 = _variable.begin();
           std::vector<BMString>::const_iterator end2 = _variable.end();
@@ -917,10 +917,10 @@ BMString ScriptActionManager::Convert(const BMString& parameter)const
               _value += "' ";
               }
             }
-          i = endBrace; 
+          i = endBrace;
           }
         else
-          {// it is not something like: ${...}, 
+          {// it is not something like: ${...},
           // process param[i] as a normal text
           _value += param[i];
           }
@@ -934,7 +934,7 @@ BMString ScriptActionManager::Convert(const BMString& parameter)const
   _value += "'";
 #ifdef VERBOSE
   std::cout<< "Convert param: "<< parameter.GetConstValue()
-           << " -> " << _value.GetConstValue() 
+           << " -> " << _value.GetConstValue()
            << std::endl;
 #endif
   return _value;
@@ -949,7 +949,7 @@ BMString ScriptActionManager::Convert(const BMString& param)const
   BMString _value="'";
   bool _vardetected = false;
   BMString _var;
-  
+
   std::string::const_iterator it;
   std::string::const_iterator end = param.GetConstValue().end();
   std::string::const_iterator endVariable;
@@ -1006,7 +1006,7 @@ BMString ScriptActionManager::Convert(const BMString& param)const
         _var += *it;
         }
       }
-    else 
+    else
       {
       _value += *it;
       }
@@ -1022,12 +1022,12 @@ BMString ScriptActionManager::Convert(const BMString& param)const
         }
       }
     }
-  
+
   _value += "'";
 
 #ifdef VERBOSE
   std::cout<< "Convert param: "<< param.GetConstValue()
-           << " -> " << _value.GetConstValue() 
+           << " -> " << _value.GetConstValue()
            << std::endl;
 #endif
   return _value;
@@ -1039,7 +1039,7 @@ BMString ScriptActionManager::ConvertExtra(const BMString& param)const
   BMString _value;// = "'";
   bool _vardetected = false;
   BMString _var;
-  
+
   for (int i=0;i<param.length();i++)
     {
     if (param[i] == '$')
@@ -1053,14 +1053,14 @@ BMString ScriptActionManager::ConvertExtra(const BMString& param)const
         {
         _var = "";
         }
-      else if ((param[i] == ' ') || (param[i] == '}') || 
+      else if ((param[i] == ' ') || (param[i] == '}') ||
                (param[i] == '\'')  || (i==param.length()-1))
         {
         if ((i==param.length()-1) && (param[i] != '}') && (param[i] != '\''))
           {
           _var+=param[i];
           }
-        
+
         _vardetected=false;
         //MString _variable;
         std::vector<BMString> _variable =  GetVariable(_var);
@@ -1070,7 +1070,7 @@ BMString ScriptActionManager::ConvertExtra(const BMString& param)const
             {
 //            _value += "'";
             }
-          
+
           if (_variable[k] != "null")
             {
             _value += _variable[k];
@@ -1080,7 +1080,7 @@ BMString ScriptActionManager::ConvertExtra(const BMString& param)const
             _value += " ";//"' ";
             }
           }
-        
+
         if ( param[i] == ' ' )
           _value += "' '";
         }
@@ -1099,7 +1099,7 @@ BMString ScriptActionManager::ConvertExtra(const BMString& param)const
         }
       }
     }
-  
+
   //_value += "'";
   return _value;
 }
@@ -1156,7 +1156,7 @@ std::vector<BMString> ScriptActionManager
             ( endBrace = param.find( '}', i + 2 ) ) != std::string::npos )
           {//found variable
           //extract variable name
-          std::vector<BMString> _variable = this->GetVariable( 
+          std::vector<BMString> _variable = this->GetVariable(
             param.substr( i + 2, endBrace - i - 2 ) );
           std::vector<BMString>::const_iterator it2 = _variable.begin();
           std::vector<BMString>::const_iterator end2 = _variable.end();
@@ -1173,7 +1173,7 @@ std::vector<BMString> ScriptActionManager
               _value = "'";
               }
             }
-          i = endBrace; 
+          i = endBrace;
           }
         else
           {//it is not something like: ${...}, process param[i] as a normal text
@@ -1203,17 +1203,17 @@ std::vector<BMString> ScriptActionManager
 }
 
 
-/** If param is like: "${my_variable}" we replace its content by the 
+/** If param is like: "${my_variable}" we replace its content by the
  *  value of my_variable between quotes: "'content'".
  *  In other cases: "my param string", copy the content of param between
  *  quotes in the result: "'my param string'"
  *  if param: " toto${foo}${bar}tonton tutu", res: "'totofoo_expandedbar_expanded' 'tutu'"
- *  
+ *
  *
 BMString ScriptActionManager
 ::ExpandParameter( const BMString& param, bool quote )const
 {
-  std::vector<BMString> variableContent = 
+  std::vector<BMString> variableContent =
     this->ExpandParameterToArray( param, quote );
   // separate all the items by a space
   std::stringstream concatenatedContent;
@@ -1250,7 +1250,7 @@ std::vector<BMString> ScriptActionManager
 }
 */
 
-bool ScriptActionManager::TestExpand( const BMString& param, int linenumber )const
+bool ScriptActionManager::TestExpand( const BMString& param, int )const
 {
 #ifdef VERBOSE
   std::cout << "Test Expand: " << param.GetConstValue() << std::endl;
@@ -1259,7 +1259,7 @@ bool ScriptActionManager::TestExpand( const BMString& param, int linenumber )con
   if( !variable.isEmpty() && !this->IsTestVariable(variable) )
     {
     // param == ${undefined_variable}
-    m_Error->SetError( BMString("In parameter: ") + param 
+    m_Error->SetError( BMString("In parameter: ") + param
                      + ", undefined variable [" + variable + "]"
                        , m_LineNumber );
     return false;
@@ -1285,7 +1285,7 @@ bool ScriptActionManager::TestConvert(const BMString& param, int linenumber)
         {
         _var = "";
         }
-      else if ((param[i] == ' ') || (param[i] == '}') || 
+      else if ((param[i] == ' ') || (param[i] == '}') ||
                (param[i] == '\'')  || (i == param.length()-1))
         {
         if ((i == param.length()-1) && (param[i] != '}') && (param[i] != '\''))
@@ -1297,8 +1297,8 @@ bool ScriptActionManager::TestConvert(const BMString& param, int linenumber)
 
         if (IsTestVariable(_var) == false)
           {
-          m_Error->SetError( BMString("In parameter: ") 
-                           + param 
+          m_Error->SetError( BMString("In parameter: ")
+                           + param
                            + ", undefined variable [" + _var + "]"
                              , m_LineNumber );
           return false;
@@ -1315,7 +1315,7 @@ bool ScriptActionManager::TestConvert(const BMString& param, int linenumber)
 */
 
 bool ScriptActionManager
-::TestConvert(const BMString& parameter, int linenumber)const
+::TestConvert(const BMString& parameter, int )const
 {
 #ifdef VERBOSE
   std::cout << "Test param: "<< parameter.GetConstValue() << std::endl;
@@ -1341,13 +1341,13 @@ bool ScriptActionManager
           _variable = param.substr( i + 2, endBrace - i - 2 );
           if( !this->IsTestVariable( _variable)  )
             {
-            m_Error->SetError( BMString("In parameter: ") 
-                             + param 
+            m_Error->SetError( BMString("In parameter: ")
+                             + param
                              + ", undefined variable [" + _variable + "]"
                                , m_LineNumber );
             return false;
             }
-          i = endBrace; 
+          i = endBrace;
           }
         break;
       default:

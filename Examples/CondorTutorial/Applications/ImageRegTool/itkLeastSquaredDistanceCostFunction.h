@@ -57,7 +57,7 @@ namespace itk
     itkNewMacro(Self);
 
     itkTypeMacro(LeastSquaredDistanceCostFunction,SingleValuedCostFunction);
-  
+
     void SetFixedPointSet( PointSetPointer fixedPointSet );
 
     void SetMovingPointSet( PointSetPointer movingPointSet );

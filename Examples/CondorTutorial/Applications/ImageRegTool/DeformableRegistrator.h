@@ -50,7 +50,7 @@ class DeformableRegistrator : public ImageRegistrationMethod < TImage, TImage >
     itkTypeMacro(DeformableRegistrator, ImageRegistrationMethod);
 
     itkNewMacro(Self);
-  
+
     typedef typename TImage::PixelType PixelType ;
     typedef typename TImage::RegionType RegionType ;
 
@@ -63,19 +63,19 @@ class DeformableRegistrator : public ImageRegistrationMethod < TImage, TImage >
     typedef Statistics::NormalVariateGenerator  OptimizerNormalGeneratorType;
     typedef TransformType::ParametersType       ParametersType ;
     typedef TransformType::ParametersType       ScalesType ;
-    typedef LinearInterpolateImageFunction< TImage, double > 
+    typedef LinearInterpolateImageFunction< TImage, double >
                                                 InterpolatorType ;
     typedef MattesMutualInformationImageToImageMetric< TImage, TImage >
                                                 MetricType ;
 
     typedef typename Superclass::OptimizerType  OptimizerType;
     typedef typename OptimizerType::Pointer     OptimizerPointer;
-    
+
     typedef itk::Vector< double, 3 >            VectorType;
     typedef itk::Image< VectorType, 3 >         DeformationFieldType;
-    typedef itk::DeformationFieldSource< DeformationFieldType >              
+    typedef itk::DeformationFieldSource< DeformationFieldType >
                                                  DeformationSourceType;
-                   
+
     void StartRegistration() ;
 
     TransformType * GetTypedTransform(void)
@@ -120,9 +120,9 @@ class DeformableRegistrator : public ImageRegistrationMethod < TImage, TImage >
     unsigned int            m_OptimizerNumberOfIterations;
 
     unsigned int            m_MetricNumberOfSpatialSamples;
-    
+
     unsigned int            m_NumberOfControlPoints;
-    
+
 
   } ; // end of class
 

@@ -54,7 +54,7 @@ CVTImageFilter< TInputImage, TOutputImage >
   Superclass::GenerateInputRequestedRegion();
   if ( this->GetInput() )
     {
-    typename InputImageType::Pointer inpt = 
+    typename InputImageType::Pointer inpt =
           const_cast< TInputImage * >( this->GetInput() );
     inpt->SetRequestedRegionToLargestPossibleRegion();
     }
@@ -129,7 +129,7 @@ CVTImageFilter< TInputImage, TOutputImage >
 
   for(unsigned int j=0; j<m_NumberOfCentroids; j++)
     {
-    std::cout << "Initial Centroid [" << j << "] = " << m_Centroids[j] 
+    std::cout << "Initial Centroid [" << j << "] = " << m_Centroids[j]
               << std::endl;
     }
 
@@ -139,8 +139,8 @@ CVTImageFilter< TInputImage, TOutputImage >
 
     iterationEnergy = this->ComputeIteration(iterationEnergyDifference);
 
-    std::cout << "Iteration = " << iteration 
-              << " : E = " << iterationEnergy 
+    std::cout << "Iteration = " << iteration
+              << " : E = " << iterationEnergy
               << " : EDiff = " << iterationEnergyDifference << std::endl;
     ContinuousIndexType indx;
     indx.Fill(0);
@@ -176,10 +176,10 @@ CVTImageFilter< TInputImage, TOutputImage >
         }
       }
     m_OutputImage->SetPixel(iIndx, j+1);
-    std::cout << " Final Centroid [" << j << "] = " << m_Centroids[j] 
+    std::cout << " Final Centroid [" << j << "] = " << m_Centroids[j]
               << std::endl;
     }
-  
+
   typedef DanielssonDistanceMapImageFilter<OutputImageType, OutputImageType>
           DDFilterType;
   typename DDFilterType::Pointer ddFilter = DDFilterType::New();
@@ -286,7 +286,7 @@ CVTImageFilter< TInputImage, TOutputImage >
     term = 0.0;
     for ( i = 0; i < ImageDimension; i++ )
       {
-      term += ( centroids2[j][i] - m_Centroids[j][i] ) 
+      term += ( centroids2[j][i] - m_Centroids[j][i] )
               * ( centroids2[j][i] - m_Centroids[j][i] );
       m_Centroids[j][i] = centroids2[j][i];
       }
@@ -367,7 +367,7 @@ CVTImageFilter< TInputImage, TOutputImage >
         {
         for ( i = 0; i < ImageDimension; i++ )
           {
-          iIndx[i] = (int)(((double)rand()/(double)RAND_MAX) 
+          iIndx[i] = (int)(((double)rand()/(double)RAND_MAX)
                            * m_InputImageSize[i]);
           if(iIndx[i] < 0)
             {
@@ -423,7 +423,7 @@ CVTImageFilter< TInputImage, TOutputImage >
 }
 
 
-/** 
+/**
  * ComputeClosest
  **/
 template < class TInputImage, class TOutputImage >
@@ -455,7 +455,7 @@ CVTImageFilter< TInputImage, TOutputImage >
       dist = 0.0;
       for ( i = 0; i < ImageDimension; i++ )
         {
-        dist +=  ( sample[js][i] - centroids[jc][i] ) 
+        dist +=  ( sample[js][i] - centroids[jc][i] )
                  * ( sample[js][i] - centroids[jc][i] );
         }
 
@@ -469,7 +469,7 @@ CVTImageFilter< TInputImage, TOutputImage >
   // std::cout << "    computing closest done" << std::endl;
 }
 
-/** 
+/**
  * PrintSelf
  **/
 template < class TInputImage, class TOutputImage >
@@ -483,14 +483,14 @@ CVTImageFilter< TInputImage, TOutputImage >
   std::cout << "InputImageMax = " << m_InputImageMax << std::endl;
   std::cout << "Seed = " << m_Seed << std::endl;
   std::cout << "NumberOfCentroids = " << m_NumberOfCentroids << std::endl;
-  std::cout << "InitialSamplingMethod = " << m_InitialSamplingMethod 
+  std::cout << "InitialSamplingMethod = " << m_InitialSamplingMethod
             << std::endl;
   std::cout << "NumberOfSamples = " << m_NumberOfSamples << std::endl;
   std::cout << "NumberOfIterations = " << m_NumberOfIterations << std::endl;
   std::cout << "BatchSamplingMethod = " << m_BatchSamplingMethod << std::endl;
-  std::cout << "NumberOfIterationsPerBatch = " << m_NumberOfIterationsPerBatch 
+  std::cout << "NumberOfIterationsPerBatch = " << m_NumberOfIterationsPerBatch
             << std::endl;
-  std::cout << "NumberOfSamplesPerBatch = " << m_NumberOfSamplesPerBatch 
+  std::cout << "NumberOfSamplesPerBatch = " << m_NumberOfSamplesPerBatch
             << std::endl;
 }
 

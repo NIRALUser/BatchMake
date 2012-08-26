@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -198,7 +198,7 @@ bool BMString::toBool()const
 }
 
 int BMString::length()const
-{ 
+{
   return m_value.size();
 }
 
@@ -271,7 +271,7 @@ BMString& BMString::operator=(const BMString& value)
 BMString& BMString::operator=(const char* value)
 {
   if(value && strlen(value)>0)
-    {  
+    {
     m_value = value;
     }
   else
@@ -531,7 +531,7 @@ BMString BMString::replaceAllCharsCopy(char key,char key2)const
 {
   // create a string with same size of m_value
   std::string m_newvalue;//(m_value.size(), char());
-  replace_copy( m_value.begin(), m_value.end(), 
+  replace_copy( m_value.begin(), m_value.end(),
                 std::back_inserter(m_newvalue), key, key2);
   return BMString(m_newvalue);
 }
@@ -570,7 +570,7 @@ BMString BMString::replaceCopy(const char* key,const char* key2)const
 
 BMString& BMString::toLower()
 {
-  std::transform( m_value.begin(), m_value.end(), 
+  std::transform( m_value.begin(), m_value.end(),
 /*                  m_value.begin(), static_cast<int(*)(int)>(std::tolower) );*/
                   m_value.begin(), lower() );
   return *this;
@@ -579,7 +579,7 @@ BMString& BMString::toLower()
 BMString& BMString::toUpper()
 {
   std::string res;
-  std::transform( m_value.begin(), m_value.end(), 
+  std::transform( m_value.begin(), m_value.end(),
 /*                  m_value.begin(), static_cast<int(*)(int)>(std::toupper) );*/
                   m_value.begin(), upper() );
   return *this;
@@ -588,7 +588,7 @@ BMString& BMString::toUpper()
 BMString BMString::toLowerCopy()const
 {
   std::string res;
-  std::transform( m_value.begin(), m_value.end(), 
+  std::transform( m_value.begin(), m_value.end(),
 /*                  static_cast<int(*)(int)>(std::tolower) );*/
                   std::back_inserter(res), lower() );
   return BMString(res);
@@ -597,7 +597,7 @@ BMString BMString::toLowerCopy()const
 BMString BMString::toUpperCopy()const
 {
   std::string res;
-  std::transform( m_value.begin(), m_value.end(), 
+  std::transform( m_value.begin(), m_value.end(),
 /*                  static_cast<int(*)(int)>(std::toupper) );*/
                   std::back_inserter(res), upper() );
   return BMString(res);
@@ -831,7 +831,7 @@ std::vector<BMString> BMString::extractVariables( bool keepQuotes )const
           inVariable = true;
           break;
         case ' ':
-        // if we found a space we have to make sure the next character is not 
+        // if we found a space we have to make sure the next character is not
         // a space nor a quote. If spaces are represented by '_', then there
         // is no variable starting after the first '_' in the cases:
         // __wfjliwe...
@@ -847,7 +847,7 @@ std::vector<BMString> BMString::extractVariables( bool keepQuotes )const
         }
       }
     }
-    
+
   if( variableList.empty() )
     {
     variableList.push_back(m_value);
@@ -882,7 +882,7 @@ BMString BMString::ConvertWildcardToRegEx()const
   res.m_value += '^';
   std::string::const_iterator it = m_value.begin();
   std::string::const_iterator end = m_value.end();
-  for ( ; it != end ; ++it) 
+  for ( ; it != end ; ++it)
     {
     char c = *it;
     switch(c)

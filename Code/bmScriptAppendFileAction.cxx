@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -35,12 +35,12 @@ bool ScriptAppendFileAction::TestParam(ScriptError* error,int linenumber)
     {
     m_Manager->TestConvert(m_Parameters[i],linenumber);\
     }
-    
+
   if (m_Parameters.size() < 2)
     {
     error->SetError(MString("No enough parameter for AppendFile"),linenumber);
     return false;
-    }   
+    }
 
   return true;
 }
@@ -56,7 +56,7 @@ void ScriptAppendFileAction::Execute()
   BMString m_filename = m_Manager->Convert(m_Parameters[0]).removeAllChars('\'');
   std::ofstream m_file;
    m_file.open(m_filename.latin1(), std::ofstream::binary | ios_base::app);
-  
+
   if ( m_file.fail() )
     {
     m_ProgressManager->AddError(
@@ -87,10 +87,10 @@ void ScriptAppendFileAction::Execute()
           m_insert = false;
           }
         }
-     
+
        if (m_insert)
          m_file << m_text[l];
-    } 
+    }
   }
 
   m_file.close();

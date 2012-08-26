@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -29,7 +29,7 @@ ScriptSetAppAction::~ScriptSetAppAction()
 }
 
 bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
-{  
+{
   if (m_Parameters.size() < 2)
     {
     error->SetError(MString("SetApp() takes at least two arguments"),linenumber);
@@ -58,8 +58,8 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
 #ifdef VERBOSE
   std::cout << "List of wrapped applications found: " << std::endl;
 #endif
-  
-  ScriptActionManager::ApplicationWrapperListType::iterator it = 
+
+  ScriptActionManager::ApplicationWrapperListType::iterator it =
     m_Manager->GetApplicationWrapperList()->begin();
   while (it != m_Manager->GetApplicationWrapperList()->end())
     {
@@ -69,11 +69,11 @@ bool ScriptSetAppAction::TestParam(ScriptError* error,int linenumber)
     if( appName == (*it)->GetName() )
       {
       appFound = true;
-      
+
       // Set all the variables of the application to off
       std::vector<ApplicationWrapperParam> & params = (*it)->GetParams();
       std::vector<ApplicationWrapperParam>::iterator itParams = params.begin();
-        
+
       while(itParams != params.end())
         {
         (*itParams).SetValueDefined(false);
@@ -116,7 +116,7 @@ void ScriptSetAppAction::Execute()
   appName = appName.fromVariable();
   bool appFound = false;
   ScriptActionManager::ApplicationWrapperListType::iterator it;
-  ScriptActionManager::ApplicationWrapperListType::iterator end = 
+  ScriptActionManager::ApplicationWrapperListType::iterator end =
     m_Manager->GetApplicationWrapperList()->end();
   for( it = m_Manager->GetApplicationWrapperList()->begin(); it != end ; ++it )
     {
@@ -127,8 +127,8 @@ void ScriptSetAppAction::Execute()
       m_Value += val.c_str();
       m_Value += "'";
       appFound = true;
-     
-      
+
+
       // Set all the variables of the application to off
       std::vector<ApplicationWrapperParam> & params = (*it)->GetParams();
       std::vector<ApplicationWrapperParam>::iterator itParams;

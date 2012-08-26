@@ -31,7 +31,7 @@ void SliceExtractor::Extract(std::string input,std::string output)
     std::cerr << e.GetDescription() << std::endl;
     std::cerr << e.GetLocation() << std::endl;
     }
-  
+
   SetInput(m_reader->GetOutput());
   Update();
 
@@ -88,7 +88,7 @@ void SliceExtractor::Update()
 {
   Image3DType::SizeType m_size = m_inputimage->GetLargestPossibleRegion().GetSize();
   Iterator3DType itS(m_inputimage,m_inputimage->GetLargestPossibleRegion());
- 
+
   if(m_orientation == -1)
     {
     m_orientation = 2;
@@ -127,7 +127,7 @@ void SliceExtractor::Update()
 
   m_outputimage = Image2DType::New();
   float values[2];
-  values[0]= 1; 
+  values[0]= 1;
   values[1]= 1;
 
   float origin_x= ((imagesize[0]/2)*values[0]*(-1));

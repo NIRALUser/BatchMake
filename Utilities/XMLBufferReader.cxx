@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -80,11 +80,11 @@ XMLBufferReader::Parse(const char* buffer,unsigned long buffersize)
     }
 
   // Default stream parser just reads a block at a time.
-  std::streamsize filesize = 
+  std::streamsize filesize =
     itksys::SystemTools::FileLength(m_Filename.c_str());
 
   char *buffer = new char [filesize];
-  
+
   inputstream.read(buffer,filesize);
 
   if(static_cast<std::streamsize>(inputstream.gcount()) != filesize)
@@ -131,7 +131,7 @@ void XMLBufferReader::StartElement(const char * name,const char **atts)
 
 /** Callback function -- called from XML parser when ending tag
  * encountered */
-void XMLBufferReader::EndElement(const char *name)
+void XMLBufferReader::EndElement(const char *)
     {
     }
 
@@ -154,7 +154,7 @@ void XMLBufferReader::CharacterDataHandler(const char *inData, int inLength)
         m_Tags[m_Tags.size()-1].values.push_back(value);
         }
       value.first = "";
-      }   
+      }
     }
   if(value.first.size()>0)
     {
@@ -162,7 +162,7 @@ void XMLBufferReader::CharacterDataHandler(const char *inData, int inLength)
     }
   }
 
-const XMLBufferReader::TagVectorType & 
+const XMLBufferReader::TagVectorType &
 XMLBufferReader::GetTags() const {return m_Tags;}
 
 }

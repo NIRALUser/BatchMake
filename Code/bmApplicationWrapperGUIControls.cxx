@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -72,14 +72,14 @@ void ApplicationWrapperGUIControls::SetApplicationListGUIControls(ApplicationLis
 }
 
 void ApplicationWrapperGUIControls::SetWrappedApplicationsPath(MString applicationpath)
-{  
+{
   m_WrappedApplicationsPath = applicationpath;
 }
 
 void ApplicationWrapperGUIControls::SetApplicationWrapper(ApplicationWrapper* applicationwrapper)
 {
   m_Applicationwrapper = applicationwrapper;
-  // @todo are you sure you want to remove spaces ? 
+  // @todo are you sure you want to remove spaces ?
   m_Currentfilename = MString(m_Applicationwrapper->GetName()).removeChar(' ');
 }
 
@@ -105,7 +105,7 @@ void ApplicationWrapperGUIControls::OnSelectPath()
     this->AutomaticCommandLineParsing();
     }
 
- 
+
 }
 
 void ApplicationWrapperGUIControls::OnSelectType()
@@ -297,7 +297,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
       {
       g_parent->add(g_name->value());
 	  }
-   
+
     //Add Param
     m_param.SetName(MString(g_name->value()));
     m_param.SetType(g_type->value()); //ApplicationWrapperParam::Float
@@ -341,7 +341,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
 		  break;
 		  }
 	    }
-	  
+	
 	  }
     }
   else
@@ -421,7 +421,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
         m_paramSub->SetValue(MString((int)g_enumlist->value()));
         }
       m_paramSub->SetEnum(m_list);
-	  
+	
 	  if(g_parent->value() != 0)
 	    {
 	    m_Applicationwrapper->GetParam(g_parent->text(g_parent->value()))->AddParamSub(*m_paramSub);
@@ -479,7 +479,7 @@ void ApplicationWrapperGUIControls::OnAddParameters()
 	    }
 	  }
 	}
-  
+
   m_Applicationwrapper->SetApplicationPath( g_path->value() );
   m_Applicationwrapper->SetName( g_modulename->value() );
   m_Applicationwrapper->SetVersion( g_moduleversion->value() );
@@ -619,7 +619,7 @@ void ApplicationWrapperGUIControls::Refresh()
   g_modulename->value(m_Applicationwrapper->GetName().c_str());
   g_moduleversion->value(m_Applicationwrapper->GetVersion().c_str());
   g_modulerequirements->value(m_Applicationwrapper->GetRequirements().c_str());
-  
+
   for (unsigned int i=0 ; i<m_Applicationwrapper->GetParams().size() ; i++)
     {
     g_parameters->add(m_Applicationwrapper->GetParams()[i].GetName().toChar());
@@ -645,7 +645,7 @@ void ApplicationWrapperGUIControls::Refresh()
 	  }
     }
 
-  DisplayExample();  
+  DisplayExample();
   //OnSelectParameters();
 }
 
@@ -653,7 +653,7 @@ void ApplicationWrapperGUIControls::OnLoadModule()
 {
   char* fName = fl_file_chooser(
     "Load module", "Image Files (*.bmm)", NULL);
- 
+
   if(fName)
   {
     m_Applicationwrapper->Load( fName );
@@ -661,7 +661,7 @@ void ApplicationWrapperGUIControls::OnLoadModule()
     g_modulename->value(m_Applicationwrapper->GetName().c_str());
     g_moduleversion->value(m_Applicationwrapper->GetVersion().c_str());
     g_modulerequirements->value(m_Applicationwrapper->GetRequirements().c_str());
-    
+
     for (unsigned int i=0;i<m_Applicationwrapper->GetParams().size();i++)
     {
       g_parameters->add(m_Applicationwrapper->GetParams()[i].GetName().toChar());
@@ -669,7 +669,7 @@ void ApplicationWrapperGUIControls::OnLoadModule()
         g_parent->add(m_Applicationwrapper->GetParams()[i].GetName().toChar());
     }
 
-    DisplayExample();  
+    DisplayExample();
     OnSelectParameters();
   }
 }
@@ -768,7 +768,7 @@ void ApplicationWrapperGUIControls::OnReject()
   m_Applicationlistguicontrols->g_Applicationlistgui->show();
 }
 
-/** Automatic command line parsing. If the current pointed program 
+/** Automatic command line parsing. If the current pointed program
  *  supports -vxml option or --xml */
 void ApplicationWrapperGUIControls::AutomaticCommandLineParsing()
 {
@@ -790,7 +790,7 @@ void ApplicationWrapperGUIControls::AutomaticCommandLineParsing()
   g_modulerequirements->value(m_Applicationwrapper->GetRequirements().c_str());
   g_moduleversion->value(m_Applicationwrapper->GetVersion().c_str());
   g_modulename->value(m_Applicationwrapper->GetName().c_str());
-  
+
   this->DisplayExample();
 }
 

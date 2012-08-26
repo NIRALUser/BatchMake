@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -54,14 +54,14 @@ MString ScriptCreateMethodAction::Help()
 {
   return "CreateMethod(methodVariable ExperimentVariable 'MethodName' [method description])";
 }
-  
+
 /** */
 void ScriptCreateMethodAction::Execute()
 {
   m_Manager->AddDashboardMethod(m_Parameters[0].toChar(),
                                 m_Parameters[1].toChar(),
                                 m_Parameters[2].toChar());
-  
+
 #ifdef BM_GRID
   if(m_GridModule)
     {
@@ -113,13 +113,13 @@ void ScriptCreateMethodAction::Execute()
 
   url += "/dashboard.php";
   MString m_Output = m_request.Send(url.c_str());
- 
+
   if (m_Output.length()>3)
     {
     m_ProgressManager->AddError("Bad Host or connexion problem");
     return;
     }
-  
+
   if (m_Output.toInt() != 0)
     {
     m_ProgressManager->FinishAction("Dashboard problem when sending data");
@@ -134,7 +134,7 @@ void ScriptCreateMethodAction::Execute()
       }
     return;
     }
-  
+
   m_ProgressManager->FinishAction(MString("Data sent"));
   return;
 }

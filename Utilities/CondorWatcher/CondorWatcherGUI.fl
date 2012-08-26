@@ -1,6 +1,6 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0108 
-header_name {.h} 
+version 1.0108
+header_name {.h}
 code_name {.cxx}
 class CondorWatcherGUI {open
 } {
@@ -32,4 +32,4 @@ class CondorWatcherGUI {open
   } {}
   Function {Update()} {selected return_type {virtual void}
   } {}
-} 
+}

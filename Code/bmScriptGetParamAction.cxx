@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -42,7 +42,7 @@ bool ScriptGetParamAction::TestParam(ScriptError* error,int linenumber)
     {
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
-    
+
   /*for (unsigned int j=2;j<m_Parameters.size();j++)
     if (!m_Parameters[j].isInt())
     {
@@ -65,7 +65,7 @@ MString ScriptGetParamAction::Help()
 void ScriptGetParamAction::Execute()
 {
   BMString m_value;
-  std::vector<BMString> m_list = 
+  std::vector<BMString> m_list =
     //m_Manager->GetParamsFromVariable(m_Manager->Convert(m_Parameters[1]));
     //m_Manager->ExpandParameterToArray( m_Parameters[1] );
     m_Manager->ConvertToArray( m_Parameters[1] );
@@ -94,8 +94,8 @@ void ScriptGetParamAction::Execute()
       {
       m_value+=" ";
       }
-      
-    m_value+= m_list[m_param.toInt()]; 
+
+    m_value+= m_list[m_param.toInt()];
     }
 
   m_Manager->SetVariable(m_Parameters[0],m_value);

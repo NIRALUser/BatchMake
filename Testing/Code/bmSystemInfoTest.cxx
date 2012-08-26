@@ -41,7 +41,7 @@ int SystemInfoTest(int argc, char* argv[])
   std::cout << "Available Virtual Memory = "  << info.GetAvailableVirtualMemory() << "Mb" << std::endl;
   std::cout << "Total Physical Memory = "  << info.GetTotalPhysicalMemory() << "Mb" << std::endl;
   std::cout << "AvailablePhysicalMemory = "  << info.GetAvailablePhysicalMemory() << "Mb" << std::endl;
-    
+
   std::cout << "Hostname = " << info.GetHostname() << std::endl;
   std::cout << "Operating System Platform = " << info.GetOSPlatform() << std::endl;
   std::cout << "Operating System Name = " << info.GetOSName() << std::endl;

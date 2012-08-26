@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "bmScriptForNFoldAction.h"
@@ -85,7 +85,7 @@ MString ScriptForNFoldAction::Help()
 }
 
 void ScriptForNFoldAction::CreateLoop()
-{ 
+{
   unsigned int numberOfFolds = m_Parameters[3].toInt();
 
   std::vector<BMString> forDataList;
@@ -107,7 +107,7 @@ void ScriptForNFoldAction::CreateLoop()
       forDataItem = forDataString.beginCopy(" ");
       forDataString.after(" ");
       }
-      
+
     if (forDataItem.length() != 0)
       {
       forDataList.push_back( BMString("'") + forDataItem + "'" );
@@ -129,7 +129,7 @@ void ScriptForNFoldAction::CreateLoop()
       foldSize[i] += 1;
       }
     }
-  
+
   unsigned int c = 0;
   unsigned int j;
   for(i=0; i<numberOfFolds; i++)

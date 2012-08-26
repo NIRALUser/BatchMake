@@ -1,5 +1,5 @@
 # This combo should not report any errors
-# 
+#
 # This script shouldn't exit if there is an error
 # Test this by adding an error, then clearing the error
 # Then exiting, which should return without an error

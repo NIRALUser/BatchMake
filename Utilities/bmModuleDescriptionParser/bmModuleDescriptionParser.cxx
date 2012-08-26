@@ -136,7 +136,7 @@ startElement(void *userData, const char *element, const char **attrs)
   ps->LastData[ps->Depth].clear();
 
   // Check for a valid module description file
-  //  
+  //
   if (ps->Depth == 0 && (name != "executable") )
     {
     std::string error("ModuleDescriptionParser Error: <executable> must be the outer most tag. <" + name + std::string("> was found instead."));
@@ -209,7 +209,7 @@ startElement(void *userData, const char *element, const char **attrs)
     parameter = new ModuleParameter;
     parameter->SetTag(name);
     int attrCount = XML_GetSpecifiedAttributeCount(ps->Parser);
-    if (attrCount == 2 && 
+    if (attrCount == 2 &&
         (strcmp(attrs[0], "multiple") == 0) &&
         (strcmp(attrs[1], "true") == 0))
       {
@@ -238,7 +238,7 @@ startElement(void *userData, const char *element, const char **attrs)
       }
     parameter = new ModuleParameter;
     int attrCount = XML_GetSpecifiedAttributeCount(ps->Parser);
-    if (attrCount == 2 && 
+    if (attrCount == 2 &&
         (strcmp(attrs[0], "multiple") == 0) &&
         (strcmp(attrs[1], "true") == 0))
       {
@@ -269,7 +269,7 @@ startElement(void *userData, const char *element, const char **attrs)
       }
     parameter = new ModuleParameter;
     int attrCount = XML_GetSpecifiedAttributeCount(ps->Parser);
-    if (attrCount == 2 && 
+    if (attrCount == 2 &&
         (strcmp(attrs[0], "multiple") == 0) &&
         (strcmp(attrs[1], "true") == 0))
       {
@@ -300,7 +300,7 @@ startElement(void *userData, const char *element, const char **attrs)
       }
     parameter = new ModuleParameter;
     int attrCount = XML_GetSpecifiedAttributeCount(ps->Parser);
-    if (attrCount == 2 && 
+    if (attrCount == 2 &&
         (strcmp(attrs[0], "multiple") == 0) &&
         (strcmp(attrs[1], "true") == 0))
       {
@@ -733,7 +733,7 @@ startElement(void *userData, const char *element, const char **attrs)
       }
     parameter = new ModuleParameter;
     int attrCount = XML_GetSpecifiedAttributeCount(ps->Parser);
-    if (attrCount == 2 && 
+    if (attrCount == 2 &&
         (strcmp(attrs[0], "multiple") == 0) &&
         (strcmp(attrs[1], "true") == 0))
       {
@@ -1321,7 +1321,7 @@ endElement(void *userData, const char *element)
       {
       std::string error("ModuleDescriptionParser Error: <"
                         + name
-                        + std::string("> can only contain one character. \"") 
+                        + std::string("> can only contain one character. \"")
                         + temp
                         + std::string("\" has more than one character."));
       if (ps->ErrorDescription.size() == 0)
@@ -1591,7 +1591,7 @@ endElement(void *userData, const char *element)
       ps->ErrorLine = XML_GetCurrentLineNumber(ps->Parser);
       ps->Error = true;
       }
-    } 
+    }
 
   if (!ps->OpenTags.empty())
     {
@@ -1625,7 +1625,7 @@ ModuleDescriptionParser::Parse( const std::string& xml, ModuleDescription& descr
 
   ParserState parserState;
   parserState.CurrentDescription = description;
-  
+
   XML_Parser parser = XML_ParserCreate(NULL);
   int done;
 

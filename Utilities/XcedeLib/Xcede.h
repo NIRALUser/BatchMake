@@ -49,7 +49,7 @@ public:
                     std::string listOfArguments, std::string directoryResources,
                     std::string schemaLocation);
   void WriteNewResourceFile(std::string filename, xmlDocPtr doc, Resource* res);
-  
+
   void SetPatient(std::string id, std::string sex, std::string birthdate,
                   std::string age,std::string handed, std::string race);
   void SetResource(std::string id, std::string format, std::string group, std::string subject,

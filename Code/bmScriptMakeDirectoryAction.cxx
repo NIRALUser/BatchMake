@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -36,7 +36,7 @@ bool ScriptMakeDirectoryAction::TestParam(ScriptError* error,int linenumber)
     {
     error->SetError(MString("No enough parameter for MakeDirectory"),linenumber);
     return false;
-    }   
+    }
 
   return true;
 }
@@ -61,7 +61,7 @@ void ScriptMakeDirectoryAction::Execute()
   if( !itksys::SystemTools::MakeDirectory(dirname.toChar()) )
     {
     // failed to create dir..
-    m_ProgressManager->AddError( 
+    m_ProgressManager->AddError(
       BMString("Failed to create directory ") + dirname );
     return;
     }

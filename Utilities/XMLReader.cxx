@@ -8,15 +8,15 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
 #include "XMLReader.h"
 
 XMLReader::XMLReader()
-  :m_EndOfFile( false ) 
+  :m_EndOfFile( false )
 {
 }
 
@@ -32,7 +32,7 @@ int XMLReader::Open(const char* filename)
   if (networkfile == NULL) return -1;
   m_EndOfFile = false;
   return 0;
-} 
+}
 
 MString XMLReader::GetValue()
 {
@@ -50,7 +50,7 @@ MString XMLReader::GetBalise()
   MString line = data;
   int begin_balise_start = line.find("<");
   int begin_balise_end =  line.find(">",begin_balise_start+1);
-  
+
   int end_balise_begin = line.find("<",begin_balise_end+1);
 
   m_balise = line.mid(begin_balise_start+1,begin_balise_end-begin_balise_start-1);
@@ -65,7 +65,7 @@ MString XMLReader::GetBalise()
     }
 
   delete [] data;
- 
+
   return m_balise;
 }
 

@@ -45,7 +45,7 @@ foreach(file ${files})
 
   Set(slice '${slicename}')
   Set(filename '${file}')
-  Set(volume pixelCounter.NPixels) 
+  Set(volume pixelCounter.NPixels)
   Set(threshold 10)
   DashboardSend(meth)
   GridSingleNode(off)

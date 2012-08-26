@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -34,7 +34,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
 
   if(m_Manager->GetVariable(appvar).size()==0)
     {
-    std::cout << "ScriptRunAction::GenerateGrid():" 
+    std::cout << "ScriptRunAction::GenerateGrid():"
               << "Applications should be wrapped to be used on the grid"
               << std::endl;
     return;
@@ -69,8 +69,8 @@ void ScriptRunAction::GenerateGrid(const char* appname)
   else
     {
     // If the application support it. we force the application to write the output out as XML
-    std::stringstream ss; 
-    ss << application->GetName() << "." 
+    std::stringstream ss;
+    ss << application->GetName() << "."
        << m_GridModule->GetNumberOfApplications() << ".out.xml";
     std::string xmloutputname = ss.str();
     application->SetParameterValue("GenerateXMLFile","","1");
@@ -97,7 +97,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
 
     if(!gsFound)
       {
-      std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridStore " 
+      std::cout << "ScriptDashboardSendAction::GenerateCondor : Cannot find bmGridStore "
                 << appName.GetConstValue() << std::endl;
       return;
       }
@@ -120,7 +120,7 @@ void ScriptRunAction::GenerateGrid(const char* appname)
     m_GridModule->AddApplication(&app);
 #endif
     }
-  
+
 }
 
 } // end namespace bm

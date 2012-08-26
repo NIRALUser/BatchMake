@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include <stdlib.h>
@@ -31,12 +31,12 @@ int ActionsTest (int argc, char *argv[])
 
   std::string filename(argv[1]);
   std::string applicationPath;
-  if( argc > 2 ) 
+  if( argc > 2 )
     {
     applicationPath = argv[2];
     m_Parser.LoadWrappedApplication( applicationPath.c_str() );
     }
-  
+
   if( m_Parser.Execute( filename.c_str()) == false )
     {
     return EXIT_FAILURE;

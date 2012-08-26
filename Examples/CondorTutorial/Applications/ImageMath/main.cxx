@@ -9,8 +9,8 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,23 +45,23 @@ int usage(void)
   std::cout << "Options :" << std::endl;
   std::cout << "  -w <imageOutputFile>"
             << std::endl
-            << "     : writes the current image to the designated file." 
+            << "     : writes the current image to the designated file."
             << std::endl
-            << "       Image is stored as floats" 
+            << "       Image is stored as floats"
             << std::endl;
   std::cout << "  -W <type> <imageOutputFile>"
             << std::endl
-            << "     : writes the current image to the designated file." 
+            << "     : writes the current image to the designated file."
             << std::endl
-            << "       Using pixel type (0=unsigned byte, 1=unsigned" 
+            << "       Using pixel type (0=unsigned byte, 1=unsigned"
             << std::endl
-            << "       short, 2=short, 3=formatted for MIDAS)" 
+            << "       short, 2=short, 3=formatted for MIDAS)"
             << std::endl;
   std::cout << "  -i <inValMin> <inValMax> <outMin> <outMax>"
             << std::endl
             << "     : Intensity window inVal range to outValRange "
             << std::endl
-            << "       - with clipping" 
+            << "       - with clipping"
             << std::endl;
   std::cout << "  -I <inMeanField>"
             << std::endl
@@ -69,36 +69,36 @@ int usage(void)
             << std::endl;
   std::cout << "  -n <inValMin> <inValMax> <noiseMean> <noiseStdDev>"
             << std::endl
-            << "     : Adds Gaussian noise to all pixels within inVal range." 
+            << "     : Adds Gaussian noise to all pixels within inVal range."
             << std::endl;
   std::cout << "  -N <inValMin> <inValMax> <noiseMean> <noiseRange>"
             << std::endl
-            << "     : Adds uniform noise to all pixels within inVal range." 
+            << "     : Adds uniform noise to all pixels within inVal range."
             << std::endl
             << "     : Noise is uniform within noiseMean+/-noiseRange"
             << std::endl;
   std::cout << "  -a <weight1> <weight2> <inFile2>"
             << std::endl
-            << "     : I(x) = weight1*I(x) + weight2*inFile2(x)" 
+            << "     : I(x) = weight1*I(x) + weight2*inFile2(x)"
             << std::endl;
   std::cout << "  -f <offset2> <inFile2>"
             << std::endl
             << "     : fuse two images." << std::endl;
             << "     : C(x) = argmax(C=1..2)(inFileC(x))." << std::endl;
-            << "     : I(x) = (C==1)?(inFile1(x)):(offset2+inFile2(x))." 
+            << "     : I(x) = (C==1)?(inFile1(x)):(offset2+inFile2(x))."
             << std::endl;
             << std::endl;
   std::cout << "  -t <threshLow> <threshHigh> <valTrue> <valFalse>"
             << std::endl
             << "         if threshLow <= I(x) <= threshHigh "
             << std::endl
-            << "             then I(x)=valTrue else I(x)=valFalse" 
+            << "             then I(x)=valTrue else I(x)=valFalse"
             << std::endl;
   std::cout << "  -m <threshLow> <threshHigh> <inFile2> <valFalse>"
             << std::endl
             << "         if threshLow <= inFile21(x) <= threshHigh "
             << std::endl
-            << "             then I(x)=I(x) else I(x)=valFalse" 
+            << "             then I(x)=I(x) else I(x)=valFalse"
             << std::endl;
   std::cout << "  -M <mode> <radius> <forgroundValue> <backgroundValue>"
             << std::endl
@@ -106,15 +106,15 @@ int usage(void)
             << std::endl
             << "       voxels are morphed (mode 0=erode, 1=dilate)."
             << std::endl
-            << "       Erosion fills-in using backgroundValue." 
+            << "       Erosion fills-in using backgroundValue."
             << std::endl;
   std::cout << "  -b <sigma>"
             << std::endl
-            << "     : gaussian blur the image using the given sigma" 
+            << "     : gaussian blur the image using the given sigma"
             << std::endl;
   std::cout << "  -B <sigma> <order> <direction>"
             << std::endl
-            << "     : gaussian blur the image using the given sigma" 
+            << "     : gaussian blur the image using the given sigma"
             << std::endl
             << "       and the order (0 = blur, 1 = 1st derivative,"
             << std::endl
@@ -124,11 +124,11 @@ int usage(void)
             << std::endl;
   std::cout << "  -h <nBins> <histOutputFile>"
             << std::endl
-            << "     : writes the image's histogram to the designated file" 
+            << "     : writes the image's histogram to the designated file"
             << std::endl;
   std::cout << "  -H <nBins> <binMin> <binSIZE> <histOutputFile>"
             << std::endl
-            << "     : writes the image's histogram to the designated file" 
+            << "     : writes the image's histogram to the designated file"
             << std::endl;
   std::cout << "  -v <scaleMin> <scaleMax> <step> (3D only)"
             << std::endl
@@ -136,13 +136,13 @@ int usage(void)
             << std::endl;
   std::cout << "  -c <nBins> <nMatchPoints> (3D only)"
             << std::endl
-            << "     : Correct intensity slice-by-slice" 
+            << "     : Correct intensity slice-by-slice"
             << std::endl
             << "     : NBins & nMatchPoints are used by HistogramMatchingFilter"
             << std::endl;
   std::cout << "  -C <nBins> <nMatchPoints> <referenceVolume>"
             << std::endl
-            << "     : Correct intensity to match another volume's" 
+            << "     : Correct intensity to match another volume's"
             << std::endl
             << "     : NBins & nMatchPoints are used by HistogramMatchingFilter"
             << std::endl;
@@ -169,11 +169,11 @@ int usage(void)
             << std::endl;
   std::cout << "  -S <seedValue>"
             << std::endl
-            << "     : Sets the random number seed - to repeat experiments" 
+            << "     : Sets the random number seed - to repeat experiments"
             << std::endl;
   std::cout << "  -V <numberOfCentroids> <numberOfIterations> <numberOfSamples> <centroidOutputFile>"
             << std::endl
-            << "     : Run centroid voronoi tessellation on the image" 
+            << "     : Run centroid voronoi tessellation on the image"
             << std::endl;
   return 0;
   }*/
@@ -190,12 +190,12 @@ typedef itk::Image<short, 3> ImageTypeShort;
 ImageType::Pointer ResampleImage( ImageType::Pointer a, ImageType::Pointer b )
 {
   ImageType::Pointer output = a;
-  
+
   for( int i = 0; i < 3; i++ )
     {
-    if( a->GetLargestPossibleRegion().GetSize()[i] 
-          != b->GetLargestPossibleRegion().GetSize()[i] 
-        || a->GetSpacing()[i] != b->GetSpacing()[i] 
+    if( a->GetLargestPossibleRegion().GetSize()[i]
+          != b->GetLargestPossibleRegion().GetSize()[i]
+        || a->GetSpacing()[i] != b->GetSpacing()[i]
         || a->GetOrigin()[i] != b->GetOrigin()[i]  )
       {
       typedef itk::ResampleImageFilter<ImageType,ImageType> ResampleFilterType;
@@ -216,7 +216,7 @@ ImageType::Pointer ResampleImage( ImageType::Pointer a, ImageType::Pointer b )
 int main(int argc, char **argv)
   {
   MetaCommand command;
-  
+
   command.SetName("ImageMath");
   command.SetVersion("1.0");
   command.SetAuthor("CADDLab @ UNC");
@@ -306,7 +306,7 @@ int main(int argc, char **argv)
 
   command.SetOption("resize","r",false,"resample an image to reduce dim size by a factor (if factor==0, then make isotropic)");
   command.AddOptionField("resize","factor",MetaCommand::FLOAT,true);
-  
+
   command.SetOption("resize2","R",false,"resample an image to match the dimensions of inFile2");
   command.AddOptionField("resize2","inFile2",MetaCommand::STRING,true);
 
@@ -323,7 +323,7 @@ int main(int argc, char **argv)
   command.AddOptionField("offset","offsetX",MetaCommand::FLOAT,true);
   command.AddOptionField("offset","offsetY",MetaCommand::FLOAT,true);
   command.AddOptionField("offset","offsetZ",MetaCommand::FLOAT,true);
-  
+
   command.SetOption("SetRandom","S",false,"Sets the random number seed - to repeat experiments");
   command.AddOptionField("SetRandom","seedValue",MetaCommand::FLOAT,true);
 
@@ -359,8 +359,8 @@ int main(int argc, char **argv)
   reader->SetFileName( command.GetValueAsString("infile").c_str() );
   ImageType::Pointer imIn;
   imIn = reader->GetOutput();
-  
-  // See if the file can be read - "try" otherwise program will 
+
+  // See if the file can be read - "try" otherwise program will
   //   mysteriously exit on failure in the Object factory
   std::cout << "Reading file (" << command.GetValueAsString("infile").c_str() <<")"<< std::endl;
   try
@@ -392,7 +392,7 @@ int main(int argc, char **argv)
       catch( itk::ExceptionObject& err )
         {
         std::cout << "WriteImage : " << err << std::endl;
-        return 1;  
+        return 1;
         }
       } // end -w
 
@@ -405,7 +405,7 @@ int main(int argc, char **argv)
         {
           case 0:
             {
-            typedef itk::CastImageFilter< ImageType, ImageTypeUChar> 
+            typedef itk::CastImageFilter< ImageType, ImageTypeUChar>
                   CastFilterType;
             CastFilterType::Pointer castFilter = CastFilterType::New();
             castFilter->SetInput( imIn );
@@ -420,7 +420,7 @@ int main(int argc, char **argv)
             }
           case 1:
             {
-            typedef itk::CastImageFilter< ImageType, ImageTypeUShort> 
+            typedef itk::CastImageFilter< ImageType, ImageTypeUShort>
                   CastFilterType;
             CastFilterType::Pointer castFilter = CastFilterType::New();
             castFilter->SetInput( imIn );
@@ -435,7 +435,7 @@ int main(int argc, char **argv)
             }
           case 2:
             {
-            typedef itk::CastImageFilter< ImageType, ImageTypeShort> 
+            typedef itk::CastImageFilter< ImageType, ImageTypeShort>
                   CastFilterType;
             CastFilterType::Pointer castFilter = CastFilterType::New();
             castFilter->SetInput( imIn );
@@ -450,7 +450,7 @@ int main(int argc, char **argv)
             }
           case 3:
             {
-            typedef itk::CastImageFilter< ImageType, ImageTypeShort> 
+            typedef itk::CastImageFilter< ImageType, ImageTypeShort>
                   CastFilterType;
             CastFilterType::Pointer castFilter = CastFilterType::New();
             castFilter->SetInput( imIn );
@@ -487,7 +487,7 @@ int main(int argc, char **argv)
         float valMax = command.GetValueAsFloat(*it,"inValMax");
         float outMin = command.GetValueAsFloat(*it,"outMin");
         float outMax = command.GetValueAsFloat(*it,"outMax");
-        itk::ImageRegionIterator< ImageType > it(imIn, 
+        itk::ImageRegionIterator< ImageType > it(imIn,
               imIn->GetLargestPossibleRegion());
         it.GoToBegin();
         while(!it.IsAtEnd())
@@ -526,7 +526,7 @@ int main(int argc, char **argv)
           return 1;
           }
         imIn2 = ResampleImage(imIn2, imIn);
-        itk::ImageRegionIterator< ImageType > it2(imIn2, 
+        itk::ImageRegionIterator< ImageType > it2(imIn2,
                        imIn2->GetLargestPossibleRegion());
         int count = 0;
         double mean = 0;
@@ -542,7 +542,7 @@ int main(int argc, char **argv)
           ++it2;
           }
         mean /= count;
-        itk::ImageRegionIterator< ImageType > it(imIn, 
+        itk::ImageRegionIterator< ImageType > it(imIn,
               imIn->GetLargestPossibleRegion());
         it.GoToBegin();
         it2.GoToBegin();
@@ -568,8 +568,8 @@ int main(int argc, char **argv)
         float valMin = command.GetValueAsFloat(*it,"inValMin");
         float valMax = command.GetValueAsFloat(*it,"inValMax");
         float noiseMean = command.GetValueAsFloat(*it,"noiseMean");
-        float noiseRange = command.GetValueAsFloat(*it,"noiseRange");        
-        itk::ImageRegionIterator< ImageType > it(imIn, 
+        float noiseRange = command.GetValueAsFloat(*it,"noiseRange");
+        itk::ImageRegionIterator< ImageType > it(imIn,
               imIn->GetLargestPossibleRegion());
         it.GoToBegin();
         while(!it.IsAtEnd())
@@ -583,7 +583,7 @@ int main(int argc, char **argv)
           ++it;
           }
         } // -N
-     
+
       // GaussianNoise
       else if((*it).name == "GaussianNoise")
         {
@@ -592,7 +592,7 @@ int main(int argc, char **argv)
         float valMax = command.GetValueAsFloat(*it,"inValMax");
         float noiseMean = command.GetValueAsFloat(*it,"noiseMean");
         float noiseStdDev = command.GetValueAsFloat(*it,"noiseStdDev");
-        itk::ImageRegionIterator< ImageType > it(imIn, 
+        itk::ImageRegionIterator< ImageType > it(imIn,
               imIn->GetLargestPossibleRegion());
         it.GoToBegin();
         while(!it.IsAtEnd())
@@ -606,7 +606,7 @@ int main(int argc, char **argv)
           ++it;
           }
         } // end -n
-      
+
       // I(x)
       else if((*it).name == "Add")
         {
@@ -626,9 +626,9 @@ int main(int argc, char **argv)
           std::cout << "Problems reading file format of inFile2." << std::endl;
           return 1;
           }
-        itk::ImageRegionIterator< ImageType > it1(imIn, 
+        itk::ImageRegionIterator< ImageType > it1(imIn,
               imIn->GetLargestPossibleRegion());
-        itk::ImageRegionIterator< ImageType > it2(imIn2, 
+        itk::ImageRegionIterator< ImageType > it2(imIn2,
               imIn2->GetLargestPossibleRegion());
         it1.GoToBegin();
         it2.GoToBegin();
@@ -660,9 +660,9 @@ int main(int argc, char **argv)
           std::cout << "Problems reading file format of inFile2." << std::endl;
           return 1;
           }
-        itk::ImageRegionIterator< ImageType > it1(imIn, 
+        itk::ImageRegionIterator< ImageType > it1(imIn,
               imIn->GetLargestPossibleRegion());
-        itk::ImageRegionIterator< ImageType > it2(imIn2, 
+        itk::ImageRegionIterator< ImageType > it2(imIn2,
               imIn2->GetLargestPossibleRegion());
         it1.GoToBegin();
         it2.GoToBegin();
@@ -679,7 +679,7 @@ int main(int argc, char **argv)
           ++it2;
           }
         } // end -a
-      
+
       // Threshold
       else if((*it).name == "Threshold")
         {
@@ -691,7 +691,7 @@ int main(int argc, char **argv)
         float valTrue = command.GetValueAsFloat(*it,"valTrue");
         float valFalse = command.GetValueAsFloat(*it,"valFalse");
 
-        itk::ImageRegionIterator< ImageType > it1(imIn, 
+        itk::ImageRegionIterator< ImageType > it1(imIn,
               imIn->GetLargestPossibleRegion());
         it1.GoToBegin();
         while(!it1.IsAtEnd())
@@ -733,9 +733,9 @@ int main(int argc, char **argv)
           return 1;
           }
         imIn2 = ResampleImage( imIn2, imIn );
-        itk::ImageRegionIterator< ImageType > it1(imIn, 
+        itk::ImageRegionIterator< ImageType > it1(imIn,
               imIn->GetLargestPossibleRegion());
-        itk::ImageRegionIterator< ImageType > it2(imIn2, 
+        itk::ImageRegionIterator< ImageType > it2(imIn2,
               imIn2->GetLargestPossibleRegion());
         it1.GoToBegin();
         it2.GoToBegin();
@@ -823,8 +823,8 @@ int main(int argc, char **argv)
           filter->SetInput( imIn );
           // filter->SetNormalizeAcrossScale( true );
           filter->SetSigma( sigma );
-  
-          filter->SetOrder( 
+
+          filter->SetOrder(
                    itk::RecursiveGaussianImageFilter<ImageType>::ZeroOrder );
           filter->SetDirection( i );
 
@@ -838,7 +838,7 @@ int main(int argc, char **argv)
       else if((*it).name == "blurOrder")
         {
         std::cout << "Blurring." << std::endl;
- 
+
         float sigma = command.GetValueAsFloat(*it,"sigma");
         int order = command.GetValueAsInt(*it,"order");
         int direction = command.GetValueAsInt(*it,"direction");
@@ -852,15 +852,15 @@ int main(int argc, char **argv)
         switch(order)
           {
           case 0:
-            filter->SetOrder( 
+            filter->SetOrder(
                     itk::RecursiveGaussianImageFilter<ImageType>::ZeroOrder );
             break;
           case 1:
-            filter->SetOrder( 
+            filter->SetOrder(
                     itk::RecursiveGaussianImageFilter<ImageType>::FirstOrder );
             break;
           case 2:
-            filter->SetOrder( 
+            filter->SetOrder(
                     itk::RecursiveGaussianImageFilter<ImageType>::SecondOrder );
             break;
           }
@@ -877,7 +877,7 @@ int main(int argc, char **argv)
         unsigned int nBins = (unsigned int)command.GetValueAsInt(*it,"nBins");
         const char * filename = command.GetValueAsString(*it,"histOutputFile").c_str();
 
-        itk::ImageRegionIteratorWithIndex< ImageType > it1(imIn, 
+        itk::ImageRegionIteratorWithIndex< ImageType > it1(imIn,
               imIn->GetLargestPossibleRegion());
         it1.GoToBegin();
         double binMin = it1.Get();
@@ -922,7 +922,7 @@ int main(int argc, char **argv)
         writeStream.open(filename, std::ios::binary | std::ios::out);
         for(unsigned int i=0; i<nBins; i++)
           {
-          writeStream << (i/(double)nBins)*(binMax-binMin)+binMin << " " 
+          writeStream << (i/(double)nBins)*(binMax-binMin)+binMin << " "
                       << bin[i] << std::endl;
           }
         writeStream.close();
@@ -939,7 +939,7 @@ int main(int argc, char **argv)
         double binMax = binMin + binSize*nBins;
         const char * filename = command.GetValueAsString(*it,"histOutputFile").c_str();
 
-        itk::ImageRegionIteratorWithIndex< ImageType > it1(imIn, 
+        itk::ImageRegionIteratorWithIndex< ImageType > it1(imIn,
               imIn->GetLargestPossibleRegion());
         it1.GoToBegin();
         itk::Array<double> bin;
@@ -959,7 +959,7 @@ int main(int argc, char **argv)
         writeStream.open(filename, std::ios::binary | std::ios::out);
         for(unsigned int i=0; i<nBins; i++)
           {
-          writeStream << (i/(double)nBins)*(binMax-binMin)+binMin << " " 
+          writeStream << (i/(double)nBins)*(binMax-binMin)+binMin << " "
                       << bin[i] << std::endl;
           }
         writeStream.close();
@@ -983,9 +983,9 @@ int main(int argc, char **argv)
         imIn2->SetSpacing(imIn->GetSpacing());
         imIn2->Allocate();
 
-        itk::ImageRegionIteratorWithIndex< ImageType > it1(imIn, 
+        itk::ImageRegionIteratorWithIndex< ImageType > it1(imIn,
               imIn->GetLargestPossibleRegion());
-        itk::ImageRegionIterator< ImageType > it2(imIn2, 
+        itk::ImageRegionIterator< ImageType > it2(imIn2,
               imIn2->GetLargestPossibleRegion());
 
         double tf;
@@ -1052,13 +1052,13 @@ int main(int argc, char **argv)
         im2DRef->Allocate();
         im2DIn->SetRegions(size2D);
         im2DIn->Allocate();
-        itk::ImageRegionIterator< ImageType > it3D(imIn, 
+        itk::ImageRegionIterator< ImageType > it3D(imIn,
               imIn->GetLargestPossibleRegion());
-        itk::ImageRegionIterator< ImageType > it3DSliceStart(imIn, 
+        itk::ImageRegionIterator< ImageType > it3DSliceStart(imIn,
               imIn->GetLargestPossibleRegion());
-        itk::ImageRegionIterator< ImageType2D > it2DRef(im2DRef, 
+        itk::ImageRegionIterator< ImageType2D > it2DRef(im2DRef,
               im2DRef->GetLargestPossibleRegion());
-        itk::ImageRegionIterator< ImageType2D > it2DIn(im2DIn, 
+        itk::ImageRegionIterator< ImageType2D > it2DIn(im2DIn,
               im2DIn->GetLargestPossibleRegion());
         unsigned int z, y, x;
         it3D.GoToBegin();
@@ -1095,7 +1095,7 @@ int main(int argc, char **argv)
           matchFilter->SetNumberOfMatchPoints(numberOfMatchPoints);
           matchFilter->Update();
           itk::ImageRegionIterator< ImageType2D > it2DOut(
-                matchFilter->GetOutput(), 
+                matchFilter->GetOutput(),
                 im2DIn->GetLargestPossibleRegion());
           it2DRef.GoToBegin();
           it2DOut.GoToBegin();
@@ -1113,7 +1113,7 @@ int main(int argc, char **argv)
             }
           }
         }
-      
+
       // Correction
       else if((*it).name == "Correction")
         {
@@ -1145,7 +1145,7 @@ int main(int argc, char **argv)
         matchFilter->Update();
         imIn = matchFilter->GetOutput();
         }
-     
+
       // resize
       else if((*it).name == "resize")
         {
@@ -1232,7 +1232,7 @@ int main(int argc, char **argv)
         typedef itk::ConnectedThresholdImageFilter<ImageType, ImageType>
                    FilterType;
         FilterType::Pointer filter = FilterType::New();
-        
+
         ImageType::IndexType seed;
         seed[0] = (long int)x;
         seed[1] = (long int)y;
@@ -1257,7 +1257,7 @@ int main(int argc, char **argv)
         offset[2] = command.GetValueAsFloat(*it,"offsetZ");
         imIn->SetOrigin(offset);
         }
-     
+
       // SetRandom
       else if((*it).name == "SetRandom")
         {
@@ -1265,7 +1265,7 @@ int main(int argc, char **argv)
         srand(seed);
         gaussGen->Initialize((int)seed);
         } // end -S
-     
+
       // Voronoi
       else if((*it).name == "Voronoi")
         {
@@ -1373,7 +1373,7 @@ int main(int argc, char **argv)
               {
               if(i == 2)
                 {
-                std::cout << "Computing adjacency of slice : " << indx[2] 
+                std::cout << "Computing adjacency of slice : " << indx[2]
                           << std::endl;
                 }
               indx[i]++;

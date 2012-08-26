@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -36,12 +36,12 @@ bool ScriptCopyFileAction::TestParam(ScriptError* error,int linenumber)
     {
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
-    
+
   if (m_Parameters.size() < 2)
     {
     error->SetError(MString("No enough parameter for CopyFile"),linenumber);
     return false;
-    }   
+    }
 
   return true;
 }
@@ -63,21 +63,21 @@ void ScriptCopyFileAction::Execute()
                               .latin1();
     if( itksys::SystemTools::FileIsDirectory( source.toChar() ) )
       {
-      if( !itksys::SystemTools::CopyADirectory( source.toChar(), 
+      if( !itksys::SystemTools::CopyADirectory( source.toChar(),
                                                 destination.toChar() ) )
         {
-        m_ProgressManager->AddError( 
-          MString("CopyFile: Cannot write directory \"") + source 
+        m_ProgressManager->AddError(
+          MString("CopyFile: Cannot write directory \"") + source
                                    + "\" in directory \"" + destination + "\"" );
         }
       }
     else
       {
-      if( !itksys::SystemTools::CopyFileAlways( source.toChar(), 
+      if( !itksys::SystemTools::CopyFileAlways( source.toChar(),
                                                 destination.toChar() ) )
         {
-        m_ProgressManager->AddError( 
-          MString("CopyFile: Cannot write file \"") + source 
+        m_ProgressManager->AddError(
+          MString("CopyFile: Cannot write file \"") + source
                                    + "\" in file \"" + destination + "\"" );
         }
       }

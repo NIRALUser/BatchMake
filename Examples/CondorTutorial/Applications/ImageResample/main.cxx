@@ -51,13 +51,13 @@ int main(int argc,char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  std::string InputImage = command.GetValueAsString("InputImage"); 
-  std::string OutputImage = command.GetValueAsString("OutputImage"); 
-   
+  std::string InputImage = command.GetValueAsString("InputImage");
+  std::string OutputImage = command.GetValueAsString("OutputImage");
+
   reader->SetFileName(InputImage);
   reader->Update();
   filter->SetInput(reader->GetOutput());
-  
+
   ImageType::SpacingType spacing;
   spacing[0]=reader->GetOutput()->GetSpacing()[0];
   spacing[1]=reader->GetOutput()->GetSpacing()[1];
@@ -73,9 +73,9 @@ int main(int argc,char * argv[])
   filter->SetOutputOrigin(inputOrigin);
 
   TransformType::OutputVectorType translation;
-  translation[0] = command.GetValueAsFloat("coordinate", "x"); 
-  translation[1] = command.GetValueAsFloat("coordinate", "y"); 
-  translation[2] = command.GetValueAsFloat("coordinate", "z"); 
+  translation[0] = command.GetValueAsFloat("coordinate", "x");
+  translation[1] = command.GetValueAsFloat("coordinate", "y");
+  translation[2] = command.GetValueAsFloat("coordinate", "z");
   transform->Translate(translation);
 
   filter->SetTransform(transform);

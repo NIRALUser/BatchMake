@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -17,7 +17,7 @@
 
 namespace bm {
 
-ScriptErrorGUI::ScriptErrorGUI() 
+ScriptErrorGUI::ScriptErrorGUI()
 : ScriptError()
 {
   m_TextDisplay = 0;
@@ -68,7 +68,7 @@ void ScriptErrorGUI::DisplaySummary()
   if (m_TextDisplay)
     {
     m_TextDisplay->buffer()->append(
-      (BMString("%1 error(s), ").arg(nb_error) +  
+      (BMString("%1 error(s), ").arg(nb_error) +
        BMString("%1 warning(s)").arg(nb_warning) + "\n").toChar());
     }
 

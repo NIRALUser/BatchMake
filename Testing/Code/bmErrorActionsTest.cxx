@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include <stdlib.h>
@@ -31,14 +31,14 @@ int ErrorActionsTest (int argc, char *argv[])
 
   std::string filename(argv[1]);
   std::string applicationPath;
-  if( argc > 3 ) 
+  if( argc > 3 )
     {
     applicationPath = argv[3];
     m_Parser.LoadWrappedApplication( applicationPath.c_str() );
     }
-    
 
-   
+
+
   if( argc > 2 )
     {
     // in this case we need the script to return false and to have the right
@@ -54,12 +54,12 @@ int ErrorActionsTest (int argc, char *argv[])
       }
       return EXIT_FAILURE;
     }
- 
+
   if( m_Parser.Execute( filename.c_str()) == false )
     {
     // here we are just looking for the script to return false
     return EXIT_SUCCESS;
     }
-  // default is failue 
+  // default is failue
   return EXIT_FAILURE;
 }

@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -31,7 +31,7 @@ ScriptMathAction::~ScriptMathAction()
 bool ScriptMathAction::TestParam(ScriptError* error,int linenumber)
 {
   if (m_Parameters.size() < 4)
-    { 
+    {
     error->SetError(MString("No enough parameter for Inc"),linenumber);
     return false;
     }
@@ -64,7 +64,7 @@ void ScriptMathAction::Execute()
     temp += "}";
     value1 = m_Manager->Convert(temp);
     }
-    
+
   // Second argument is the operator
   BMString op = m_Parameters[2];
 
@@ -78,26 +78,26 @@ void ScriptMathAction::Execute()
     temp += "}";
     value2 = m_Manager->Convert(temp);
     }
-  
-  // get the value without the ''  
+
+  // get the value without the ''
   value1.rbegin("'")+1;
   value2.rbegin("'")+1;
-  
+
   if(value1.length() == 0)
     {
     value1 = m_Parameters[1];
     }
-  
+
   if(value2.length() == 0)
     {
     value2 = m_Parameters[3];
     }
-    
+
   float val1 = value1.toFloat();
   float val2 = value2.toFloat();
-    
+
   float result = 0;
-  
+
   if(op == "+")
     {
     result = val1+val2;
@@ -113,8 +113,8 @@ void ScriptMathAction::Execute()
   else if(op == "/")
     {
     result = val1/val2;
-    }    
-  
+    }
+
   BMString newVal(result);
   BMString value ="'";
   value += newVal;

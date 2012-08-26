@@ -29,7 +29,7 @@ static size_t outputFunction(char *buffer, size_t size, size_t nitems, void *use
 
 XnatCatalog::XnatCatalog()
 {
-  m_LoginUrl = "http://central.xnat.org/app/action/XDATLoginUser"; 
+  m_LoginUrl = "http://central.xnat.org/app/action/XDATLoginUser";
   m_Url = "";
   m_Catalog = "";
 }
@@ -41,7 +41,7 @@ void XnatCatalog::Login(std::string login, std::string password)
 
   curl_global_init(CURL_GLOBAL_ALL);
   xnatCurl = curl_easy_init();
-  if(!xnatCurl) 
+  if(!xnatCurl)
     {
     std::cout << "Cannot Initialize Curl!" << std::endl;
     }
@@ -56,7 +56,7 @@ void XnatCatalog::Login(std::string login, std::string password)
 
   xnatHttpReply = "";
   curl_easy_perform(xnatCurl);
-  
+
 
   //Get The SessionID
   std::string::size_type loc1 = xnatHttpReply.find("jsessionid=", 0);
@@ -217,7 +217,7 @@ xmlXPathObjectPtr XnatCatalog::GetNodeSet (xmlDocPtr doc, xmlChar *xpath,
     std::cerr<<"Error in xmlXPathEvalExpression"<<std::endl;
     return NULL;
     }
- 
+
   if(xmlXPathNodeSetIsEmpty(result->nodesetval))
     {
     xmlXPathFreeObject(result);
@@ -238,7 +238,7 @@ xmlDocPtr XnatCatalog::GetNewCatalog(xmlDocPtr mainDoc, std::string login, std::
     {
     curl_global_init(CURL_GLOBAL_ALL);
     xnatCurl = curl_easy_init();
-    if(!xnatCurl) 
+    if(!xnatCurl)
       {
       std::cout << "Cannot Initialize Curl!" << std::endl;
       }
@@ -288,7 +288,7 @@ std::vector<std::string> XnatCatalog::GetXnatDataSets(xmlDocPtr mainDoc, std::st
 std::vector<std::string> XnatCatalog::GetXnatDataSetNames(xmlDocPtr mainDoc, std::string login, std::string password)
 {
   xmlDocPtr doc = this->GetNewCatalog(mainDoc, login, password);
-  
+
   std::vector<std::string> names = this->GetNames(doc, login, password);
 
   return names;
@@ -313,7 +313,7 @@ bool XnatCatalog::DownloadXnatDatasets(std::string xnatDataSet, std::string dire
     {
     curl_global_init(CURL_GLOBAL_ALL);
     xnatCurl = curl_easy_init();
-    if(!xnatCurl) 
+    if(!xnatCurl)
       {
       std::cout << "Cannot Initialize Curl!" << std::endl;
       }
@@ -349,7 +349,7 @@ bool XnatCatalog::DownloadXnatDatasets(std::string xnatDataSet, std::string dire
   CURLcode res = curl_easy_perform(xnatCurl);
   curl_easy_cleanup(xnatCurl);
 
-  if (res != CURLE_OK) 
+  if (res != CURLE_OK)
     {
     fprintf(stderr, "Curl perform failed: %s\n", curl_easy_strerror(res));
     xnatOutputFile->close();
@@ -366,7 +366,7 @@ std::string XnatCatalog::GetXnatFilename(std::string xnatDataSet)
 {
   std::string::size_type loc = xnatDataSet.rfind(";", xnatDataSet.size());
   std::string filename = xnatDataSet.substr(loc+1);
-  
+
   return filename;
 }
 
@@ -374,6 +374,6 @@ std::string XnatCatalog::GetXnatUrl(std::string xnatDataSet)
 {
   std::string::size_type loc = xnatDataSet.rfind(";", xnatDataSet.size());
   std::string url = xnatDataSet.substr(0,loc);
-  
+
   return url;
 }

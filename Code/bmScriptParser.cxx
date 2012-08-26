@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -66,7 +66,7 @@ void ScriptParser::SetScriptPath(MString scriptpath)
   m_ScriptActionManager->SetScriptFullPath(scriptpath.toChar());
 }
 
-void ScriptParser::LoadWrappedApplication(MString applicationpath) 
+void ScriptParser::LoadWrappedApplication(MString applicationpath)
 {
   if(m_ApplicationList)
     {
@@ -86,7 +86,7 @@ void ScriptParser::LoadWrappedApplication(MString applicationpath)
       if(extension == ".bmm")
         {
         std::string file = directory.GetFile(i);
-        ApplicationWrapper* m_newapplication = new ApplicationWrapper();  
+        ApplicationWrapper* m_newapplication = new ApplicationWrapper();
         m_newapplication->Load( (applicationpath + "/" + file.c_str()).GetConstValue() );
         m_ApplicationList->push_back(m_newapplication);
         }
@@ -122,7 +122,7 @@ void  ScriptParser::RemoveCodeLine(unsigned int line)
   for(unsigned int i=0;i<line;i++)
     {
     it++;
-    }   
+    }
   m_Code.erase(it);
 }
 
@@ -170,7 +170,7 @@ bool ScriptParser::Compile(MString filename,unsigned long pos,bool isInclude)
 }
 
 bool ScriptParser::Execute(MString filename,unsigned long pos)
-{ 
+{
   m_CurrentFilename = filename.toChar();
   std::ifstream m_file;
   m_file.open(filename.toChar(),std::ifstream::binary);
@@ -193,7 +193,7 @@ bool ScriptParser::Execute(MString filename,unsigned long pos)
     }
   m_file.close();
 
- 
+
   if(!this->Parse())
     {
     return false;
@@ -268,7 +268,7 @@ int ScriptParser::RunCondor( const std::string& buffer )
     // Run the application
     itksysProcess* gp = itksysProcess_New();
     itksysProcess_SetCommand(gp, &*args.begin());
-    itksysProcess_Execute(gp); 
+    itksysProcess_Execute(gp);
 
     std::string output = "";
 
@@ -441,7 +441,7 @@ bool ScriptParser::CheckOption(MString param)
         m_Error->SetError(MString("Missing '(' or ')'"),m_LineNumber);
      return false;
   }
- 
+
   return true;
 }
 
@@ -462,12 +462,12 @@ ScriptAction::ParametersType ScriptParser::GetParams(MString param)
       {
       m_isquote=!m_isquote;
       }
-  
+
     if ((m_isquote) && (m_param[i] != '\''))
       {
       m_value += m_param[i];
       }
-    
+
     if ((!m_isquote) && (m_param[i] != '\'') && (m_param[i] != ' '))
       {
       m_value += m_param[i];
@@ -521,7 +521,7 @@ bool ScriptParser::Parse()
     {
     m_LineNumber++;
     m_currentline = m_Code[i];
-      
+
     MString optionName = m_currentline.begin("(").removeChar(' ').removeChar('\t').toLower();
 
     int pos = m_currentline.find("/*");

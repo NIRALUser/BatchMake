@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -36,7 +36,7 @@ int XMLWriter::Open(const std::string& filename)
     {
     return -1;
     }
-  
+
   return 0;
 }
 
@@ -99,5 +99,5 @@ void XMLWriter::Write(MString balise,float value)
 
 void XMLWriter::Close()
 {
-  networkfile.close();  
+  networkfile.close();
 }

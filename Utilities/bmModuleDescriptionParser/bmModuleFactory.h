@@ -39,7 +39,7 @@ public:
   // messages (to refer to the application using the module factory)
   // and in encoding entry points.
   const std::string& GetName() const { return Name; }
-  
+
   // Set the search path for modules (both command line modules and
   // shared object modules). A list of ':' or ';' separated paths.
   void SetSearchPaths(const std::string& paths) { SearchPaths = paths; }
@@ -54,7 +54,7 @@ public:
 
   // Get the module cache path.
   const std::string& GetCachePath() const { return CachePath; }
-  
+
   // Scan for modules in the module search path.  This will locate
   // command line modules as well as shared object modules.
   virtual void Scan();
@@ -67,8 +67,8 @@ public:
 
   // Typedef of callback function
   typedef void (*CallbackFunctionType)(const char *);
-    
-  // Set/Get a function to call to report back warnings 
+
+  // Set/Get a function to call to report back warnings
   void SetWarningMessageCallback( CallbackFunctionType );
   CallbackFunctionType GetWarningMessageCallback();
 
@@ -83,8 +83,8 @@ public:
   // Set/Get a function to call to report back a discovered module
   void SetModuleDiscoveryMessageCallback( CallbackFunctionType );
   CallbackFunctionType GetModuleDiscoveryMessageCallback();
-  
-  
+
+
 protected:
   // Load the module cache.
   virtual void LoadModuleCache();
@@ -101,7 +101,7 @@ protected:
                                  long int commandModifiedTime,
                                  const std::string & type,
                                  std::stringstream &stream);
-  
+
   // Scan for shared object modules (i.e. DLL) in the module search
   // path. Modules can either have global symbols or entry points to
   // describe the module and logos. Returns the number of modules
@@ -118,10 +118,10 @@ protected:
   // line modules are executables with global symbols that can be
   // queried without executing the program. Returns the number of
   // modules found (that have not already been discovered by another
-  // method). 
+  // method).
   virtual long ScanForCommandLineModulesByPeeking();
 
-  // Scan for Python modules in the module search path. 
+  // Scan for Python modules in the module search path.
   virtual long ScanForPythonModulesByLoading();
 
   // Scan for files which are known (by exclusion) to not be modules
@@ -129,18 +129,18 @@ protected:
 
   // Get the logo for a command line module
   virtual void GetLogoForCommandLineModuleByExecuting(ModuleDescription&);
-  
+
   void WarningMessage( const char *);
   void ErrorMessage( const char *);
   void InformationMessage( const char *);
   void ModuleDiscoveryMessage( const char *);
-  
+
   ModuleCache *InternalCache;
   ModuleDescriptionMap *InternalMap;
   ModuleFileMap *InternalFileMap;
 
   bool CacheModified;
-  
+
 private:
 
   std::string Name;

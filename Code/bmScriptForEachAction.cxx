@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "bmScriptForEachAction.h"
@@ -71,7 +71,7 @@ MString ScriptForEachAction::Help()
 }
 /*
 void ScriptForEachAction::CreateLoop()
-{ 
+{
   m_ForLoop.clear();
   MString m_paramlist = m_Manager->Convert(m_Parameters[1]);
   ScriptAction::ParametersType m_params;
@@ -99,7 +99,7 @@ void ScriptForEachAction::CreateLoop()
         m_value = m_paramlist.begin(" ");
         m_paramlist = m_paramlist.end(" ");
         }
-        
+
       if (m_value.length() != 0)
         {
         m_ForLoop.push_back(MString("'") + m_value + "'");
@@ -109,9 +109,9 @@ void ScriptForEachAction::CreateLoop()
 }*/
 
 void ScriptForEachAction::CreateLoop()
-{ 
+{
   /*m_ForLoop.clear();
-  
+
   BMString m_paramlist( m_Manager->Convert(m_Parameters[1]) );
   //BMString m_paramlist2( m_Manager->Convert(m_Parameters[1]) );
   //BMString m_paramlist3( m_Manager->Convert(m_Parameters[1]) );
@@ -137,7 +137,7 @@ void ScriptForEachAction::CreateLoop()
         m_value = m_paramlist.beginCopy(" ");
         m_paramlist.after(" ");
         }
-        
+
       if (!m_value.isEmpty())
         {
         m_ForLoop.push_back( m_value.toVariable() );
@@ -179,7 +179,7 @@ void ScriptForEachAction::Execute()
       m_GridModule->SetDistributed(true);
       }
 #endif
-    m_Manager->SetVariable(m_Parameters[0],m_ForLoop[loop]); 
+    m_Manager->SetVariable(m_Parameters[0],m_ForLoop[loop]);
     for (unsigned int i=0;i<m_Action.size();i++)
       {
       m_Action[i]->Execute();

@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 #if defined(_MSC_VER)
@@ -1072,7 +1072,7 @@ void Flu_Tree_Browser :: on_dnd_drop( const Flu_DND_Event *e )
   if( rdata.grabbed )
     {
       rdata.grabbed->select( true );
-  
+
       // move the node
       if( NodeList::move( rdata.grabbed, rdata.dragWhere, rdata.dragNode ) )
   {
@@ -1135,7 +1135,7 @@ int Flu_Tree_Browser :: handle( int event )
       if( Fl_Group::handle( event ) )
   {
     //if( event == FL_KEYDOWN || event == FL_KEYUP )
-      
+
 
     // redraw();
     return 1;
@@ -1167,8 +1167,8 @@ int Flu_Tree_Browser :: handle( int event )
   rdata.delta = 0;
   rdata.visibilityChanged = false;
 
- 
-  
+
+
   // catch cursor keys for moving the hilighted entry or selecting all entries
   if( event == FL_KEYDOWN )
     {
@@ -1895,7 +1895,7 @@ void Flu_Tree_Browser :: Node :: draw( RData &rdata, bool measure )
     else
       X += rdata.collapseIcons[which]->w() + rdata.wGap;
   }
-      else 
+      else
   X += rdata.wGap;
 
       // draw some more connectors
@@ -2264,7 +2264,7 @@ bool Flu_Tree_Browser :: Node :: isMoveValid( Node* &n1, int &where, Node* &n2 )
 
   if( where==MOVE_AFTER && n2->is_branch() && n2->open() )
     {
-      // can't move inside a branch if within the same group, unless the first node is dragged 
+      // can't move inside a branch if within the same group, unless the first node is dragged
       // from outside the tree (in which case n1 is NULL)
       if( sameGroup && n1 )
   {
@@ -2480,7 +2480,7 @@ int Flu_Tree_Browser :: Node :: recurse( RData &rdata, int type, int event )
       {
         open( true );
       }
-    return 1;    
+    return 1;
         }
 
       // check for the enter key opening/closing this entry
@@ -2540,7 +2540,7 @@ int Flu_Tree_Browser :: Node :: recurse( RData &rdata, int type, int event )
     }
 
   if( event == FL_PUSH )
-    {  
+    {
       // check for expand/collapse
       if( Fl::event_button() == FL_LEFT_MOUSE && inExpander )
         {

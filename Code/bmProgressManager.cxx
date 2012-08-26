@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -38,21 +38,21 @@ void ProgressManager::IsRunning()
 {
 }
 
-void ProgressManager::AddAction(const BMString& name)
+void ProgressManager::AddAction(const BMString& )
 {
 }
 
-void ProgressManager::FinishAction(const BMString& output)
+void ProgressManager::FinishAction(const BMString& )
 {
 }
 
-void ProgressManager::AddOutput(const BMString& output)
+void ProgressManager::AddOutput(const BMString& )
 {
   // AddOutput is typically called by the Run action.
   // After an external application is executed, Run() calls
   // AddOutput with the outputs of the external application
   // While a GUI Progress Manager would like to display
-  // these outputs, we probably don't want them outputed 
+  // these outputs, we probably don't want them outputed
   // in a standard stream. If the user want them, he should
   // use Echo( ${output} ) after calling Run( output my_prog )
   // if( output.length() )
@@ -93,7 +93,7 @@ void ProgressManager::Start(bool reset)
     }
 }
 
-void ProgressManager::SetFinished(const BMString& message)
+void ProgressManager::SetFinished(const BMString& )
 {
 }
 

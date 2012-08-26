@@ -18,8 +18,8 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
   std::string indent2 = indent1 + indent1;
   std::string indent3 = indent2 + indent1;
   std::string indent4 = indent3 + indent1;
-  
-  // Can only generate BatchMakeWrappers for executables.  
+
+  // Can only generate BatchMakeWrappers for executables.
   if (module.GetType() != "CommandLineModule")
     {
     return "";
@@ -50,7 +50,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
   mp2bm["image"] = "0";  // file
   mp2bm["geometry"] = "0";  // file
   mp2bm["point"] = "4";  // string ???
-  
+
   // BatchMake format preamble
   wrapper << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   wrapper << "<BatchMakeApplicationWrapper>" << std::endl;
@@ -64,7 +64,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
           << std::endl;
   wrapper << indent2 << "<Parameters>" << std::endl;
 
-  
+
   std::vector<ModuleParameterGroup>::const_iterator pgbeginit
     = module.GetParameterGroups().begin();
   std::vector<ModuleParameterGroup>::const_iterator pgendit
@@ -77,7 +77,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
   // Loop over all parameters that have a flag then loop over the
   // parameters that are index parameters
   //
-  
+
   // Loop over executables with flags
   int pcount = 0;
   for (pgit = pgbeginit; pgit != pgendit; ++pgit)
@@ -94,7 +94,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
       std::string prefix;
       std::string flag;
       bool hasFlag = false;
-      
+
       if ((*pit).GetLongFlag() != "")
         {
         prefix = "--";
@@ -111,7 +111,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
       if (hasFlag)
         {
         pcount++;
-        
+
         // Batchmake uses two parameters to represent non-boolean
         // options.  THe first of the parameters is the "flag", the
         // second is the value.  THe Parent tag is used to ling flags
@@ -152,10 +152,10 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
         //
         // THe flag itself is always external = 0
         wrapper << indent4 << "<External>0</External>" << std::endl;
-        
+
         // Any module parameter that has a flag is optional.
         wrapper << indent4 << "<Optional>1</Optional>" << std::endl;
-        
+
         wrapper << indent3 << "</Param>" << std::endl;
 
         // Is a child BatchMake parameter needed for the parameter?
@@ -164,7 +164,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
           pcount++;
 
           wrapper << indent3 << "<Param>" << std::endl;
-          
+
           // find the module parameter type in the map to BatchMake types
           mp2bmIt = mp2bm.find((*pit).GetTag());
           if (mp2bmIt != mp2bm.end())
@@ -184,7 +184,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
           wrapper << indent4 << "<Name>";
           wrapper << (*pit).GetName();
           wrapper << "</Name>" << std::endl;
-          
+
           wrapper << indent4 << "<Value>";
           wrapper << (*pit).GetDefault();
           wrapper << "</Value>" << std::endl;
@@ -193,7 +193,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
           // the flag)
           wrapper << indent4 << "<Parent>" << pcount - 1
                   << "</Parent>" << std::endl;
-          
+
           // BatchMake external flag is:
           //   0=nothing, 1=input, 2=output
           if ((*pit).GetTag() == "image" || (*pit).GetTag() == "geometry"
@@ -216,16 +216,16 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
             {
             wrapper << indent4 << "<External>0</External>" << std::endl;
             }
-          
+
           // If the flag was specified, then the parameter for the
           // value cannot be option
           wrapper << indent4 << "<Optional>0</Optional>" << std::endl;
-          
+
           wrapper << indent3 << "</Param>" << std::endl;
           }
         }
       }
-    }  
+    }
 
   // now tack on any parameters that are based on indices
   //
@@ -239,7 +239,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
     std::vector<ModuleParameter>::const_iterator pendit
       = (*pgit).GetParameters().end();
     std::vector<ModuleParameter>::const_iterator pit;
-  
+
     for (pit = pbeginit; pit != pendit; ++pit)
       {
       if ((*pit).GetIndex() != "")
@@ -254,7 +254,7 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
   for (iit = indexmap.begin(); iit != indexmap.end(); ++iit)
     {
     wrapper << indent3 << "<Param>" << std::endl;
-    
+
     // find the module parameter type in the map to BatchMake types
     mp2bmIt = mp2bm.find((*iit).second.GetTag());
     if (mp2bmIt != mp2bm.end())
@@ -272,14 +272,14 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
     wrapper << indent4 << "<Name>";
     wrapper << (*iit).second.GetName();
     wrapper << "</Name>" << std::endl;
-    
+
     wrapper << indent4 << "<Value>";
     wrapper << (*iit).second.GetDefault();
     wrapper << "</Value>" << std::endl;
-    
+
     // index parameters have no parents
     wrapper << indent4 << "<Parent>0</Parent>" << std::endl;
-    
+
     // BatchMake external flag is:
     //   0=nothing, 1=input, 2=output
     if ((*iit).second.GetTag() == "image"
@@ -303,10 +303,10 @@ std::string GenerateBatchMakeWrapper(const ModuleDescription& module)
       {
       wrapper << indent4 << "<External>0</External>" << std::endl;
       }
-    
+
     // Any index parameter is not optional
     wrapper << indent4 << "<Optional>0</Optional>" << std::endl;
-    
+
     wrapper << indent3 << "</Param>" << std::endl;
     }
 

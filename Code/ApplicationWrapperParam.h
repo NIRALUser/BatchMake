@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -26,7 +26,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-class ApplicationWrapperParam : public ApplicationWrapperParamSub 
+class ApplicationWrapperParam : public ApplicationWrapperParamSub
 {
 public:
   ApplicationWrapperParam();
@@ -40,12 +40,12 @@ public:
   void ClearParamSubValues();
   bool ParamSubExists( const std::string& first)const;
 //  bool CheckSubValueDefined(bool relativePath, std::string* line)const;
-  bool CheckSubValueDefined( std::string* line, bool relativePath,  
+  bool CheckSubValueDefined( std::string* line, bool relativePath,
                              const std::string& inputDirectory,
                              const std::string& outputDirectory )const;
   void SetParamSubValue(std::string first, std::string second, std::string value, bool boolean);
   std::vector<std::string> ShowApplicationOptionsSubParams(std::string parent) const;
- 
+
 
 private:
   std::vector<ApplicationWrapperParamSub> m_Params;

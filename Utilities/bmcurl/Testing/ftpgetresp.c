@@ -1,8 +1,8 @@
 /*****************************************************************************
- *                                  _   _ ____  _     
- *  Project                     ___| | | |  _ \| |    
- *                             / __| | | | |_) | |    
- *                            | (__| |_| |  _ <| |___ 
+ *                                  _   _ ____  _
+ *  Project                     ___| | | |  _ \| |
+ *                             / __| | | | |_) | |
+ *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
  * Id
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   FILE *ftpfile;
   FILE *respfile;
   (void)argc; (void)argv;
-  
+
   /* local file name to store the file as */
   ftpfile = fopen(LIBCURL_BINARY_DIR "/Testing/ftpgetresp-list.txt", "wb"); /* b is binary, needed on win32 */
 

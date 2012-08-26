@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "metaCommand.h"
@@ -24,7 +24,7 @@ void AddField(std::string filename, std::string name, std::string value)
   std::ifstream infile;
   infile.open(filename.c_str(), std::ios::binary | std::ios::in);
   if(infile.is_open())
-    { 
+    {
     while(!infile.eof())
       {
       char str[2000];
@@ -73,7 +73,7 @@ void AddField(std::string filename, std::string name, std::string value)
 }
 
 /** Parse the XML output and set some variables */
-void ParseXMLOutput(const char* filename, 
+void ParseXMLOutput(const char* filename,
                     const char* output,const char* appname)
 {
   typedef itk::XMLBufferReader XMLParserType;
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
   command.AddField("filename","Name of the file to store the variables",MetaCommand::STRING,MetaCommand::DATA_OUT);
   command.AddField("name","Name of the variable",MetaCommand::STRING);
   command.AddField("value","Value to store",MetaCommand::STRING);
- 
+
   // Add the input file option
   // This is necessary for Condor to send the file to the input node
   // The inputfilename variable is actually never used
@@ -173,7 +173,7 @@ int main(int argc, char* argv[])
   if(command.GetOptionWasSet("parse"))
     {
     std::string filen = command.GetValueAsString("parse");
-    
+
     // Read the file
     std::ifstream file;
     file.open(filen.c_str(), std::ios::binary | std::ios::in);
@@ -188,7 +188,7 @@ int main(int argc, char* argv[])
 
     char* buf = new char[fileSize+1];
     file.read(buf,fileSize);
-    buf[fileSize] = 0; 
+    buf[fileSize] = 0;
     std::string buffer(buf);
     buffer.resize(fileSize);
     delete [] buf;

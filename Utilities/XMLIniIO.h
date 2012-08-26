@@ -1,11 +1,11 @@
 #ifndef _XMLINIIO_H
 #define _XMLINIIO_H
-  
+
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
-  
+
 #include "XMLWriter.h"
 #include "XMLReader.h"
 
@@ -33,10 +33,10 @@ private:
     MString balise;
     MString value;
   };
-  
+
   std::vector<balisestruct*> m_list;
   XMLReader* m_reader;
-  XMLWriter* m_writer;  
+  XMLWriter* m_writer;
 };
 
 #endif

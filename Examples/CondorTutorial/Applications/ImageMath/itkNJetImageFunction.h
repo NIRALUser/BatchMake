@@ -9,8 +9,8 @@
   Copyright (c) 2002 CADDLab @ UNC. All rights reserved.
   See itkUNCCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ namespace itk
 /**
  * \class NJetImageFunction
  * \brief Calculate the gaussian blurred value, 1st derivatives, and
- *        second derivatives at point 
+ *        second derivatives at point
  *        given a scale and extent of the gaussian.
  * This class is templated over the input image type.
  *
@@ -51,7 +51,7 @@ public Object // ImageFunction< TInputImage, double >
      * Standard "Self" typedef
      */
     typedef NJetImageFunction Self;
-  
+
     /**
      * Standard "Superclass" typedef
      */
@@ -62,43 +62,43 @@ public Object // ImageFunction< TInputImage, double >
      */
     typedef SmartPointer<Self> Pointer;
     typedef SmartPointer<const Self>  ConstPointer;
-  
+
     /**
      * Method for creation through the object factory.
      */
     itkNewMacro(Self);
-  
+
     itkTypeMacro( NJetImageFunction, Object );
     //itkTypeMacro( NJetImageFunction, ImageFunction );
-  
+
     /**
      * Dimension of the underlying image.
      */
     itkStaticConstMacro(ImageDimension,
                         unsigned int,
                         TInputImage::ImageDimension);
-    
+
     typedef TInputImage                                 InputImageType;
     typedef typename InputImageType::Pointer            InputImagePointer;
 
     typedef Point<double, itkGetStaticConstMacro(ImageDimension) >
                                                         PointType;
 
-    typedef Vector< double, itkGetStaticConstMacro(ImageDimension) > 
+    typedef Vector< double, itkGetStaticConstMacro(ImageDimension) >
                                                         VectorType;
 
     typedef Matrix< double, itkGetStaticConstMacro(ImageDimension),
-                    itkGetStaticConstMacro(ImageDimension) >  
+                    itkGetStaticConstMacro(ImageDimension) >
                                                         MatrixType;
 
     typedef typename InputImageType::IndexType          IndexType;
 
-    typedef ContinuousIndex<double, itkGetStaticConstMacro(ImageDimension) > 
+    typedef ContinuousIndex<double, itkGetStaticConstMacro(ImageDimension) >
                                                         ContinuousIndexType;
 
     typedef typename InputImageType::SpacingType              SpacingType;
 
-    typedef Size<itkGetStaticConstMacro(ImageDimension)>      SizeType; 
+    typedef Size<itkGetStaticConstMacro(ImageDimension)>      SizeType;
 
     typedef Array< VectorType >                               ArrayVectorType;
 
@@ -107,12 +107,12 @@ public Object // ImageFunction< TInputImage, double >
      */
     void SetInputImage( const InputImageType * ptr );
     itkGetConstObjectMacro( InputImage, InputImageType );
-    
+
     void SetInputImageMask( const InputImageType * ptr );
     itkGetConstObjectMacro( InputImageMask, InputImageType );
     itkSetMacro( UseInputImageMask, bool );
     itkGetMacro( UseInputImageMask, bool );
-  
+
     void ComputeStatistics(void);
 
     /** Return the min over the (possibly masked) image.
@@ -125,11 +125,11 @@ public Object // ImageFunction< TInputImage, double >
 
     /** Evalulate the function at specified point */
     double Evaluate( const PointType & point, double scale=1 ) const;
-    double Evaluate( const PointType & point, const VectorType & v1, 
+    double Evaluate( const PointType & point, const VectorType & v1,
                      double scale=1 ) const;
     double Evaluate( const PointType & point, const VectorType & v1, const VectorType & v2,
                      double scale=1 ) const;
-  
+
     /** Evaluate the function at specified Index position */
     double EvaluateAtIndex( const IndexType & index, double scale=1 ) const;
     double EvaluateAtIndex( const IndexType & index, const VectorType & v1,
@@ -137,7 +137,7 @@ public Object // ImageFunction< TInputImage, double >
     double EvaluateAtIndex( const IndexType & index, const VectorType & v1,
                             const VectorType & v2,
                             double scale=1 ) const;
-  
+
     /** Evaluate the function at specified ContinousIndex position */
     double EvaluateAtContinuousIndex( const ContinuousIndexType & index,
                                       double scale=1 ) const;
@@ -147,25 +147,25 @@ public Object // ImageFunction< TInputImage, double >
     double EvaluateAtContinuousIndex( const ContinuousIndexType & index,
                                       const VectorType & v1, const VectorType & v2,
                                       double scale=1 ) const;
-  
-    VectorType 
+
+    VectorType
       Derivative( const PointType & point, double scale=1 ) const;
-    VectorType 
-      Derivative( const PointType & point, 
-                  const VectorType & v1, 
+    VectorType
+      Derivative( const PointType & point,
+                  const VectorType & v1,
                   double scale=1 ) const;
-    VectorType 
-      Derivative( const PointType & point, 
+    VectorType
+      Derivative( const PointType & point,
                   const VectorType & v1, const VectorType & v2,
                   double scale=1 ) const;
 
-    VectorType 
+    VectorType
       DerivativeAtIndex( const IndexType & index, double scale=1 ) const;
-    VectorType 
-      DerivativeAtIndex( const IndexType & index, 
+    VectorType
+      DerivativeAtIndex( const IndexType & index,
                          const VectorType & v1,
                          double scale=1 ) const;
-    VectorType 
+    VectorType
       DerivativeAtIndex( const IndexType & index,
                          const VectorType & v1, const VectorType & v2,
                          double scale=1 ) const;
@@ -182,31 +182,31 @@ public Object // ImageFunction< TInputImage, double >
                                    const VectorType & v1, const VectorType & v2,
                                    double scale=1 ) const;
 
-    VectorType 
+    VectorType
       ValueAndDerivative( const PointType & point,
                           double & val,
                           double scale=1 ) const;
-    VectorType 
+    VectorType
       ValueAndDerivative( const PointType & point,
                           double & val,
                           const VectorType & v1,
                           double scale=1 ) const;
-    VectorType 
+    VectorType
       ValueAndDerivative( const PointType & point,
                           double & val,
                           const VectorType & v1, const VectorType & v2,
                           double scale=1 ) const;
 
-    VectorType 
+    VectorType
       ValueAndDerivativeAtIndex( const IndexType & index,
                                  double & val,
                                  double scale=1 ) const;
-    VectorType 
+    VectorType
       ValueAndDerivativeAtIndex( const IndexType & index,
                                  double & val,
                                  const VectorType & v1,
                                  double scale=1 ) const;
-    VectorType 
+    VectorType
       ValueAndDerivativeAtIndex( const IndexType & index,
                                  double & val,
                                  const VectorType & v1, const VectorType & v2,
@@ -263,19 +263,19 @@ public Object // ImageFunction< TInputImage, double >
     double
       Ridgeness( const PointType & point, double scale=1 ) const;
     double
-      Ridgeness( const PointType & point, 
+      Ridgeness( const PointType & point,
                  const VectorType & v1, double scale=1 ) const;
     double
-      Ridgeness( const PointType & point, 
+      Ridgeness( const PointType & point,
                  const VectorType & v1, const VectorType & v2, double scale=1 ) const;
 
     double
       RidgenessAtIndex( const IndexType & index, double scale=1 ) const;
     double
-      RidgenessAtIndex( const IndexType & index, 
+      RidgenessAtIndex( const IndexType & index,
                         const VectorType & v1, double scale=1 ) const;
     double
-      RidgenessAtIndex( const IndexType & index, 
+      RidgenessAtIndex( const IndexType & index,
                         const VectorType & v1, const VectorType & v2,
                         double scale=1 ) const;
 
@@ -294,7 +294,7 @@ public Object // ImageFunction< TInputImage, double >
                                   double scale=1 ) const;
     VectorType
       RidgenessAndDerivative(const PointType &point, double & val,
-                                  const VectorType & v1, 
+                                  const VectorType & v1,
                                   double scale=1 ) const;
     VectorType
       RidgenessAndDerivative(const PointType &point, double & val,
@@ -329,19 +329,19 @@ public Object // ImageFunction< TInputImage, double >
     MatrixType
       Hessian( const PointType & point, double scale=1 ) const;
     MatrixType
-      Hessian( const PointType & point, 
+      Hessian( const PointType & point,
                const VectorType & v1, double scale=1 ) const;
     MatrixType
-      Hessian( const PointType & point, 
+      Hessian( const PointType & point,
                const VectorType & v1, const VectorType & v2, double scale=1 ) const;
 
     MatrixType
       HessianAtIndex( const IndexType & index, double scale=1 ) const;
     MatrixType
-      HessianAtIndex( const IndexType & index, 
+      HessianAtIndex( const IndexType & index,
                       const VectorType & v1, double scale=1 ) const;
     MatrixType
-      HessianAtIndex( const IndexType & index, 
+      HessianAtIndex( const IndexType & index,
                       const VectorType & v1, const VectorType & v2, double scale=1 ) const;
 
     MatrixType
@@ -361,17 +361,17 @@ public Object // ImageFunction< TInputImage, double >
      * Set the Extent
      */
     itkSetMacro( Extent, double);
-  
+
     /**
      * Get the Extent
      */
     itkGetMacro( Extent, double);
-  
+
     /**
      * Get the Spacing
      */
     itkGetConstMacro( InputImageSpacing, SpacingType );
-  
+
     /**
      * If set to true, then values and derivatives are computed and then
      *   projected onto the subset of directions given.   Otherwise, the
@@ -383,16 +383,16 @@ public Object // ImageFunction< TInputImage, double >
   protected:
     NJetImageFunction();
     NJetImageFunction( const Self& ){};
-  
+
     ~NJetImageFunction(){};
-  
+
     void operator=( const Self& ){};
     void PrintSelf(std::ostream& os, Indent indent) const;
-  
+
     typename InputImageType::ConstPointer  m_InputImage;
     typename InputImageType::ConstPointer  m_InputImageMask;
     bool                                   m_UseInputImageMask;
-  
+
     SizeType                m_InputImageSize;
     SpacingType             m_InputImageSpacing;
     SpacingType             m_InputImageSpacingSquared;
@@ -403,14 +403,14 @@ public Object // ImageFunction< TInputImage, double >
     double                  m_StatsMax;
 
     bool                    m_UseProjection;
-  
+
   };
-  
+
 } // namespace itk
-  
+
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkNJetImageFunction.txx"
 #endif
-  
+
 #endif
-  
+

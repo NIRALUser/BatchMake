@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -47,14 +47,14 @@ int ScriptError::GetWarning()
 
 void ScriptError::SetError( const BMString& error, int linenumber )
 {
-  std::cout << " Error (" << linenumber 
+  std::cout << " Error (" << linenumber
             << "): '"     << error.toChar() << std::endl;
   nb_error++;
 }
 
 void ScriptError::SetWarning( const BMString& warning, int linenumber )
 {
-    std::cout << " Warning (" << linenumber 
+    std::cout << " Warning (" << linenumber
               << "): '"       << warning.toChar() << std::endl;
     nb_warning++;
 }
@@ -66,7 +66,7 @@ void ScriptError::SetStatus( const BMString& status )
 
 void ScriptError::DisplaySummary()
 {
-      std::cout << nb_error   << " error(s), " 
+      std::cout << nb_error   << " error(s), "
                 << nb_warning <<" warning(s)" << std::endl;
 }
 

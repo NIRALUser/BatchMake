@@ -19,7 +19,7 @@ WhetstoneClock::WhetstoneClock():m_Frequency(1)
   LARGE_INTEGER frequency;
   ::QueryPerformanceFrequency(&frequency);
 
-  this->m_Frequency = 
+  this->m_Frequency =
     static_cast< FrequencyType >( (__int64)frequency.QuadPart );
 
   SYSTEMTIME st1;
@@ -46,9 +46,9 @@ WhetstoneClock::WhetstoneClock():m_Frequency(1)
 
   memcpy( &ui1, &ft1, sizeof( ui1 ) );
   memcpy( &ui2, &ft2, sizeof( ui2 ) );
-  
-  this->m_Difference = 
-    static_cast< TimeStampType >( ui2.QuadPart - ui1.QuadPart) / 
+
+  this->m_Difference =
+    static_cast< TimeStampType >( ui2.QuadPart - ui1.QuadPart) /
     static_cast< TimeStampType >( 1e7 );
 
   FILETIME currentTime;
@@ -60,14 +60,14 @@ WhetstoneClock::WhetstoneClock():m_Frequency(1)
 
   memcpy( &intTime, &currentTime, sizeof( intTime ) );
 
-  this->m_Origin = 
-    static_cast< TimeStampType >( intTime.QuadPart ) / 
+  this->m_Origin =
+    static_cast< TimeStampType >( intTime.QuadPart ) /
     static_cast< TimeStampType >( 1e7 );
 
-  this->m_Origin -= 
-    static_cast< TimeStampType >( (__int64)tick.QuadPart ) / 
+  this->m_Origin -=
+    static_cast< TimeStampType >( (__int64)tick.QuadPart ) /
     this->m_Frequency;
-    
+
   this->m_Origin +=  this->m_Difference;
 
 
@@ -90,11 +90,11 @@ WhetstoneClock::GetTimeStamp() const
 {
 #if defined(WIN32) || defined(_WIN32)
   LARGE_INTEGER tick;
-  
+
   ::QueryPerformanceCounter( &tick );
 
-  TimeStampType value = 
-      static_cast< TimeStampType >( (__int64)tick.QuadPart ) / 
+  TimeStampType value =
+      static_cast< TimeStampType >( (__int64)tick.QuadPart ) /
       this->m_Frequency;
 
   value += this->m_Origin;
@@ -107,7 +107,7 @@ WhetstoneClock::GetTimeStamp() const
 
   ::gettimeofday( &tval, 0 );
 
-  TimeStampType value = 
+  TimeStampType value =
     static_cast< TimeStampType >( tval.tv_sec ) +
     static_cast< TimeStampType >( tval.tv_usec ) / this->m_Frequency;
 
@@ -235,7 +235,7 @@ ComputeBenchmark( void )
     {
     xtra = (long)((double)(m_DesiredBenchmarkSeconds * xtra) / m_TimeUsed);
     }
-  if (xtra < 1) 
+  if (xtra < 1)
     {
     xtra = 1;
     }
@@ -246,13 +246,13 @@ ComputeBenchmark( void )
 
   if (m_TimeUsed>0)
     {
-    m_MWIPS = (double)(xtra) * (double)(m_DesiredCalibrationSeconds) 
+    m_MWIPS = (double)(xtra) * (double)(m_DesiredCalibrationSeconds)
                              / (10.0 * m_TimeUsed);
     }
   else
     {
     m_MWIPS = 0;
-    }  
+    }
 
   if ( m_Check == 0 )
     {
@@ -265,13 +265,13 @@ RunWhetstone(long xtra, double desiredTime, bool calibrate)
 {
 
   long n1,n2,n3,n4,n5,n6,n7,n8,i,ix,n1mult;
-  RealType x,y,z;              
+  RealType x,y,z;
   long j,k,l;
   RealType e1[4];
   double timea,timeb;
 
   RealType t =  0.49999975;
-  RealType t0 = t;        
+  RealType t0 = t;
   RealType t1 = 0.50000025;
   RealType t2 = 2.0;
 
@@ -306,7 +306,7 @@ RunWhetstone(long xtra, double desiredTime, bool calibrate)
         }
       t = 1.0 - t;
       }
-    t =  t0;                    
+    t =  t0;
     }
   timeb = (m_Clock.GetTimeStamp()-timea)/(double)(n1mult);
   UpdateTime((double)(n1*16)*(double)(xtra), 1, e1[3],
@@ -317,7 +317,7 @@ RunWhetstone(long xtra, double desiredTime, bool calibrate)
   timea = m_Clock.GetTimeStamp();
     {
     for (ix=0; ix<xtra; ix++)
-      { 
+      {
       for(i=0; i<n2; i++)
         {
         Pa(e1,t,t2);
@@ -501,7 +501,7 @@ UpdateTime(double ops, int type, double checknum,
   m_TimeUsed =  m_TimeUsed + time;
 
   if (!calibrate)
-    {              
+    {
     if (type == 1)
       {
       if (time>0)
@@ -526,7 +526,7 @@ UpdateTime(double ops, int type, double checknum,
         mops = 0;
         }
       m_LoopMOPS[section] = mops;
-      m_LoopMFLOPS[section] = 0;                 
+      m_LoopMFLOPS[section] = 0;
       }
     }
 

@@ -40,7 +40,7 @@ public:
   ModuleParameter(const ModuleParameter& parameter);
 
   void operator=(const ModuleParameter& parameter);
-  
+
   virtual void SetTag(const std::string &tag)
   {
     this->Tag = tag;
@@ -50,23 +50,23 @@ public:
   {
     return this->Tag;
   }
-  
+
   virtual void SetCPPType(const std::string &type)
   {
     this->CPPType = type;
   }
 
-  virtual std::string GetCPPType() const 
+  virtual std::string GetCPPType() const
   {
     return this->CPPType;
   }
-  
+
   virtual void SetType(const std::string &type)
   {
     this->Type = type;
   }
 
-  virtual std::string GetType() const 
+  virtual std::string GetType() const
   {
     return this->Type;
   }
@@ -90,17 +90,17 @@ public:
   {
     return this->Hidden;
   }
-  
+
   virtual void SetArgType(const std::string &argType)
   {
     this->ArgType = argType;
   }
 
-  virtual std::string GetArgType() const 
+  virtual std::string GetArgType() const
   {
     return this->ArgType;
   }
-  
+
   virtual void SetStringToType(const std::string &stringToType)
   {
     this->StringToType = stringToType;
@@ -110,7 +110,7 @@ public:
   {
     return this->StringToType;
   }
-  
+
   virtual void SetName(const std::string &name)
   {
     this->Name = name;
@@ -120,7 +120,7 @@ public:
   {
     return this->Name;
   }
-  
+
   virtual void SetLongFlag(const std::string &longFlag)
   {
     this->LongFlag = longFlag;
@@ -130,7 +130,7 @@ public:
   {
     return this->LongFlag;
   }
-  
+
   virtual void SetLongFlagAliasesAsString(const std::string &aliases);
 
   virtual std::string GetLongFlagAliasesAsString() const
@@ -149,17 +149,17 @@ public:
   {
     return this->DeprecatedLongFlagAliasesAsString;
   }
-  
+
   virtual const std::vector<std::string> &GetDeprecatedLongFlagAliases() const
   {
     return this->DeprecatedLongFlagAliases;
   }
 
-  virtual void SetLabel(const std::string &label) 
+  virtual void SetLabel(const std::string &label)
   {
     this->Label = label;
   }
-  
+
   virtual std::string GetLabel() const
   {
     return this->Label;
@@ -169,7 +169,7 @@ public:
   {
     this->Constraints = constraints;
   }
-  
+
   virtual std::string GetConstraints() const
   {
     return this->Constraints;
@@ -179,27 +179,27 @@ public:
   {
     this->Maximum = maximum;
   }
-  
-  virtual std::string GetMaximum() const 
+
+  virtual std::string GetMaximum() const
   {
     return this->Maximum;
   }
 
-  virtual void SetMinimum(const std::string &minimum) 
+  virtual void SetMinimum(const std::string &minimum)
   {
     this->Minimum = minimum;
   }
-  
-  virtual std::string GetMinimum() const 
+
+  virtual std::string GetMinimum() const
   {
     return this->Minimum;
   }
 
-  virtual void SetStep(const std::string &step) 
+  virtual void SetStep(const std::string &step)
   {
     this->Step = step;
   }
-  
+
   virtual std::string GetStep() const
   {
     return this->Step;
@@ -214,7 +214,7 @@ public:
   {
     return this->Description;
   }
-  
+
   virtual void SetChannel(const std::string &channel)
   {
     this->Channel = channel;
@@ -224,7 +224,7 @@ public:
   {
     return this->Channel;
   }
-  
+
   virtual void SetIndex(const std::string &index)
   {
     this->Index = index;
@@ -234,7 +234,7 @@ public:
   {
     return this->Index;
   }
-  
+
   virtual void SetDefault(const std::string &def)
   {
     this->Default = def;
@@ -244,7 +244,7 @@ public:
   {
     return this->Default;
   }
-  
+
   virtual void SetFlag(const std::string &flag)
   {
     this->Flag = flag;
@@ -261,7 +261,7 @@ public:
   {
     return this->FlagAliasesAsString;
   }
-  
+
   virtual const std::vector<std::string> &GetFlagAliases() const
   {
     return this->FlagAliases;
@@ -278,7 +278,7 @@ public:
   {
     return this->DeprecatedFlagAliases;
   }
-  
+
   virtual void SetMultiple(const std::string &multiple)
   {
     this->Multiple = multiple;
@@ -298,7 +298,7 @@ public:
   {
     return this->Aggregate;
   }
-  
+
   virtual void SetFileExtensionsAsString(const std::string &extensions);
 
   virtual std::string GetFileExtensionsAsString() const
@@ -328,10 +328,10 @@ public:
     return this->Elements;
   }
 
-  
+
 protected:
 
-  
+
 private:
   std::string Tag;
   std::string Name;

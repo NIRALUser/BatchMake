@@ -1,6 +1,6 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107 
-header_name {.h} 
+version 1.0107
+header_name {.h}
 code_name {.cxx}
 class ProgressGUI {open : {bm::ProgressGUIBase}
 } {
@@ -34,4 +34,4 @@ class ProgressGUI {open : {bm::ProgressGUIBase}
       }
     }
   }
-} 
+}

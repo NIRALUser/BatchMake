@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -58,16 +58,16 @@ void ScriptAction::Execute()
 
 
 void ScriptAction::SetParent(ScriptAction* parent)
-{ 
+{
   m_Parent = parent;
-} 
+}
 
 ScriptAction* ScriptAction::GetParent()
 {
   return m_Parent;
 }
 
-void  ScriptAction::AddAction(ScriptAction* action)
+void  ScriptAction::AddAction(ScriptAction* )
 {
 
 }
@@ -83,7 +83,7 @@ void ScriptAction::SetProgressManager(ProgressManager* progressmanager)
 }
 
 
-bool ScriptAction::TestParam(ScriptError* error, int linenumber)
+bool ScriptAction::TestParam(ScriptError* , int )
 {
   return true;
 }

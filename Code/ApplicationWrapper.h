@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -38,7 +38,7 @@ public:
   const std::string&  GetApplicationPath( )const;
   void                SetName( const std::string& name );
   const std::string&  GetName( )const;
-  
+
   void                SetVersion( const std::string& version );
   const std::string&  GetVersion( )const;
   void                AddParam( ApplicationWrapperParam param );
@@ -57,7 +57,7 @@ public:
   void                UpParam( const std::string& name);
   void                DownParam( const std::string& name );
   bool                AutomaticCommandLineParsing( const std::string& _path );
-  bool                AutomaticCommandLineParsingSlicer( 
+  bool                AutomaticCommandLineParsingSlicer(
                                                       const std::string& _path );
 
 
@@ -72,16 +72,16 @@ public:
 
 
   /** Return the current command line arguments */
-  std::string         GetCurrentCommandLineArguments( 
-    bool relativePath=true, 
-    const std::string& inputDirectory = std::string(), 
+  std::string         GetCurrentCommandLineArguments(
+    bool relativePath=true,
+    const std::string& inputDirectory = std::string(),
     const std::string& outputDirectory = std::string() )const ;
 
-  /** Set the parameter value 
+  /** Set the parameter value
    *  Return true if the parameter is set, false otherwise.
    */
-  bool SetParameterValue( const std::string& first, 
-                          const std::string& second, 
+  bool SetParameterValue( const std::string& first,
+                          const std::string& second,
                           const std::string& value );
 
   /** Return true if a parameter exists */
@@ -90,34 +90,34 @@ public:
   /** Set/Get if the application uses sequential arguments */
   void SetSequentialParsing( bool val )
     {
-    m_Sequential = val; 
+    m_Sequential = val;
     m_SequentialParams.clear();
     }
   bool GetSequentialParsing() {return m_Sequential;}
 
-  void                SetDataHost(const std::string& hostname) 
+  void                SetDataHost(const std::string& hostname)
     {m_DataHost = hostname;}
-  const std::string&  GetDataHost()const 
+  const std::string&  GetDataHost()const
     {return m_DataHost;}
-  
-  void SetOutputHost(const std::string& hostname) 
+
+  void SetOutputHost(const std::string& hostname)
     {m_OutputHost = hostname;}
-  const std::string& GetOutputHost()const 
+  const std::string& GetOutputHost()const
     {return m_OutputHost;}
- 
+
   void SetOutputDirectory(const std::string& directory)
     {m_OutputDirectory = directory;}
-  const std::string& GetOutputDirectory()const 
+  const std::string& GetOutputDirectory()const
     {return m_OutputDirectory;}
 
-  void SetDataDirectory(const std::string& directory) 
+  void SetDataDirectory(const std::string& directory)
     {m_DataDirectory = directory;}
-  const std::string& GetDataDirectory()const 
+  const std::string& GetDataDirectory()const
     {return m_DataDirectory;}
 
-  void SetDependsOn(int val) 
+  void SetDependsOn(int val)
     {m_DependsOn = val;}
-  int  GetDependsOn()const 
+  int  GetDependsOn()const
     {return m_DependsOn;}
 
   void SetAfterEndBarrier(bool val)
@@ -135,7 +135,7 @@ public:
   const std::string& GetDependencyTag()const
     {return m_DependencyTag;}
 
-  void SetSingleNode(int single) 
+  void SetSingleNode(int single)
     {m_SingleNode = single;}
   int GetSingleNode()const
     {return m_SingleNode;}
@@ -151,26 +151,26 @@ public:
     }
 
   void ClearParameterValues();
-  
+
   void SetRequirements( const std::string& requirements )
     {
     m_Requirements = requirements;
     }
-  
+
   const std::string& GetRequirements() const
     {
     return m_Requirements;
     }
 
 protected:
-  
-  
+
+
 private:
   std::string                           m_name;
   std::string                           m_applicationpath;
   std::string                           m_version;
   // Set if we should use the sequential application
-  bool                                  m_Sequential; 
+  bool                                  m_Sequential;
   std::vector<ApplicationWrapperParam>  m_params;
   std::vector<ApplicationWrapperParam>  m_SequentialParams;
   std::string                           m_DataHost;
@@ -190,7 +190,7 @@ private:
 #endif // BM_GRID
 
   bool AddSlicerModuleDescription(bm::ModuleDescription* moduleDescription);
-  
+
   //friend class bm::ApplicationWrapperGUIControls;
 };
 

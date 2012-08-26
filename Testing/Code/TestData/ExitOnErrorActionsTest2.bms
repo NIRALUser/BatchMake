@@ -1,5 +1,5 @@
 # This combo should not report any errors
-# 
+#
 # This script should exit if there is an error, but there
 # won't be any errors. Test this by running a command without
 # error, then exiting, should exit without error.

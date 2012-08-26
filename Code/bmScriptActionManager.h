@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -49,7 +49,7 @@ public:
 
   ScriptActionManager();
   virtual ~ScriptActionManager();
-  
+
   /*
   struct variablestruct
     {
@@ -107,7 +107,7 @@ public:
     std::string password;
     std::vector<DashboardExperiment> experiments;
     };
-   
+
   ScriptAction* CreateAction(const BMString& option);
 
   void        SetApplicationPath(const BMString& applicationpath);
@@ -118,7 +118,7 @@ public:
   void AddAction(ScriptAction* action);
   void AddAction( const BMString& option, const std::vector<BMString>& param );
 
-  void Execute(); 
+  void Execute();
 
   //MString Convert(MString param);
   BMString Convert(const BMString& param)const;
@@ -126,7 +126,7 @@ public:
   std::vector<BMString> ConvertToArray( const BMString& param )const;
   // Expand does the same than convert
   //BMString ExpandParameter( const BMString& param, bool quote = true ) const;
-  //BMString ExpandExpression( const BMString& expression, 
+  //BMString ExpandExpression( const BMString& expression,
   //                          bool quote = true ) const;
   /** Give an action parameter as input and it returns its content
    *  expanded if needed.
@@ -134,16 +134,16 @@ public:
    *    quote if true, every returned string are set between quotes, if false
    *          the surrounding quotes are removed .
    */
-  //std::vector<BMString> ExpandParameterToArray( const BMString& param, 
+  //std::vector<BMString> ExpandParameterToArray( const BMString& param,
   //                                              bool quote = true )const;
 
   void                  SetVariable(const BMString& name, const BMString& value);
   void                  SetSocketVariable(const BMString& name);
   std::vector<BMString> GetVariable(const BMString& name)const;
-  
+
   void DisplayVariableList()const;
   void SetLineNumber(int linenumber);
-  int  GetLineNumber() 
+  int  GetLineNumber()
          { return m_LineNumber; }
 
   void         SetError(ScriptError* error);
@@ -168,42 +168,42 @@ public:
   BMString              GetVariableFromParams( const std::vector<BMString> &
                                                params )const;
 
-  void SetParser(void* parser) 
+  void SetParser(void* parser)
          { m_Parser = parser; }
-  void* GetParser() 
+  void* GetParser()
          { return m_Parser; }
 
   /** Set/Get the list of wrapped applications */
   void   SetApplicationWrapperList(ApplicationWrapperListType* applicationlist);
-  ApplicationWrapperListType* GetApplicationWrapperList() 
+  ApplicationWrapperListType* GetApplicationWrapperList()
          { return m_ApplicationWrapperList; }
   ApplicationWrapper* GetApplicationWrapper( const BMString& applicationPath );
-  
-  /** Set/Get the list of application from the editor associating an app 
+
+  /** Set/Get the list of application from the editor associating an app
    *  and a keyword */
-  void SetApplicationsList(ApplicationsListType* list) 
+  void SetApplicationsList(ApplicationsListType* list)
          { m_ApplicationsList = list; }
-  ApplicationsListType* GetApplicationsList() 
+  ApplicationsListType* GetApplicationsList()
          { return m_ApplicationsList; }
 
   std::vector<BMString> GenerateKeywordList()const;
-  
-  
+
+
 #ifdef BM_GRID
-  void SetGridModule(Grid* grid) 
+  void SetGridModule(Grid* grid)
          { m_GridModule = grid; }
 #endif // BM_GRID
 
-#ifdef BM_DASHBOARD 
+#ifdef BM_DASHBOARD
   /** Set/Get variables relative to the dashboard */
-  void SetDashboardURL(const char* url) 
+  void SetDashboardURL(const char* url)
          { m_Dashboard.url = url; }
-  const char* GetDashboardURL() 
+  const char* GetDashboardURL()
          { return m_Dashboard.url.c_str(); }
-  
-  void SetDashboardUser( const std::string& user) 
+
+  void SetDashboardUser( const std::string& user)
          { m_Dashboard.user = user; }
-  void SetDashboardKey( const std::string& key) 
+  void SetDashboardKey( const std::string& key)
          { m_Dashboard.key = key; }
 
   const std::string& GetDashboardUser() const
@@ -219,7 +219,7 @@ public:
                            const std::string& methodName );
 
   bool AddDashboardMethodParameter(const std::string& var,
-                                   const std::string& methVar, 
+                                   const std::string& methVar,
                                    const std::string& name,
                                    bool output=false,
                                    bool ideal=false,
@@ -231,7 +231,7 @@ public:
                              const std::string& isPublic);
 
   /** Get the dashboard as a const method, onlt to retrieve data from it */
-  const Dashboard * GetDashboard() const 
+  const Dashboard * GetDashboard() const
           { return &m_Dashboard; }
 #endif
 
@@ -239,7 +239,7 @@ public:
   bool RemoveSocket( const BMString& name);
 
 protected:
-  
+
   std::vector<ScriptAction*>         m_ActionList;
   ScriptAction                     * m_ParentAction;
   //std::vector<variablestruct*>       m_VariableList;
@@ -259,17 +259,17 @@ protected:
   void                             * m_Parser;
 
   // Tells the output of the Run command to generate grid scripts
-#ifdef BM_GRID 
+#ifdef BM_GRID
   Grid* m_GridModule;
 #endif
 
-#ifdef BM_DASHBOARD 
+#ifdef BM_DASHBOARD
   // The Script Action manager keeps global variables regarding the dashboard
   Dashboard m_Dashboard;
 #endif
 
 private:
-  
+
   std::vector<ScriptAction*> m_InternalActionList;
 
 };
@@ -282,7 +282,7 @@ struct AppWrapFinder
   { return obj && obj->GetApplicationPath() == m_AppPath;}
   std::string m_AppPath;
 };
- 
+
 
 } // end namespace bm
 

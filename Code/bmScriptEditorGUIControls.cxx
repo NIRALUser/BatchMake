@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -56,7 +56,7 @@ ScriptEditorGUIControls::ScriptEditorGUIControls():ScriptEditorGUI()
   g_editor->SetScriptEditorGUI(this);
 
 #ifdef BM_GRID
-  #if !defined(__APPLE__) 
+  #if !defined(__APPLE__)
   m_CondorWatcher = new CondorWatcher;
   #endif
 #endif
@@ -71,7 +71,7 @@ ScriptEditorGUIControls::~ScriptEditorGUIControls()
   delete m_InitFile;
 
 #ifdef BM_GRID
-  #if !defined(__APPLE__) 
+  #if !defined(__APPLE__)
   delete m_CondorWatcher;
   #endif
 #endif
@@ -114,18 +114,18 @@ void ScriptEditorGUIControls::Show()
     m_SplashBuffer += BatchMake_EXTENDED_VERSION_STRING;
     m_SplashBuffer += "\n";
     m_SplashBuffer += "Copyright (c) 2007 Kitware Inc.\n\n";
-#ifdef BM_DASHBOARD     
+#ifdef BM_DASHBOARD
     m_SplashBuffer += "Dashboard Module: [enabled]\n";
 #else
     m_SplashBuffer += "Dashboard Module: [disabled]\n";
 #endif
 
-#ifdef BM_GRID    
+#ifdef BM_GRID
     m_SplashBuffer += "Grid Module: [enabled]\n";
 #else
     m_SplashBuffer += "Grid Module: [disabled]\n";
 #endif
-     
+
     m_SplashBuffer += "\nWebsite: http://www.batchmake.org\n";
     ui->copyright->label(m_SplashBuffer.c_str());
     g_Scripteditorgui->show();
@@ -135,7 +135,7 @@ void ScriptEditorGUIControls::Show()
   }
 #endif
 
-  std::cout << "BatchMake " << BatchMake_EXTENDED_VERSION_STRING 
+  std::cout << "BatchMake " << BatchMake_EXTENDED_VERSION_STRING
             << " by Kitware Inc." << std::endl;
 
   //Load .ini
@@ -145,8 +145,8 @@ void ScriptEditorGUIControls::Show()
     MString wrappedApplicationPath = m_InitFile->Find("WrappedApplicationsPath");
     if(wrappedApplicationPath.GetValue().size()>0)
       {
-      m_WrappedApplicationsPath = wrappedApplicationPath.toChar();  
-      }  
+      m_WrappedApplicationsPath = wrappedApplicationPath.toChar();
+      }
     }
   else // if the init file doesn't exist we write the default value
     {
@@ -156,7 +156,7 @@ void ScriptEditorGUIControls::Show()
     if( !itksys::SystemTools::FileIsFullPath(
                                             m_WrappedApplicationsPath.c_str()) )
       {
-      m_WrappedApplicationsPath = 
+      m_WrappedApplicationsPath =
         (m_ApplicationPath + "/" + m_WrappedApplicationsPath.c_str()).toChar();
       }
     m_InitFile->Update("WrappedApplicationsPath",
@@ -178,7 +178,7 @@ void ScriptEditorGUIControls::OnOpenScript()
 {
   const char* filename = 0;
   filename = fl_file_chooser("Load script", "BatchMake Script(*.bms)", NULL);
- 
+
   if(filename)
     {
     m_Filename = filename;
@@ -192,7 +192,7 @@ void ScriptEditorGUIControls::OnOpenScript()
 void ScriptEditorGUIControls::hide()
 {
   if (MString(g_Scripteditorgui->label()).find("*") != -1)
-  OnSaveScript();     
+  OnSaveScript();
   g_Scripteditorgui->hide();
 }
 
@@ -286,11 +286,11 @@ void ScriptEditorGUIControls::OnExecute()
     }
 
   m_Errorgui->SetStatus(MString("Compiling ..."));
-    
+
   ProgressManagerGUI* m_ProgressManagergui = new ProgressManagerGUI();
   ProgressGUIControls* m_Progressgui = new ProgressGUIControls();
   m_Progressgui->g_progress->box( FL_DOWN_BOX );
-  // m_Progressgui->g_progress->auto_branches( true );  
+  // m_Progressgui->g_progress->auto_branches( true );
   m_Progressgui->g_progress->show_leaves( true );
   m_Progressgui->g_progress->show_branches( true );
   m_Progressgui->g_progress->get_root()->always_open( true );
@@ -351,7 +351,7 @@ void ScriptEditorGUIControls::OnGenerateGAD()
     }
 
   m_Errorgui->SetStatus(MString("Generating kwgrid script ..."));
-    
+
   Grid grid;
   grid.SetFileName(filename);
   m_Parser->SetGridModule(&grid);
@@ -368,7 +368,7 @@ void ScriptEditorGUIControls::OnGenerateGAD()
   grid.WriteGAD();
 
   m_Parser->SetGridModule(NULL);
-  m_Errorgui->SetStatus(MString("Generation done.")); 
+  m_Errorgui->SetStatus(MString("Generation done."));
 #else
   fl_alert("To generate grid script turn GRID_SUPPORT=ON when configuring with CMake.");
 #endif
@@ -403,7 +403,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     }
 
   m_Errorgui->SetStatus(MString("Generating condor script ..."));
-    
+
   Grid grid;
   grid.SetFileName(filename);
   m_Parser->SetGridModule(&grid);
@@ -418,7 +418,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     }
 
   grid.WriteCondor();
- 
+
 #if !defined(__APPLE__)
   if(fl_choice("Run condor watcher?","No","Yes",NULL))
     {
@@ -445,7 +445,7 @@ void ScriptEditorGUIControls::OnGenerateCondor()
     }
 
   m_Parser->SetGridModule(NULL);
-  m_Errorgui->SetStatus(MString("Generation done.")); 
+  m_Errorgui->SetStatus(MString("Generation done."));
 #else
   fl_alert("To generate grid script turn GRID_SUPPORT=ON when configuring with CMake.");
 #endif
@@ -478,7 +478,7 @@ void ScriptEditorGUIControls::OnGenerateShell()
     }
 
   m_Errorgui->SetStatus(MString("Generating shell script ..."));
-    
+
   Grid grid;
   grid.SetFileName(filename);
   m_Parser->SetGridModule(&grid);
@@ -495,7 +495,7 @@ void ScriptEditorGUIControls::OnGenerateShell()
   grid.WriteShell();
 
   m_Parser->SetGridModule(NULL);
-  m_Errorgui->SetStatus(MString("Generation done.")); 
+  m_Errorgui->SetStatus(MString("Generation done."));
 #else
   fl_alert("To generate grid script turn GRID_SUPPORT=ON when configuring with CMake.");
 #endif

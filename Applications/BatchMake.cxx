@@ -9,8 +9,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@
 #ifdef BM_GRID
   #include "bmGrid.h"
 #endif
- 
+
 #include "bmScriptParser.h"
 #include "bmConfigure.h"
 #include <itksys/SystemTools.hxx>
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 #ifdef WIN32
   MString m_BatchMakeBinaryPath = MString(argv[0]).rbegin("\\");
   MString m_ApplicationPath = m_BatchMakeBinaryPath + "\\Applications";
-  
+
 #else
   MString m_BatchMakeBinaryPath = MString(argv[0]).rbegin("/");
   MString m_ApplicationPath = m_BatchMakeBinaryPath + "/Applications";
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
     {
     m_ApplicationPath = env;
     }
-    
+
 #ifdef BM_USE_FLTK
   if (argc < 2)
     {
@@ -64,23 +64,23 @@ int main(int argc, char **argv)
     ui->SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
     ui->SetWrappedApplicationsPath(m_ApplicationPath.toChar());
     // Initialize FLTK
-    Fl::visual(FL_DOUBLE|FL_INDEX); 
+    Fl::visual(FL_DOUBLE|FL_INDEX);
     Fl::background(236,233,216);
 
     // Show BatchMake Editor Interface
     ui->Show();
-  
+
     // Run the FL driver
     Fl::run();
-  
+
     delete ui;
     }
   else
 #endif
-    { 
+    {
     MetaCommand command;
     command.DisableDeprecatedWarnings();
- 
+
     command.SetName("BatchMake");
     command.SetVersion(BatchMake_EXTENDED_VERSION_STRING);
     command.SetAuthor("Kitware Inc");
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
     // Compile a script
     command.SetOption("compileScript","c",false,"Compile a script");
     command.AddOptionField("compileScript","filename",MetaCommand::STRING,true);
-    
+
     // Execute a script
     command.SetOption("executeScript","e",false,"Execute a script");
     command.AddOptionField("executeScript","filename",MetaCommand::STRING,true);
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     // Specify batchmake path
     command.SetOption("path","p",false,"Specify the batchmake path");
     command.AddOptionField("path","path",MetaCommand::STRING,true);
-    
+
     // Specify application path
     command.SetOption("applicationPath","ap",false,
                       "Specify the path where applications are stored");
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
       {
       return 1;
       }
-      
+
     if(command.GetOptionWasSet("path"))
       {
       m_BatchMakeBinaryPath = command.GetValueAsString("path","path");
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
       {
       m_ApplicationPath = command.GetValueAsString("path","path");
       }
-    
+
     if(command.GetOptionWasSet("compileScript"))
       {
       std::string filename = command.GetValueAsString("compileScript","filename");
@@ -166,26 +166,26 @@ int main(int argc, char **argv)
       ApplicationWrapper m_ApplicationWrapper;
       m_ApplicationWrapper.AutomaticCommandLineParsing(appname);
       std::string moduleName = m_ApplicationWrapper.GetName();
-       
+
       std::string output = m_ApplicationPath.toChar();
       output += "/";
-      output += moduleName; 
+      output += moduleName;
       output += ".bmm";
-      std::cout << "Saving application description as: " 
+      std::cout << "Saving application description as: "
                 << output.c_str() << std::endl;
       m_ApplicationWrapper.Save(output);
- 
+
       return 0;
       }
     if(command.GetOptionWasSet("generateShell"))
       {
-#ifdef BM_GRID 
+#ifdef BM_GRID
       std::string scriptname = command.GetValueAsString("generateShell","scriptname");
       std::string outputname = command.GetValueAsString("generateShell","outputname");
       bm::ScriptParser m_Parser;
       m_Parser.LoadWrappedApplication(m_ApplicationPath);
       m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
-     
+
       std::cout << "Generating shell script ..." << std::endl;
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
       bm::ScriptParser m_Parser;
       m_Parser.LoadWrappedApplication(m_ApplicationPath);
       m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
-     
+
       std::cout << "Generating condor script ..." << std::endl;
       bm::Grid grid;
       grid.SetFileName(outputname.c_str());
@@ -227,7 +227,7 @@ int main(int argc, char **argv)
       bm::ScriptParser m_Parser;
       m_Parser.LoadWrappedApplication(m_ApplicationPath);
       m_Parser.SetBatchMakeBinaryPath(m_BatchMakeBinaryPath);
-     
+
       std::cout << "Generating kwgrid script ...";
 
       bm::Grid grid;

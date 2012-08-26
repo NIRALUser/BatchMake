@@ -38,7 +38,7 @@ Important Facts:
 
 Unlike the base implementation of the ITK registration framework, this
 application provides moving-image-to-fixed-image transforms (the default
-behaviour in ITK is to have registration optimization return 
+behaviour in ITK is to have registration optimization return
 fixed-image-to-moving-image transforms).
 
 The registration process uses a two-phase optimization scheme.   An initial,

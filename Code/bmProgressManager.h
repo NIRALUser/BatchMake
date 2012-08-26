@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -44,15 +44,15 @@ public:
   /** Typically called by Echo(...) */
   virtual void DisplayOutput(const BMString& message);
   virtual void DisplayError(const BMString& message);
-  /** Define the behavior to have when an error is added. If stop is set to 
-   *  true, next time AddError() is called, it will automatically call Stop() 
-   *  and the next action won't be executed. If stop is set to false, then 
+  /** Define the behavior to have when an error is added. If stop is set to
+   *  true, next time AddError() is called, it will automatically call Stop()
+   *  and the next action won't be executed. If stop is set to false, then
    *  nothing happen when AddError is called.
    */
   void SetStopOnError( bool stopOnError );
   void ResetErrorCount();
   unsigned int GetErrorCount()const;
-  
+
 protected:
 
   bool m_Stop;

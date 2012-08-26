@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -34,7 +34,7 @@ bool ScriptWriteFileAction::TestParam(ScriptError* error,int linenumber)
     {
     m_Manager->TestConvert(m_Parameters[i],linenumber);
     }
-    
+
   if (m_Parameters.size() < 2)
     {
     error->SetError(MString("No enough parameter for WriteFile"),linenumber);
@@ -56,14 +56,14 @@ void ScriptWriteFileAction::Execute()
   std::ofstream m_file;
    m_file.open( m_filename.latin1(),
                 ios_base::binary | ios_base::out | ios_base::trunc);
-  
+
   if( m_file.fail() )
     {
-    m_ProgressManager->AddError( 
+    m_ProgressManager->AddError(
       BMString("WriteFile: Can't write in file ") + m_filename );
     return;
     }
-  
+
   BMString m_value;
   for (unsigned int i=1;i<m_Parameters.size();i++)
     {
@@ -85,13 +85,13 @@ void ScriptWriteFileAction::Execute()
           m_file << '\t';
           l++;
           m_insert = false;
-          }    
+          }
         }
       if (m_insert)
         {
         m_file << m_text[l];
         }
-      } 
+      }
     }
 
   m_file.close();

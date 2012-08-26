@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -50,7 +50,7 @@ bool ScriptListFileInDirAction::TestParam(ScriptError* error,int linenumber)
   return true;
 }
 
- 
+
 MString ScriptListFileInDirAction::Help()
 {
   return "ListFileInDir(<filelist> 'directory' *.*|*.img))";

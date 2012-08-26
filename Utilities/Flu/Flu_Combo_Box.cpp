@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 
 
@@ -41,7 +41,7 @@ Flu_Combo_Box :: Flu_Combo_Box( int X, int Y, int W, int H, const char* l )
   input.textsize(  FL_NORMAL_SIZE );
   input.textcolor( FL_FOREGROUND_COLOR );
 
-  input.resize( X+Fl::box_dx(box()), Y+Fl::box_dy(box()), 
+  input.resize( X+Fl::box_dx(box()), Y+Fl::box_dy(box()),
     W-18-Fl::box_dw(box()), H-Fl::box_dh(box()) );
 
   editable( true );
@@ -84,7 +84,7 @@ void Flu_Combo_Box :: input_cb( Fl_Widget*, void* v )
 void Flu_Combo_Box :: resize( int X, int Y, int W, int H )
 {
   Fl_Group::resize( X, Y, W, H );
-  input.resize( X+Fl::box_dx(box()), Y+Fl::box_dy(box()), 
+  input.resize( X+Fl::box_dx(box()), Y+Fl::box_dy(box()),
     W-18-Fl::box_dw(box()), H-Fl::box_dh(box()) );
 }
 
@@ -192,7 +192,7 @@ int Flu_Combo_Box::Popup :: handle( int event )
     }
 
   // if release after dragging outside the popup window, popdown
-  if( event == FL_RELEASE && dragging && 
+  if( event == FL_RELEASE && dragging &&
       !Fl::event_inside( child(0) ) )
     {
       combo->_popped = false;
@@ -228,7 +228,7 @@ int Flu_Combo_Box::Popup :: handle( int event )
         combo->selected( selected );
       }
     combo->_popped = false;
-    return 1;    
+    return 1;
   }
     }
 
@@ -241,7 +241,7 @@ int Flu_Combo_Box :: handle( int event )
     return Fl_Group::handle( event );
 
   // is it time to popup?
-  bool open = ( event == FL_PUSH ) && 
+  bool open = ( event == FL_PUSH ) &&
     (!Fl::event_inside( &input ) || ( !editable() && Fl::event_inside( &input ) ) );
   open |= ( event == FL_KEYDOWN ) && Fl::event_key( ' ' );
 

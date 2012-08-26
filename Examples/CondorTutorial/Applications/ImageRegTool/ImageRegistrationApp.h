@@ -44,30 +44,30 @@ class ImageRegistrationApp : public Object
     typedef Object Superclass;
     typedef SmartPointer<Self> Pointer;
     typedef SmartPointer<const Self> ConstPointer;
-  
+
     itkNewMacro(Self);
     itkTypeMacro(ImageRegistrationApp, Object);
-  
+
     typedef TImage                        ImageType;
     typedef typename ImageType::Pointer   ImagePointer;
     typedef typename TImage::PixelType    ImagePixelType ;
     typedef typename TImage::RegionType   RegionType ;
     typedef typename TImage::OffsetType   OffsetType ;
-  
+
     typedef MomentRegistrator< TImage >               NoneRegistratorType;
-    typedef typename NoneRegistratorType::TransformType 
+    typedef typename NoneRegistratorType::TransformType
                                                       NoneRegTransformType;
 
     typedef MomentRegistrator< TImage >               CenterRegistratorType;
-    typedef typename CenterRegistratorType::TransformType 
+    typedef typename CenterRegistratorType::TransformType
                                                       CenterRegTransformType;
 
     typedef MomentRegistrator< TImage >               MassRegistratorType;
-    typedef typename MassRegistratorType::TransformType  
+    typedef typename MassRegistratorType::TransformType
                                                       MassRegTransformType;
 
     typedef MomentRegistrator< TImage >               MomentRegistratorType;
-    typedef typename MomentRegistratorType::TransformType  
+    typedef typename MomentRegistratorType::TransformType
                                                       MomentRegTransformType;
 
     typedef LandmarkRegistrator                       LandmarkRegistratorType;
@@ -76,29 +76,29 @@ class ImageRegistrationApp : public Object
     typedef LandmarkRegistratorType::ParametersType   LandmarkParametersType;
     typedef LandmarkRegistratorType::ScalesType       LandmarkScalesType;
     typedef LandmarkRegistratorType::TransformType    LandmarkRegTransformType;
-  
+
     typedef AffineTransform<double, 3>                LoadedRegTransformType;
 
     typedef RigidRegistrator< TImage >                    RigidRegistratorType;
     typedef typename RigidRegistratorType::ParametersType RigidParametersType;
     typedef typename RigidRegistratorType::ScalesType     RigidScalesType;
     typedef typename RigidRegistratorType::TransformType  RigidRegTransformType;
-  
+
     typedef AffineRegistrator< TImage >                 AffineRegistratorType;
-    typedef typename AffineRegistratorType::ParametersType 
+    typedef typename AffineRegistratorType::ParametersType
                                                         AffineParametersType;
     typedef typename AffineRegistratorType::ScalesType  AffineScalesType;
-    typedef typename AffineRegistratorType::TransformType 
+    typedef typename AffineRegistratorType::TransformType
                                                         AffineRegTransformType;
-  
+
     typedef DeformableRegistrator< TImage >         DeformableRegistratorType;
-    typedef typename DeformableRegistratorType::ParametersType  
+    typedef typename DeformableRegistratorType::ParametersType
                                                     DeformableParametersType;
-    
+
     typedef AffineTransform<double, 3>              AffineTransformType;
-    typedef itk::BSplineDeformableTransform<double, 3, 3> 
+    typedef itk::BSplineDeformableTransform<double, 3, 3>
                                                     DeformableTransformType ;
-  
+
     void SetOptimizerToOnePlusOne();
 
     void SetOptimizerToGradient();
@@ -120,17 +120,17 @@ class ImageRegistrationApp : public Object
 
     void RegisterUsingLandmarks(LandmarkSetType* fixedImageLandmarks,
                                 LandmarkSetType* movingImageLandmarks) ;
-  
+
     void RegisterUsingRigid() ;
-  
+
     void RegisterUsingAffine() ;
-    
+
     void RegisterUsingDeformable() ;
-  
+
     void SetFixedImage(TImage* image);
-    
+
     void SetMovingImage(TImage* image);
-  
+
     itkGetObjectMacro(NoneRegTransform, NoneRegTransformType) ;
     itkGetObjectMacro(CenterRegTransform, CenterRegTransformType) ;
     itkGetObjectMacro(MassRegTransform, MassRegTransformType) ;
@@ -145,12 +145,12 @@ class ImageRegistrationApp : public Object
     itkGetObjectMacro(FinalTransform, AffineTransformType);
     itkGetObjectMacro(DeformableRegTransform, DeformableTransformType);
     itkGetObjectMacro(FinalDeformableTransform, DeformableTransformType);
-  
+
     itkSetMacro(LandmarkNumberOfIterations, unsigned int) ;
     itkGetConstMacro(LandmarkNumberOfIterations, unsigned int) ;
     itkSetMacro(LandmarkScales, LandmarkScalesType) ;
     itkGetConstMacro(LandmarkScales, LandmarkScalesType) ;
-  
+
     itkSetMacro(RigidNumberOfIterations, unsigned int) ;
     itkGetConstMacro(RigidNumberOfIterations, unsigned int) ;
     itkSetMacro(RigidFixedImageStandardDeviation, double) ;
@@ -161,7 +161,7 @@ class ImageRegistrationApp : public Object
     itkGetConstMacro(RigidNumberOfSpatialSamples, unsigned int) ;
     itkSetMacro(RigidScales, RigidScalesType) ;
     itkGetConstMacro(RigidScales, RigidScalesType) ;
-  
+
     itkSetMacro(AffineNumberOfIterations, unsigned int) ;
     itkGetConstMacro(AffineNumberOfIterations, unsigned int) ;
     itkSetMacro(AffineFixedImageStandardDeviation, double) ;
@@ -172,17 +172,17 @@ class ImageRegistrationApp : public Object
     itkGetConstMacro(AffineNumberOfSpatialSamples, unsigned int) ;
     itkSetMacro(AffineScales, AffineScalesType) ;
     itkGetConstMacro(AffineScales, AffineScalesType) ;
-  
+
     itkSetMacro(DeformableNumberOfIterations, unsigned int);
     itkGetConstMacro(DeformableNumberOfIterations, unsigned int);
     itkSetMacro(DeformableNumberOfSpatialSamples, unsigned int);
     itkGetConstMacro(DeformableNumberOfSpatialSamples, unsigned int);
     itkSetMacro(DeformableNumberOfControlPoints, unsigned int);
     itkGetConstMacro(DeformableNumberOfControlPoints, unsigned int);
-    
+
     itkSetMacro(FixedImageRegion, RegionType) ;
     itkGetConstMacro(FixedImageRegion, RegionType) ;
-  
+
     ImagePointer GetNoneRegisteredMovingImage();
     ImagePointer GetCenterRegisteredMovingImage();
     ImagePointer GetMassRegisteredMovingImage();
@@ -196,19 +196,19 @@ class ImageRegistrationApp : public Object
     itkGetMacro(RigidMetricValue, double);
     itkGetMacro(AffineMetricValue, double);
     itkGetMacro(DeformableMetricValue, double);
-  
-                                    
+
+
   protected:
     ImageRegistrationApp() ;
     virtual ~ImageRegistrationApp() ;
 
     void InitRigidParameters(RigidParametersType & p,
                              Point<double, 3> & center);
-  
+
     void PrintUncaughtError() ;
-  
+
     void PrintError(ExceptionObject &e) ;
-  
+
   private:
     typedef enum { NONE, CENTER, MASS, MOMENT, LANDMARK, LOADED, DEFLOADED, RIGID, AFFINE, DEFORMABLE }
                  PriorRegistrationMethodType;
@@ -239,20 +239,20 @@ class ImageRegistrationApp : public Object
     typename DeformableTransformType::Pointer    m_DeformableRegTransform ;
     typename AffineTransformType::Pointer        m_FinalTransform;
     typename DeformableTransformType::Pointer    m_FinalDeformableTransform;
-    
+
     DeformableParametersType            m_FinalParameters;
-    
+
     ImagePointer                        m_FinalDeformableImageP;
-  
+
     double m_RigidMetricValue;
     double m_AffineMetricValue;
     double m_DeformableMetricValue;
 
     TImage*             m_FixedImage ;
     TImage*             m_MovingImage ;
-    
+
     RegionType          m_FixedImageRegion ;
-  
+
     PriorRegistrationMethodType   m_PriorRegistrationMethod;
 
     OptimizerMethodType        m_OptimizerMethod;
@@ -271,31 +271,31 @@ class ImageRegistrationApp : public Object
 
     bool                m_LoadedRegValid;
     bool                m_LoadedDefValid;
-  
+
     unsigned int        m_RigidNumberOfIterations ;
     double              m_RigidFixedImageStandardDeviation ;
     double              m_RigidMovingImageStandardDeviation ;
     unsigned int        m_RigidNumberOfSpatialSamples ;
     RigidScalesType     m_RigidScales ;
     bool                m_RigidRegValid;
-  
+
     unsigned int        m_AffineNumberOfIterations ;
     double              m_AffineFixedImageStandardDeviation ;
     double              m_AffineMovingImageStandardDeviation ;
     unsigned int        m_AffineNumberOfSpatialSamples ;
     AffineScalesType    m_AffineScales ;
     bool                m_AffineRegValid;
-    
+
     unsigned int        m_DeformableNumberOfIterations;
     unsigned int        m_DeformableNumberOfSpatialSamples;
     unsigned int        m_DeformableNumberOfControlPoints;
     bool                m_DeformableRegValid;
-  
+
     ImagePointer        m_ResampleUsingTransform(
                                         AffineTransformType * transform,
                                         ImageType * input,
                                         ImageType * output);
-    
+
     ImagePointer        m_ResampleUsingDeformableTransform(
                                         DeformableTransformType * transform,
                                         ImageType * input,

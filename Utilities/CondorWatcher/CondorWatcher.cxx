@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -112,7 +112,7 @@ std::string CondorWatcher::RemoveExtraChar(std::string & buffer)
           buf.replace(posslash,1,"\\");
           posslash = buf.find("/",posslash+1);
           }
-        
+
         return buf;
         }
       return buffer;
@@ -128,16 +128,16 @@ void CondorWatcher::ParseStatus(std::string & buffer)
 {
   // Each machine is between <c> </c>
   long pos = buffer.find("<c>");
-  if(pos == -1) 
+  if(pos == -1)
     {
     return;
     }
   long pos1 = buffer.find("</c>",pos);
-  if(pos1 == -1) 
+  if(pos1 == -1)
     {
     return;
     }
-  
+
   // We loop to all the machines in the pool
   while(pos1 != -1)
     {
@@ -209,7 +209,7 @@ void CondorWatcher::ParseStatus(std::string & buffer)
       word += m.StatusList[i].first;
       word += "\">";
       p = mach.find(word.c_str(),p+1);
-    
+
       if(p != -1)
         {
         long p1 = mach.find("</a>",p+1);
@@ -232,7 +232,7 @@ void CondorWatcher::ParseStatus(std::string & buffer)
       }*/
 
     pos = buffer.find("<c>",pos1+1);
-    if(pos == -1) 
+    if(pos == -1)
       {
       return;
       }
@@ -247,16 +247,16 @@ void CondorWatcher::ParseQueue(std::string & buffer)
 {
   // Each job is between <c> </c>
   long pos = buffer.find("<c>");
-  if(pos == -1) 
+  if(pos == -1)
     {
     return;
     }
   long pos1 = buffer.find("</c>",pos);
-  if(pos1 == -1) 
+  if(pos1 == -1)
     {
     return;
     }
-  
+
   // We loop to all the machines in the pool
   while(pos1 != -1)
     {
@@ -324,7 +324,7 @@ void CondorWatcher::ParseQueue(std::string & buffer)
     m.StatusList.push_back(PairType("Args",""));
     m.StatusList.push_back(PairType("ProcId",""));
     m.StatusList.push_back(PairType("ServerTime",""));
-    
+
     std::string job = buffer.substr(pos,pos1-pos);
     long p = 0;
     unsigned int i;
@@ -334,7 +334,7 @@ void CondorWatcher::ParseQueue(std::string & buffer)
       word += m.StatusList[i].first;
       word += "\">";
       p = job.find(word.c_str(),p+1);
-    
+
       if(p != -1)
         {
         long p1 = job.find("</a>",p+1);
@@ -350,7 +350,7 @@ void CondorWatcher::ParseQueue(std::string & buffer)
      m_JobVector.push_back(m);
 
     pos = buffer.find("<c>",pos1+1);
-    if(pos == -1) 
+    if(pos == -1)
       {
       return;
       }
@@ -393,7 +393,7 @@ void CondorWatcher::Update()
   std::vector<machine>::const_iterator it = m_MachineVector.begin();
 
   while(it != m_MachineVector.end())
-    { 
+    {
     std::string name = (*it).StatusList[2].second;
     long pos = name.find("@");
     if(pos != -1)
@@ -412,7 +412,7 @@ void CondorWatcher::Update()
     name += loadAvg;
     delete loadAvg;
     name += ")";
- 
+
     Flu_Tree_Browser::Node* c = this->Clients->add_branch(name.c_str());
     c->branch_icon(new Fl_Pixmap( (char*const*)computer_xpm ));
     c->label_size(11);
@@ -427,13 +427,13 @@ void CondorWatcher::Update()
       l->label_size(11);
       it2++;
       }
-    
+
     it++;
     }
 
   // Update the list of Jobs
   std::vector<job>::const_iterator it_job = m_JobVector.begin();
-  
+
   this->Jobs->clear();
   this->Jobs->always_open(true);
   n = this->Jobs->set_root("Jobs");
@@ -441,12 +441,12 @@ void CondorWatcher::Update()
   n->label_size(11);
 
   while(it_job != m_JobVector.end())
-    { 
+    {
     std::string name = (*it_job).StatusList[2].second;
     name += " : ";
-    
+
     long poslast = (*it_job).StatusList[25].second.find_last_of("\\");
-      
+
     if(poslast != -1)
       {
       std::string cmd = (*it_job).StatusList[25].second;
@@ -467,7 +467,7 @@ void CondorWatcher::Update()
       {
       name += "busy";
       }
-    
+
     name += ")";
 
 
@@ -492,11 +492,11 @@ void CondorWatcher::Update()
       l->label_size(11);
       it2++;
       }
-    
+
     it_job++;
     }
 /*static int i = 0;
-  
+
   if(i%2 == 0)
     {
     Flu_Tree_Browser::Node* n = this->Clients->get_root();
@@ -513,7 +513,7 @@ void CondorWatcher::Update()
   this->Jobs->redraw();
 
   Fl::check();
-  
+
 }
 
 
@@ -549,7 +549,7 @@ std::string CondorWatcher::Run(const char* program)
 
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
- 
+
   SECURITY_ATTRIBUTES tmpSec;
   ZeroMemory( &tmpSec, sizeof(tmpSec) );
   tmpSec.nLength = sizeof(tmpSec);
@@ -575,20 +575,20 @@ std::string CondorWatcher::Run(const char* program)
   si.hStdOutput = hWritePipe; //output;
   ZeroMemory( &pi, sizeof(pi) );
 
-  memset(buffer,'\0',sizeof(buffer)); 
-  
-  // Start the child process. 
-  if( !CreateProcess( NULL,       // No module name (use command line). 
-      (char*)program,  // Command line. 
-      NULL,                       // Process handle not inheritable. 
-      NULL,                       // Thread handle not inheritable. 
-      TRUE,                       // Set handle inheritance to FALSE. 
-      0,                          //CREATE_NEW_PROCESS_GROUP,  // No creation flags. 
-      NULL,                       // Use parent's environment block. 
-      NULL,                       // Use parent's starting directory. 
+  memset(buffer,'\0',sizeof(buffer));
+
+  // Start the child process.
+  if( !CreateProcess( NULL,       // No module name (use command line).
+      (char*)program,  // Command line.
+      NULL,                       // Process handle not inheritable.
+      NULL,                       // Thread handle not inheritable.
+      TRUE,                       // Set handle inheritance to FALSE.
+      0,                          //CREATE_NEW_PROCESS_GROUP,  // No creation flags.
+      NULL,                       // Use parent's environment block.
+      NULL,                       // Use parent's starting directory.
       &si,                        // Pointer to STARTUPINFO structure.
       &pi )                       // Pointer to PROCESS_INFORMATION structure.
-  ) 
+  )
   {
     std::cout << "CondorWatcher - CreateProcess failed!" << std::endl;
     return "";
@@ -616,9 +616,9 @@ std::string CondorWatcher::Run(const char* program)
     m_run = false;
     }
 
-  PeekNamedPipe(hReadPipe,buffer,sizeof(buffer),&m_nbtoread,&m_nbread,NULL); 
+  PeekNamedPipe(hReadPipe,buffer,sizeof(buffer),&m_nbtoread,&m_nbread,NULL);
 
-  int val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL); 
+  int val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL);
   while (m_nbread > 0 && val)
     {
     for (unsigned int k=0;k<m_nbreaded;k++)
@@ -632,7 +632,7 @@ std::string CondorWatcher::Run(const char* program)
     val = ReadFile(hReadPipe,buffer,512,&m_nbreaded,NULL);
     }
 
-  } 
+  }
 
   //Terminate Process
   TerminateProcess(pi.hProcess,0);
@@ -645,7 +645,7 @@ std::string CondorWatcher::Run(const char* program)
 
   return m_output;
 
-#else  
+#else
   int stdin_pipe[2];
   int stdout_pipe[2];
   char buffer[BUFSIZ+1];
@@ -654,34 +654,34 @@ std::string CondorWatcher::Run(const char* program)
 
   memset(buffer,'\0',sizeof(buffer));
 
-   if ( (pipe(stdin_pipe)==0)   
+   if ( (pipe(stdin_pipe)==0)
         && (pipe(stdout_pipe)==0)
       )
    {
      fork_result = fork();
      if (fork_result == -1)
      {
-       std::cerr << "Create Process failed (Pipe error) ! " << std::endl;   
-     //  m_error = "Create Process failed (Pipe error) ! "; 
+       std::cerr << "Create Process failed (Pipe error) ! " << std::endl;
+     //  m_error = "Create Process failed (Pipe error) ! ";
       exit(EXIT_FAILURE);
-     }  
+     }
      else if (fork_result == 0)
-     { 
+     {
        // This is the child
        close(0);
       dup(stdin_pipe[0]);
       close(stdin_pipe[0]);
       close(stdin_pipe[1]);
-      close(1);      
-      dup(stdout_pipe[1]);     
-      close(stdout_pipe[0]); 
-      close(stdout_pipe[1]);      
-      close(2);   
+      close(1);
+      dup(stdout_pipe[1]);
+      close(stdout_pipe[0]);
+      close(stdout_pipe[1]);
+      close(2);
 
       fcntl(stdout_pipe[1], F_SETFL, O_NONBLOCK);
 
     if (execlp(program,program,"",NULL) == -1)
-    {         
+    {
   if (errno == 2)
   {
       std::cout << "Program not found : " << program  << std::endl;
@@ -689,29 +689,29 @@ std::string CondorWatcher::Run(const char* program)
     }
 
       exit(EXIT_FAILURE);
-    } 
-    else   
-    { 
+    }
+    else
+    {
       // This is the parent
       close(stdin_pipe[0]);
       close(stdin_pipe[1]);
-      close(stdout_pipe[1]);  
+      close(stdout_pipe[1]);
 
       fcntl(stdout_pipe[0], F_SETFL, O_NONBLOCK);
 
-      while(1)   
-      {       
- 
+      while(1)
+      {
+
        data_processed = read(stdout_pipe[0],buffer,BUFSIZ);
        if (data_processed != -1)
        {
    for (unsigned int k=0;k<strlen(buffer);k++)
            m_output += buffer[k];
-       
+
 
          memset(buffer,'\0',sizeof(buffer));
        }
-      
+
 
        if ((data_processed == 0) ) break;
      }

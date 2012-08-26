@@ -1,6 +1,6 @@
 /* inftrees.c -- generate Huffman trees for efficient decoding
  * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
+ * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
 #include "zutil.h"
@@ -395,13 +395,12 @@ local inflate_huft *fixed_td;
 #include "inffixed.h"
 #endif
 
-
-int inflate_trees_fixed(bl, bd, tl, td, z)
-uIntf *bl;               /* literal desired/actual bit depth */
-uIntf *bd;               /* distance desired/actual bit depth */
-inflate_huft * FAR *tl;  /* literal/length tree result */
-inflate_huft * FAR *td;  /* distance tree result */
-z_streamp z;             /* for memory allocation */
+int inflate_trees_fixed(
+  uIntf * bl,               /*literal desired/actual bit depth */
+  uIntf *bd,                /*distance desired/actual bit depth */
+  inflate_huft * FAR *tl,   /*literal/length tree result */
+  inflate_huft * FAR *td,   /*distance tree result */
+  z_streamp z)              /*for memory allocation */
 {
 #ifdef BUILDFIXED
   /* build fixed tables if not already */
@@ -447,7 +446,7 @@ z_streamp z;             /* for memory allocation */
     fixed_built = 1;
   }
 #endif
-  z = z;  /* prevent warning for unused variable*/
+  (void)z;
   *bl = fixed_bl;
   *bd = fixed_bd;
   *tl = fixed_tl;

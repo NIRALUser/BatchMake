@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -19,15 +19,15 @@ namespace bm{
 
 /** Add an experiement to the dashboard */
 bool ScriptActionManager
-::AddDashboardExperiment( const std::string& var, 
-                          const std::string& projectName, 
+::AddDashboardExperiment( const std::string& var,
+                          const std::string& projectName,
                           const std::string& experimentName )
 {
   // Check that the experiment does not exist
   std::vector<DashboardExperiment>::const_iterator it = m_Dashboard.experiments.begin();
   while(it != m_Dashboard.experiments.end())
     {
-    if((!strcmp((*it).project.c_str(),projectName.c_str())) 
+    if((!strcmp((*it).project.c_str(),projectName.c_str()))
       && (!strcmp((*it).name.c_str(),experimentName.c_str())))
       {
       return false;
@@ -45,8 +45,8 @@ bool ScriptActionManager
 
 /** Add a method to an experiment */
 bool ScriptActionManager
-::AddDashboardMethod( const std::string& var, 
-                      const std::string& expvar, 
+::AddDashboardMethod( const std::string& var,
+                      const std::string& expvar,
                       const std::string& methodName )
 {
   // Check that the experiment exist
@@ -70,7 +70,7 @@ bool ScriptActionManager
       DashboardMethod meth;
       meth.variable = var;
       meth.expVariable = expvar;
-      meth.name = methodName;  
+      meth.name = methodName;
       (*it).methods.push_back(meth);
       return true;
       }
@@ -81,8 +81,8 @@ bool ScriptActionManager
 
 /** Add a parameter to a specific method */
 bool ScriptActionManager
-::AddDashboardMethodParameter( const std::string& var, 
-                               const std::string& methVar, 
+::AddDashboardMethodParameter( const std::string& var,
+                               const std::string& methVar,
                                const std::string& name,
                                bool output,
                                bool ideal,
@@ -97,7 +97,7 @@ bool ScriptActionManager
       {
       if((!strcmp((*itMeth).variable.c_str(),methVar.c_str())))
         {
-        std::vector<DashboardMethodParameter>::const_iterator itParam 
+        std::vector<DashboardMethodParameter>::const_iterator itParam
                                                     = (*itMeth).parameters.begin();
         bool found = false;
         while(itParam != (*itMeth).parameters.end())
@@ -132,7 +132,7 @@ bool ScriptActionManager
 }
 
 /** Add a BatchBoard */
-ScriptActionManager::BatchBoard* 
+ScriptActionManager::BatchBoard*
 ScriptActionManager::AddBatchBoard(const std::string& var,
                                    const std::string& experimentVar,
                                    const std::string& title,

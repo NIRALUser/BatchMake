@@ -65,7 +65,7 @@ void gz_uncompress(gzFile in,FILE* out)
 
     for (;;) {
         len = gzread(in, buf, sizeof(buf));
-        if (len < 0) 
+        if (len < 0)
           std::cerr << gzerror(in, &err) <<std::endl;
         if (len == 0) break;
 
@@ -73,10 +73,10 @@ void gz_uncompress(gzFile in,FILE* out)
           std::cerr << "failed fwrite" << std::endl;
   }
     }
-    if (fclose(out)) 
+    if (fclose(out))
       std::cerr << "failed fclose" << std::endl;
 
-    if (gzclose(in) != Z_OK) 
+    if (gzclose(in) != Z_OK)
        std::cerr << "failed gzclose" << std::endl;
 }
 
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 
    char outmode[20];
    sprintf(outmode,"wb%i ",6);
-   int m_result = 0; 
+   int m_result = 0;
    for (int i=1;i<argc;i++)
      {
      if (gz_uncompressfile(argv[i]) != 0)
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
        m_result = -1;
        }
      }
-  return m_result; 
+  return m_result;
 }
 
 

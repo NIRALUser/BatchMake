@@ -9,8 +9,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -83,8 +83,8 @@ public:
   void UpdateVariable();
   void SetParentWindow(Fl_Window* parentwindow);
   static void SetModified(bool flag);
-  
-  /** Return true if the current buffer is empty. 
+
+  /** Return true if the current buffer is empty.
    *  i.e the script is empty*/
   bool IsBufferEmpty();
 

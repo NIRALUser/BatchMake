@@ -1,14 +1,14 @@
 // Id
 
 /***************************************************************
- *                FLU - FLTK Utility Widgets 
+ *                FLU - FLTK Utility Widgets
  *  Copyright (C) 2002 Ohio Supercomputer Center, Ohio State University
  *
  * This file and its content is protected by a software license.
  * You should have received a copy of this license with this file.
  * If not, please contact the Ohio Supercomputer Center immediately:
  * Attn: Jason Bryan Re: FLU 1224 Kinnear Rd, Columbus, Ohio 43212
- * 
+ *
  ***************************************************************/
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4800 )
@@ -491,7 +491,7 @@ Flu_File_Chooser :: Flu_File_Chooser( const char *pathname, const char *pat, int
   desktopBtn->enter_box( FL_THIN_UP_BOX );
   desktopBtn->color( FL_DARK3 );
   desktopBtn->callback( _desktopCB, this );
-  { 
+  {
     Flu_Label *l = new Flu_Label( 5, 62, 100, 20, desktopTxt.c_str() );
     l->labelcolor( FL_WHITE );
     l->align( FL_ALIGN_CENTER );
@@ -520,7 +520,7 @@ Flu_File_Chooser :: Flu_File_Chooser( const char *pathname, const char *pat, int
   documentsBtn->labelcolor( FL_WHITE );
   documentsBtn->color( FL_DARK3 );
   documentsBtn->callback( _documentsCB, this );
-  { 
+  {
 #ifdef WIN32
     Flu_Label *l = new Flu_Label( 5, 222, 100, 20, myDocumentsTxt.c_str() );
     documentsBtn->image( &bigdocuments );
@@ -538,7 +538,7 @@ Flu_File_Chooser :: Flu_File_Chooser( const char *pathname, const char *pat, int
   favoritesBtn->enter_box( FL_THIN_UP_BOX );
   favoritesBtn->color( FL_DARK3 );
   favoritesBtn->callback( _favoritesCB, this );
-  { 
+  {
     Flu_Label *l = new Flu_Label( 5, 302, 100, 20, favoritesTxt.c_str() );
     l->labelcolor( FL_WHITE );
     l->align( FL_ALIGN_CENTER );
@@ -822,7 +822,7 @@ void Flu_File_Chooser :: hideCB()
 }
 
 void Flu_File_Chooser :: cancelCB()
-{ 
+{
   filename.value("");
   filename.position( filename.size(), filename.size() );
   unselect_all();
@@ -839,7 +839,7 @@ void Flu_File_Chooser :: do_callback()
 void Flu_File_Chooser :: pattern( const char *p )
 {
   // just like in Fl_File_Chooser, we accept tab, |, and ; delimited strings like this:
-  // "Description (patterns)" or just "patterns" where patterns is 
+  // "Description (patterns)" or just "patterns" where patterns is
   // of the form *.xxx or *.{xxx,yyy,zzz}}
 
   rawPattern = p;
@@ -1013,7 +1013,7 @@ void Flu_File_Chooser :: newFolderCB()
     {
       fl_alert( createFolderErrTxt.c_str(), newName.c_str() );
       return;
-    }  
+    }
 
   // create a new entry with the name of the new folder. add to either the list or the details
   bool isThisTrue = false;
@@ -1033,7 +1033,7 @@ void Flu_File_Chooser :: newFolderCB()
   entry->editMode = 2;
   entry->value( entry->filename.c_str() );
   entry->take_focus();
-  entry->position( 0, entry->filename.size() );  
+  entry->position( 0, entry->filename.size() );
   entry->redraw();
   */
   if( !fileDetailsBtn->value() )
@@ -1120,7 +1120,7 @@ void Flu_File_Chooser :: trashCB( bool recycle )
    {
      if( recycle )
        {
-         if( !fl_choice( "Really send these files to the Recycle Bin?", 
+         if( !fl_choice( "Really send these files to the Recycle Bin?",
                          "No", "Yes", NULL ) )
      return;
        }
@@ -1143,7 +1143,7 @@ void Flu_File_Chooser :: trashCB( bool recycle )
        g->remove( *e );
        delete e;
      }
-         else 
+         else
      i++;
        }
      // save the favorites
@@ -1281,12 +1281,12 @@ void Flu_File_Chooser :: updateLocationQJ()
 }
 
 void Flu_File_Chooser :: favoritesCB()
-{ 
+{
   cd( FAVORITES_UNIQUE_STRING );
 }
 
 void Flu_File_Chooser :: myComputerCB()
-{ 
+{
   cd( "/" );
 }
 
@@ -1498,7 +1498,7 @@ int Flu_File_Chooser :: ImgTxtPreview ::  preview( const char *filename )
     int bytes = fread( previewTxt, 1, sizeof(previewTxt) - 1, f );
     previewTxt[bytes] = '\0';
     fclose( f );
-  } 
+  }
       else
   return 0;
 
@@ -1513,7 +1513,7 @@ int Flu_File_Chooser :: ImgTxtPreview ::  preview( const char *filename )
   {
     // Non-printable file - can't handle
     return 0;
-  } 
+  }
       else
   {
     // Show the first 1k of text...
@@ -2363,7 +2363,7 @@ void Flu_File_Chooser :: Entry :: updateSize()
 
   // measure the name and see if we need a truncated version
   int W = 0, H = 0;
-  fl_measure( filename.c_str(), W, H );  
+  fl_measure( filename.c_str(), W, H );
   if( W > nameW-iW )
     {
       // progressively strip characters off the end of the name until
@@ -2381,7 +2381,7 @@ void Flu_File_Chooser :: Entry :: updateSize()
     shortname[len] = '\0';
     len--;
     W = 0;
-    fl_measure( shortname.c_str(), W, H );  
+    fl_measure( shortname.c_str(), W, H );
   }
     }
   else
@@ -2392,7 +2392,7 @@ void Flu_File_Chooser :: Entry :: updateSize()
   if( details )
     {
       W = 0; H = 0;
-      fl_measure( description.c_str(), W, H );  
+      fl_measure( description.c_str(), W, H );
       if( W > typeW-4 )
   {
     // progressively strip characters off the end of the description until
@@ -2407,7 +2407,7 @@ void Flu_File_Chooser :: Entry :: updateSize()
         shortDescription[len] = '\0';
         len--;
         W = 0;
-        fl_measure( shortDescription.c_str(), W, H );  
+        fl_measure( shortDescription.c_str(), W, H );
       }
   }
     }
@@ -2615,7 +2615,7 @@ int Flu_File_Chooser :: Entry :: handle( int event )
 
 
     if( !((chooser->selectionType & Flu_File_Chooser::DIRECTORY) ||
-    (chooser->selectionType & Flu_File_Chooser::STDFILE)) && 
+    (chooser->selectionType & Flu_File_Chooser::STDFILE)) &&
         ( Fl::event_state(FL_CTRL) || Fl::event_state(FL_SHIFT) ) )
       {
         // if we are only choosing multiple files, don't allow a directory
@@ -3128,7 +3128,7 @@ void Flu_File_Chooser :: cleanupPath( FluSimpleString &s )
   int oldPos, newPos;
   for( oldPos = 0, newPos = 0; oldPos < s.size(); oldPos++ )
     {
-      // remove "./" 
+      // remove "./"
       if( s[oldPos] == '.' && s[oldPos+1] == '/' )
   oldPos += 2;
 
@@ -3302,23 +3302,23 @@ void Flu_File_Chooser :: buildLocationCombo()
       const char *disk = "Disk";
       switch( type )
         {
-        case DRIVE_REMOVABLE: 
+        case DRIVE_REMOVABLE:
     disk = strlen(volumeName)?volumeName: ( 1 < 2 ? diskTypesTxt[0].c_str() : diskTypesTxt[1].c_str() );
     driveIcons[i] = &floppy_drive;
     break;
-        case DRIVE_FIXED: 
+        case DRIVE_FIXED:
     disk = strlen(volumeName)?volumeName:diskTypesTxt[2].c_str();
     //driveIcons[i] = &disk_drive;
     break;
-        case DRIVE_CDROM: 
+        case DRIVE_CDROM:
     disk = strlen(volumeName)?volumeName:diskTypesTxt[3].c_str();
     driveIcons[i] = &cd_drive;
     break;
-        case DRIVE_REMOTE: 
+        case DRIVE_REMOTE:
     disk = strlen(volumeName)?volumeName:diskTypesTxt[4].c_str();
     driveIcons[i] = &network_drive;
     break;
-        case DRIVE_RAMDISK: 
+        case DRIVE_RAMDISK:
     disk = strlen(volumeName)?volumeName:diskTypesTxt[5].c_str();
     driveIcons[i] = &ram_drive;
     break;
@@ -3741,7 +3741,7 @@ void Flu_File_Chooser :: cd( const char *path )
         isThisTrue = true;
         }
       entry = new Entry( myDocumentsTxt.c_str(), ENTRY_MYDOCUMENTS, isThisTrue, this );
-      entry->updateSize();     
+      entry->updateSize();
       entry->updateIcon();
       entry = new Entry( myComputerTxt.c_str(), ENTRY_MYCOMPUTER, isThisTrue, this );
       entry->updateSize();
@@ -4074,7 +4074,7 @@ void Flu_File_Chooser :: cd( const char *path )
 
       FluSimpleString prefix = commonStr();
 
-      if( numDirs == 1 && 
+      if( numDirs == 1 &&
     currentFile == (FluSimpleString(lastAddedDir)+"*") )
   {
     delayedCd = lastAddedDir;
@@ -4124,7 +4124,7 @@ void Flu_File_Chooser :: cd( const char *path )
       filename.value( prefix.c_str() );
   }
 
-      if( currentFile == "*" && 
+      if( currentFile == "*" &&
 #ifdef WIN32
     filename.value()[1] != ':' )
 #else

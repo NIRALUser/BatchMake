@@ -35,7 +35,7 @@ RigidRegistrator< TImage >
 
   m_OptimizerMethod = ONEPLUSONEPLUSGRADIENT;
   m_OptimizerNumberOfIterations = 500 ;
-  m_OptimizerScales.set_size(6) ; 
+  m_OptimizerScales.set_size(6) ;
   m_OptimizerScales[0] = 200; // rotations
   m_OptimizerScales[1] = 200;
   m_OptimizerScales[2] = 200;
@@ -60,7 +60,7 @@ RigidRegistrator< TImage >
 template< class TImage >
 void
 RigidRegistrator< TImage >
-::SetOptimizerToOnePlusOne() 
+::SetOptimizerToOnePlusOne()
   {
   m_OptimizerMethod = ONEPLUSONE;
   }
@@ -68,7 +68,7 @@ RigidRegistrator< TImage >
 template< class TImage >
 void
 RigidRegistrator< TImage >
-::SetOptimizerToGradient() 
+::SetOptimizerToGradient()
   {
   m_OptimizerMethod = GRADIENT;
   }
@@ -76,7 +76,7 @@ RigidRegistrator< TImage >
 template< class TImage >
 void
 RigidRegistrator< TImage >
-::SetOptimizerToOnePlusOnePlusGradient() 
+::SetOptimizerToOnePlusOnePlusGradient()
   {
   m_OptimizerMethod = ONEPLUSONEPLUSGRADIENT;
   }
@@ -88,7 +88,7 @@ RigidRegistrator< TImage >
   {
   this->GetInterpolator()->SetInputImage(this->GetMovingImage()) ;
 
-  this->GetTypedMetric()->SetNumberOfSpatialSamples( 
+  this->GetTypedMetric()->SetNumberOfSpatialSamples(
                           m_MetricNumberOfSpatialSamples );
 
   switch(m_OptimizerMethod)
@@ -169,7 +169,7 @@ RigidRegistrator< TImage >
 ::StartRegistration()
   {
   try
-    {   
+    {
     Superclass::StartRegistration();
     }
   catch(ExceptionObject &e)
@@ -191,17 +191,17 @@ RigidRegistrator< TImage >
       }
     catch(ExceptionObject &e)
       {
-      this->SetLastTransformParameters( 
+      this->SetLastTransformParameters(
                      m_SecondaryOptimizer->GetCurrentPosition() );
-      this->GetTypedTransform()->SetParameters( 
+      this->GetTypedTransform()->SetParameters(
                      this->GetLastTransformParameters() );
 
       this->PrintError(e) ;
       }
 
-    this->SetLastTransformParameters( 
+    this->SetLastTransformParameters(
                    m_SecondaryOptimizer->GetCurrentPosition() );
-    this->GetTypedTransform()->SetParameters( 
+    this->GetTypedTransform()->SetParameters(
                    this->GetLastTransformParameters() );
     }
 
@@ -212,11 +212,11 @@ void
 RigidRegistrator< TImage >
 ::PrintUncaughtError()
 {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in RigidRegistrator:" << std::endl;
   std::cout << "unknown exception caught !!!" << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
 }
 
@@ -225,11 +225,11 @@ void
 RigidRegistrator< TImage >
 ::PrintError(ExceptionObject &e)
 {
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
   std::cout << "Exception caught in RigidRegistrator:" << std::endl;
   std::cout << e << std::endl;
-  std::cout << "-------------------------------------------------" 
+  std::cout << "-------------------------------------------------"
             << std::endl;
 }
 

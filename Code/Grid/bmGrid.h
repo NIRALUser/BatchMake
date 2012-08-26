@@ -8,8 +8,8 @@
   Copyright (c) 2005 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
@@ -30,7 +30,7 @@ class Grid
 {
 public:
 
-  typedef enum 
+  typedef enum
     {ALL,
     EXECUTABLE,
     INPUT_FILES,
@@ -46,11 +46,11 @@ public:
    */
   void SetFileName( const std::string& filename );
   const std::string& GetFileName( )const;
-    
+
   /** Add an application to the list of applications to generate */
   void AddApplication(ApplicationWrapper* app,
                       const char* datadir=NULL,const char* outputdir=NULL);
-  
+
   unsigned long GetNumberOfApplications()
     {
     return m_ApplicationsList.size();
@@ -72,7 +72,7 @@ public:
   void SetTransferFile( TransfertType transferType ) {m_TransferFiles = transferType;}
   void SetOwner( const std::string owner ) { m_Owner = owner; }
   void SetRequirements( const std::string& requirements );
- 
+
   const std::string& GetInputDirectory()const {return m_InputDirectory;}
   const std::string& GetOutputDirectory()const {return m_OutputDirectory;}
   const std::string& GetGridTempDirectory()const {return m_GridTempDirectory;}
@@ -80,13 +80,13 @@ public:
   const std::string& GetWorkingDirectory()const {return m_WorkingDirectory;}
   const std::string& GetOwner()const { return m_Owner; }
   const std::string& GetRequirements( )const;
- 
+
   void SetDistributed(bool val);
 
   void SetGridBarrier();
   void RemoveGridBarrier();
 
-  void SetSingleNode(bool single) 
+  void SetSingleNode(bool single)
     {
     if(single != m_SingleNode)
       {
@@ -98,7 +98,7 @@ public:
   /** Set the maximum number of nodes to the grid */
   void SetMaxNodes(int nodes) {m_MaxNodes = nodes;}
   int GetMaxNodes() {return m_MaxNodes;}
-  
+
   /** Set if grouping should be used for GAD generation */
   void SetGrouping(bool group) {m_Grouping = group;}
   bool GetGrouping() {return m_Grouping;}
@@ -110,7 +110,7 @@ protected:
   std::string AddQuotes(std::string value);
 
   /** Return a filename for a full path */
-  std::string GetFilename(const char* fullpath); 
+  std::string GetFilename(const char* fullpath);
 
   std::string m_FileName;
   std::vector<ApplicationWrapper> m_ApplicationsList; // we create a copy of the app

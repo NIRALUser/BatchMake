@@ -55,10 +55,10 @@ LandmarkRegistrator
 void
 LandmarkRegistrator
 ::StartRegistration()
-  { 
+  {
   m_Generator->Initialize(1289);
 
-  if( m_FixedLandmarkSet->GetNumberOfPoints() 
+  if( m_FixedLandmarkSet->GetNumberOfPoints()
       != m_MovingLandmarkSet->GetNumberOfPoints() )
     {
     itk::ExceptionObject e("LandmarkRegistrator.txx",77);
@@ -110,11 +110,11 @@ LandmarkRegistrator
       v1 = (m_MovingLandmarkSet->GetPoint(i)->GetPosition().GetVnlVector()
             - movingCenter.GetVnlVector());
       v1.normalize();
-      
+
       v2 = (m_FixedLandmarkSet->GetPoint(i)->GetPosition().GetVnlVector()
             - fixedCenter.GetVnlVector());
       v2.normalize();
-      
+
       vTemp = m * v2;
       vTemp.normalize();
       mat = outer_product(v1, vTemp);
@@ -123,7 +123,7 @@ LandmarkRegistrator
       vct[0] = vsr.GetX() + weight * vsrTemp.GetX();
       vct[1] = vsr.GetY() + weight * vsrTemp.GetY();
       vct[2] = vsr.GetZ() + weight * vsrTemp.GetZ();
-      if(vct.GetNorm() > 1) 
+      if(vct.GetNorm() > 1)
         {
         vct.Normalize();
         }
@@ -143,7 +143,7 @@ LandmarkRegistrator
     v1 = (m_MovingLandmarkSet->GetPoint(i)->GetPosition().GetVnlVector()
           - movingCenter.GetVnlVector());
     v1.normalize();
-    
+
     v2 = (m_FixedLandmarkSet->GetPoint(i)->GetPosition().GetVnlVector()
           - fixedCenter.GetVnlVector());
     v2.normalize();
@@ -197,7 +197,7 @@ LandmarkRegistrator
   m_Transform->SetCenter(fixedCenter);
   }
 
-void 
+void
 LandmarkRegistrator
 ::PrintSelf( std::ostream &os, itk::Indent indent ) const
   {
@@ -211,7 +211,7 @@ LandmarkRegistrator
   os<<"Optimizer: "<<m_Optimizer<<std::endl;
   }
 
-void 
+void
 LandmarkRegistrator
 ::CopyLandmarkSet( LandmarkSetType::Pointer source,
                    LandmarkSetType::Pointer dest ) const
