@@ -900,6 +900,11 @@ void Grid::WriteCondor()
     if(!dagNode.isVirtual)
       {
       fprintf(dagfile,"Job job%d %s\n",id, jobFileName.c_str());
+      // if there is a Condor Pre Script for this application, add it to the DAG file
+      if((*it).GetCondorPreScript() != "")
+        {
+        fprintf(dagfile,"SCRIPT PRE job%d %s\n",id, (*it).GetCondorPreScript().c_str());
+        }
       // if there is a Condor Post Script for this application, add it to the DAG file
       if((*it).GetCondorPostScript() != "")
         {

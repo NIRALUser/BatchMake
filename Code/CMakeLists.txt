@@ -168,6 +168,7 @@ if(GRID_SUPPORT)
     Grid/bmScriptGridRequirementsAction.cxx
     Grid/bmScriptGridOwnerAction.cxx
     Grid/bmScriptCondorPostScriptAction.cxx
+    Grid/bmScriptCondorPreScriptAction.cxx
     )
 
   if(DASHBOARD_SUPPORT)

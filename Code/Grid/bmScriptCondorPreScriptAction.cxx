@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   BatchMake
-  Module:    bmScriptCondorPostScriptAction.cxx
+  Module:    bmScriptCondorPreScriptAction.cxx
   Language:  C++
   Date:      $Date$
   Version:   $Revision$
@@ -13,7 +13,7 @@
      PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 
-#include "bmScriptCondorPostScriptAction.h"
+#include "bmScriptCondorPreScriptAction.h"
 #include "bmScriptError.h"
 #include "bmScriptActionManager.h"
 
@@ -22,21 +22,21 @@ namespace bm
 {
 
 /** */
-ScriptCondorPostScriptAction::ScriptCondorPostScriptAction() : ScriptAction()
+ScriptCondorPreScriptAction::ScriptCondorPreScriptAction() : ScriptAction()
   {
   }
 
 /** */
-ScriptCondorPostScriptAction::~ScriptCondorPostScriptAction()
+ScriptCondorPreScriptAction::~ScriptCondorPreScriptAction()
   {
   }
 
 /** */
-bool ScriptCondorPostScriptAction::TestParam(ScriptError* error,int linenumber)
+bool ScriptCondorPreScriptAction::TestParam(ScriptError* error,int linenumber)
   {
   if( m_Parameters.size() < 3 )
     {
-    error->SetError(MString("Not enough parameters for CondorPostScript"),linenumber);
+    error->SetError(MString("Not enough parameters for CondorPreScript"),linenumber);
     return false;
     }
 
@@ -48,13 +48,13 @@ bool ScriptCondorPostScriptAction::TestParam(ScriptError* error,int linenumber)
   }
 
 /** */
-MString ScriptCondorPostScriptAction::Help()
+MString ScriptCondorPreScriptAction::Help()
   {
-  return "CondorPostScript(<application> <script_filename> <Param1> <Param2> ... )";
+  return "CondorPreScript(<application> <script_filename> <Param1> <Param2> ... )";
   }
 
 /** */
-void ScriptCondorPostScriptAction::Execute()
+void ScriptCondorPreScriptAction::Execute()
   {
   // First we search for the application
   std::vector<BMString> appOptions = m_Parameters[0].tokenize(".");
@@ -70,7 +70,7 @@ void ScriptCondorPostScriptAction::Execute()
   if( !app )
     {
     m_ProgressManager->AddError(
-      BMString("CondorPostScript: Cannot find application: ") +
+      BMString("CondorPreScript: Cannot find application: ") +
       applicationName );
     return;
     }
@@ -90,11 +90,11 @@ void ScriptCondorPostScriptAction::Execute()
       }
     }
 
-  // follow this with three variable names that Condor will populate
-  m_value += " $JOB $JOBID $RETURN ";
+  // follow this with two variable names that Condor will populate
+  m_value += " $JOB $JOBID";
 
   // set the value of the entire POST line in the Application
-  app->SetCondorPostScript(m_value.toChar());
+  app->SetCondorPreScript(m_value.toChar());
   return;
   }
 

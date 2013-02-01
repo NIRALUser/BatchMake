@@ -67,6 +67,10 @@ public:
   void SetCondorPostScript(const std::string& script) { m_CondorPostScript = script; }
   /** set the value of the Condor Post Script line in the DAG file for this application. */
   const std::string& GetCondorPostScript() const { return m_CondorPostScript; }
+  /** set the value of the Condor Pre Script line in the DAG file for this application. */
+  void SetCondorPreScript(const std::string& script) { m_CondorPreScript = script; }
+  /** set the value of the Condor Pre Script line in the DAG file for this application. */
+  const std::string& GetCondorPreScript() const { return m_CondorPreScript; }
 #endif // BM_GRID
 
 
@@ -187,6 +191,7 @@ private:
 
 #ifdef BM_GRID
   std::string                           m_CondorPostScript;
+  std::string                           m_CondorPreScript;
 #endif // BM_GRID
 
   bool AddSlicerModuleDescription(bm::ModuleDescription* moduleDescription);
