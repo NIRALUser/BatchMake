@@ -29,7 +29,7 @@ int XMLReader::Open(const char* filename)
 {
   /** Open file for reading */
   networkfile.open(filename,ifstream::binary);
-  if (networkfile == NULL) return -1;
+  if ( networkfile.fail() ) return -1;
   m_EndOfFile = false;
   return 0;
 }

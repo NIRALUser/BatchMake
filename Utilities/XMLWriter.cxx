@@ -32,11 +32,10 @@ int XMLWriter::Open(const std::string& filename)
   /** Open file for writing */
   networkfile.open( filename.c_str(),
                     std::ofstream::binary );
-  if( networkfile == NULL )
+  if( networkfile.fail() )
     {
     return -1;
     }
-
   return 0;
 }
 

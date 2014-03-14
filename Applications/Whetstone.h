@@ -290,8 +290,8 @@ public:
 
 private:
   FrequencyType    m_Frequency;
-  TimeStampType    m_Difference;
-  TimeStampType    m_Origin;
+  //NEVER USED TimeStampType    m_Difference;
+  //NEVER USED TimeStampType    m_Origin;
 };
 
 class Whetstone
