@@ -282,8 +282,8 @@ local uLong ziplocal_TmzDateToDosDate(
     const tm_zip* const ptm,
     const uLong dosDate)
 {
-    (void)dosDate;
     uLong year = (uLong)ptm->tm_year;
+    (void)dosDate;
     if (year>1980)
         year-=1980;
     else if (year>80)

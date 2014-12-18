@@ -73,7 +73,7 @@ endif(WIN32)
 
 find_package(ITK REQUIRED)
 if(ITK_FOUND)
-  include(${USE_ITK_FILE})
+  include(${ITK_USE_FILE})
 endif(ITK_FOUND)
 
 set(BUILD_SHARED_LIBS ${ITK_BUILD_SHARED})
