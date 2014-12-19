@@ -290,8 +290,11 @@ public:
 
 private:
   FrequencyType    m_Frequency;
-  //NEVER USED TimeStampType    m_Difference;
-  //NEVER USED TimeStampType    m_Origin;
+  #if defined(WIN32) || defined(_WIN32)
+  // USED  if build on Win32
+  TimeStampType    m_Difference;
+  TimeStampType    m_Origin;
+  #endif  // defined(WIN32) || defined(_WIN32)
 };
 
 class Whetstone
