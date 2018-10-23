@@ -662,7 +662,7 @@ configure_file(${LIBCURL_SOURCE_DIR}/config.h.in
   ${LIBCURL_BINARY_DIR}/LIBCURLConfig.h)
 
 add_library(bmcurl ${libCurl_SRCS})
-target_link_libraries(bmcurl ${CURL_LIBS})
+target_link_libraries(bmcurl ${CURL_LIBS} ${ITK_LIBRARIES})
 
 option(CURL_TESTING "Do libCurl testing" OFF)
 if(CURL_TESTING)
