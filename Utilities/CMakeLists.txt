@@ -53,7 +53,7 @@ set(BatchMakeUtilities_SRCS
 #---------------------------------------------------------------------
 #  Build BatchMakeUtilities Library
 
-add_library(BatchMakeUtilities ${BatchMakeUtilities_SRCS} ${BatchMakeUtilities_HDRS})
+add_library(BatchMakeUtilities STATIC ${BatchMakeUtilities_SRCS} ${BatchMakeUtilities_HDRS})
 target_link_libraries(BatchMakeUtilities ${ITK_LIBRARIES})
 
 if(USE_FLTK)

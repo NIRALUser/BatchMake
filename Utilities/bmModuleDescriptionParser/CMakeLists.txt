@@ -106,6 +106,7 @@ endif(USE_BFD)
 
 set(lib_name bmModuleDescriptionParser)
 add_library(${lib_name}
+  STATIC
   ${bmModuleDescriptionParser_SRCS}
   ${bmModuleDescriptionParser_HDRS}
 )
